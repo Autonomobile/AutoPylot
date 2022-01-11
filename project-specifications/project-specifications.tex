@@ -50,12 +50,22 @@ So we will only see miniature autonomous racing framework that we would likely r
 
 The most known is called "DonkeyCar", created by Will Roscoe and Adam Conway in early of 2017. Most of the models trained with DonkeyCar are behavior cloning models, meaning models that tries to replicate the behavior of a driver. This methods uses a big amount of images (input) associated to steering angles and throttle (output), it requires the user to drive the car (collect data) prior to training the model: no examples means no training. The lack of training data often leads to the car leaving the track.\\
 
-One other framework worth looking at is one created by Nvidia called "JetRacer" released in 2019. It uses a different approach from DonkeyCar where the user labels the data by hand by clicking on where the car should go on the image. The model used is similar to what DonkeyCar uses meaning a Convolutional Neural Network with two outputs, one for the steering angle and one for the throttle to apply.
+One other framework worth looking at is one created by Nvidia called "JetRacer" released in 2019. It uses a different approach from DonkeyCar where the user annotates the images by hand by clicking on where the car should go. The model used is similar to what DonkeyCar uses meaning a Convolutional Neural Network with one input (the image) and two outputs, one for the steering angle and one for the throttle to apply.
 
 \section{Objectives}
 
 \subsection{Final objectives}
-Those are the final objectives
+Our main objective is to make our car race against other cars and win the race !
+This will require multiple intermediate milestones:
+\begin{itemize}
+\item Being able to send scripted controls to the motor and servo
+\item Being able to drive the car manually using a controller
+\item Develop a way to gather images and annotations and store them in a stuctured way, for example sorted by date
+\item Process those data before feeding them to the neural network
+\item Being able to train a convolutional neural network using those data
+\item Tweak the architecture and the parameters of the chosen model to acheive the best results
+\item 
+\end{itemize}
 
 \subsection{Optional objectives}
 Those are the opt objectives
