@@ -10,6 +10,6 @@
 \contentsline {subsection}{\numberline {3.1}Hardware}{5}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Software}{7}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Constraints}{7}{subsection.3.3}%
-\contentsline {section}{\numberline {4}Planning}{7}{section.4}%
-\contentsline {section}{\numberline {5}Task allocation}{7}{section.5}%
+\contentsline {section}{\numberline {4}Planning}{8}{section.4}%
+\contentsline {section}{\numberline {5}Task allocation}{8}{section.5}%
 \contentsline {section}{\numberline {6}Conclusion}{8}{section.6}%
