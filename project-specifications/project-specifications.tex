@@ -39,7 +39,7 @@
 \subsection{Project nature}
 Autonomous cars will likely dominate our roads in a relatively close future,
 with this project, we aim to have a first approach to such a complex problem.
-We will be using a 1:10 scale radio controlled car transformed into a small autonomous car !
+We will be using a 1:10 scale radio controlled car modified to integrate onboard computer such as a raspberry pi and some sensors.
 
 \subsection{State of the art}
 
@@ -58,29 +58,43 @@ One other framework worth looking at is one created by Nvidia called "JetRacer" 
 Our main objective is to make our car race against other cars and win the race !
 This will require multiple intermediate milestones:
 \begin{itemize}
-\item Being able to send scripted controls to the motor and servo
-\item Being able to drive the car manually using a controller
-\item Develop a way to gather images and annotations and store them in a stuctured way, for example sorted by date
-\item Process those data before feeding them to the neural network
-\item Being able to train a convolutional neural network using those data
-\item Tweak the architecture and the parameters of the chosen model to acheive the best results
-\item 
+\item Being able to send scripted controls to the motor and servo.
+\item Being able to drive the car manually using a controller.
+\item Develop a way to gather images and annotations and store them in a stuctured way, for example sorted by date.
+\item Process those data before feeding them to the neural network.
+\item Being able to train a convolutional neural network using those data.
+\item Tweak the architecture and the parameters of the chosen model to acheive the best results.
+\item Test in real life the model.
+\item Race against other !
 \end{itemize}
+Once all of that is done, we will start our optional objectives that will enable better racing and better understanding of the car's environnement.
 
 \subsection{Optional objectives}
-Those are the opt objectives
+To be able to go faster and increase the reliability of our car's driving, we will need to add some features to our project. \\
+
+One good feature would be to have a model that takes into account the speed of the car. As we all know on a real car, we don't steer the same way when going at 10km/h and going at 90km/h. This input extension could bring more stability to our model.
+To go faster, it would also be great to be able to differenciate turns from straight lines and even braking zone before the turn. \\
+
+One of the challenges racing implies is overtaking. Overtaking is a very complex manoeuver. First we obviously need to be faster than the car ahead, we could assure that by detecting the successive positions of the car ahead on the image. If the car is getting closer, it's Y coordinate will come closer to the bottom of our image. Also, we cannot overtake if we have no room for that, that means we have to detect a gap on the left or the right of the car before initiating the overtake. Once we decided on what part of track we will overtake, we still need to get ahead of the opponent's car. We could acheive that by forcing the model to drive on the left or right part of the track for a given amount of time.
 
 \subsection{Motivations}
-Those are the final requirements
 
 \section{Technical specifications}
 
 \subsection{Hardware}
-Those are the technical specifications
-- what we need
-- what will we use ?
+On the hardware side, we already have a working car containing:
+\begin{itemize}
+\item A RaspberryPi 4. It is used for heavy computations like image processing, model inference, and other. Most of our programs will run on this device.
+\item A USB camera. Connected to the RaspberryPi, this camera will be our main source of data.
+\item An Arduino Mini. It is used for the low level, it handles commands sent by the RaspberryPi on the serial port, processes them and send PWM signals to both the ESC (Electronic Speed Controller) and servo motor.
+\item An Electronic Speed Controller (or ESC). It is used to drive the motor, it receives  from the arduino a PWM signal (Pulse width modulation).
+\item A Servo moto. Just like the ESC, it receives a PWM signal
+\item A Speed sensor. This sensor will be usefull for our optional objectives that will require a speed feedback. This sensor is read by the arduino, then the data is sent to the RaspberryPi over the serial port.
+\end{itemize}
 
-\rotatebox[origin=c]{-90}{\includegraphics[width=27cm]{schema.png}}
+Here is a schema of the current hardware setup we will be using:
+
+\rotatebox[origin=c]{-90}{\includegraphics[width=25cm]{schema.png}}
 
 \subsection{Software}
 - data generation / gathering
@@ -95,11 +109,28 @@ Those are the technical specifications
 - safety
 
 \section {Planning}
+\rotatebox{-90}
+{
+\begin{tabular}{|c|c|c|c|c|c|}
+  \hline
+  Race 1 \tiny{(29/01)} & Race 2 \tiny{(26/02)} & Race 3 \tiny{(19/03)} &  Race 4 \tiny{(16/04)} &  Race 5 \tiny{(14/05)} &  Race 6 \tiny{(04/06)} \\
+  \hline
+  0 & 1 & 2 & 3 & 4 & 5 \\
+  \hline
+  6 & 7 & 8 & 9 & 10 & 11 \\
+  \hline
+\end{tabular}
+}
 
 \section {Task allocation}
+\begin{tabular}{|l|c|c|c|c|}
+  \hline  Tasks & Mickael B. & Maxime G. & Alexandre G. &  Maxime E.\\
+  \hline  Do Something & x &  &  & x \\
+  \hline  Do Something else &  & x & x & \\
+  \hline
+\end{tabular}
 
+% Maybe write later
 \section {Conclusion}
-
-
 
 \end{document}
