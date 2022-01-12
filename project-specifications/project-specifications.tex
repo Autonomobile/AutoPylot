@@ -37,12 +37,11 @@
 \section{Introduction}
 
 \subsection{Project nature}
-Autonomous cars will likely dominate our roads in a relatively close future,
-with this project, we aim to have a first approach to such a complex problem.
+Autonomous cars will likely dominate our roads in a relatively close future.
+with this project, we aim to have a first approach to such a complex problem by participating in the DiyRobocars competition.
 We will be using a 1:10 scale radio controlled car modified to integrate onboard computer such as a raspberry pi and some sensors.
 
 \subsection{State of the art}
-
 In this section, we will try to see what was previously made in this sector of industry.
 It would not be realistic to compare our 1:10 project to real sized cars such as Tesla's, simply because in a racing environnement,
 we don't need to deal with such an amount of safety: pedestrian detection, emergency braking, speed limit detection and other.
@@ -51,6 +50,8 @@ So we will only see miniature autonomous racing framework that we would likely r
 The most known is called "DonkeyCar", created by Will Roscoe and Adam Conway in early of 2017. Most of the models trained with DonkeyCar are behavior cloning models, meaning models that tries to replicate the behavior of a driver. This methods uses a big amount of images (input) associated to steering angles and throttle (output), it requires the user to drive the car (collect data) prior to training the model: no examples means no training. The lack of training data often leads to the car leaving the track.\\
 
 One other framework worth looking at is one created by Nvidia called "JetRacer" released in 2019. It uses a different approach from DonkeyCar where the user annotates the images by hand by clicking on where the car should go. The model used is similar to what DonkeyCar uses meaning a Convolutional Neural Network with one input (the image) and two outputs, one for the steering angle and one for the throttle to apply.
+
+Both those framework are written in python and use packages such as Tensorflow and OpenCV, will also use them in our project.
 
 \section{Objectives}
 
@@ -77,7 +78,9 @@ To go faster, it would also be great to be able to differenciate turns from stra
 
 One of the challenges racing implies is overtaking. Overtaking is a very complex manoeuver. First we obviously need to be faster than the car ahead, we could assure that by detecting the successive positions of the car ahead on the image. If the car is getting closer, it's Y coordinate will come closer to the bottom of our image. Also, we cannot overtake if we have no room for that, that means we have to detect a gap on the left or the right of the car before initiating the overtake. Once we decided on what part of track we will overtake, we still need to get ahead of the opponent's car. We could acheive that by forcing the model to drive on the left or right part of the track for a given amount of time.
 
+% paragraphe mika 
 \subsection{Motivations}
+The concept of an autonomous car is nothing new. Indeed, many achievements have been made. Both real and miniature size cars exist but their implementation is different. In fact, there is a huge gap of technologies between. We want to reduce this gap. We want to succeed in implementing the safety and stability of cars in productions like Tesla. Our goal is not to make a miniature Tesla, but to take back the safety elements. It is common for miniaturized cars to slip off the tracks for lack of environmental detection. We want to use the latter method for entourage detection. So far, a large part of the implementations uses line detections. We want to go beyond the comfort zone and use a different and innovative method that is based on AI. We want to take the best of what is out there and explore possibilities to make self-driving miniature cars that are reliable and capable of racing other vehicles. Until now miniaturized cars did not take into account other vehicles. They are considered the only vehicle on the track and the overtaking principle was not implemented. We will try to beat this challenge. Indeed, this is something unusual. We want to make a real leap forward in this area and not just replicate what is out there. To simplify our task, we will be content to run races. The recognition of panels and pedestrians is too complex for us. Large-scale racing and artificial intelligence are a little exploited field. This is what push us to create something new. We will be happy to represent EPITA at the next cars races and win for our School. We would be very proud of it.
 
 \section{Technical specifications}
 
@@ -92,13 +95,18 @@ On the hardware side, we already have a working car containing:
 \item A Speed sensor. This sensor will be usefull for our optional objectives that will require a speed feedback. This sensor is read by the arduino, then the data is sent to the RaspberryPi over the serial port.
 \end{itemize}
 
+As the car is already working on the hardware side, it will save us some precious time. But still, it is really important to understand how the whole car is working and how the different components are interecting.
 Here is a schema of the current hardware setup we will be using:
+\newpage
 
-\rotatebox[origin=c]{-90}{\includegraphics[width=25cm]{schema.png}}
+\rotatebox[origin=c]{-90}{\includegraphics[width=27cm]{schema.png}}
+
 
 \subsection{Software}
-- data generation / gathering
-- what software parts we will need
+As you understood, our work will be focused more on the software side.
+Our project will be written mostly in Python, with a bit of JS and arduino code.
+
+ 
 
 \subsection{Constraints}
 - weight

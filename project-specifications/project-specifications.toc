@@ -6,10 +6,10 @@
 \contentsline {subsection}{\numberline {2.1}Final objectives}{3}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Optional objectives}{4}{subsection.2.2}%
 \contentsline {subsection}{\numberline {2.3}Motivations}{4}{subsection.2.3}%
-\contentsline {section}{\numberline {3}Technical specifications}{4}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Hardware}{4}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Software}{6}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Constraints}{6}{subsection.3.3}%
-\contentsline {section}{\numberline {4}Planning}{6}{section.4}%
-\contentsline {section}{\numberline {5}Task allocation}{6}{section.5}%
-\contentsline {section}{\numberline {6}Conclusion}{7}{section.6}%
+\contentsline {section}{\numberline {3}Technical specifications}{5}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Hardware}{5}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Software}{7}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Constraints}{7}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Planning}{7}{section.4}%
+\contentsline {section}{\numberline {5}Task allocation}{7}{section.5}%
+\contentsline {section}{\numberline {6}Conclusion}{8}{section.6}%
