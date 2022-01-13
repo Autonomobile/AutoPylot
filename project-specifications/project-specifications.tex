@@ -54,7 +54,7 @@ So we will only see miniature autonomous racing framework that we would likely r
 
 The most known is called "DonkeyCar", created by Will Roscoe and Adam Conway in early of 2017. Most of the models trained with DonkeyCar are behavior cloning models, meaning models that tries to replicate the behavior of a driver. This methods uses a big amount of images (input) associated to steering angles and throttle (output), it requires the user to drive the car (collect data) prior to training the model: no examples means no training. The lack of training data often leads to the car leaving the track.\\
 
-One other framework worth looking at is one created by Nvidia called "JetRacer" released in 2019. It uses a different approach from DonkeyCar where the user annotates the images by hand by clicking on where the car should go. The model used is similar to what DonkeyCar uses meaning a Convolutional Neural Network with one input (the image) and two outputs, one for the steering angle and one for the throttle to apply.
+One other framework worth looking at is one created by Nvidia called "JetRacer" released in 2019. It uses a different approach from DonkeyCar where the user annotates the images by hand by clicking on where the car should go. The model used is similar to what DonkeyCar uses meaning a Convolutional Neural Network with one input (the image) and two outputs, one for the steering angle and one for the throttle to apply. \\
 
 Both of those framework are written in python and use packages such as Tensorflow and OpenCV, we will also use them in our project.
 
@@ -104,7 +104,7 @@ On the hardware side, we already have a working car containing:
 \item A USB camera. Connected to the RaspberryPi, this camera will be our main source of data.
 \item An Arduino Mini. It is used for the low level, it handles commands sent by the RaspberryPi on the serial port, processes them and send Pulse Width modulation (PWM) signals to both the Electronic Speed Controller (ESC) and servo motor.
 \item An Electronic Speed Controller (or ESC). It is used to drive the motor, it receives  from the arduino a PWM signal (Pulse width modulation).
-\item A Servo moto. Just like the ESC, it receives a PWM signal
+\item A Servo motor. Just like the ESC, it receives a PWM signal
 \item A Speed sensor. This sensor will be usefull for our optional objectives that will require a speed feedback. This sensor is read by the arduino, then the data is sent to the RaspberryPi over the serial port.
 \end{itemize}
 
@@ -121,6 +121,9 @@ Our project will be written mostly in Python, with a bit of JS and arduino code.
 We will divide the project into 3 big parts:
 \begin{itemize}
 \item The backend. This is where most of our efforts will be focused, this part includes every key programs all the way from the data gathering to the model training and testing.
+
+The first part we will developp is the code responsible for the communication between the RaspberryPi and the Arduino, this code will enable us to drive the motor and servo motor by calling some simple functions. This program will also later be used to fetch the speed of the car transmitted by the arduino to the RaspberryPi.
+Then, we will need to find a way to control the car manually, for example using a controller. The values of every axis and buttons on the controller
 \item The Telemetry website. This part will give us the ability to see in real time the last predictions of our model and plot some data found usefull like the speed of the car.
 \item The presentation website. This website will evolve with the time, tracking our latest acheivements and demonstration videos.
 \end{itemize}
@@ -128,36 +131,80 @@ We will divide the project into 3 big parts:
  
 \subsection{Constraints}
 Throughout the project, we will have to keep in mind some constraints.
-Our biggest constraint will be the compute power. We need all of the inference of the model to be executed on the RaspberryPi, this means that we will have to be really carefull of the performance of our code. How fast our main control loop is will determine the reactivity of our car. Our usb camera can capture up to 30 images per seconds, our main control loop should ideally match 30 iterations per seconds. The part that will likely take the most time will be the inference, we will need to keep track of the ratio between performance and accuracy of our models.
-Regarding the accuracy of our models, we will need sufficient accuracy and generalization to be able to complete multiple laps.
+Our biggest constraint will be the compute power. We need all of the inference of the model to be executed on the RaspberryPi, this means that we will have to be really carefull of the performance of our code. How fast our main control loop is will determine the reactivity of our car. Our usb camera can capture up to 30 images per seconds, our main control loop should ideally match 30 iterations per seconds. For example, if the car is going at 1 meter per seconds and our control loop is running at 10hz, the distance the car travels between each iteration is 10cm. Now if you are going 5 times faster with the same control loop, you now have 50cm between each decision, this is huge for such a small car ! The part that will likely take the most time will be the inference, we will need to keep track of the ratio between performance and accuracy of our models.
+Regarding the accuracy of our models, we will need sufficient accuracy and generalization to be able to complete multiple laps. If the generalization is not high enough, small changes in the lightning or changes in the background will affect the prediction of our model.
+On the safety part, we have to keep in mind that we are driving a powerfull car, a wrong motor command can lead us right into the wall and break the car. Prior to deploy and test our code on a real track, we will need to carefully test our code to avoid such a disaster.
+\newpage
 
-- weight
-- language: python
-- autonomous navigation
-- safety
-
-% sout : 7-11 / 03
+% sout : 7 / 03 & 25 / 04 & 06 / 06
 \section {Planning}
-\rotatebox{-90}
-{
-\begin{tabular}{|c|c|c|c|c|c|}
-  \hline
-  Race 1 \tiny{(29/01)} & Race 2 \tiny{(26/02)} & Race 3 \tiny{(19/03)} &  Race 4 \tiny{(16/04)} &  Race 5 \tiny{(14/05)} &  Race 6 \tiny{(04/06)} \\
-  \hline
-  0 & 1 & 2 & 3 & 4 & 5 \\
-  \hline
-  6 & 7 & 8 & 9 & 10 & 11 \\
-  \hline
+\subsection {Race}
+
+\begin{tabular}{|l|c|c|c|c|c|c|} 
+\hline
+\begin{tabular}[c]{@{}l@{}}\\Tasks\end{tabular} & Race 1 & Race 2 & Race 3 & Race 4 & Race 5 & Race 6  \\ 
+\hline
+Code controlled motors and servo                & 75\%   & 100\%  &        &        &        &         \\ 
+\hline
+Drive the car with a controller                 & 25\%   & 100\%   &        &        &        &         \\ 
+\hline
+Data collection                                 &        & 50\%   & 100\%  &        &        &         \\ 
+\hline
+Telemetry website                               &        & 25\%   & 100\%  &        &        &         \\ 
+\hline
+Data processing and augmentation                &        &        & 50\%   & 75\%   & 100\%  &         \\ 
+\hline
+Basic Convolutional neural network              &        &        & 25\%   & 50\%   & 100\%  &         \\ 
+\hline
+\begin{tabular}[c]{@{}l@{}}Advanced \\models and optional objectives\end{tabular} &        &        &        &        &        & 50\%    \\
+\hline
 \end{tabular}
-}
+
+\subsection {Presentations}
+
+\begin{tabular}{|l|c|c|c|} 
+\hline
+Tasks                                                                             & 1st presentation & 2nd Presentation & Final resentation  \\ 
+\hline
+Code controlled motors and servo                                                  & 100\%              &                &                    \\ 
+\hline
+Drive the car with a controller                                                   & 100\%              & ~              &                    \\ 
+\hline
+Data collection                                                                   & 75\%               & 100\%          &                    \\ 
+\hline
+Telemetry website                                                                 & 25\%               & 100\%          &                    \\ 
+\hline
+Data processing and augmentation                                                  &                    & 75\%           & 100\%              \\ 
+\hline
+Basic Convolutional neural network                                                &                    & 50\%           & 100\%              \\ 
+\hline
+\begin{tabular}[c]{@{}l@{}}Advanced \\models and optional objectives\end{tabular} &                    &                & 50\%               \\
+\hline
+\end{tabular}
+
 
 \section {Task allocation}
-\begin{tabular}{|l|c|c|c|c|}
-  \hline  Tasks & Mickael B. & Maxime G. & Alexandre G. &  Maxime E.\\
-  \hline  Do Something & x &  &  & x \\
-  \hline  Do Something else &  & x & x & \\
-  \hline
+
+\begin{tabular}{|l|c|c|c|c|} 
+\hline
+Tasks                        & Mickael B. & Maxime G. & Alexandre G. & Maxime E.  \\ 
+\hline
+Low level car control        &            & x         & x            &            \\ 
+\hline
+Driving with a controller    &            & x         & x            &            \\ 
+\hline
+Data storage and handling    & x          & x         & x            & x          \\ 
+\hline
+Telemetry website            & x          &           &              & x          \\ 
+\hline
+Presentation website         & x          &           &              & x          \\ 
+\hline
+Convolutional neural network & x          & x         & x            & x          \\ 
+\hline
+Main control loop            &            & x         & x            & x          \\
+\hline
 \end{tabular}
+
 
 % Maybe write later
 \section {Conclusion}
