@@ -43,7 +43,7 @@ The first one would be the software part. Indeed in this project we will need to
 
 \subsection{Project nature}
 Autonomous cars will likely dominate our roads in a relatively close future.
-with this project, we aim to have a first approach to such a complex problem by participating in the DiyRobocars competition.
+With this project, we aim to have a first approach to such a complex problem by participating in the DiyRobocars competition.
 We will be using a 1:10 scale radio controlled car modified to integrate onboard computer such as a raspberry pi and some sensors.
 
 \subsection{State of the art}
@@ -56,7 +56,7 @@ The most known is called "DonkeyCar", created by Will Roscoe and Adam Conway in 
 
 One other framework worth looking at is one created by Nvidia called "JetRacer" released in 2019. It uses a different approach from DonkeyCar where the user annotates the images by hand by clicking on where the car should go. The model used is similar to what DonkeyCar uses meaning a Convolutional Neural Network with one input (the image) and two outputs, one for the steering angle and one for the throttle to apply.
 
-Both those framework are written in python and use packages such as Tensorflow and OpenCV, will also use them in our project.
+Both of those framework are written in python and use packages such as Tensorflow and OpenCV, we will also use them in our project.
 
 \section{Objectives}
 
@@ -69,6 +69,7 @@ This will require multiple intermediate milestones:
 \item Develop a way to gather images and annotations and store them in a stuctured way, for example sorted by date.
 \item Process those data before feeding them to the neural network.
 \item Being able to train a convolutional neural network using those data.
+\item Construct a telemetry web app.
 \item Tweak the architecture and the parameters of the chosen model to acheive the best results.
 \item Test in real life the model.
 \item Race against other !
@@ -87,12 +88,12 @@ One of the challenges racing implies is overtaking. Overtaking is a very complex
 \subsection{Motivations}
 Why this project ? 
 
-This project is something that we deeply care about. Being able to work on an self driving car does sound like a dream to most of us. Yet thanks to Reda and Maxime Ellerbach we made that dream come true. Being able to work on this project means we will be able to learn valuable skills for our futur life. Being able to work on this project is also a way to prove ourselves, that with enough work anything is achivable. 
+This project is something that we deeply care about. Being able to work on an self driving car does sound like a dream to most of us. Yet thanks to Reda Dehak, we made that dream come true. Being able to work on this project means we will be able to learn valuable skills for our futur life. Being able to work on this project is also a way to prove ourselves, that with enough work anything is achivable.
 
-Our goal is not to make the new tesla model W but be a part of this constant progress in autonomus vehicules. We also want to see how far we can take this project and what we will have achieved by the end of the school year. With this idea in mind we have created some challenges to beat, as for example winning a race. This project is not a common one but that is exactly what pushes us to make it work not matter the cost. We are also proud to be able to represent Epita for the races. 
+Our goal is not to make the new tesla model W but be a part of this constant progress in autonomus vehicules. We also want to see how far we can take this project and what we will have achieved by the end of the school year. With this idea in mind we have set ourself some goals, for example winning a race. This project is not a common one but that is exactly what pushes us to make it work not matter the cost. We are also proud to be able to represent Epita for the races. 
 
 
-The concept of an autonomous car is nothing new. Indeed, many achievements have been made. Both real and miniature size cars exist but their implementation is different. In fact, there is a huge gap of technologies between. We want to reduce this gap. We want to succeed in implementing the safety and stability of cars in productions like Tesla. Our goal is not to make a miniature Tesla, but to take back the safety elements. It is common for miniaturized cars to slip off the tracks for lack of environmental detection. We want to use the latter method for entourage detection. So far, a large part of the implementations uses line detections. We want to go beyond the comfort zone and use a different and innovative method that is based on AI. We want to take the best of what is out there and explore possibilities to make self-driving miniature cars that are reliable and capable of racing other vehicles. Until now miniaturized cars did not take into account other vehicles. They are considered the only vehicle on the track and the overtaking principle was not implemented. We will try to beat this challenge. Indeed, this is something unusual. We want to make a real leap forward in this area and not just replicate what is out there. To simplify our task, we will be content to run races. The recognition of panels and pedestrians is too complex for us. Large-scale racing and artificial intelligence are a little exploited field. This is what push us to create something new. We will be happy to represent EPITA at the next cars races and win for our School. We would be very proud of it.
+% The concept of an autonomous car is nothing new. Indeed, many achievements have been made. Both real and miniature size cars exist but their implementation is different. In fact, there is a huge gap of technologies between. We want to reduce this gap. We want to succeed in implementing the safety and stability of cars in productions like Tesla. Our goal is not to make a miniature Tesla, but to take back the safety elements. It is common for miniaturized cars to slip off the tracks for lack of environmental detection. We want to use the latter method for entourage detection. So far, a large part of the implementations uses line detections. We want to go beyond the comfort zone and use a different and innovative method that is based on AI. We want to take the best of what is out there and explore possibilities to make self-driving miniature cars that are reliable and capable of racing other vehicles. Until now miniaturized cars did not take into account other vehicles. They are considered the only vehicle on the track and the overtaking principle was not implemented. We will try to beat this challenge. Indeed, this is something unusual. We want to make a real leap forward in this area and not just replicate what is out there. To simplify our task, we will be content to run races. The recognition of panels and pedestrians is too complex for us. Large-scale racing and artificial intelligence are a little exploited field. This is what push us to create something new. We will be happy to represent EPITA at the next cars races and win for our School. We would be very proud of it.
 
 \section{Technical specifications}
 
@@ -101,7 +102,7 @@ On the hardware side, we already have a working car containing:
 \begin{itemize}
 \item A RaspberryPi 4. It is used for heavy computations like image processing, model inference, and other. Most of our programs will run on this device.
 \item A USB camera. Connected to the RaspberryPi, this camera will be our main source of data.
-\item An Arduino Mini. It is used for the low level, it handles commands sent by the RaspberryPi on the serial port, processes them and send PWM signals to both the ESC (Electronic Speed Controller) and servo motor.
+\item An Arduino Mini. It is used for the low level, it handles commands sent by the RaspberryPi on the serial port, processes them and send Pulse Width modulation (PWM) signals to both the Electronic Speed Controller (ESC) and servo motor.
 \item An Electronic Speed Controller (or ESC). It is used to drive the motor, it receives  from the arduino a PWM signal (Pulse width modulation).
 \item A Servo moto. Just like the ESC, it receives a PWM signal
 \item A Speed sensor. This sensor will be usefull for our optional objectives that will require a speed feedback. This sensor is read by the arduino, then the data is sent to the RaspberryPi over the serial port.
@@ -121,17 +122,18 @@ We will divide the project into 3 big parts:
 \begin{itemize}
 \item The backend. This is where most of our efforts will be focused, this part includes every key programs all the way from the data gathering to the model training and testing.
 \item The Telemetry website. This part will give us the ability to see in real time the last predictions of our model and plot some data found usefull like the speed of the car.
-\item The presentation website. 
+\item The presentation website. This website will evolve with the time, tracking our latest acheivements and demonstration videos.
 \end{itemize}
 
  
-
 \subsection{Constraints}
+Throughout the project, we will have to keep in mind some constraints.
+Our biggest constraint will be the compute power. We need all of the inference of the model to be executed on the RaspberryPi, this means that we will have to be really carefull of the performance of our code. How fast our main control loop is will determine the reactivity of our car. Our usb camera can capture up to 30 images per seconds, our main control loop should ideally match 30 iterations per seconds. The part that will likely take the most time will be the inference, we will need to keep track of the ratio between performance and accuracy of our models.
+Regarding the accuracy of our models, we will need sufficient accuracy and generalization to be able to complete multiple laps.
+
 - weight
 - language: python
 - autonomous navigation
-- data ?
-- framerate, efficiency of the algorithm
 - safety
 
 % sout : 7-11 / 03
