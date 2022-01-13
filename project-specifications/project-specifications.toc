@@ -16,7 +16,7 @@
 \contentsline {subsection}{\numberline {3.2}Software}{8}{subsection.3.2}%
 \contentsline {subsection}{\numberline {3.3}Constraints}{9}{subsection.3.3}%
 \contentsline {section}{\numberline {4}Planning}{9}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Race}{9}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.1}Races}{9}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Presentations}{9}{subsection.4.2}%
 \contentsline {section}{\numberline {5}Task allocation}{10}{section.5}%
 \contentsline {section}{\numberline {6}Conclusion}{10}{section.6}%
