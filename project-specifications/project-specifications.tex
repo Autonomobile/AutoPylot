@@ -132,13 +132,13 @@ As you understood, our work will be focused more on the software side.
 Our project will be written mostly in Python, with a bit of JS and arduino code.
 We will divide the project into 3 big parts:
 \begin{itemize}
-\item The backend. This is where most of our efforts will be focused, this part includes every key programs all the way from the data gathering to the model training and testing.
+\item The backend. This is where most of our efforts will be focused; this part includes every key programs all the way from the data gathering to the model training and testing.
 
 The first part we will develop is the code responsible for the communication between the RaspberryPi and the Arduino, this code will enable us to drive the motor and servo motor by calling some simple functions. This program will also later be used to fetch the speed of the car transmitted by the arduino to the RaspberryPi.
 Then, we will need to find a way to control the car manually, for example using a controller. The values of every axis and buttons on the controller will need to be fetch and then transmitted to the arduino using the code previously created.
 We will then create functions to capture, save and load images and annotations corresponding to the image. The data will be stored in an ordered manner using the date of capture of the images. For this part we will mostly use OpenCV and Numpy.
-Then we will need to create models using Tensorflow, we will create first a basic Convolutional model. In order to train it, we will need to write a program to load existing data, feed the right inputs and output to the model. The modularity of this part is crucial as our models will have more and more inputs and outputs.
-To increase the accuracy and generalization of our model, we will need to provide some augmented data to our model. We will create multiple functions to add some random noise, random shadows, lights and blur to our images. This process known as data augmentation is really important and will bring more robustness to our models.
+Then we will need to create models using Tensorflow, we will firstly create a basic Convolutional model. In order to train it, we will need to write a program to load existing data, feed the right inputs and output to the model. The modularity of this part is crucial as our models will have more and more inputs and outputs.
+To increase the accuracy and generalization of our model, we will need to provide some augmented data to our model. We will create multiple functions to add some random noise, random shadows, lights, and blur to our images. This process known as data augmentation, is really important and will bring more robustness to our models.
 We will then be able to start our optional objectives such as speed control and overtaking !
 
 \item The Telemetry website.
