@@ -137,7 +137,7 @@ We will then be able to start our optional objectives such as speed control and 
 \item The presentation website. This website will evolve with the time, tracking our latest acheivements and demonstration videos.
 \end{itemize}
 
- 
+ \newpage
 \subsection{Constraints}
 Throughout the project, we will have to keep in mind some constraints.
 Our biggest constraint will be the compute power. We need all of the inference of the model to be executed on the RaspberryPi, this means that we will have to be really carefull of the performance of our code. How fast our main control loop is will determine the reactivity of our car. Our usb camera can capture up to 30 images per seconds, our main control loop should ideally match 30 iterations per seconds. For example, if the car is going at 1 meter per seconds and our control loop is running at 10hz, the distance the car travels between each iteration is 10cm. Now if you are going 5 times faster with the same control loop, you now have 50cm between each decision, this is huge for such a small car ! The part that will likely take the most time will be the inference, we will need to keep track of the ratio between performance and accuracy of our models.
@@ -216,19 +216,16 @@ Main control loop            &            & x         & x            & x        
 \hline
 \end{tabular}
 
-
-% Maybe write later
+\newpage
 \section {Conclusion}
 All in all, our project is not an easy one, our goal is to make an autonomous car to race against other cars. To make this dream come true,  we have to deal with two distinct parts.
-In one hand the Hardware side that is to say create a real functional car and in the other hand the Software side. 
-
+In one hand the Hardware side that is to say create a real functional car and in the other hand the Software side. \\
 We will spend most of our time on the Software part, which includes gathering data to the model training and testing, develop the code responsible for driving the car, the Software part also includes a networking part for the telemetry website and a presentation website. 
 Moreover, we will have to face  many constraints as for example the computer power and the code efficiency.
-Furthermore, thanks to the regular races, it provides us an immediate feedback which is important for the project development.
+Furthermore, thanks to the regular races, it provides us an immediate feedback which is important for the project development. \\
+As you might have realized, it will take a lot of work and learning to make it work, but we are extremely motivated to work on this project and to learn new skills. \\
 
-As you might have realized, it will take a lot of work and learning to make it work, but we are extremely motivated to work on this project and to learn new skills. 
-
-To make a on story short, our goal is not to revolutionise the automobile industry, but just to make something that we enjoy and get a first glance into what AI and self driving cars are all about.
+To make a long story short, our goal is not to revolutionise the automobile industry, but to make something that we enjoy and that will give us a first glance into what AI and self driving cars are all about.
 
 
 \end{document}
