@@ -1,0 +1,10 @@
+{
+  "root": true,
+  "extends": "next/core-web-vitals",
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "double"],
+    "eqeqeq": ["error", "always"],
+    "no-unused-vars": ["warn", { "vars": "all", "args": "after-used", "ignoreRestSiblings": false }]
+  }
+}
