@@ -19,8 +19,9 @@ class Webcam:
         self.h = shape[0]
         self.w = shape[1]
         assert len(self.shape) == 3, "Shape should have 3 dimensions"
+        assert self.shape[-1] == 3 or self.shape[-1] == 1, "Image last dimension should be either 3 (RGB) or 1 (GREY)"
 
-    def resize(self, img):
+    def _resize(self, img):
         """Resize the image to the given shape of output image.
 
         Args:
