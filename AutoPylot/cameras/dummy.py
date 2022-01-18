@@ -1,4 +1,4 @@
-
+"""Dummy camera for testing purposes."""
 import numpy as np
 
 
