@@ -14,7 +14,3 @@ def test_dummy_color():
     cam = camera.Camera(camera_type="dummy", shape=shape)
     img = cam.read()
     assert img.shape == shape
-
-
-def test_test():
-    assert 1 == 2
