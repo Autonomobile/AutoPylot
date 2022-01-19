@@ -10,17 +10,18 @@ export const Members = () => {
     },
     {
       name: "Maxime Ellerbach",
-      bio: "Maxime Ellerbach is a member of the AutoPylot team.",
-      src: "/images/maxime-ellerbach.jpg",
+      bio: "Let's face it, I am kinda the BBB around here (Big Bad Boss). Yet I love the people i am working with, they are smart and devoted to the task. Also i am hella good at programming.",
+      //src: "/images/maxime-ellerbach.jpg",
+      src:"https://wiki.komica.org/images/b/bf/Rickroll.png"
     },
     {
       name: "Maxime Gay",
-      bio: "Maxime Gay is a member of the AutoPylot team.",
+      bio: "Fuck I am so hot, normal I am from the south of France. Yet dispite being a siddist I am actually smart and I love money.",
       src: "/images/maxime-gay.jpg",
     },
     {
       name: "Mickaël Bobovitch",
-      bio: "Mickaël Bobovitch is a member of the AutoPylot team.",
+      bio: "Hot, sexy and russian. I am a full stack develloper with a heart of gold. I am glad to be in this wonderfull team of smart and nice developpers (Alex is kinda da best).",
       src: "/images/mickael-bobovitch.jpg",
     },
   ];
