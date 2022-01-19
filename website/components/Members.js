@@ -4,6 +4,11 @@ import { Member } from "./Member.js";
 export const Members = () => {
   const members = [
     {
+      name: "Alexandre Girold",
+      bio: "Future CEO of Google. I am studying at EPITA in order to acquire the necessary skills to achieve my goals. I am glad that I can work on Autopylot with such a great team! See you in 6 years. ",
+      src: "/images/alexandre-girold.jpg",
+    },
+    {
       name: "Maxime Ellerbach",
       bio: "Maxime Ellerbach is a member of the AutoPylot team.",
       src: "/images/maxime-ellerbach.jpg",
@@ -12,11 +17,6 @@ export const Members = () => {
       name: "Maxime Gay",
       bio: "Maxime Gay is a member of the AutoPylot team.",
       src: "/images/maxime-gay.jpg",
-    },
-    {
-      name: "Alexandre Girold",
-      bio: "Alexandre Girold is a member of the AutoPylot team.",
-      src: "/images/alexandre-girold.jpg",
     },
     {
       name: "Mickaël Bobovitch",
