@@ -6,15 +6,8 @@ name: Python package
 on:
   push:
     branches: [ main ]
-    paths:
-      - '!website'
-      - '!project-specifications'
-
   pull_request:
     branches: [ main ]
-    paths:
-      - '!website'
-      - '!project-specifications'
 
 jobs:
   build:
