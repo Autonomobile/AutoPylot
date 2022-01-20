@@ -6,16 +6,10 @@ name: Python package
 on:
   push:
     paths:
-      - 'autopylot/**'
-      - 'main_programs/**'
-      - '!website/**'
-      - '!project-specifications/**'
+      - '**.py'
   pull_request:
     paths:
-      - 'autopylot/**'
-      - 'main_programs/**'
-      - '!website/**'
-      - '!project-specifications/**'
+      - '**.py'
 
 jobs:
   build:
