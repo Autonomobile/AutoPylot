@@ -7,12 +7,14 @@ on:
   push:
     branches: [ main ]
     paths:
-      - '**.py'
+      - '!website'
+      - '!project-specifications'
 
   pull_request:
     branches: [ main ]
     paths:
-      - '**.py'
+      - '!website'
+      - '!project-specifications'
 
 jobs:
   build:
