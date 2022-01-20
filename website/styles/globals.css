@@ -28,6 +28,10 @@ a {
   justify-content: center;
 }
 
+.min-h {
+  font-size: 10%;
+}
+
 @media screen and (max-width: 640px) {
   .h {
     font-size: 10vw;
@@ -38,3 +42,36 @@ a {
   font-family: 'Source Code Pro', monospace;
 }
 
+.card {
+  perspective: 150rem;
+  position: relative;
+}
+
+.card-side {
+  transition: all 0.8s;
+  backface-visibility: hidden;
+  position: absolute;
+  width: 100%;
+}
+
+.card-side.back {
+  transform: rotateY(-180deg);
+}
+
+.card:hover .card-side.front {
+  transform: rotateY(180deg);
+}
+
+.card:hover .card-side.back {
+  transform: rotateY(0deg);
+}
+
+@media (min-width: 1024px) {
+  .card:hover .card-side.front {
+    transform: rotateY(180deg) translateY(-3%);
+  }
+
+  .card:hover .card-side.back {
+    transform: rotateY(0deg) translateY(-3%);
+  }
+}
