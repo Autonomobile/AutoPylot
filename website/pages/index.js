@@ -14,10 +14,10 @@ export default function Home() {
       </Head>
 
       <Brand />
-      <Car />
+      {/* <Car /> */}
       <Members />
-      <Info />
-      <Progress />
+      {/* <Info /> */}
+      {/* <Progress /> */}
     </>
   );
 }

@@ -13,7 +13,7 @@ export const Brand = () => {
             width={250}
             height={250}
           />
-        <h1 className="h text-center">By Autonomobile.</h1>
+        <h1 className="h text-center">By Autonomobile</h1>
       </div>
     </div>
   );
