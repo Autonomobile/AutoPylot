@@ -6,8 +6,18 @@ name: Python package
 on:
   push:
     branches: [ main ]
+    paths:
+      - 'autopylot/**'
+      - 'main_programs/**'
+      - '!website/**'
+      - '!project-specifications/**'
   pull_request:
     branches: [ main ]
+    paths:
+      - 'autopylot/**'
+      - 'main_programs/**'
+      - '!website/**'
+      - '!project-specifications/**'
 
 jobs:
   build:
