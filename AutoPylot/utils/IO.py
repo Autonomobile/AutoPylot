@@ -20,9 +20,9 @@ def save_image(path,new_path): #Probably the right version (using the numpy.arra
 
 
 def laod_json(path):#path is the path o the json file
-    json = json.loads(path)
+    data = json.load(path)
+    return data
     
-
 
 def save_json(path):
 
