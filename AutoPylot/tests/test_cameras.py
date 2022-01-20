@@ -1,3 +1,4 @@
+"""Test the cameras."""
 import context
 from cameras import camera
 
