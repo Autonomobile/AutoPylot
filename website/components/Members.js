@@ -4,23 +4,24 @@ import { Member } from "./Member.js";
 export const Members = () => {
   const members = [
     {
-      name: "Maxime Ellerbach",
-      bio: "Maxime Ellerbach is a member of the AutoPylot team.",
-      src: "/images/maxime-ellerbach.jpg",
-    },
-    {
-      name: "Maxime Gay",
-      bio: "Maxime Gay is a member of the AutoPylot team.",
-      src: "/images/maxime-gay.jpg",
-    },
-    {
       name: "Alexandre Girold",
-      bio: "Alexandre Girold is a member of the AutoPylot team.",
+      bio: "Future CEO of Google. I am studying at EPITA in order to acquire the necessary skills to achieve my goals. I am glad that I can work on Autopylot with such a great team! See you in 6 years. ",
       src: "/images/alexandre-girold.jpg",
     },
     {
+      name: "Maxime Ellerbach",
+      bio: "Let's face it, I am kinda the BBB around here (Big Bad Boss). Yet I love the people i am working with, they are smart and devoted to the task. Also i am hella good at programming.",
+      //src: "/images/maxime-ellerbach.jpg",
+      src:"https://wiki.komica.org/images/b/bf/Rickroll.png"
+    },
+    {
+      name: "Maxime Gay",
+      bio: "Fuck I am so hot, normal I am from the south of France. Yet dispite being a siddist I am actually smart and I love money.",
+      src: "/images/maxime-gay.jpg",
+    },
+    {
       name: "Mickaël Bobovitch",
-      bio: "Mickaël Bobovitch is a member of the AutoPylot team.",
+      bio: "Hot, sexy and russian. I am a full stack develloper with a heart of gold. I am glad to be in this wonderfull team of smart and nice developpers (Alex is kinda da best).",
       src: "/images/mickael-bobovitch.jpg",
     },
   ];
