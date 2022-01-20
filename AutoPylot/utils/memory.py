@@ -3,7 +3,7 @@ import time
 
 
 class Memory(dict):
-    """Memory class."""
+    """Memory class, inherits from dict."""
 
     def __init__(self):
         """Init of the memory class."""
