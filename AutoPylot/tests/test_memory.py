@@ -1,3 +1,4 @@
+"""Test the memory class."""
 import context
 from utils import memory
 
