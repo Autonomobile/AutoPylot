@@ -22,7 +22,7 @@ def save_json(path):
     return json.dump(laod_json(path))
 
 
-def get_image_path()
+def get_image_path():
 
 def load_both (json_path):
     
