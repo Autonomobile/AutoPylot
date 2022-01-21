@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Info = () => {
   return (
     <div className="flex w-screen h-screen bg-gray-50">

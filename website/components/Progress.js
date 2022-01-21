@@ -1,5 +1,3 @@
-import React from "react";
-
 export const Progress = () => {
   return (
     <div className="flex w-screen h-screen bg-white">

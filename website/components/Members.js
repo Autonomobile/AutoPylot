@@ -1,4 +1,3 @@
-import React from "react";
 import { Member } from "./Member.js";
 
 export const Members = () => {
