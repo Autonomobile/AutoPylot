@@ -10,9 +10,14 @@ class SerialControl:
     """This classs send through serial port commands to an Arduino to pilot a motors and a servo motor using PWM."""
 
     def __init__(self, memory: dict, port="/dev/ttyUSB0", steering_key="steering", throttle_key="throttle", speed_key="speed"):
-        """
-        Initialize the class. It does require a serial port name. it can be COMx where x is an interger on Windows.
-        Or /dev/ttyXYZ where XYZ is a valid tty output for example /dev/ttyS2 or /dev/ttyUSB0
+        """Initialize the class.
+
+        Args:
+            memory (dict): memory object.
+            port (str, optional): serial port. Defaults to "/dev/ttyUSB0". example /dev/ttyS2 or /dev/ttyUSB0
+            steering_key (str, optional): key of the steering in the memory. Defaults to "steering".
+            throttle_key (str, optional): key of the throttle in the memory. Defaults to "throttle".
+            speed_key (str, optional): key of the speed in the memory. Defaults to "speed".
         """
         self.ser = serial.Serial()
         self.ser.port = port
