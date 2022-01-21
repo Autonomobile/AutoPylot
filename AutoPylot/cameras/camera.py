@@ -3,7 +3,7 @@ from .webcam import Webcam
 from .dummy import Dummy
 
 
-def Camera(camera_type="webcam", shape=(160, 120, 3), *args, **kwargs):
+def Camera(memory, camera_type="webcam", shape=(160, 120, 3), *args, **kwargs):
     """Init Camera class.
 
     Args:
@@ -14,8 +14,8 @@ def Camera(camera_type="webcam", shape=(160, 120, 3), *args, **kwargs):
         ValueError: raise a valueError if camera_type is not supported.
     """
     if camera_type == "webcam":
-        return Webcam(*args, **kwargs, shape=shape)
+        return Webcam(memory, *args, **kwargs, shape=shape)
     elif camera_type == "dummy":
-        return Dummy(*args, **kwargs, shape=shape)
+        return Dummy(memory, *args, **kwargs, shape=shape)
     else:
         raise ValueError("Unknown camera type")
