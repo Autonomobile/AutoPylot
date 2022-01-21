@@ -1,3 +1,5 @@
+"""test the io class"""
+
 from ..utils import io
 
 """
@@ -22,8 +24,8 @@ def test_save_image():
     assert io.save_image(image, '../.../saved_image.jpg'), "should not be None."
 
 def test_laod_json():
-
-    assert
+    file = io.laod_json("../.../file.json")
+    assert file, "should not be None."
 
 def test_save_json():
 
