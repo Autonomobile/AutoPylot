@@ -7,8 +7,8 @@ def Camera(memory, camera_type="webcam", shape=(160, 120, 3), *args, **kwargs):
     """Init Camera class.
 
     Args:
-        camera_type (str, optional): [description]. Defaults to "webcam".
-        shape (tuple, optional): [description]. Defaults to (160, 120, 3).
+        camera_type (str, optional): Camera type. Defaults to "webcam".
+        shape (tuple, optional): output shape of the captured image. Defaults to (160, 120, 3).
 
     Raises:
         ValueError: raise a valueError if camera_type is not supported.
