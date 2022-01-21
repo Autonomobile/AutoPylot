@@ -1,9 +1,8 @@
 """ Here we will load and save data comming from the images""" 
-from tkinter import CASCADE
 from numpy import asarray
 import json 
 import cv2
-import os
+
 
 """When on windows don't copy the path directly use one of the following ways: 
 1.  use an r (raw) before the copied path (r "C:\...\...")
