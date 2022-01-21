@@ -27,6 +27,9 @@ def laod_json(path):#path is the path o the json file.
 def save_json(path):
     return json.dump(laod_json(path))
 
-print (load_image("C:\\Users\\sacha\\Downloads\\kid.jpg"))
 
 #def load_both (json_path):
+
+#tests will be removed
+#print(load_image("C:\\Users\\sacha\\Downloads\\kid.jpg"))
+#print(save_image("C:\\Users\\sacha\\Downloads\\kid.jpg","C:\\Users\\sacha\\Desktop\\copied image\\imagesave.jpg"))
