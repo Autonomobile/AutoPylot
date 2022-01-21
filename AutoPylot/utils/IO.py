@@ -1,53 +1,34 @@
-""" Here we will load and save data""" 
-from PIL import Image 
+""" Here we will load and save data comming from the images""" 
 from numpy import asarray
-import json
+import json 
 import cv2
 
-def load_image(path): #Should return the image as array.
-    image = PImage.open(path)
-    array_data = asarray(image)
-    return array_data
+
+"""When on windows don't copy the path directly use one of the following ways: 
+1.  use an r (raw) before the copied path (r "C:\...\...")
+2.  use the normal /
+3.  use the \\ ("C:\\...\\...")
+"""
 
 
-def save_image(path,new_path): #Save the image from the normal image
-    image = PImage.open(path)
-    image.save(new_path)
-
-def save_image(path,new_path): #Probably the right version (using the numpy.array data)
-    image=Image.fromarray(save_image(path))
-    image.save(new_path)
+def load_image(path): #Should return the image as array (num_rows, num_cols, num_channels).
+    return cv2.imread(path)
 
 
-def laod_json(path):#path is the path o the json file
-    data = json.load(path)
-    return data
+def save_image(path,save_path): #Probably the right version (using the numpy.array data)
+    return cv2.imwrite(save_path,load_image(path))
+
+
+def laod_json(path):#path is the path to the json file.
+    return json.load(path)
     
 
-def save_json(path):
+def save_json(path):#saving  the json file.
+    return json.dump(laod_json(path))
 
 
+#def load_both (json_path):
 
-def both ():
-
-
-
-def test_load_image():
-
-    assert 
-
-def test_save_image():
-
-    assert
-
-def test_laod_json():
-
-    assert
-
-def test_save_json():
-
-    assert
-
-def test_both():
-
-    assert
+#tests will be removed
+#print(load_image("C:\\Users\\sacha\\Downloads\\kid.jpg"))
+#print(save_image("C:\\Users\\sacha\\Downloads\\kid.jpg","C:\\Users\\sacha\\Desktop\\copied image\\imagesave.jpg"))
