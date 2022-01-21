@@ -1,4 +1,4 @@
-import io.py
+"""import io.py
 
 
 def test_load_image():
@@ -20,3 +20,4 @@ def test_save_json():
 def test_both():
 
     assert
+"""
