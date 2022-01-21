@@ -9,7 +9,7 @@ git clone https://github.com/Autonomobile/AutoPylot.git
 cd AutoPylot
 pip install .
 ```
-### How to acces our presentation website
+## How to acces our presentation website
 
 follow this link :
 https://autonomobile.github.io/
