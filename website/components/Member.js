@@ -4,7 +4,10 @@ import Ratio from "react-ratio";
 
 export const Member = (props) => {
   return (
-    <Ratio className="card flex-0 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6 m-3" ratio={ 2 / 3 }>
+    <Ratio
+      className="card flex-0 w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/5 xl:w-1/6 m-3"
+      ratio={2 / 3}
+    >
       <div className="card-side front bg-transparent w-full h-full">
         <div className="bg-black w-full h-full relative border-2 border-black rounded-lg overflow-hidden">
           <Image

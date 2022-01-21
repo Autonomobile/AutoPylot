@@ -1,11 +1,7 @@
 module.exports = {
-  content: ["./pages/**/*.js", "./components/**/*.js" ],
+  content: ["./pages/**/*.js", "./components/**/*.js"],
   theme: {
-    extend: {
-      aspectRatio: {
-        "2/3": "2/3",
-      },
-    },
+    extend: {},
   },
   plugins: [],
 };
