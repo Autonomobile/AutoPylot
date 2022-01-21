@@ -1,6 +1,5 @@
 """Test the memory class."""
-import context
-from utils import memory
+from ..utils import memory
 
 
 def test_memory_dict():
