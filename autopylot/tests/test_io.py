@@ -14,13 +14,13 @@ The Json file should be with .json extension.
 
 
 def test_load_image():
-    image = io.load_image('../.../image.jpg')
+    image = io.load_image("../.../image.jpg")
     assert image, "should not be None, given path no correct."
 
 
 def test_save_image():
-    image = io.load_image('../.../image.jpg')
-    io.save_image(image, '../.../saved_image.jpg')
+    image = io.load_image("../.../image.jpg")
+    io.save_image(image, "../.../saved_image.jpg")
     assert io.save_image(image, '../.../saved_image.jpg'), "should not be None."
 
 def test_laod_json():
