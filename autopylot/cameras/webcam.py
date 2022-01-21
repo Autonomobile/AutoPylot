@@ -26,7 +26,7 @@ class Webcam:
         assert self.c in [
             1, 3], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
 
-    def update(self):
+    def read(self):
         """Read image from the camera.
 
         Raises:
