@@ -19,6 +19,6 @@ class Dummy():
         assert len(self.shape) == 3, "Shape should have 3 dimensions"
         assert self.shape[-1] == 3 or self.shape[-1] == 1, "Image last dimension should be either 3 (RGB) or 1 (GREY)"
 
-    def read(self):
+    def update(self):
         """Create a dummy image."""
         self.memory['image'] = np.zeros(self.shape, dtype=np.float32)
