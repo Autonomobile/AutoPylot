@@ -33,13 +33,6 @@ class SerialControl:
         self.__isOperation = False
         self.__boosting = False
         self.__toSend = []
-        try:
-            self.ser.open()
-            print("Serial port open")
-            print(self.ser.portstr)  # check which port was really used
-            self.ser.write(self.__command)
-        except Exception as e:
-            print("Error opening port: " + str(e))
 
         self.__memory = memory
 
@@ -54,10 +47,16 @@ class SerialControl:
         self.__gear_ratio = 7  # 7 motor turn = 1 wheel turn
         self.__last_received = time.time()
 
-        self.__thread = threading.Thread(target=self.__run_threaded__)
-        self.__thread.start()
+        try:
+            self.ser.open()
+            print(self.ser.portstr)  # check which port was really used
+            self.ser.write(self.__command)
+            self.__thread = threading.Thread(target=self.__run_threaded__)
+            self.__thread.start()
+            print("Serial port open")
 
-        time.sleep(1)
+        except Exception as e:
+            print("Error opening port: " + str(e))
 
     def stop(self):
         self.__isRuning = False
@@ -85,30 +84,32 @@ class SerialControl:
             self.__isOperation = True
             try:
                 out = self.ser.readlines()[-1]
-
-                if self.__ignore_next:
-                    self.__ignore_next = False
-
-                else:
-                    # make sure that both end of lines are present
-                    if out != "" and b'\r' in out and b'\n' in out:
-                        res = int(out.decode())
-                        if self.__pwm < 134 and self.__pwm > 120 and res > 27000:
-                            self.__sensor_rpm = 0
-                        else:
-                            self.__sensor_rpm = (30000000 / res)
-
-                        self.__last_received = time.time()
-                        self.__memory[self.__speed_key] = (self.__sensor_rpm /
-                                                           (self.__gear_ratio * 60)) * self.__wheel_to_meters
-                    else:
-                        self.__ignore_next = True
+                self.__decode_out__(out)
 
             except:
                 pass
 
             finally:
                 self.__isOperation = False
+
+    def __decode_out__(self, out):
+        if self.__ignore_next:
+            self.__ignore_next = False
+
+        else:
+            # make sure that both end of lines are present
+            if out != "" and b'\r' in out and b'\n' in out:
+                res = int(out.decode())
+                if self.__pwm < 134 and self.__pwm > 120 and res > 27000:
+                    self.__sensor_rpm = 0
+                else:
+                    self.__sensor_rpm = (30000000 / res)
+
+                self.__last_received = time.time()
+                self.__memory[self.__speed_key] = (self.__sensor_rpm /
+                                                   (self.__gear_ratio * 60)) * self.__wheel_to_meters
+            else:
+                self.__ignore_next = True
 
     def apply_steering(self, steering):
         """Change steering.
