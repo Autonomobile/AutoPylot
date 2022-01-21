@@ -6,7 +6,7 @@ import serial
 from ..utils import utils
 
 
-class Control:
+class SerialControl:
     """This classs send through serial port commands to an Arduino to pilot a motors and a servo motor using PWM."""
 
     def __init__(self, memory: dict, port="/dev/ttyUSB0", steering_key="steering", throttle_key="throttle", speed_key="speed"):
@@ -14,13 +14,13 @@ class Control:
         Initialize the class. It does require a serial port name. it can be COMx where x is an interger on Windows.
         Or /dev/ttyXYZ where XYZ is a valid tty output for example /dev/ttyS2 or /dev/ttyUSB0
         """
-        self.__ser = serial.Serial()
-        self.__ser.port = port
-        self.__ser.baudrate = 115200
-        self.__ser.bytesize = serial.EIGHTBITS  # number of bits per bytes
-        self.__ser.parity = serial.PARITY_NONE  # set parity check: no parity
-        self.__ser.stopbits = serial.STOPBITS_ONE  # number of stop bits
-        self.__ser.timeout = 0  # 0 = no timeout
+        self.ser = serial.Serial()
+        self.ser.port = port
+        self.ser.baudrate = 115200
+        self.ser.bytesize = serial.EIGHTBITS  # number of bits per bytes
+        self.ser.parity = serial.PARITY_NONE  # set parity check: no parity
+        self.ser.stopbits = serial.STOPBITS_ONE  # number of stop bits
+        self.ser.timeout = 0  # 0 = no timeout
 
         self.__sensor_rpm = 0  # init rpm of the sensor to 0
         self.__command = bytearray([255, 127, 127, 0])
@@ -29,10 +29,10 @@ class Control:
         self.__boosting = False
         self.__toSend = []
         try:
-            self.__ser.open()
+            self.ser.open()
             print("Serial port open")
-            print(self.__ser.portstr)  # check which port was really used
-            self.__ser.write(self.__command)
+            print(self.ser.portstr)  # check which port was really used
+            self.ser.write(self.__command)
         except Exception as e:
             print("Error opening port: " + str(e))
 
@@ -57,9 +57,9 @@ class Control:
     def stop(self):
         self.__isRuning = False
         self.__thread.join()
-        if self.__ser.is_open:
+        if self.ser.is_open:
             self.apply_steering_throttle()
-            self.__ser.close()  # close port
+            self.ser.close()  # close port
 
     def __run_threaded__(self):
         while(self.__isRuning):
@@ -70,16 +70,16 @@ class Control:
             pass
         self.__isOperation = True
         print("writing", command)
-        self.__ser.write(command)
+        self.ser.write(command)
         self.__isOperation = False
 
     def __read_rpm__(self):
-        if self.__ser.in_waiting >= 1:
+        if self.ser.in_waiting >= 1:
             while self.__isOperation:
                 pass
             self.__isOperation = True
             try:
-                out = self.__ser.readlines()[-1]
+                out = self.ser.readlines()[-1]
 
                 if self.__ignore_next:
                     self.__ignore_next = False
@@ -115,7 +115,7 @@ class Control:
 
         self.__steering = int(utils.map_value(steering, -1, 1, 0, 255))
         self.__command[1] = self.__steering
-        self.__ser.write(self.__command)
+        self.ser.write(self.__command)
 
     def apply_throttle(self, throttle):
         """Change motor throttle.
@@ -125,7 +125,7 @@ class Control:
         """
         self.__throttle = int(utils.map_value(throttle, -1, 1, 0, 255))
         self.__command[2] = self.__throttle
-        self.__ser.write(self.__command)
+        self.ser.write(self.__command)
 
     def apply_steering_throttle(self, steering, throttle):
         """Change all the elements at the same time.
@@ -139,7 +139,7 @@ class Control:
 
         self.__command[1] = self.__steering
         self.__command[2] = self.__throttle
-        self.__ser.write(self.__command)
+        self.ser.write(self.__command)
 
     def update(self):
         """Update steering and throttle using memory."""
