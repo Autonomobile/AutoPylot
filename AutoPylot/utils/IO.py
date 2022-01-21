@@ -19,11 +19,11 @@ def save_image(path,save_path): #Probably the right version (using the numpy.arr
     return cv2.imwrite(save_path,load_image(path))
 
 
-def laod_json(path):#path is the path o the json file.
+def laod_json(path):#path is the path to the json file.
     return json.load(path)
     
 
-def save_json(path):
+def save_json(path):#saving  the json file.
     return json.dump(laod_json(path))
 
 
