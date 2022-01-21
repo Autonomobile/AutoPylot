@@ -4,13 +4,6 @@ import json
 import cv2
 
 
-"""When on windows don't copy the path directly use one of the following ways: 
-1.  use an r (raw) before the copied path (r "C:\...\...")
-2.  use the normal /
-3.  use the \\ ("C:\\...\\...")
-"""
-
-
 def load_image(path): #Should return the image as array (num_rows, num_cols, num_channels).
     return cv2.imread(path)
 
