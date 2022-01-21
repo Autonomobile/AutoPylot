@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-
+import loader from "../utils/loader";
 
 export const Brand = () => {
   return (
@@ -8,10 +8,12 @@ export const Brand = () => {
       <div className="m-auto">
         <Image
             className="rounded-t"
-            src="/logo.svg"
+            loader={loader}
+            src="logo.svg"
             alt="logo"
             width={250}
             height={250}
+            unoptimized={true}
           />
         <h1 className="h text-center">By Autonomobile</h1>
       </div>

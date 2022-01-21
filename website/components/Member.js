@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import loader from "../utils/loader";
 
 export const Member = (props) => {
   return (
@@ -8,9 +9,11 @@ export const Member = (props) => {
         <div className="bg-black w-full h-full relative border-2 border-black rounded-lg overflow-hidden">
           <Image
             className="w-full h-full"
+            loader={loader}
             src={props.src}
             alt={props.name}
             layout="fill"
+            unoptimized={true}
           />
           <div className="text-black absolute w-full text-center border-b-2 border-black">
             <p className="mini-hc">{props.name}</p>
