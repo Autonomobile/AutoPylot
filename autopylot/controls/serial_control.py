@@ -19,8 +19,12 @@ class SerialControl:
             throttle_key (str, optional): key of the throttle in the memory. Defaults to "throttle".
             speed_key (str, optional): key of the speed in the memory. Defaults to "speed".
         """
-        self.ser = serial.Serial()
-        self.ser.port = port
+        if port == "loop://":
+            # this one is for testing purposes
+            self.ser = serial.serial_for_url("loop://")
+        else:
+            self.ser = serial.Serial()
+            self.ser.port = port
         self.ser.baudrate = 115200
         self.ser.bytesize = serial.EIGHTBITS  # number of bits per bytes
         self.ser.parity = serial.PARITY_NONE  # set parity check: no parity
@@ -48,12 +52,12 @@ class SerialControl:
         self.__last_received = time.time()
 
         try:
-            self.ser.open()
-            print(self.ser.portstr)  # check which port was really used
-            self.ser.write(self.__command)
-            self.__thread = threading.Thread(target=self.__run_threaded__)
-            self.__thread.start()
-            print("Serial port open")
+            if not self.ser.isOpen():
+                self.ser.open()
+                print(self.ser.portstr)  # check which port was really used
+
+                self.start_thread()
+                print("Serial port open")
 
         except Exception as e:
             print("Error opening port: " + str(e))
@@ -62,8 +66,12 @@ class SerialControl:
         self.__isRuning = False
         self.__thread.join()
         if self.ser.is_open:
-            self.apply_steering_throttle()
+            self.apply_steering_throttle(0, 0)
             self.ser.close()  # close port
+
+    def start_thread(self):
+        self.__thread = threading.Thread(target=self.__run_threaded__)
+        self.__thread.start()
 
     def __run_threaded__(self):
         while(self.__isRuning):
@@ -98,7 +106,7 @@ class SerialControl:
 
         else:
             # make sure that both end of lines are present
-            if out != "" and b'\r' in out and b'\n' in out:
+            if out != "" and out.endswith(b'\r\n'):
                 res = int(out.decode())
                 if self.__pwm < 134 and self.__pwm > 120 and res > 27000:
                     self.__sensor_rpm = 0
