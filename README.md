@@ -9,6 +9,12 @@ git clone https://github.com/Autonomobile/AutoPylot.git
 cd AutoPylot
 pip install .
 ```
+usefull tools:
+- setup a python linter (we use flake8) : https://code.visualstudio.com/docs/python/linting
+- setup the test extension of vscode : https://code.visualstudio.com/docs/python/testing
+- use a docstring generator for example the vscode extension "Python Docstring Generator"
+
+
 ## How to acces our presentation website
 
 follow this link :
