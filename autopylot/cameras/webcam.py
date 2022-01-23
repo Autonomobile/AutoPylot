@@ -19,10 +19,10 @@ class Webcam:
         assert ret, "Couldn't read from camera"
 
         self.shape = shape
-        assert len(self.shape) == 3, "Shape should have 3 dimensions"
         self.h = shape[0]
         self.w = shape[1]
         self.c = shape[2]
+        assert len(self.shape) == 3, "Shape should have 3 dimensions"
         assert self.c in [
             1, 3], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
 
