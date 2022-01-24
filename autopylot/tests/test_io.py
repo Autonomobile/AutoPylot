@@ -26,7 +26,7 @@ def test_load_image():
 def test_save_image():
     image = io.load_image("../.../image.jpg")
     io.save_image(image, "../.../saved_image.jpg")
-    assert io.save_image(image, '../.../saved_image.jpg') is None, "should not be None."
+    assert io.save_image(image, '../.../saved_image.jpg') is True, "should not be None."
 
 def test_laod_json():
     file = io.laod_json("../.../file.json")
