@@ -12,6 +12,11 @@ The images should be with .jpg or .png extension.
 The Json file should be with .json extension.
 """
 
+#creer un dossier 
+def create_file (path):
+    pass
+    
+
 
 def test_load_image():
     image = io.load_image("../.../image.jpg")
