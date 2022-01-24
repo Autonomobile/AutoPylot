@@ -5,6 +5,8 @@ import struct
 import array
 import threading
 
+from ..utils import utils
+
 
 class Joystick(object):
     """An interface to a physical joystick."""
@@ -186,8 +188,13 @@ class XboxOneJoystick(Joystick):
         """
         if self.connected:
             # calculate the steering and throttle now st we don't need to reprocess them
-            steering = self.axis_states['x']
-            throttle = self.joy.axis_states["rz"] - self.joy.axis_states["z"]
+            steering = utils.deadzone(self.axis_states['x'], 0.05)
+            
+            # right trigger
+            th_right = utils.deadzone(self.joy.axis_states["rz"], 0.05)
+            # left trigger
+            th_left = utils.deadzone(self.joy.axis_states["z"], 0.05)
+            throttle = th_right - th_left
 
             # provide steering, throttle and every axis/buttons values we have
             self.memory['controller'] = {
