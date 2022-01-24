@@ -35,6 +35,11 @@ def load_json(path):
 
 # saving the json file.
 
+def load_both (json_path): #load image associate to json file
+    json_data = json.load(json_path) #path of the json file
+    image_path = cv2.imread(json_path) #deduce the path of the image 
+    image = cv2.imread(image_path) #load image .png
+    return image, json_data
 
 def save_json(path, to_save):
     with open(os.path.normpath(path), "w") as json_file:
