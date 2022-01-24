@@ -21,7 +21,3 @@ def save_json(path):
 
 
 #def load_both (json_path):
-
-#tests will be removed
-#print(load_image("C:\\Users\\sacha\\Downloads\\kid.jpg"))
-#print(save_image("C:\\Users\\sacha\\Downloads\\kid.jpg","C:\\Users\\sacha\\Desktop\\copied image\\imagesave.jpg"))
