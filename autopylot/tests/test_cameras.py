@@ -1,6 +1,5 @@
 """Test the cameras."""
-import context
-from cameras import camera
+from ..cameras import camera
 
 
 def test_dummy_capture():
