@@ -1,20 +1,6 @@
 # AutoPylot
 AutoPylot project by Autonomobile !
 
-## How to setup the software
-
-first clone the repo, then install the package and it's dependencies.
-```bash
-git clone https://github.com/Autonomobile/AutoPylot.git
-cd AutoPylot
-pip install .
-```
-usefull tools:
-- setup a python linter (we use flake8) : https://code.visualstudio.com/docs/python/linting
-- setup the test extension of vscode : https://code.visualstudio.com/docs/python/testing
-- use a docstring generator for example the vscode extension "Python Docstring Generator"
-
-
 ## How to acces our presentation website
 
 follow this link :
@@ -44,4 +30,20 @@ For more detailed infomation please read the [project specifications](https://gi
 Enjoy,
 
 The Autonomobile Team.
- 
+
+
+## (for the devs) How to setup the software
+
+It is recommended to have python 3.6.X installed, as this is the python version installed on the car.
+
+Clone the repo, and install the package and it's dependencies:
+```bash
+git clone https://github.com/Autonomobile/AutoPylot.git
+cd AutoPylot
+pip install .
+```
+
+usefull tools:
+- setup a python linter (we use flake8) : https://code.visualstudio.com/docs/python/linting
+- setup the test extension of vscode : https://code.visualstudio.com/docs/python/testing
+- use a docstring generator for example the vscode extension "Python Docstring Generator"
