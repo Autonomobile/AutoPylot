@@ -39,9 +39,7 @@ This will require multiple intermediate milestones:
  - Race against others !
  - WIN !
 
-For more detailed infomation go to :
-
-AutoPylot/project-specifications/project-specifications.pdf 
+For more detailed infomation please read the [project specifications](https://github.com/Autonomobile/AutoPylot/blob/main/project-specifications/project-specifications.pdf) 
 
 Enjoy,
 
