@@ -15,6 +15,17 @@ def load_image(path):
     """
     return cv2.imread(path)
 
+def load_json(path):
+    """Load a json file
+
+    Args:
+        path ([string]): path of the json file to load
+
+    Returns:
+        [dictionary]: data about the image 
+    """
+    with open(os.path.normpath(path), "r") as json_file:
+        return json.load(json_file)
 
 def save_image(path, image):
     """Save an image to a file.
@@ -28,20 +39,6 @@ def save_image(path, image):
     """
     return cv2.imwrite(path, image)
 
-
-def load_json(path):
-    """Load a json file
-
-    Args:
-        path ([string]): path of the json file to load
-
-    Returns:
-        [dictionary]: data about the image 
-    """
-    with open(os.path.normpath(path), "r") as json_file:
-        return json.load(json_file)
-
-
 def save_json(path, to_save):
     """Save the Json file
 
@@ -54,6 +51,21 @@ def save_json(path, to_save):
     """
     with open(os.path.normpath(path), "w") as json_file:
         return json.dump(to_save, path)
+
+
+def save_image_data(json_file, to_save):
+    """takes a dictionary (json_file), save image and json_path
+
+    Args:
+        json_file ([dictionary]): contains an image and json_path
+        to_save ([path]): path of where we have to save those data
+
+    Returns:
+        [tuple]: image and data 
+    """
+    image = json_file["image"]
+    json_path = json_file["json_file"]
+    return cv2.imwrite(to_save, image), json.dump(to_save, json_path)
 
 
 def load_image_data (json_path):
@@ -75,7 +87,7 @@ def load_image_data (json_path):
     with open(os.path.normpath(json_path), "r") as json_file:
         data = {
             "image" : cv2.imread(image_path),
-            "json_file" :json.load(json_path)
+            "json_file" : json.load(json_path)
         } 
     return data
     
