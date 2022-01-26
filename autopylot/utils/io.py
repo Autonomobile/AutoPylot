@@ -19,13 +19,14 @@ def load_json(path):
     """Load a json file
 
     Args:
-        path ([string]): path of the json file to load
+        path (string): path of the json file to load
 
     Returns:
-        [dictionary]: data about the image 
+        dictionary: data about the image 
     """
     with open(os.path.normpath(path), "r") as json_file:
-        return json.load(json_file)
+        data = json.load(json_file)
+    return data 
 
 def save_image(path, image):
     """Save an image to a file.
@@ -43,51 +44,42 @@ def save_json(path, to_save):
     """Save the Json file
 
     Args:
-        path ([string]): path of the json file
-        to_save ([string]): path of where we have to save this file
+        path (string): path of the json file
+        to_save (string): path of where we have to save this file
 
     Returns:
-        [dictionary]: save data about the image at the path "to_save"
+        dictionary: save data about the image at the path "to_save"
     """
     with open(os.path.normpath(path), "w") as json_file:
-        return json.dump(to_save, path)
+        ret = json.dump(to_save, path)
+    return ret
 
-
-def save_image_data(json_file, to_save):
-    """takes a dictionary (json_file), save image and json_path
+def save_image_data(image_data, path):
+    """takes a dictionary (image_data), save image and json_path
 
     Args:
-        json_file ([dictionary]): contains an image and json_path
-        to_save ([path]): path of where we have to save those data
+        image_data (dictionary): contains an image and json_path
+        path (path): path of where we have to save those data
 
     Returns:
-        [tuple]: image and data 
+        tuple: image and data 
     """
-    image = json_file["image"]
-    json_path = json_file["json_file"]
-    return cv2.imwrite(to_save, image), json.dump(to_save, json_path)
+    image = image_data["image"]
+    del image_data["image"]
+    return cv2.imwrite(path, image), json.dump(path, image_data)
 
 
 def load_image_data (json_path):
     """load a json file and an image 
 
     Args:
-        json_path ([string]): path of the json file 
+        json_path (string): path of the json file 
 
     Returns:
-        [tuple]: image and json file
+        tuple: image and json file
     """
-    tmp = json_path.split(".")
-    tmp.pop()
-    tmp.append(".png")
-    image_path = ""
-    for i in tmp :
-        image_path += i
-
-    with open(os.path.normpath(json_path), "r") as json_file:
-        data = {
-            "image" : cv2.imread(image_path),
-            "json_file" : json.load(json_path)
-        } 
-    return data
+    image_path = json_path.split(".json")[0] + ".png"
+    image_data = load_json(json_path)
+    image_data["image"] = load_image(image_path)
+    return image_data
     
