@@ -12,7 +12,9 @@ class StateSwitcher:
         """
         self.memory = memory
         self.states = ["stop", "autonomous", "collect", "manual"]
-        self.state = "driving"
+        self.state = self.states[0]
+
+        self.memory['state'] = self.state
 
     def update(self):
         """Update state using controller buttons."""
