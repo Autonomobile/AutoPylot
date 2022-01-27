@@ -53,7 +53,7 @@ def save_json(path, to_save):
     with open(os.path.normpath(path), "w") as json_file:
         ret = json.dump(to_save, path)
     return ret
-
+    
 def save_image_data(image_data, path):
     """takes a dictionary (image_data), save image and json_path
 

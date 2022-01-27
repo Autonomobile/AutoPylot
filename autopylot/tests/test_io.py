@@ -25,6 +25,7 @@ def create_directory():
     """
     current_path = os.getcwd()
     new_path_dir = os.path.join(current_path,"testing_io")
+    assert os.path.exists(new_path_dir) is True, "file already exists"
     os.mkdir(new_path_dir)
     #print ("Test directory created successfully here :", new_path_dir)
     return new_path_dir
@@ -43,24 +44,33 @@ def delete_directory():
 def test_load_image():
     """testing if the image was 
     """
-    image = io.load_image(create_directory()+"image.jpg")
-    assert image is None, "should not be None, given path no correct/not excistent."
+    dir = create_directory()
+    image = io.load_image(dir+"image.jpg")
     delete_directory()
+    assert image is None, "should not be None, given path no correct/not excistent."
+    
 
 
 def test_save_image():
-    image = io.load_image(create_directory() +"image.jpg")
-    save = io.save_image(image, "../saved_image.jpg")
+    dir = create_directory()
+    image = io.load_image(dir+"image.jpg")
+    save = io.save_image(image, dir+"save_image.jpg")
     assert save is False, "Image not saved."
-    delete_directory()
+    
 
 def test_laod_json():
     data = io.laod_json(create_directory()+"data.json")
+    delete_directory()
     assert data is None, "given file does not exist"
+    
+
 
 def test_save_json():
-    data = io.load_json(create_directory()+"data.json")
-    save = io.save_json(data,)
+    dir = create_directory()
+    data = io.load_json(dir+"data.json")
+    save = io.save_json(data,dir+"save_data.json")
+    delete_directory()
+
 
 #     assert
 
