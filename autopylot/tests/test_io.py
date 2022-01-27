@@ -1,5 +1,7 @@
 """test the io class"""
 import os
+
+from numpy import empty
 from ..utils import io
 
 """
@@ -44,36 +46,38 @@ def delete_directory():
 def test_load_image():
     """testing if the image was 
     """
-    dir = create_directory()
-    image = io.load_image(dir+"image.jpg")
-    delete_directory()
+    #dir = create_directory()
+    image = io.load_image("C:\\Users\\maxim\\Desktop\\Projet S2" + "logo2.png")
     assert image is None, "should not be None, given path no correct/not excistent."
-    
+    #delete_directory()
 
 
 def test_save_image():
-    dir = create_directory()
-    image = io.load_image(dir+"image.jpg")
-    save = io.save_image(image, dir+"save_image.jpg")
-    assert save is False, "Image not saved."
-    
+    #dir = create_directory()
+    image = io.load_image("C:\\Users\\maxim\\Desktop\\Projet S2\\logo2.png")
+    save = io.save_image("C:\\Users\\maxim\\Desktop\\Projet S2\\test\\logo3.png", image)
+    assert save is True, "Image not saved."
+    #delete_directory()
 
-def test_laod_json():
-    data = io.laod_json(create_directory()+"data.json")
-    delete_directory()
-    assert data is None, "given file does not exist"
+
+def test_load_json():
+    """need to change assert to have stg good
+    """
+    data = io.load_json("C:\\Users\\maxim\\Desktop\\Projet S2\\test\\test.json")
+    #delete_directory()
+    assert data != {}, "given file does not exist" 
     
 
 
 def test_save_json():
-    dir = create_directory()
-    data = io.load_json(dir+"data.json")
-    save = io.save_json(data,dir+"save_data.json")
-    delete_directory()
+    #dir = create_directory()
+    data = io.load_json("C:\\Users\\maxim\\Desktop\\Projet S2\\test\\test.json")
+    save = io.save_json("C:\\Users\\maxim\\Desktop\\Projet S2\\test\\test2.json", data)
+    assert save is None, "Image not saved."
+    #delete_directory()
 
+def test_save_image_data():
+    pass
 
-#     assert
-
-# def test_both():
-
-#     assert
+def test_load_image_data ():  
+    pass
