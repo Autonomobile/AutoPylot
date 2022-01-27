@@ -10,6 +10,8 @@ When on windows don't copy the path directly use one of the following ways:
 
 The images should be with .jpg or .png extension.
 The Json file should be with .json extension.
+
+Make sure you have the correct permissions.
 """
 #create a test_io directory which will be deleted afterwards.
 
@@ -17,16 +19,17 @@ def create_directory():
     current_path = os.getcwd()
     new_path_dir = os.path.join(current_path,"testing_io")
     os.mkdir(new_path_dir)
+    print ("Test directory created successfully here :", new_path_dir)
 
-
+#create_directory()
 
 def delete_directory():
     path = os.getcwd()
     path_dir = os.path.join(path,"testing_io")
-    os.remove(path_dir)
-    return "succesfully removed temp dir"
+    os.rmdir(path_dir)
+    print("succesfully removed test directory")
 
-delete_directory()
+#delete_directory()
 """
 def test_load_image():
     image = io.load_image("../.../image.jpg")
