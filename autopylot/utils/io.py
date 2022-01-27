@@ -15,6 +15,7 @@ def load_image(path):
     """
     return cv2.imread(path)
 
+
 def load_json(path):
     """Load a json file
 
@@ -27,6 +28,7 @@ def load_json(path):
     with open(os.path.normpath(path), "r") as json_file:
         data = json.load(json_file)
     return data 
+
 
 #print(load_json("C:\\Users\\maxim\\Desktop\\Projet S2\\test\\test.json"))
 def save_image(path, image):
@@ -41,6 +43,7 @@ def save_image(path, image):
     """
     image = cv2.imwrite(path, image)
     return image
+
 
 def save_json(path, to_save):
     """Save the Json file
