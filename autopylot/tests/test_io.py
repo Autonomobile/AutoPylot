@@ -77,7 +77,10 @@ def test_save_json():
     #delete_directory()
 
 def test_save_image_data():
-    pass
+    image_data = io.load_json("C:\\Users\\maxim\\Desktop\\Projet S2\\test\\test.json")
+    data_tuple = io.save_image_data(image_data, "C:\\Users\\maxim\\Desktop\\Projet S2\\test\\test3.json")
+    (a,b) = data_tuple
+    assert a is True and b is None  
 
 def test_load_image_data ():  
     pass

@@ -52,7 +52,7 @@ def save_json(path, to_save):
     Returns:
         dictionary: save data about the image at the path "path"
     """
-    with open(path, "w") as json_file:
+    with open(os.path.normpath(path), "w") as json_file:
         ret = json.dump(to_save, json_file)
     return ret
 
