@@ -20,6 +20,7 @@ def create_directory():
     new_path_dir = os.path.join(current_path,"testing_io")
     os.mkdir(new_path_dir)
     print ("Test directory created successfully here :", new_path_dir)
+    return new_path_dir
 
 #create_directory()
 
