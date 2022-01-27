@@ -16,7 +16,7 @@ export default function Home() {
       <Brand />
       {/* <Car /> */}
       <Members />
-      {/* <Info /> */}
+      <Info />
       {/* <Progress /> */}
     </>
   );

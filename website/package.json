@@ -10,6 +10,7 @@
   "dependencies": {
     "autoprefixer": "^10.4.2",
     "next": "12.0.8",
+    "pdf-lib": "^1.17.1",
     "postcss": "^8.4.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
