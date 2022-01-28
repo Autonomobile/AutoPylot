@@ -1,7 +1,6 @@
-from autopylot import controls, cameras, utils
-from controls import controller, state_switcher, serial_control
-from cameras import Camera
-from utils import memory
+from autopylot.controls import controller, state_switcher, serial_control
+from autopylot.cameras import camera
+from autopylot.utils import memory
 
 mem = memory.Memory()
 
