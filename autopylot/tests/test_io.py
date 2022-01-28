@@ -19,7 +19,7 @@ Make sure you have the correct permissions.
 
 
 def test_create_directory():
-    """create a testing_io directory.
+    """Create a testing_io directory.
 
     Returns:
         string : path to testing_io directory.
@@ -31,19 +31,20 @@ def test_create_directory():
 
 
 def test_load_image_none():
-    """testing if the image was loaded."""
+    """Testing if the image was loaded."""
     image = io.load_image(os.getcwd() + "\\testing_io\\test.png")
     assert image is None, "should not be None, the image doens't exist."
 
 
 def test_save_image():
+    """Testing the saving of an image."""
     image = np.zeros((2, 2, 3), dtype=np.float32)
     save = io.save_image(os.getcwd() + "\\testing_io\\test.png", image)
     assert save is True, "Image not saved."
 
 
 def test_load_image():
-    """testing if the image was loaded."""
+    """Testing the loading of the image."""
     image = io.load_image(os.getcwd() + "\\testing_io\\test.png")
     assert image.shape == (2, 2, 3)
 
@@ -55,17 +56,20 @@ def test_load_image():
 
 
 def test_save_json():
+    """Testing the saving of a dictionnary into a .json file."""
     data = {"test": "this is a test"}
     save = io.save_json(os.getcwd() + "\\testing_io\\test.json", data)
     assert save is None, "json not saved."
 
 
 def test_load_json():
+    """Testing the loading of the .json file."""
     data = io.load_json(os.getcwd() + "\\testing_io\\test.json")
     assert data == {"test": "this is a test"}
 
 
 def test_load_image_data():
+    """Testing the loading of both image and .json file."""
     image_data = io.load_image_data(os.getcwd() + "\\testing_io\\test.json")
     image = image_data["image"]
     del image_data["image"]
@@ -73,6 +77,7 @@ def test_load_image_data():
 
 
 def test_save_image_data():
+    """Testing the saving of both image and data of the image into a .png and .json file."""
     image_data = {
         "test": "this is a test",
         "image": np.zeros((2, 2, 3), dtype=np.float32),
@@ -88,8 +93,7 @@ def test_save_image_data():
 
 
 def test_delete_directory():
-    """deletes the created directory."""
-
+    """Deletes the created directory."""
     path = os.getcwd()
     path_dir = os.path.join(path, "testing_io")
 
