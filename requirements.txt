@@ -1,4 +1,5 @@
 # those are the requirements for the tests, if you wish to install the package, use instead "pip install ."
 opencv-python >= 4.1.1
 numpy >= 1.17
+glob2
 pyserial
