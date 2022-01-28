@@ -94,3 +94,4 @@ def test_delete_directory():
         os.remove(filepath)
 
     os.rmdir(path_dir)
+    assert os.path.exists(path_dir) is False
