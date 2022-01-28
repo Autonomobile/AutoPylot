@@ -53,7 +53,7 @@ class SerialControl:
 
         self.__ignore_next = False
         self.__steering = 127
-        self.__pwm = 127
+        self.__throttle = 127
         self.__wheel_to_meters = 0.20  # 1 wheel turn = 0.20 m
         self.__gear_ratio = 7  # 7 motor turn = 1 wheel turn
         self.__last_received = time.time()
@@ -115,7 +115,7 @@ class SerialControl:
             # make sure that both end of lines are present
             if out != "" and out.endswith(b"\r\n"):
                 res = int(out.decode())
-                if self.__pwm < 134 and self.__pwm > 120 and res > 27000:
+                if self.__throttle < 134 and self.__throttle > 120 and res > 27000:
                     self.__sensor_rpm = 0
                 else:
                     self.__sensor_rpm = 30000000 / res
