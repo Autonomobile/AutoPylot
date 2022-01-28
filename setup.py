@@ -13,5 +13,6 @@ setup(
         'tensorflow >= 2.3.2',
         'numpy >= 1.17',
         'glob'
+        'pyserial',
     ],
 )
