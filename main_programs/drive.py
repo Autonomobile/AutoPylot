@@ -1,8 +1,7 @@
-from autopylot.controls import controller
-from autopylot.controls import state_switcher
-from autopylot.controls import serial_control
-from autopylot.cameras import camera
-from autopylot.utils import memory
+from autopylot import controls, cameras, utils
+from controls import controller, state_switcher, serial_control
+from cameras import Camera
+from utils import memory
 
 mem = memory.Memory()
 
@@ -12,12 +11,13 @@ cam = camera.Camera(mem)
 js = controller.XboxOneJoystick(mem)
 js.init()
 
+
 def main():
     while True:
 
-        js.update() # update joystick
-        
-        state.update() # car state
+        js.update()  # update joystick
+
+        state.update()  # car state
 
         if mem["state"] == "stop":
             mem["steering"] = 0.0
@@ -35,9 +35,9 @@ def main():
             mem["steering"] = mem["controller"]["steering"]
             mem["throttle"] = mem["controller"]["throttle"]
 
-            cam.update() # get the last frame from the camera
+            cam.update()  # get the last frame from the camera
 
-        serial.update() # send commands to the memory
+        serial.update()  # send commands to the memory
 
 
 if __name__ == "__main__":
