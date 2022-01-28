@@ -9,6 +9,7 @@ def test_serial_high_speed():
     # open a test serial
     ser = serial_control.SerialControl(test_memory, port="loop://")
     ser.start_thread()
+    ser.__throttle = 150
 
     # corresponds to normal-ish RPM
     ser.ser.write(b"1234\r\n")
@@ -27,6 +28,7 @@ def test_serial_normal_speed():
     # open a test serial
     ser = serial_control.SerialControl(test_memory, port="loop://")
     ser.start_thread()
+    ser.__throttle = 140
 
     # corresponds to normal-ish RPM
     ser.ser.write(b"5678\r\n")
