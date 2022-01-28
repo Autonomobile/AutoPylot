@@ -88,8 +88,7 @@ class Joystick(object):
     def show_map(self):
         """List the buttons and axis found on this joystick."""
         print("%d axes found: %s" % (self.num_axes, ", ".join(self.axis_map)))
-        print("%d buttons found: %s" %
-              (self.num_buttons, ", ".join(self.button_map)))
+        print("%d buttons found: %s" % (self.num_buttons, ", ".join(self.button_map)))
 
     def poll(self):
         """Query the state of the joystick, returns button which was pressed.

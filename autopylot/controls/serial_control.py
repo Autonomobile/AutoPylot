@@ -9,7 +9,14 @@ from ..utils import utils
 class SerialControl:
     """This classs send through serial port commands to an Arduino to pilot a motors and a servo motor using PWM."""
 
-    def __init__(self, memory: dict, port="/dev/ttyUSB0", steering_key="steering", throttle_key="throttle", speed_key="speed"):
+    def __init__(
+        self,
+        memory: dict,
+        port="/dev/ttyUSB0",
+        steering_key="steering",
+        throttle_key="throttle",
+        speed_key="speed",
+    ):
         """Initialize the class.
 
         Args:
@@ -74,7 +81,7 @@ class SerialControl:
         self.__thread.start()
 
     def __run_threaded__(self):
-        while(self.__isRuning):
+        while self.__isRuning:
             self.__read_rpm__()
 
     def __safe_write__(self, command):
@@ -106,16 +113,17 @@ class SerialControl:
 
         else:
             # make sure that both end of lines are present
-            if out != "" and out.endswith(b'\r\n'):
+            if out != "" and out.endswith(b"\r\n"):
                 res = int(out.decode())
                 if self.__pwm < 134 and self.__pwm > 120 and res > 27000:
                     self.__sensor_rpm = 0
                 else:
-                    self.__sensor_rpm = (30000000 / res)
+                    self.__sensor_rpm = 30000000 / res
 
                 self.__last_received = time.time()
-                self.__memory[self.__speed_key] = (self.__sensor_rpm /
-                                                   (self.__gear_ratio * 60)) * self.__wheel_to_meters
+                self.__memory[self.__speed_key] = (
+                    self.__sensor_rpm / (self.__gear_ratio * 60)
+                ) * self.__wheel_to_meters
             else:
                 self.__ignore_next = True
 

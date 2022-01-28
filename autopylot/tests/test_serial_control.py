@@ -55,7 +55,7 @@ def test_serial_no_speed():
     # stop the thread
     ser.stop()
 
-    assert test_memory['speed'] == 0.0
+    assert test_memory["speed"] == 0.0
 
 
 def test_serial_invalid_bitarray():
@@ -77,59 +77,59 @@ def test_serial_invalid_bitarray():
 
 def test_serial_send_positive_steering():
     # simulate right turn
-    test_memory = {'steering': 0.5}
+    test_memory = {"steering": 0.5}
 
     # open a test serial
     ser = serial_control.SerialControl(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b'\xff\xbf\x7f\x00'
+    assert out == b"\xff\xbf\x7f\x00"
 
 
 def test_serial_send_negative_steering():
     # simulate left turn
-    test_memory = {'steering': -0.5}
+    test_memory = {"steering": -0.5}
 
     # open a test serial
     ser = serial_control.SerialControl(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b'\xff?\x7f\x00'
+    assert out == b"\xff?\x7f\x00"
 
 
 def test_serial_send_positive_throttle():
     # simulate forward throttle
-    test_memory = {'throttle': 0.5}
+    test_memory = {"throttle": 0.5}
 
     # open a test serial
     ser = serial_control.SerialControl(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b'\xff\x7f\xbf\x00'
+    assert out == b"\xff\x7f\xbf\x00"
 
 
 def test_serial_send_negative_throttle():
     # simulate backward throttle
-    test_memory = {'throttle': -0.5}
+    test_memory = {"throttle": -0.5}
 
     # open a test serial
     ser = serial_control.SerialControl(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b'\xff\x7f?\x00'
+    assert out == b"\xff\x7f?\x00"
 
 
 def test_serial_send_both():
     # simulate right turn and forward throttle
-    test_memory = {'steering': 0.5, 'throttle': 0.5}
+    test_memory = {"steering": 0.5, "throttle": 0.5}
 
     # open a test serial
     ser = serial_control.SerialControl(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b'\xff\xbf\xbf\x00'
+    assert out == b"\xff\xbf\xbf\x00"

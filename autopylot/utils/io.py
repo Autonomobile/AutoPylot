@@ -1,38 +1,87 @@
-""" Here we will load and save data comming from the images""" 
-from numpy import asarray
-import json 
+""" Here we will load and save data comming from the images."""
+import json
 import cv2
+import os
 
 
-"""When on windows don't copy the path directly use one of the following ways: 
-1.  use an r (raw) before the copied path (r "C:\...\...")
-2.  use the normal /
-3.  use the \\ ("C:\\...\\...")
-"""
+def load_image(image_path):
+    """Load an image from a path.
+
+    Args:
+        image_path (string): path of the image to load.
+
+    Returns:
+        np.array: the image.
+    """
+    return cv2.imread(image_path)
 
 
-def load_image(path): #Should return the image as array (num_rows, num_cols, num_channels).
-    return cv2.imread(path)
+def load_json(json_path):
+    """Load a json file
+
+    Args:
+        json_path (string): path of the json file to load
+
+    Returns:
+        dictionary: dictionnary of the content of a json file.
+    """
+    with open(os.path.normpath(json_path), "r") as json_file:
+        data = json.load(json_file)
+    return data
 
 
-def save_image(path,save_path): #Probably the right version (using the numpy.array data)
-    return cv2.imwrite(save_path,load_image(path))
+def save_image(path, image):
+    """Save an image to a file.
+
+    Args:
+        path (string): path of the saved image.
+        image (np.array): the image to save.
+
+    Returns:
+        bool: wether the image is saved or not.
+    """
+    image = cv2.imwrite(path, image)
+    return image
 
 
-def laod_json(path):#path is the path to the json file.
-    return json.load(path)
-    
+def save_json(json_path, to_save):
+    """Save the Json file
 
-def save_json(path):#saving  the json file.
-    return json.dump(laod_json(path))
+    Args:
+        json_path (string): path of where we want to save it.
+        to_save (dictionnary): is the dictionnary to save.
+    """
+    with open(os.path.normpath(json_path), "w") as json_file:
+        json.dump(to_save, json_file)
 
 
-def load_both (json_path): #load image associate to json file
-    json_data = json.load(json_path) #path of the json file
-    image_path = cv2.imread(json_path) #deduce the path of the image 
-    image = cv2.imread(image_path) #load image .png
-    return image, json_data
+def save_image_data(image_data, json_path):
+    """takes a dictionary (image_data), save image and json_path
 
-#tests will be removed
-#print(load_image("C:\\Users\\sacha\\Downloads\\kid.jpg"))
-#print(save_image("C:\\Users\\sacha\\Downloads\\kid.jpg","C:\\Users\\sacha\\Desktop\\copied image\\imagesave.jpg"))
+    Args:
+        image_data (dictionary): contains an image and json_path.
+        json_path (path): path of where we have to save those data.
+
+    Returns:
+        bool: ret of save_image.
+    """
+    image_data_copy = image_data.copy()
+    image = image_data_copy["image"]
+    del image_data_copy["image"]
+    image_path = json_path.split(".json")[0] + ".png"
+    return save_image(image_path, image)
+
+
+def load_image_data(json_path):
+    """load a json file and an image
+
+    Args:
+        json_path (string): path of the json file.
+
+    Returns:
+        dictionnary: image and json file into a dictionary.
+    """
+    image_path = json_path.split(".json")[0] + ".png"
+    image_data = load_json(json_path)
+    image_data["image"] = load_image(image_path)
+    return image_data
