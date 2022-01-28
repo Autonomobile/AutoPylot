@@ -37,7 +37,7 @@ def main():
             cam.update()  # get the last frame from the camera
 
         serial.update()  # send commands to the memory
-        print(mem)
+        # print(mem)
 
 
 if __name__ == "__main__":
