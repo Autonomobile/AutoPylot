@@ -2,7 +2,7 @@ import Head from "next/head";
 import { Brand } from "../components/Brand.js";
 import { Members } from "../components/Members.js";
 import { Progress } from "../components/Progress.js";
-import { Info } from "../components/Info.js";
+import { Timeline } from "../components/Timeline.js";
 import { Car } from "../components/Car.js";
 
 export default function Home() {
@@ -16,7 +16,7 @@ export default function Home() {
       <Brand />
       {/* <Car /> */}
       <Members />
-      <Info />
+      <Timeline />
       {/* <Progress /> */}
     </>
   );

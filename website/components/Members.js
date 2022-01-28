@@ -45,6 +45,7 @@ export const Members = () => {
             />
           ))}
         </div>
+        <p className="text-center mt-6">TODO ADD TEXT</p>
       </div>
     </div>
   );

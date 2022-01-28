@@ -13,6 +13,7 @@
     "pdf-lib": "^1.17.1",
     "postcss": "^8.4.5",
     "react": "17.0.2",
+    "react-chrono": "^1.13.2",
     "react-dom": "17.0.2",
     "react-pageflip": "^2.0.3",
     "react-pdf": "^5.6.0",
