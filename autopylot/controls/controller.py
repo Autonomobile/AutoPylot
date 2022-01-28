@@ -86,8 +86,7 @@ class Joystick(object):
     def show_map(self):
         """List the buttons and axis found on this joystick."""
         print("%d axes found: %s" % (self.num_axes, ", ".join(self.axis_map)))
-        print("%d buttons found: %s" %
-              (self.num_buttons, ", ".join(self.button_map)))
+        print("%d buttons found: %s" % (self.num_buttons, ", ".join(self.button_map)))
 
     def poll(self):
         """Query the state of the joystick, returns button which was pressed.
@@ -189,4 +188,4 @@ class XboxOneJoystick(Joystick):
         # throttle = self.joy.axis_states["rz"] - self.joy.axis_states["z"]
 
         # provide steering, throttle and every axis/buttons values we have
-        self.memory['controller'] = {**self.axis_states, **self.button_states}
+        self.memory["controller"] = {**self.axis_states, **self.button_states}

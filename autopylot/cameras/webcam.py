@@ -24,7 +24,9 @@ class Webcam:
         self.c = shape[2]
         assert len(self.shape) == 3, "Shape should have 3 dimensions"
         assert self.c in [
-            1, 3], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
+            1,
+            3,
+        ], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
 
     def update(self):
         """Read image from the camera.
@@ -36,9 +38,9 @@ class Webcam:
         if ret:
             img = cv2.resize(img, (self.w, self.h))
             if self.c == 3:
-                self.memory['image'] = img
+                self.memory["image"] = img
             else:
-                self.memory['image'] = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+                self.memory["image"] = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
         else:
             raise ValueError("Image read failed")

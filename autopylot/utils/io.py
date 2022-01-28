@@ -68,7 +68,7 @@ def save_image_data(image_data, json_path):
     image_data_copy = image_data.copy()
     image = image_data_copy["image"]
     del image_data_copy["image"]
-    image_path = json_path.split('.json')[0] + ".png"
+    image_path = json_path.split(".json")[0] + ".png"
     return save_image(image_path, image)
 
 

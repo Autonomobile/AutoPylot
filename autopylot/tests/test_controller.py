@@ -4,6 +4,7 @@ from ..cameras import camera
 
 
 def test_controller():
+    """Test the controller dict when joystick is not connected."""
     mem = memory.Memory()
     cam = camera.Camera(mem, camera_type="dummy")
     cam.update()
@@ -12,4 +13,4 @@ def test_controller():
     js.update()
 
     # no controls as controller is not init
-    assert len(mem) == 2 and mem['controller'] == {}
+    assert len(mem) == 2 and mem["controller"] == {}

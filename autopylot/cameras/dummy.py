@@ -2,7 +2,7 @@
 import numpy as np
 
 
-class Dummy():
+class Dummy:
     """Dummy camera."""
 
     def __init__(self, memory, shape=(160, 120, 3)):
@@ -19,8 +19,10 @@ class Dummy():
         self.c = shape[2]
         assert len(self.shape) == 3, "Shape should have 3 dimensions"
         assert self.c in [
-            1, 3], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
+            1,
+            3,
+        ], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
 
     def update(self):
         """Create a dummy image."""
-        self.memory['image'] = np.zeros(self.shape, dtype=np.float32)
+        self.memory["image"] = np.zeros(self.shape, dtype=np.float32)
