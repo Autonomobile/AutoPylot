@@ -47,3 +47,12 @@ usefull tools:
 - setup a python linter (we use flake8) : https://code.visualstudio.com/docs/python/linting
 - setup the test extension of vscode : https://code.visualstudio.com/docs/python/testing
 - use a docstring generator for example the vscode extension "Python Docstring Generator"
+- install "black" python package for code formating
+installation:
+    ```cmd
+    pip install black
+    ```
+    usage in a cmd:
+    ```cmd
+    black autopylot
+    ```
