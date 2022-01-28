@@ -115,7 +115,7 @@ class SerialControl:
             # make sure that both end of lines are present
             if out != "" and out.endswith(b"\r\n"):
                 res = int(out.decode())
-                if 134 > self.__throttle > 120 and res > 27000:
+                if 134 > self.__throttle > 120:  # and res > 27000
                     self.__sensor_rpm = 0
                 else:
                     self.__sensor_rpm = 30000000 / res
