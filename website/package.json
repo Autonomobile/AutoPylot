@@ -13,6 +13,8 @@
     "postcss": "^8.4.5",
     "react": "17.0.2",
     "react-dom": "17.0.2",
+    "react-pageflip": "^2.0.3",
+    "react-pdf": "^5.6.0",
     "react-ratio": "^0.1.5",
     "tailwindcss": "^3.0.15"
   },
