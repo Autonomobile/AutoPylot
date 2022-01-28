@@ -46,6 +46,7 @@ def test_serial_no_speed():
     # open a test serial
     ser = serial_control.SerialControl(test_memory, port="loop://")
     ser.start_thread()
+    ser.__throttle = 127
 
     ser.ser.write(b"27001\r\n")
 
