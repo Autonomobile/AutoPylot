@@ -40,7 +40,7 @@ Clone the repo, and install the package and it's dependencies:
 ```bash
 git clone https://github.com/Autonomobile/AutoPylot.git
 cd AutoPylot
-pip install .
+pip -e install .
 ```
 
 usefull tools:
