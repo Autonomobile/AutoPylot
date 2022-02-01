@@ -10,9 +10,10 @@ setup(
     packages=['autopylot'],
     install_requires=[
         'opencv-python >= 4.1.1',
-        'tensorflow >= 2.3.2',
+        'tensorflow >= 2.3.0, <2.4',
         'numpy >= 1.17',
         'glob2',
         'pyserial',
+        'pytest',
     ],
 )
