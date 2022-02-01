@@ -14,8 +14,8 @@ Being able to work on this project means we will be able to understand how tomor
 Our main objective is to make our car race against other cars and win the race !
 This will require multiple intermediate milestones:
 
- - [ ] Being able to send scripted controls to the motor and servo.
- - [ ] Being able to drive the car manually using a controller.
+ - [x] Being able to send scripted controls to the motor and servo.
+ - [x] Being able to drive the car manually using a controller.
  - [ ] Develop a way to gather images and annotations and store them in a stuctured way, for example sorted by date.
  - [ ] Process those data before feeding them to the neural network.
  - [ ] Being able to train a convolutional neural network using those data.
