@@ -5,6 +5,8 @@ import struct
 import array
 import threading
 
+from ..utils import utils
+
 
 class Joystick(object):
     """An interface to a physical joystick."""
@@ -168,14 +170,14 @@ class XboxOneJoystick(Joystick):
         }
 
         self.button_names = {
-            0x130: "a",
-            0x131: "b",
-            0x133: "x",
-            0x134: "y",
-            0x13A: "back",
-            0x13B: "start",
-            0x136: "lb",
-            0x137: "rb",
+            0x130: "button_a",
+            0x131: "button_b",
+            0x133: "button_x",
+            0x134: "button_y",
+            0x13A: "button_back",
+            0x13B: "button_start",
+            0x136: "button_lb",
+            0x137: "button_rb",
         }
 
     def update(self):
@@ -183,9 +185,22 @@ class XboxOneJoystick(Joystick):
 
         This function stores in the memory the newly fetched axis values.
         """
-        # calculate the steering and throttle now st we don't need to reprocess them
-        # steering = self.axis_states['x']
-        # throttle = self.joy.axis_states["rz"] - self.joy.axis_states["z"]
+        if self.connected:
+            # calculate the steering and throttle now st we don't need to reprocess them
+            steering = utils.deadzone(self.axis_states['x'], 0.05)
+            
+            # right trigger
+            th_right = utils.deadzone(self.axis_states["rz"], 0.05)
+            # left trigger
+            th_left = utils.deadzone(self.axis_states["z"], 0.05)
+            throttle = th_right - th_left
 
-        # provide steering, throttle and every axis/buttons values we have
-        self.memory["controller"] = {**self.axis_states, **self.button_states}
+            # provide steering, throttle and every axis/buttons values we have
+            self.memory['controller'] = {
+                'steering': steering,
+                'throttle': throttle,
+                **self.axis_states,
+                **self.button_states
+            }
+        else:
+            self.memory['controller'] = {}
