@@ -36,11 +36,36 @@ The Autonomobile Team.
 
 It is recommended to have python 3.6.X installed, as this is the python version installed on the car.
 
+To avoid any packages conflicts with your existing python installation, we will use virtualenv
+install virtualenv using:
+```bash
+pip install virtualenv
+```
+
 Clone the repo, and install the package and it's dependencies:
 ```bash
 git clone https://github.com/Autonomobile/AutoPylot.git
 cd AutoPylot
-pip -e install .
+```
+Then, create a virtual env (you need to specify the path to your python3.6:
+```bash
+virtualenv --python C:\Path\To\Python\python.exe venv
+```
+Then, every time you will be working on the project, you will need to activate this environnement,
+to do so:
+```bash
+.\venv\Scripts\activate
+```
+
+Now, to install autopylot and its requirements:
+```bash
+pip install -e .
+```
+You are now all setup to work on the project ! Don't forget to keep the setup.py and requirements.txt up to date.
+
+To exit the virtualenv:
+```bash
+deactivate
 ```
 
 usefull tools:
