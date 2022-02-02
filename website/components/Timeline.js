@@ -1,13 +1,11 @@
-import { Document, Page, pdfjs } from "react-pdf";
 import { Chrono } from "react-chrono";
 import { useEffect, useState } from "react";
 import {items } from "../data/data";
 
-pdfjs.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
-
 export const Timeline = () => {
   const [width, setWidth] = useState(0);
 
+  // this function is used to resize the timeline when the window is resized
   useEffect(() => {
     const handleResize = () => setWidth(window.innerWidth);
     handleResize();

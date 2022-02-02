@@ -1,9 +1,8 @@
 import Head from "next/head";
 import { Brand } from "../components/Brand.js";
 import { Members } from "../components/Members.js";
-import { Progress } from "../components/Progress.js";
 import { Timeline } from "../components/Timeline.js";
-import { Car } from "../components/Car.js";
+// import { Car } from "../components/Car.js";
 
 export default function Home() {
   return (
@@ -17,7 +16,6 @@ export default function Home() {
       {/* <Car /> */}
       <Members />
       <Timeline />
-      {/* <Progress /> */}
     </>
   );
 }
