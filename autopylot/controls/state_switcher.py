@@ -14,22 +14,22 @@ class StateSwitcher:
         self.states = ["stop", "autonomous", "collect", "manual"]
         self.state = self.states[0]
 
-        self.memory['state'] = self.state
+        self.memory["state"] = self.state
 
     def update(self):
         """Update state using controller buttons."""
-        controller_inp = self.memory.get('controller', {})
+        controller_inp = self.memory.get("controller", {})
 
-        if controller_inp == {} or controller_inp['button_y']:
+        if controller_inp == {} or controller_inp["button_y"]:
             self.state = self.states[0]
 
-        elif controller_inp['button_a']:
+        elif controller_inp["button_a"]:
             self.state = self.states[2]
 
-        elif (controller_inp['steering'] == 0.0 and controller_inp['throttle'] == 0.0):
+        elif controller_inp["steering"] == 0.0 and controller_inp["throttle"] == 0.0:
             self.state = self.states[1]
 
         else:
             self.state = self.states[3]
 
-        self.memory['state'] = self.state
+        self.memory["state"] = self.state
