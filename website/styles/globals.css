@@ -21,6 +21,10 @@ a {
   box-sizing: border-box;
 }
 
+.f {
+  font-family: 'Source Code Pro', monospace;
+}
+
 .h {
   font-family: 'Source Code Pro', monospace;
   font-size: 4vw;
@@ -74,4 +78,17 @@ a {
   .card:hover .card-side.back {
     transform: rotateY(0deg) translateY(-3%);
   }
+}
+
+.timeline-card-content {
+  min-height: 0px !important;
+}
+
+.vertical-item-row {
+  min-height: 0px !important;
+}
+
+.card-media-wrapper {
+  height: fit-content !important;
+  /* max-height: 100px !important; */
 }
