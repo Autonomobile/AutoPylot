@@ -14,7 +14,8 @@ export const Brand = () => {
           height={250}
           unoptimized={true}
         />
-        <h1 className="h text-center">By Autonomobile</h1>
+        <h1 className="h text-center mb-12">By Autonomobile</h1>
+        <h2><a href="https://github.com/Autonomobile/AutoPylot" className="underline text-blue-500 hover:text-blue-400 f">See the project on Github</a></h2>
       </div>
     </div>
   );
