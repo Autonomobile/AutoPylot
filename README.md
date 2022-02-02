@@ -62,7 +62,7 @@ Now, to install autopylot and its requirements (including dev requirements):
 pip install -e .[dev]
 ```
 
-For the code formatting, we will use something called "pre-commit", that enables us to automate stuff as linting before commiting.
+For the code formatting, we will use something called "pre-commit", that enables us to automate stuff as linting before commiting. If the code is not well linted, it will throw an error before commiting and will lint it, you will only have to commit again to apply the changes the linter did !
 Here is how to setup pre-commit:
 ```bash
 pre-commit install
