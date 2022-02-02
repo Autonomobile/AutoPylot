@@ -187,8 +187,8 @@ class XboxOneJoystick(Joystick):
         """
         if self.connected:
             # calculate the steering and throttle now st we don't need to reprocess them
-            steering = utils.deadzone(self.axis_states['x'], 0.05)
-            
+            steering = utils.deadzone(self.axis_states["x"], 0.05)
+
             # right trigger
             th_right = utils.deadzone(self.axis_states["rz"], 0.05)
             # left trigger
@@ -196,11 +196,11 @@ class XboxOneJoystick(Joystick):
             throttle = th_right - th_left
 
             # provide steering, throttle and every axis/buttons values we have
-            self.memory['controller'] = {
-                'steering': steering,
-                'throttle': throttle,
+            self.memory["controller"] = {
+                "steering": steering,
+                "throttle": throttle,
                 **self.axis_states,
-                **self.button_states
+                **self.button_states,
             }
         else:
-            self.memory['controller'] = {}
+            self.memory["controller"] = {}

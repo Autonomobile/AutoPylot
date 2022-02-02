@@ -1,19 +1,19 @@
 from setuptools import setup
 
 setup(
-    name='autopylot',
-    version='0.0.1',
-    description='An RC autonomous car python library',
-    url='https://github.com/Autonomobile/AutoPylot',
-    author='Autonomobile',
-    license='MIT',
-    packages=['autopylot'],
+    name="autopylot",
+    version="0.0.1",
+    description="An RC autonomous car python library",
+    url="https://github.com/Autonomobile/AutoPylot",
+    author="Autonomobile",
+    license="MIT",
+    packages=["autopylot"],
     install_requires=[
-        'opencv-python >= 4.1.1',
-        'tensorflow >= 2.3.0, <2.4',
-        'numpy >= 1.17',
-        'glob2',
-        'pyserial',
-        'pytest',
+        "opencv-python >= 4.1.1",
+        "tensorflow >= 2.3.0, <2.4",
+        "numpy >= 1.17",
+        "glob2",
+        "pyserial",
     ],
+    extras_require={"dev": ["pytest", "flake8", "black", "pre-commit"]},
 )
