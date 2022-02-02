@@ -18,7 +18,7 @@ def test_serial_high_speed():
 
     # stop the thread
     ser.stop()
-    assert test_memory["speed"] == 11.57675387821255
+    assert test_memory["speed"] == 28.94188469553137
 
 
 def test_serial_normal_speed():
@@ -37,7 +37,7 @@ def test_serial_normal_speed():
     # stop the thread
     ser.stop()
 
-    assert test_memory["speed"] == 2.515976450460424
+    assert test_memory["speed"] == 6.289941126151059
 
 
 def test_serial_no_speed():

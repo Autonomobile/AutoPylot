@@ -54,7 +54,7 @@ class SerialControl:
         self.__ignore_next = False
         self.__steering = 127
         self.__throttle = 127
-        self.__wheel_to_meters = 0.20  # 1 wheel turn = 0.20 m
+        self.__wheel_to_meters = 0.50  # 1 wheel turn = 0.20 m
         self.__gear_ratio = 7  # 7 motor turn = 1 wheel turn
         self.__last_received = time.time()
 
