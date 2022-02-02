@@ -14,8 +14,6 @@ setup(
         "numpy >= 1.17",
         "glob2",
         "pyserial",
-        "pytest",
-        "flake8",
-        "black",
     ],
+    extras_require={"dev": ["pytest", "flake8", "black", "pre-commit"]},
 )

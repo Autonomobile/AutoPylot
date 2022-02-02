@@ -57,9 +57,15 @@ to do so:
 .\venv\Scripts\activate
 ```
 
-Now, to install autopylot and its requirements:
+Now, to install autopylot and its requirements (including dev requirements):
 ```bash
-pip install -e .
+pip install -e .[dev]
+```
+
+For the code formatting, we will use something called "pre-commit", that enables us to automate stuff as linting before commiting.
+Here is how to setup pre-commit:
+```bash
+pre-commit install
 ```
 You are now all setup to work on the project ! Don't forget to keep the setup.py and requirements.txt up to date.
 
@@ -72,12 +78,3 @@ usefull tools:
 - setup a python linter (we use flake8) : https://code.visualstudio.com/docs/python/linting
 - setup the test extension of vscode : https://code.visualstudio.com/docs/python/testing
 - use a docstring generator for example the vscode extension "Python Docstring Generator"
-- install "black" python package for code formating
-installation:
-    ```cmd
-    pip install black
-    ```
-    usage in a cmd:
-    ```cmd
-    black autopylot
-    ```
