@@ -34,7 +34,7 @@ def vis_line_scalar(
         int(pos[0] * w + (fact[0] * scalar + length[0]) * w),
         int(h - pos[1] * h - (fact[1] * scalar + length[1]) * h),
     )
-    vis_image = cv2.line(image, p1, p2, color, thickness)
+    vis_image = cv2.line(image.copy(), p1, p2, color, thickness)
     return vis_image
 
 
@@ -113,7 +113,7 @@ def vis_text_scalar(
     )
 
     return cv2.putText(
-        image,
+        image.copy(),
         "{:.1f}".format(scalar),
         p,
         cv2.FONT_HERSHEY_SIMPLEX,
@@ -154,7 +154,7 @@ def vis_point(image, point, color=(0, 0, 255), radius=2):
     Returns:
         np.array: modified image with the drawn visualization.
     """
-    return cv2.circle(image, point, radius, color, thickness=-1)
+    return cv2.circle(image.copy(), point, radius, color, thickness=-1)
 
 
 def vis_car_position(image_data):
@@ -167,3 +167,24 @@ def vis_car_position(image_data):
         np.array: modified image with the drawn visualization.
     """
     return vis_point(image_data["image"], image_data["car_position"])
+
+
+def vis_all(image_data):
+    """Visualize every data present in the image_data dictionary.
+
+    Args:
+        image_data (dictionnary): image data dictionnary.
+
+    Returns:
+        np.array: modified image with the drawn visualization.
+    """
+
+    image_data_copy = image_data.copy()
+    if "steering" in image_data_copy:
+        image_data_copy["image"] = vis_steering(image_data_copy)
+    if "throttle" in image_data_copy:
+        image_data_copy["image"] = vis_throttle(image_data_copy)
+    if "speed" in image_data_copy:
+        image_data_copy["image"] = vis_speed(image_data_copy)
+
+    return image_data_copy["image"]
