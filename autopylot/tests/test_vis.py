@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 import pytest
 
-from ..utils import vis
+from ..utils import vis, display
 
 
 @pytest.mark.vis
@@ -99,5 +99,20 @@ def test_vis_all():
 
 @pytest.mark.vis
 def test_vis_display():
-    """This function displays all the above cv2.imshow, to close, press any key."""
-    cv2.waitKey(0)
+    """Test some of the functions from vis combined to display"""
+    image_data = {
+        "image": np.zeros((120, 160, 3), np.float32),
+        "speed": 12.34,
+        "steering": -0.543,
+        "throttle": -0.456,
+    }
+
+    disp = display.Display(
+        image_data,
+        ["image_disp0", "image_disp1", "image_disp2"],
+        ["image", "image", "image"],
+        [vis.vis_all, vis.vis_steering, display.identity_transform],
+        waitKey=0,
+    )
+
+    disp.update()

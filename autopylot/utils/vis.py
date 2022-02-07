@@ -38,17 +38,18 @@ def vis_line_scalar(
     return vis_image
 
 
-def vis_steering(image_data):
+def vis_steering(image_data, image_key="image"):
     """Visualize the steering scalar.
 
     Args:
         image_data (dictionnary): image data dictionnary.
+        image_key (string): image key.
 
     Returns:
         np.array: modified image with the drawn visualization.
     """
     return vis_line_scalar(
-        image_data["image"],
+        image_data[image_key],
         image_data["steering"],
         pos=(0.5, 0),
         length=(0, 0.25),
@@ -58,11 +59,12 @@ def vis_steering(image_data):
     )
 
 
-def vis_throttle(image_data):
+def vis_throttle(image_data, image_key="image"):
     """Visualize the throttle scalar.
 
     Args:
         image_data (dictionnary): image data dictionnary.
+        image_key (string): image key.
 
     Returns:
         np.array: modified image with the drawn visualization.
@@ -74,7 +76,7 @@ def vis_throttle(image_data):
         throttle *= -1
 
     return vis_line_scalar(
-        image_data["image"],
+        image_data[image_key],
         throttle,
         pos=(0.9, 0),
         length=(0, 0),
@@ -123,17 +125,18 @@ def vis_text_scalar(
     )
 
 
-def vis_speed(image_data):
+def vis_speed(image_data, image_key="image"):
     """Visualize the speed scalar.
 
     Args:
         image_data (dictionnary): image data dictionnary.
+        image_key (string): image key.
 
     Returns:
         np.array: modified image with the drawn visualization.
     """
     return vis_text_scalar(
-        image_data["image"],
+        image_data[image_key],
         image_data["speed"],
         pos=(0.0, 0.05),
         color=(255, 255, 255),
@@ -157,23 +160,25 @@ def vis_point(image, point, color=(0, 0, 255), radius=2):
     return cv2.circle(image.copy(), point, radius, color, thickness=-1)
 
 
-def vis_car_position(image_data):
+def vis_car_position(image_data, image_key="image"):
     """Visualize the position of the detected car.
 
     Args:
         image_data (dictionnary): image data dictionnary.
+        image_key (string): image key.
 
     Returns:
         np.array: modified image with the drawn visualization.
     """
-    return vis_point(image_data["image"], image_data["car_position"])
+    return vis_point(image_data[image_key], image_data["car_position"])
 
 
-def vis_all(image_data):
+def vis_all(image_data, image_key="image"):
     """Visualize every data present in the image_data dictionary.
 
     Args:
         image_data (dictionnary): image data dictionnary.
+        image_key (string): image key.
 
     Returns:
         np.array: modified image with the drawn visualization.
@@ -181,10 +186,10 @@ def vis_all(image_data):
 
     image_data_copy = image_data.copy()
     if "steering" in image_data_copy:
-        image_data_copy["image"] = vis_steering(image_data_copy)
+        image_data_copy[image_key] = vis_steering(image_data_copy, image_key)
     if "throttle" in image_data_copy:
-        image_data_copy["image"] = vis_throttle(image_data_copy)
+        image_data_copy[image_key] = vis_throttle(image_data_copy, image_key)
     if "speed" in image_data_copy:
-        image_data_copy["image"] = vis_speed(image_data_copy)
+        image_data_copy[image_key] = vis_speed(image_data_copy, image_key)
 
-    return image_data_copy["image"]
+    return image_data_copy[image_key]
