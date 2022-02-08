@@ -2,35 +2,26 @@
 import os
 import json
 import cv2
+import glob 
 from ..utils import io
 
 
 def load_dataset(dirpath):
-    """load dataset not finish (I will delete the other comments in green).
+    """load dataset (json and png from a folder).
+        *ps glob.glob gives a list of path.
 
     Args:
-         dirpath (string): path of a directory which contains Json and png .
+         dirpath (string): path of a directory which contains json and png.
 
     Returns:
-         dictionnary: tuple image an json.
+         list of dictionnary: list of tuple image an json.
     """
-    topdir = "."  # top argument : need more explaination
-    exten_json = ".json"  # the extension for the search
-    exten_png = ".png"
-    for dirpath, dirnames, files in os.walk(
-        topdir
-    ):  # os.walk returns 3 value, dirpath, dirnames and filenames
-        for json_file_name in files:
-            if json_file_name.lower().endswith(exten_json):
-                load_json(
-                    os.path.join(dirpath, json_file_name)
-                )  # should execute the load_json fn with the path of each json file
-        for png_file_name in files:
-            if png_file_name.lower().endswith(exten_png):
-                load_image(
-                    os.path.join(dirpath, png_file_name)
-                )  # should execute the load_json fn with the path of each json file
-
+    files = glob.glob(dirpath + "**/*.json") 
+    list = []
+    for file in files :
+        list.append(io.load_image_data(file))
+    return list
 
 def load_multiple_dataset(dirpaths):
     pass
+    
