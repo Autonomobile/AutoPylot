@@ -99,7 +99,7 @@ def test_vis_all():
 
 @pytest.mark.vis
 def test_vis_display():
-    """Test some of the functions from vis combined to display"""
+    """Test some of the functions from vis combined to display."""
     image_data = {
         "image": np.zeros((120, 160, 3), np.float32),
         "speed": 12.34,
@@ -116,3 +116,16 @@ def test_vis_display():
     )
 
     disp.update()
+
+
+def test_vis_display_wrong_params():
+    """Test wether Display raises an error when giving wrong parameters."""
+    with pytest.raises(Exception):
+        # giving on purpose mismatched list length
+        display.Display(
+            {"test": "this is a test"},
+            ["image_disp0", "image_disp1"],
+            [],
+            [display.identity_transform],
+            waitKey=0,
+        )
