@@ -22,6 +22,18 @@ def load_dataset(dirpath):
         list.append(io.load_image_data(file))
     return list
 
+
 def load_multiple_dataset(dirpaths):
-    pass
-    
+    """load multiple dataset 
+
+    Args:
+        dirpaths (string): string to multiple folders
+
+    Returns:
+        list of dictionnary: is a simple list of dictionnary good ? 
+    """
+    list = []
+    directories = glob.glob(dirpaths)
+    for dir in directories :
+        list.append(load_dataset(dir))
+    return list
