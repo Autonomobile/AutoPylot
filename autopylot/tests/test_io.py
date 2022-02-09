@@ -1,8 +1,10 @@
 """test the io class"""
 import os
+from glob import glob
 
 import numpy as np
-from glob import glob
+import pytest
+
 from ..utils import io
 
 """
@@ -49,10 +51,10 @@ def test_load_image():
     assert image.shape == (2, 2, 3)
 
 
-# def test_load_json_none():
-#     """need to change assert to have stg good."""
-#     data = io.load_json(os.getcwd() + "\\testing_io\\test.json")
-#     assert data != {}, "given file does not exist"
+def test_load_json_none():
+    """Testing the loading of a non existing json (should raise an error)."""
+    with pytest.raises(Exception):
+        io.load_json(os.getcwd() + "\\testing_io\\test.json")
 
 
 def test_save_json():
