@@ -98,6 +98,27 @@ def test_vis_all():
 
 
 @pytest.mark.vis
+def test_vis_compare():
+    """Test the compare() vis function."""
+    image_data1 = {
+        "image": np.zeros((120, 160, 3), np.float32),
+        "speed": 12.34,
+        "steering": -0.543,
+        "throttle": -0.456,
+    }
+    image_data2 = {
+        "image": np.zeros((120, 160, 3), np.float32),
+        "speed": 13.654321,
+        "steering": 0.345,
+        "throttle": 0.543,
+    }
+
+    vis_image = vis.compare([image_data1, image_data2], image_key="image")
+    assert vis_image.shape == (120, 320, 3)
+    cv2.imshow("test_vis_compare", vis_image)
+
+
+@pytest.mark.vis
 def test_vis_display():
     """Test some of the functions from vis combined to display."""
     image_data = {
@@ -119,7 +140,7 @@ def test_vis_display():
 
 
 def test_vis_display_wrong_params():
-    """Test wether Display raises an error when giving wrong parameters."""
+    """Test whether Display raises an error when giving wrong parameters."""
     with pytest.raises(Exception):
         # giving on purpose mismatched list length
         display.Display(

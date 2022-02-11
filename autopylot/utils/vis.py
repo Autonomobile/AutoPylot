@@ -1,4 +1,5 @@
 import cv2
+import numpy as np
 
 
 def vis_line_scalar(
@@ -193,3 +194,21 @@ def vis_all(image_data, image_key="image"):
         image_data_copy[image_key] = vis_speed(image_data_copy, image_key)
 
     return image_data_copy[image_key]
+
+
+def compare(image_datas, image_key="image"):
+    """Compare the visualization of multiple images.
+
+    Args:
+        image_datas (list): list of image_data dictionnary.
+        image_key (str, optional): image key. Defaults to "image".
+
+    Returns:
+        np.array: stacked images.
+    """
+
+    vis_images = []
+    for image_data in image_datas:
+        vis_images.append(vis_all(image_data))
+
+    return np.concatenate(vis_images, axis=1)
