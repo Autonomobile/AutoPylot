@@ -1,8 +1,5 @@
 """ Here we will load and save dataset."""
-import os
-import json
-import cv2
-import glob 
+import glob
 from ..utils import io
 
 
@@ -14,30 +11,51 @@ def load_dataset(dirpath):
         dirpath (string): path of a directory which contains json and png.
 
     Returns:
-        list of dictionnary: list of tuple image an json.
+        list[dict]: list of dictionnary containing image and json.
     """
-    list = []
-    for file in glob.glob(dirpath + "*.json") :
-        list.append(io.load_image_data(file))
-    return list
+    datas = []
+    for filepath in glob.glob(dirpath + "*.json"):
+        datas.append(io.load_image_data(filepath))
+    return datas
 
 
 def load_multiple_dataset(dirpaths, flat=False):
-    """load multiple dataset 
+    """load multiple dataset
 
     Args:
         dirpaths (string): string to multiple folders
 
     Returns:
-        list of list of dictionnary: is a simple list of dictionnary good ? 
+        list[list[dict]] : loaded data.
     """
-    list = []
-    for dir in glob.glob(dirpaths) :
+    datas = []
+    for dirpath in glob.glob(dirpaths):
         if flat:
-            list += load_dataset(dir)
+            datas += load_dataset(dirpath)
         else:
-            list.append(load_dataset(dir))
-    return list
+            datas.append(load_dataset(dirpath))
+    return datas
 
-load_multiple_dataset(".", False) # list of list 
-load_multiple_dataset(".", True) # 1 list
+
+def load_dataset_generator(dirpath):
+    """Load dataset generator.
+
+    Args:
+        dirpath (string): path of directory which contains json and png.
+
+    Returns:
+        list[dict]: list of dictionnary containing image and json.
+    """
+    for filepath in glob.glob(dirpath + "*.json"):
+        yield io.load_image_data(filepath)
+
+
+""" Some usage examples
+
+load_multiple_dataset(".", False)  # list of list
+load_multiple_dataset(".", True)  # 1 list
+
+for image_data in load_dataset_generator("dataset\\car\\"):
+   dosomething(image_data) 
+
+"""

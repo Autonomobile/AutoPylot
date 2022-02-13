@@ -7,7 +7,6 @@ from ..datasets import dataset
 from ..utils import io
 
 
-
 def test_create_directory():
     """Create a testing_io directory.
 
@@ -21,13 +20,13 @@ def test_create_directory():
 
 
 def test_load_dataset_empty():
-    """test if the function load_dataset works.
-    """
+    """test if the function load_dataset works."""
     list_of_dict = dataset.load_dataset(os.getcwd() + "\\testing_dataset\\")
     assert list_of_dict == []
 
-# test with list of dict 
-# tes with 2 json / png 
+
+# test with list of dict
+# tes with 2 json / png
 
 
 def test_delete_directory():
