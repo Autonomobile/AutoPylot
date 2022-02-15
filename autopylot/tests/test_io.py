@@ -59,7 +59,7 @@ def test_save_json():
     """Testing the saving of a dictionnary into a .json file."""
     data = {"test": "this is a test"}
     save = io.save_json(os.getcwd() + "\\testing_io\\test.json", data)
-    assert save is None, "json not saved."
+    assert save is True, "json not saved."
 
 
 def test_load_json():
@@ -84,7 +84,7 @@ def test_save_image_data():
     }
 
     io.save_image_data(image_data, os.getcwd() + "\\testing_io\\test2.json")
-    image_data_copy = io.load_image_data(os.getcwd() + "\\testing_io\\test.json")
+    image_data_copy = io.load_image_data(os.getcwd() + "\\testing_io\\test2.json")
 
     assert (
         image_data["image"].shape == image_data_copy["image"].shape

@@ -53,6 +53,7 @@ def save_json(json_path, to_save):
     """
     with open(os.path.normpath(json_path), "w") as json_file:
         json.dump(to_save, json_file)
+    return True
 
 
 def save_image_data(image_data, json_path):
@@ -65,11 +66,13 @@ def save_image_data(image_data, json_path):
     Returns:
         bool: ret of save_image.
     """
+    image_path = json_path.split(".json")[0] + ".png"
+
     image_data_copy = image_data.copy()
     image = image_data_copy["image"]
     del image_data_copy["image"]
-    image_path = json_path.split(".json")[0] + ".png"
-    return save_image(image_path, image)
+
+    return save_image(image_path, image), save_json(json_path, image_data_copy)
 
 
 def load_image_data(json_path):
