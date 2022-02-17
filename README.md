@@ -16,7 +16,7 @@ This will require multiple intermediate milestones:
 
  - [x] Being able to send scripted controls to the motor and servo.
  - [x] Being able to drive the car manually using a controller.
- - [ ] Develop a way to gather images and annotations and store them in a stuctured way, for example sorted by date.
+ - [x] Develop a way to gather images and annotations and store them in a stuctured way, for example sorted by date.
  - [ ] Process those data before feeding them to the neural network.
  - [ ] Being able to train a convolutional neural network using those data.
  - [ ] Build a telemetry web application.
