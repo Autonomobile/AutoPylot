@@ -76,7 +76,7 @@ def test_number_files():
 def test_delete_directory():
     """Deletes the created directory."""
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
-    files_to_delete = glob.glob(path_dir + "\\*")
+    files_to_delete = glob.glob(os.path.join(path_dir, "*"))
 
     for filepath in files_to_delete:
         os.remove(filepath)
