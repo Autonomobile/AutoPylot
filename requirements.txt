@@ -3,4 +3,3 @@ opencv-python >= 4.1.1
 numpy >= 1.17
 glob2
 pyserial
-shutil
