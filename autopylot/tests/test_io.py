@@ -1,7 +1,7 @@
 """test the io class"""
 import os
 import shutil
-from glob import glob
+import glob
 
 import numpy as np
 
@@ -97,7 +97,7 @@ def test_save_image_data():
 def test_delete_directory():
     """Deletes the created directory."""
     path_dir = os.path.join(os.getcwd(), "testing_io")
-    files_to_delete = glob.glob(os.path.join(path_dir, "*"))
+    files_to_delete = glob(os.path.join(path_dir, "*"))
 
     for filepath in files_to_delete:
         os.remove(filepath)
