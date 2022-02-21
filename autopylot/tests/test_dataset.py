@@ -1,5 +1,4 @@
 """test the File.IO class"""
-import glob
 import os
 import shutil
 import time
@@ -79,10 +78,4 @@ def test_delete_directory():
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
     shutil.rmtree(path_dir)
 
-    # files_to_delete = glob.glob(os.path.join(path_dir, "*"))
-
-    # for filepath in files_to_delete:
-    #     os.remove(filepath)
-
-    # os.rmdir(path_dir)
     assert os.path.exists(path_dir) is False

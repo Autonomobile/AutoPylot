@@ -1,7 +1,6 @@
 """test the io class"""
 import os
 import shutil
-import glob
 
 import numpy as np
 import pytest
@@ -98,10 +97,6 @@ def test_save_image_data():
 def test_delete_directory():
     """Deletes the created directory."""
     path_dir = os.path.join(os.getcwd(), "testing_io")
-    files_to_delete = glob(os.path.join(path_dir, "*"))
+    shutil.rmtree(path_dir)
 
-    for filepath in files_to_delete:
-        os.remove(filepath)
-
-    os.rmdir(path_dir)
     assert os.path.exists(path_dir) is False

@@ -15,5 +15,5 @@ setup(
         "glob2",
         "pyserial",
     ],
-    extras_require={"dev": ["pytest", "flake8", "black", "pre-commit"]},
+    extras_require={"dev": ["pytest", "flake8", "black", "pre-commit", "shutil"]},
 )
