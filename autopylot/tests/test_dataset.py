@@ -1,7 +1,8 @@
 """test the File.IO class"""
-import os
-import time
 import glob
+import os
+import shutil
+import time
 
 import numpy as np
 
@@ -76,10 +77,12 @@ def test_number_files():
 def test_delete_directory():
     """Deletes the created directory."""
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
-    files_to_delete = glob.glob(path_dir + "\\*")
+    shutil.rmtree(path_dir)
 
-    for filepath in files_to_delete:
-        os.remove(filepath)
+    # files_to_delete = glob.glob(os.path.join(path_dir, "*"))
 
-    os.rmdir(path_dir)
+    # for filepath in files_to_delete:
+    #     os.remove(filepath)
+
+    # os.rmdir(path_dir)
     assert os.path.exists(path_dir) is False
