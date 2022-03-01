@@ -1,4 +1,5 @@
 """Dummy camera for testing purposes."""
+import logging
 import numpy as np
 
 
@@ -22,6 +23,7 @@ class Dummy:
             1,
             3,
         ], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
+        logging.info("Instantiated Dummy camera.")
 
     def update(self):
         """Create a dummy image."""

@@ -1,5 +1,13 @@
-from autopylot.controls import controller, state_switcher, serial_control
+import logging
+
+# logging settings
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s [%(module)s] %(message)s",
+)
+
 from autopylot.cameras import camera
+from autopylot.controls import controller, serial_control, state_switcher
 from autopylot.utils import memory
 
 mem = memory.Memory()

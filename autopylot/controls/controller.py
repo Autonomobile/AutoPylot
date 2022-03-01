@@ -1,11 +1,14 @@
 # script based on https://github.com/autorope/donkeycar/blob/dev/donkeycar/parts/controller.py
 
+import array
+import logging
 import os
 import struct
-import array
 import threading
 
 from ..utils import utils
+
+logger = logging.getLogger(__name__)
 
 
 class Joystick(object):
@@ -82,6 +85,8 @@ class Joystick(object):
 
         th = threading.Thread(target=self.poll)
         th.start()
+
+        logger.info("Instantiated Joystick.")
 
         return True
 

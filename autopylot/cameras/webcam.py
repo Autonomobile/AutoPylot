@@ -1,4 +1,6 @@
 """Webcam camera."""
+import logging
+
 import cv2
 
 
@@ -27,6 +29,7 @@ class Webcam:
             1,
             3,
         ], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
+        logging.info("Instantiated Webcam camera.")
 
     def update(self):
         """Read image from the camera.

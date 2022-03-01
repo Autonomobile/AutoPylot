@@ -1,5 +1,6 @@
 """Memory class that we will be using throughout the project."""
 import time
+import logging
 
 
 class Memory(dict):
@@ -8,6 +9,7 @@ class Memory(dict):
     def __init__(self):
         """Init of the memory class."""
         self.last_modified = 0
+        logging.info("Memory class initialized.")
 
     def __setitem__(self, key, value):
         """Set a key to a value.
