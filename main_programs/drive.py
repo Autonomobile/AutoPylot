@@ -1,20 +1,18 @@
 import logging
 import os
+import sys
 
 # this is to write in the logs/log file
-fileHandler = logging.FileHandler(
-    os.path.join(os.getcwd(), r"../logs/log"),
-    level=logging.DEBUG,
-)
+fileHandler = logging.FileHandler(os.path.join(os.getcwd(), r"../logs/log"))
 fileHandler.setLevel(logging.DEBUG)
 
 # this is to display logs in the stdout
-streamHandler = logging.StreamHandler()
+streamHandler = logging.StreamHandler(sys.stdout)
 streamHandler.setLevel(logging.INFO)
 
 # logging settings
 logging.basicConfig(
-    format="%(asctime)s [%(module)s] %(message)s",
+    format="%(asctime)s [%(module)s] [%(levelname)s] %(message)s",
     handlers=[fileHandler, streamHandler],
 )
 
