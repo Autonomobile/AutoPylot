@@ -1,9 +1,21 @@
 import logging
+import os
+
+# this is to write in the logs/log file
+fileHandler = logging.FileHandler(
+    os.path.join(os.getcwd(), r"../logs/log"),
+    level=logging.DEBUG,
+)
+fileHandler.setLevel(logging.DEBUG)
+
+# this is to display logs in the stdout
+streamHandler = logging.StreamHandler()
+streamHandler.setLevel(logging.INFO)
 
 # logging settings
 logging.basicConfig(
-    level=logging.DEBUG,
     format="%(asctime)s [%(module)s] %(message)s",
+    handlers=[fileHandler, streamHandler],
 )
 
 from autopylot.cameras import camera
