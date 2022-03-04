@@ -1,18 +1,16 @@
 """test the File.IO class"""
+
 import glob
 import os
 import shutil
 import time
-
 import numpy as np
-
 from ..datasets import dataset
 from ..utils import io
 
 
 def test_create_directory():
     """Create a testing_io directory.
-
     Returns:
         string : path to testing_io directory.
     """

@@ -1,4 +1,5 @@
 """ Here we will load and save dataset."""
+
 import glob
 from ..utils import io
 
@@ -6,10 +7,8 @@ from ..utils import io
 def load_dataset(dirpath):
     """load dataset (json and png from a folder).
         *ps glob.glob gives a list of path.
-
     Args:
         dirpath (string): path of a directory which contains json and png.
-
     Returns:
         list[dict]: list of dictionnary containing image and json.
     """
@@ -21,10 +20,8 @@ def load_dataset(dirpath):
 
 def load_multiple_dataset(dirpaths, flat=False):
     """load multiple dataset
-
     Args:
         dirpaths (string): string to multiple folders
-
     Returns:
         list[list[dict]] : loaded data.
     """
@@ -39,10 +36,8 @@ def load_multiple_dataset(dirpaths, flat=False):
 
 def load_dataset_generator(dirpath):
     """Load dataset generator.
-
     Args:
         dirpath (string): path of directory which contains json and png.
-
     Returns:
         list[dict]: list of dictionnary containing image and json.
     """
@@ -50,12 +45,9 @@ def load_dataset_generator(dirpath):
         yield io.load_image_data(filepath)
 
 
-""" Some usage examples
-
+""" Some usage examples :
 load_multiple_dataset(".", False)  # list of list
 load_multiple_dataset(".", True)  # 1 list
-
 for image_data in load_dataset_generator("dataset\\car\\"):
    dosomething(image_data) 
-
 """
