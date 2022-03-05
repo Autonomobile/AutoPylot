@@ -73,7 +73,7 @@ def __sort_dataset(dirpath):
     """
     datas = []
     date = __get_time_stamp(dirpath + ".json")
-    datas = sorted(dirpath + ".json", key=__get_time_stamp(dirpath))
+    datas = sorted(dirpath + ".json", key=date)
     return datas
 
 
