@@ -72,8 +72,8 @@ def __sort_dataset(dirpath):
         list[dict]: Sorted dataset.
     """
     datas = []
-    date = __get_time_stamp(dirpath + ".json")
-    datas = sorted(dirpath + ".json", key=date)
+    date = __get_time_stamp(dirpath)
+    datas = sorted(dirpath, key=date)
     return datas
 
 
@@ -86,5 +86,5 @@ def __get_time_stamp(dirpath):
     Returns:
         Float: The name of the json file in float
     """
-    date = dirpath.split(".json")[0]
+    date = dirpath.split("\\" or "/")[-1]
     return float(date)
