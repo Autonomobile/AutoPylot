@@ -84,5 +84,5 @@ def __get_time_stamp(dirpath):
     Returns:
         Float: The name of the json file in float
     """
-    date = dirpath.split("\\" or "/")[-1]
+    date = dirpath.split("\\" or "/")[-1] #do path.os.
     return float(date)
