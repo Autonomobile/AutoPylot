@@ -6,7 +6,7 @@ import numpy as np
 class Dummy:
     """Dummy camera."""
 
-    def __init__(self, memory, shape=(160, 120, 3)):
+    def __init__(self, memory, shape=(120, 160, 3)):
         """Camera init.
 
         Args:
@@ -15,10 +15,8 @@ class Dummy:
         self.memory = memory
 
         self.shape = shape
-        self.h = shape[0]
-        self.w = shape[1]
-        self.c = shape[2]
         assert len(self.shape) == 3, "Shape should have 3 dimensions"
+        self.h, self.w, self.c = self.shape
         assert self.c in [
             1,
             3,

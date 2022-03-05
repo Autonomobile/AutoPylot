@@ -1,19 +1,32 @@
+"""
+Example script for the logging of telemetry.
+"""
 import logging
 
 from autopylot.cameras import camera
 from autopylot.utils import logger, memory
 
-# init the logger handlers
-logger.init()
+# init the logger handlers, select the address to the telemetry server
+logger.init(host="localhost", port=8080)
 
 mem = memory.Memory()
 cam = camera.Camera(mem)
 
 
+# this is a text log
+logging.log(logging.DEBUG, "printing !")
+
+
 def main():
+    i = 0
     while True:
-        cam.update()  # get the last frame from the camera
-        logging.log(logging.TELEMETRY, mem)
+        cam.update()  # get the last frame from the camera*
+
+        if i % 3 == 0:
+            # this is a telemetry log
+            logging.log(logging.TELEMETRY, mem)
+            i = 0
+        i += 1
 
 
 if __name__ == "__main__":

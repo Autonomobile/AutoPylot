@@ -2,11 +2,11 @@ import base64
 import json
 import logging
 import os
-import queue
 import socket
 import sys
 import threading
 import time
+from collections import deque
 
 import cv2
 import numpy as np
@@ -47,7 +47,7 @@ def init(name="", pathlogs=r"logs/log.txt", host="0.0.0.0", port=8080):
     return logger
 
 
-def compress_image(img, encode_params=[int(cv2.IMWRITE_JPEG_QUALITY), 90]):
+def compress_image(img, encode_params=[int(cv2.IMWRITE_JPEG_QUALITY), 50]):
     _, encimg = cv2.imencode(".jpg", img, encode_params)
     return encimg
 
@@ -86,9 +86,11 @@ class TelemetryHandler(logging.Handler):
         self.retryMax = 30.0
         self.retryFactor = 2.0
 
+        self.__logs_queue = deque(maxlen=100)
+        self.__telemetry_queue = deque(maxlen=5)
+
         self.__thread = None
         self.__stop_thread = False
-        self.__queue = queue.Queue()
         self.start_thread()
 
     def makeSocket(self, timeout=1):
@@ -133,9 +135,9 @@ class TelemetryHandler(logging.Handler):
                         self.retryPeriod = self.retryMax
                 self.retryTime = now + self.retryPeriod
 
-    def send(self, s):
+    def send(self, b):
         """
-        Send a string to the socket.
+        Send bytes to the socket.
 
         This function allows for partial sends which can happen when the
         network is busy.
@@ -147,13 +149,16 @@ class TelemetryHandler(logging.Handler):
         # but are still unable to connect.
         if self.sock:
             try:
-                self.sock.sendall(s)
+                self.sock.sendall(b + b"\n")
+                return True
             except OSError:  # pragma: no cover
                 self.sock.close()
                 self.sock = None  # so we can call createSocket next time
+                return False
+        return False
 
     def serialize(self, data):
-        return json.dumps(data, cls=NumpyArrayEncoder)
+        return json.dumps(data, cls=NumpyArrayEncoder).encode("utf-8")
 
     def handleError(self, record):
         """
@@ -171,7 +176,11 @@ class TelemetryHandler(logging.Handler):
 
     def emit(self, record):
         """Add a record to the queue."""
-        self.__queue.put(record)
+        record_dict = dict(record.__dict__)
+        if isinstance(record_dict["msg"], str):
+            self.__logs_queue.append(record_dict)
+        else:
+            self.__telemetry_queue.append(record_dict)
 
     def close(self):
         """
@@ -196,12 +205,23 @@ class TelemetryHandler(logging.Handler):
         """
 
         while True:
-            if self.__queue.not_empty:  # and self.sock
-                record = self.__queue.get()
+            if len(self.__logs_queue) != 0:
+                record = self.__logs_queue[0]
 
                 try:
-                    s = self.serialize(dict(record.__dict__))
-                    self.send(s)
+                    s = self.serialize(record)
+                    if self.send(s):
+                        self.__logs_queue.remove(record)
+                except Exception:
+                    self.handleError(record)
+
+            if len(self.__telemetry_queue) != 0:
+                record = self.__telemetry_queue[0]
+
+                try:
+                    s = self.serialize(record)
+                    if self.send(s):
+                        self.__telemetry_queue.remove(record)
                 except Exception:
                     self.handleError(record)
 
