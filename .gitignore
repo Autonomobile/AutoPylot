@@ -130,3 +130,8 @@ dmypy.json
 
 **.DS_Store
 /.vscode
+
+# Tex stuff
+*.out
+*.synctex.gz
+*.toc
