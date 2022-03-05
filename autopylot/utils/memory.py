@@ -1,6 +1,6 @@
 """Memory class that we will be using throughout the project."""
-import time
 import logging
+import time
 
 
 class Memory(dict):

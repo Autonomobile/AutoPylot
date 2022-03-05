@@ -1,24 +1,11 @@
 import logging
-import os
-import sys
-
-# this is to write in the logs/log file
-fileHandler = logging.FileHandler(os.path.join(os.getcwd(), r"../logs/log"))
-fileHandler.setLevel(logging.DEBUG)
-
-# this is to display logs in the stdout
-streamHandler = logging.StreamHandler(sys.stdout)
-streamHandler.setLevel(logging.INFO)
-
-# logging settings
-logging.basicConfig(
-    format="%(asctime)s [%(module)s] [%(levelname)s] %(message)s",
-    handlers=[fileHandler, streamHandler],
-)
 
 from autopylot.cameras import camera
 from autopylot.controls import controller, serial_control, state_switcher
-from autopylot.utils import memory
+from autopylot.utils import logger, memory
+
+# init the logger handlers
+logger.init()
 
 mem = memory.Memory()
 
@@ -53,6 +40,7 @@ def main():
             mem["throttle"] = mem["controller"]["throttle"]
 
             cam.update()  # get the last frame from the camera
+            logging.log(logging.INFO, mem)
 
         serial.update()  # send commands to the memory
 
