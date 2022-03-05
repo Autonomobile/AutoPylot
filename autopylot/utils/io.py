@@ -50,6 +50,9 @@ def save_json(json_path, to_save):
     Args:
         json_path (string): path of where we want to save it.
         to_save (dictionnary): is the dictionnary to save.
+
+    Returns:
+        bool if json saved.
     """
     with open(os.path.normpath(json_path), "w") as json_file:
         json.dump(to_save, json_file)
