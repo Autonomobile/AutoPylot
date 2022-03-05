@@ -20,10 +20,11 @@ logging.log(logging.DEBUG, "printing !")
 def main():
     i = 0
     while True:
-        cam.update()  # get the last frame from the camera*
+        cam.update()  # get the last frame from the camera
 
+        # telemetry 10 times a second
         if i % 3 == 0:
-            # this is a telemetry log
+            # this is a telemetry log (only sent to the telemetry server)
             logging.log(logging.TELEMETRY, mem)
             i = 0
         i += 1
