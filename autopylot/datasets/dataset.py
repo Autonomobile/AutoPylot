@@ -1,6 +1,8 @@
 """ Here we will load and save dataset."""
 
 import glob
+import json
+import os
 from ..utils import io
 
 
@@ -51,3 +53,37 @@ load_multiple_dataset(".", True)  # 1 list
 for image_data in load_dataset_generator("dataset\\car\\"):
    dosomething(image_data) 
 """
+
+
+def load_sorted_dataset(dirpath):
+    """Load sorted data.
+    Args:
+        dirpath (string): path of directory which contains sorted dataset (time.png and time.json) .
+    Returns:
+        list[dict]: Loaded data (in order)
+    """
+    return load_dataset(__sort_dataset(dirpath))
+
+
+def __sort_dataset(dirpath):
+    """sort dataset
+    Args:
+        dirpath (strign): path of directory which contains sorted dataset (time.png and time.json).
+    Returns:
+        list[dict]: Sorted dataset.
+    """
+    datas = []
+    date = __get_time_stamp(dirpath)
+    datas = sorted(dirpath, key=date)
+    return datas
+
+
+def __get_time_stamp(dirpath):
+    """get time jsonfile
+    Args:
+        dirpath (string): path of directory which contains sorted dataset (time.png and time.json).
+    Returns:
+        Float: The name of the json file in float
+    """
+    date = dirpath.split("\\" or "/")[-1] #do path.os.
+    return float(date)
