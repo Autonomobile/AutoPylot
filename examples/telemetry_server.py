@@ -36,7 +36,6 @@ while True:
 
             for m in msgs:
                 j = json.loads(m)
-                # print(j["msg"])
                 if isinstance(j["msg"], dict) and "image" in j["msg"].keys():
                     j["msg"]["image"] = decode_image(j["msg"]["image"])
                     cv2.imshow("image", j["msg"]["image"])

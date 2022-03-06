@@ -12,13 +12,15 @@ import cv2
 import numpy as np
 
 
-def init(name="", pathlogs=r"logs/log.txt", host="0.0.0.0", port=8080):
+def init(name="", pathlogs=r"logs/logs.log", host="0.0.0.0", port=8080):
     logger = logging.getLogger(name)
+
     # if the logger already exists, just return it
-    if len(logger.handlers) == 3:
-        return logger
-    else:
-        logger.handlers = []
+    for hdlr in logger.handlers:
+        if isinstance(hdlr, TelemetryHandler):
+            return logger
+
+    logger.handlers = []
 
     logging.TELEMETRY = logging.DEBUG - 5
     logging.addLevelName(logging.TELEMETRY, "TELEMETRY")
@@ -107,7 +109,7 @@ class TelemetryHandler(logging.Handler):
             raise
         return result
 
-    def createSocket(self):
+    def createSocket(self, block=True):
         """
         Try to create a socket, using an exponential backoff with
         a max retry time. Thanks to Robert Olson for the original patch
@@ -134,6 +136,8 @@ class TelemetryHandler(logging.Handler):
                     if self.retryPeriod > self.retryMax:
                         self.retryPeriod = self.retryMax
                 self.retryTime = now + self.retryPeriod
+                if block:
+                    time.sleep(self.retryPeriod)
 
     def send(self, b):
         """
@@ -142,11 +146,6 @@ class TelemetryHandler(logging.Handler):
         This function allows for partial sends which can happen when the
         network is busy.
         """
-        if self.sock is None:
-            self.createSocket()
-        # self.sock can be None either because we haven't reached the retry
-        # time yet, or because we have reached the retry time and retried,
-        # but are still unable to connect.
         if self.sock:
             try:
                 self.sock.sendall(b + b"\n")
@@ -205,7 +204,10 @@ class TelemetryHandler(logging.Handler):
         """
 
         while True:
-            if len(self.__logs_queue) != 0:
+            if self.sock is None:
+                self.createSocket()
+
+            if len(self.__logs_queue) != 0 and self.sock:
                 record = self.__logs_queue[0]
 
                 try:
@@ -215,7 +217,7 @@ class TelemetryHandler(logging.Handler):
                 except Exception:
                     self.handleError(record)
 
-            if len(self.__telemetry_queue) != 0:
+            if len(self.__telemetry_queue) != 0 and self.sock:
                 record = self.__telemetry_queue[0]
 
                 try:
@@ -230,6 +232,7 @@ class TelemetryHandler(logging.Handler):
                 break
 
     def start_thread(self):
+        """Start the thread that sends messages and telemetry to the server."""
         if not self.__thread:
             self.__thread = threading.Thread(target=self.__run_threaded__)
             self.__thread.start()
@@ -238,6 +241,7 @@ class TelemetryHandler(logging.Handler):
             logging.warning("Thread already running.")
 
     def stop_thread(self):
+        """Stop the thread that sends messages and telemetry to the server."""
         if self.__thread and self.__thread.is_alive():
             logging.info("Stopping thread.")
             self.__stop_thread = True
