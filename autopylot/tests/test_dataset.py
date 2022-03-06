@@ -69,7 +69,8 @@ def test_number_files():
     assert len(imagepaths) == 2
 
 
-#Do to : make a test funtion for when flat is true then one for when flat is false.
+# Do to : make a test funtion for when flat is true then one for when flat is false.
+
 
 def test_load_multiple_dataset_empty():
     """Testing if the function load_multiple_dataset() works"""
@@ -87,9 +88,9 @@ def test_load_dataset_generator():
 
 def test___get_time_stamp():
     """Testing if the function __get_time_stamp() works"""
-    path_dir = os.path.join(os.getcwd(), "12.json")
+    path_dir = os.path.join(os.getcwd(), "35438.455.json")
     float_val = dataset.__get_time_stamp(path_dir)
-    assert float_val != float()
+    assert isinstance(float_val, float)
 
 
 def test_delete_directory():
