@@ -1,9 +1,7 @@
 """ Here we will load and save dataset."""
 
 import glob
-import json
 import os
-'''
 from ..utils import io
 
 
@@ -78,7 +76,7 @@ def __sort_dataset(dirpath):
     datas = sorted(dirpath, key=date)
     return datas
 
-'''
+
 def __get_time_stamp(dirpath):
     """get time jsonfile
     Args:
