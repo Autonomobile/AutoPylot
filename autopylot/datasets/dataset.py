@@ -3,6 +3,7 @@
 import glob
 import json
 import os
+'''
 from ..utils import io
 
 
@@ -77,7 +78,7 @@ def __sort_dataset(dirpath):
     datas = sorted(dirpath, key=date)
     return datas
 
-
+'''
 def __get_time_stamp(dirpath):
     """get time jsonfile
     Args:
@@ -85,5 +86,6 @@ def __get_time_stamp(dirpath):
     Returns:
         Float: The name of the json file in float
     """
-    date = dirpath.split("\\" or "/")[-1] #do path.os.
+    date = os.path.basename(dirpath)
+    date = date.split(".")[0]
     return float(date)
