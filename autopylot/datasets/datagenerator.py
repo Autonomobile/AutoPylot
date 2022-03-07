@@ -53,7 +53,7 @@ class DataGenerator(Sequence):
         # X represents the input data, and Y the expected outputs (as in Y=f(X))
         # both are list of numpy arrays containing the data.
         # For example, if we have N data and inputs = ["image", "speed"]
-        # X[0].shape = (N, 160, 120, 3) | we have N images of shape (160, 120, 3).
+        # X[0].shape = (N, 120, 160, 3) | we have N images of shape (120, 160, 3).
         # X[1].shape = (N, 1) | we have N speed scalar.
         # if we have outputs = [""steering", "throttle"]
         # Y[0].shape = (N, 1) | we have N steering scalar.

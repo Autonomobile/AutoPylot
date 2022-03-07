@@ -1,4 +1,5 @@
 """State switcher class that will be used in the main control loop."""
+import logging
 
 
 class StateSwitcher:
@@ -15,6 +16,7 @@ class StateSwitcher:
         self.state = self.states[0]
 
         self.memory["state"] = self.state
+        logging.info("Instantiated StateSwitcher.")
 
     def update(self):
         """Update state using controller buttons."""
@@ -32,4 +34,6 @@ class StateSwitcher:
         else:
             self.state = self.states[3]
 
-        self.memory["state"] = self.state
+        if self.memory["state"] != self.state:
+            logging.info(f"State changed to: {self.state}")
+            self.memory["state"] = self.state

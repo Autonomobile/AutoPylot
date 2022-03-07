@@ -1,11 +1,13 @@
 """Webcam camera."""
+import logging
+
 import cv2
 
 
 class Webcam:
     """Webcam class."""
 
-    def __init__(self, memory, index=0, shape=(160, 120, 3)):
+    def __init__(self, memory, index=0, shape=(120, 160, 3)):
         """Camera init.
 
         Args:
@@ -19,14 +21,14 @@ class Webcam:
         assert ret, "Couldn't read from camera"
 
         self.shape = shape
-        self.h = shape[0]
-        self.w = shape[1]
-        self.c = shape[2]
         assert len(self.shape) == 3, "Shape should have 3 dimensions"
+
+        self.h, self.w, self.c = self.shape
         assert self.c in [
             1,
             3,
         ], "Image last dimension should be either 3 (RGB) or 1 (GREY)"
+        logging.info("Instantiated Webcam camera.")
 
     def update(self):
         """Read image from the camera.
