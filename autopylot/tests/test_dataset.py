@@ -3,7 +3,6 @@
 import glob
 import os
 import shutil
-from this import s
 import time
 import numpy as np
 from ..datasets import dataset
@@ -75,7 +74,7 @@ def test_number_files():
 
 def test_load_multiple_dataset_empty():
     """Testing if the function load_multiple_dataset() works"""
-    path_dir = os.path.join(os.getcwd(), "testing_dataset\\")
+    path_dir = os.path.join(os.getcwd(), "testing_dataset") + os.sep
     ret_false = dataset.load_multiple_dataset(path_dir, False)
     ret_true = dataset.load_multiple_dataset(path_dir, True)
     assert ret_false == [] and ret_true == []
@@ -83,7 +82,7 @@ def test_load_multiple_dataset_empty():
 
 def test_load_dataset_generator():
     """Testing if the function load_dataset_generator() works."""
-    path_dir = os.path.join(os.getcwd(), "testing_dataset\\")
+    path_dir = os.path.join(os.getcwd(), "testing_dataset") + os.sep
     list_of_dict = list(dataset.load_dataset_generator(path_dir))
     assert len(list_of_dict) == 2
 
@@ -97,14 +96,24 @@ def test___sort_paths_is_str():
 
 def test___sort_paths_is_sorted():
     """Testing if __sort_paths() returns sorted elements."""
-    path_dir = ["mypath\\test\\1000.json", "hello/1.2.json", "yo/hella/weird/666.json"]
-    correct = ["hello/1.2.json", "yo/hella/weird/666.json", "mypath\\test\\1000.json"]
+    path_dir = [
+        os.path.normpath("mypath\\test\\1000.json"),
+        os.path.normpath("hello/1.2.json"),
+        os.path.normpath("yo/hella/weird/666.json"),
+    ]
+    correct = [
+        os.path.normpath("hello/1.2.json"),
+        os.path.normpath("yo/hella/weird/666.json"),
+        os.path.normpath("mypath\\test\\1000.json"),
+    ]
     assert correct == dataset.__sort_paths(path_dir)
 
 
 def test___get_time_stamp():
     """Testing if the function __get_time_stamp() works"""
-    float_val = dataset.__get_time_stamp("mypath\\test\\35438.455.json")
+    float_val = dataset.__get_time_stamp(
+        os.path.normpath("mypath\\test\\35438.455.json")
+    )
     assert isinstance(float_val, float)
 
 
