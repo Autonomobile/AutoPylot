@@ -72,11 +72,18 @@ def test_number_files():
 # Do to : make a test funtion for when flat is true then one for when flat is false.
 
 
-def test_load_multiple_dataset_empty():
+def test_load_multiple_dataset_empty_False():
     """Testing if the function load_multiple_dataset() works"""
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
-    list_of_dict_of_dict = dataset.load_multiple_dataset(path_dir, False)
-    assert list_of_dict_of_dict == [[]]
+    list_of_list_of_dict = dataset.load_multiple_dataset(path_dir, False)
+    assert list_of_list_of_dict == [[]]
+
+
+def test_load_multiple_dataset_empty_True():
+    """Testing if the function load_multiple_dataset() works"""
+    path_dir = os.path.join(os.getcwd(), "testing_dataset")
+    list_of_dict = dataset.load_multiple_dataset(path_dir, True)
+    assert list_of_dict == []
 
 
 def test_load_dataset_generator():
@@ -84,6 +91,10 @@ def test_load_dataset_generator():
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
     list_of_dict = dataset.load_dataset_generator(path_dir)
     assert list_of_dict == []
+
+
+def test___sort_dataset_empty():
+    """Tetsign if function __sort_dataset() works"""
 
 
 def test___get_time_stamp():
