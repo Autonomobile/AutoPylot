@@ -2,11 +2,27 @@
 
 import glob
 import os
+import sys
 import shutil
 import time
 import numpy as np
 from ..datasets import dataset
 from ..utils import io
+
+
+def __convert_path(path):
+    """Util function to convert path according to the current os
+
+    Args:
+        path (str): the path.
+
+    Returns:
+        str: the converted path.
+    """
+    if sys.platform == "win32":
+        return path.replace("/", "\\")
+    else:
+        return path.replace("\\", "/")
 
 
 def test_create_directory():
@@ -97,23 +113,21 @@ def test___sort_paths_is_str():
 def test___sort_paths_is_sorted():
     """Testing if __sort_paths() returns sorted elements."""
     path_dir = [
-        os.path.normpath("mypath\\test\\1000.json"),
-        os.path.normpath("hello/1.2.json"),
-        os.path.normpath("yo/hella/weird/666.json"),
+        __convert_path("mypath\\test\\1000.json"),
+        __convert_path("hello/1.2.json"),
+        __convert_path("yo/hella/weird/666.json"),
     ]
     correct = [
-        os.path.normpath("hello/1.2.json"),
-        os.path.normpath("yo/hella/weird/666.json"),
-        os.path.normpath("mypath\\test\\1000.json"),
+        __convert_path("hello/1.2.json"),
+        __convert_path("yo/hella/weird/666.json"),
+        __convert_path("mypath\\test\\1000.json"),
     ]
     assert correct == dataset.__sort_paths(path_dir)
 
 
 def test___get_time_stamp():
     """Testing if the function __get_time_stamp() works"""
-    float_val = dataset.__get_time_stamp(
-        os.path.normpath("mypath\\test\\35438.455.json")
-    )
+    float_val = dataset.__get_time_stamp(__convert_path("mypath\\test\\35438.455.json"))
     assert isinstance(float_val, float)
 
 
