@@ -32,7 +32,9 @@ def load_multiple_dataset(dirpath, flat=False):
             if flat:
                 datas += load_dataset(path)
             else:
-                datas.append(load_dataset(path))
+                data = load_dataset(path)
+                if data != []:
+                    datas.append(data)
     return datas
 
 
