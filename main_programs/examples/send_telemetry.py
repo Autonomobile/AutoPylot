@@ -7,7 +7,7 @@ from autopylot.cameras import camera
 from autopylot.utils import logger, memory
 
 # init the logger handlers, select the address to the telemetry server
-logger.init(host="localhost", port=8080)
+logger.init(host="http://localhost:8080")
 
 mem = memory.Memory()
 cam = camera.Camera(mem)

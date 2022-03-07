@@ -2,7 +2,7 @@ import base64
 import json
 import logging
 import os
-import socket
+import socketio
 import sys
 import threading
 import time
@@ -14,7 +14,7 @@ import numpy as np
 pathlogs = __file__ + r"/../../../logs/logs.log"
 
 
-def init(name="", pathlogs=pathlogs, host="0.0.0.0", port=8080):
+def init(name="", pathlogs=pathlogs, host="http://localhost:8080"):
     logger = logging.getLogger(name)
 
     # if the logger already exists, just return it
@@ -45,13 +45,13 @@ def init(name="", pathlogs=pathlogs, host="0.0.0.0", port=8080):
     logger.addHandler(streamHandler)
 
     # this is to send records to the server
-    telemetryHandler = TelemetryHandler(host, port)
+    telemetryHandler = TelemetryHandler(host)
     telemetryHandler.setLevel(logging.TELEMETRY)
     logger.addHandler(telemetryHandler)
     return logger
 
 
-def compress_image(img, encode_params=[int(cv2.IMWRITE_JPEG_QUALITY), 50]):
+def compress_image(img, encode_params=[int(cv2.IMWRITE_JPEG_QUALITY), 90]):
     _, encimg = cv2.imencode(".jpg", img, encode_params)
     return encimg
 
@@ -72,16 +72,12 @@ class TelemetryHandler(logging.Handler):
     If the peer resets it, an attempt is made to reconnect on the next call.
     """
 
-    def __init__(self, host, port):
+    def __init__(self, host):
         logging.Handler.__init__(self)
 
         assert isinstance(host, str)
-        assert isinstance(port, int)
-        self.address = (host, port)
-
         self.host = host
-        self.port = port
-        self.address = (host, port)
+
         self.sock = None
         self.closeOnError = False
         self.retryTime = None
@@ -97,19 +93,17 @@ class TelemetryHandler(logging.Handler):
         self.__stop_thread = False
         self.start_thread()
 
-    def makeSocket(self, timeout=1):
+    def makeSocket(self):
         """
         A factory method which allows subclasses to define the precise
         type of socket they want.
         """
-        result = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        result.settimeout(timeout)
+        sio = socketio.Client()
         try:
-            result.connect(self.address)
-        except OSError:
-            result.close()
-            raise
-        return result
+            sio.connect(self.host)
+        except ConnectionError:
+            sio.disconnect()
+        return sio
 
     def createSocket(self, block=True):
         """
@@ -141,7 +135,7 @@ class TelemetryHandler(logging.Handler):
                 if block:
                     time.sleep(self.retryPeriod)
 
-    def send(self, b):
+    def send(self, func: str, data: dict):
         """
         Send bytes to the socket.
 
@@ -150,16 +144,16 @@ class TelemetryHandler(logging.Handler):
         """
         if self.sock:
             try:
-                self.sock.sendall(b + b"\n")
+                print(data)
+                self.sock.emit(func, data)
                 return True
-            except OSError:  # pragma: no cover
-                self.sock.close()
-                self.sock = None  # so we can call createSocket next time
+            except OSError:
+                self.sock.disconnect()
                 return False
         return False
 
     def serialize(self, data):
-        return json.dumps(data, cls=NumpyArrayEncoder).encode("utf-8")
+        return json.dumps(data, cls=NumpyArrayEncoder)
 
     def handleError(self, record):
         """
@@ -170,7 +164,7 @@ class TelemetryHandler(logging.Handler):
         next event.
         """
         if self.closeOnError and self.sock:
-            self.sock.close()
+            self.sock.disconnect()
             self.sock = None  # try to reconnect next time
         else:
             logging.Handler.handleError(self, record)
@@ -192,7 +186,7 @@ class TelemetryHandler(logging.Handler):
             sock = self.sock
             if sock:
                 self.sock = None
-                sock.close()
+                sock.disconnect()
             logging.Handler.close(self)
         finally:
             self.release()
@@ -209,16 +203,16 @@ class TelemetryHandler(logging.Handler):
             if self.sock is None:
                 self.createSocket()
 
-            if len(self.__logs_queue) != 0 and self.sock:
+            if len(self.__logs_queue) != 0 and self.sock.connected:
                 record = self.__logs_queue[0]
-                s = self.serialize(record)
-                if self.send(s):
+                data = self.serialize(record)
+                if self.send("logs", data):
                     self.__logs_queue.remove(record)
 
-            if len(self.__telemetry_queue) != 0 and self.sock:
+            if len(self.__telemetry_queue) != 0 and self.sock.connected:
                 record = self.__telemetry_queue[0]
-                s = self.serialize(record)
-                if self.send(s):
+                data = self.serialize(record)
+                if self.send("telemetry", data):
                     self.__telemetry_queue.remove(record)
 
             if self.__stop_thread:
