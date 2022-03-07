@@ -3,6 +3,7 @@
 import glob
 import os
 import shutil
+from this import s
 import time
 import numpy as np
 from ..datasets import dataset
@@ -93,8 +94,11 @@ def test_load_dataset_generator():
     assert len(list_of_dict) == 0
 
 
-def test___sort_dataset_empty():
-    """Tetsign if function __sort_dataset() works"""
+def test___sort_paths_is_str():
+    """testing if __sort_paths() works"""
+    path_dir = os.path.join(os.getcwd(), "testing_dataset")
+    for path in glob.glob(path_dir + "*.json"):
+        assert isinstance(path, str)
 
 
 def test___get_time_stamp():
@@ -107,5 +111,4 @@ def test_delete_directory():
     """Deletes the created directory."""
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
     shutil.rmtree(path_dir)
-
     assert os.path.exists(path_dir) is False
