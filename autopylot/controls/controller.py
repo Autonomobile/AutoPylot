@@ -1,8 +1,9 @@
 # script based on https://github.com/autorope/donkeycar/blob/dev/donkeycar/parts/controller.py
 
+import array
+import logging
 import os
 import struct
-import array
 import threading
 
 from ..utils import utils
@@ -29,18 +30,18 @@ class Joystick(object):
         except ModuleNotFoundError:
             self.num_axes = 0
             self.num_buttons = 0
-            print("no support for fnctl module. joystick not enabled.")
+            logging.warning("no support for fnctl module. joystick not enabled.")
             return False
 
         if not os.path.exists(self.dev_fn):
-            print(self.dev_fn, "is missing")
+            logging.warning(self.dev_fn, "is missing")
             return False
 
         """
         call once to setup connection to device and map buttons
         """
         # Open the joystick device.
-        print("Opening %s..." % self.dev_fn)
+        logging.info(f"Opening {self.dev_fn}...")
         self.jsdev = open(self.dev_fn, "rb")
 
         # Get the device name.
@@ -48,7 +49,7 @@ class Joystick(object):
         # JSIOCGNAME(len)
         ioctl(self.jsdev, 0x80006A13 + (0x10000 * len(buf)), buf)
         self.js_name = buf.tobytes().decode("utf-8")
-        print("Device name: %s" % self.js_name)
+        logging.info(f"Device name: {self.js_name}")
 
         # Get number of axes and buttons.
         buf = array.array("B", [0])
@@ -83,12 +84,13 @@ class Joystick(object):
         th = threading.Thread(target=self.poll)
         th.start()
 
+        logging.info("Instantiated Joystick.")
         return True
 
     def show_map(self):
         """List the buttons and axis found on this joystick."""
-        print("%d axes found: %s" % (self.num_axes, ", ".join(self.axis_map)))
-        print("%d buttons found: %s" % (self.num_buttons, ", ".join(self.button_map)))
+        logging.info(f"{self.num_axes} axes found: {self.axis_map}")
+        logging.info(f"{self.num_buttons} buttons found: {self.button_map}")
 
     def poll(self):
         """Query the state of the joystick, returns button which was pressed.
@@ -128,7 +130,7 @@ class Joystick(object):
                         fvalue = value / 32767.0
                         self.axis_states[axis] = fvalue
 
-        print("Controller stopped")
+        logging.info("Controller disconnected.")
 
 
 class XboxOneJoystick(Joystick):
@@ -155,6 +157,7 @@ class XboxOneJoystick(Joystick):
         super(XboxOneJoystick, self).__init__(*args, **kwargs)
 
         self.memory = memory
+        self.previous_state = self.connected
 
         self.axis_names = {
             0x00: "x",

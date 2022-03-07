@@ -3,7 +3,7 @@ from .webcam import Webcam
 from .dummy import Dummy
 
 
-def Camera(memory, camera_type="webcam", shape=(160, 120, 3), *args, **kwargs):
+def Camera(memory, camera_type="webcam", shape=(120, 160, 3), *args, **kwargs):
     """Init Camera class.
 
     Args:
