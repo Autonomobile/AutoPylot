@@ -90,7 +90,7 @@ class SerialControl:
         while self.__isOperation:
             pass
         self.__isOperation = True
-        print("writing", command)
+        # print("writing", command)
         self.ser.write(command)
         self.__isOperation = False
 
@@ -121,7 +121,7 @@ class SerialControl:
                     self.__sensor_rpm = 0
                 else:
                     self.__sensor_rpm = 30000000 / res
-                print(self.__throttle, res)
+                # print(self.__throttle, res)
 
                 self.__last_received = time.time()
                 self.__memory[self.__speed_key] = (
