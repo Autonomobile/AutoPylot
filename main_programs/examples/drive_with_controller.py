@@ -40,7 +40,7 @@ def main():
             mem["throttle"] = mem["controller"]["throttle"]
 
             cam.update()  # get the last frame from the camera
-            logging.log(logging.INFO, mem)
+            logging.log(logging.TELEMETRY, mem)
 
         serial.update()  # send commands to the memory
 
