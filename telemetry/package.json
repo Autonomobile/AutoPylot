@@ -1,0 +1,33 @@
+{
+  "name": "telemetry",
+  "version": "0.1.0",
+  "description": "this web server will collect data such as images and logs from python clients",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Autonomobile/AutoPylot.git"
+  },
+  "author": "Mickael Bobovitch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Autonomobile/AutoPylot/issues"
+  },
+  "homepage": "https://github.com/Autonomobile/AutoPylot#readme",
+  "dependencies": {
+    "next": "12.1.0",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
+  },
+  "devDependencies": {
+    "eslint": "8.10.0",
+    "eslint-config-next": "12.1.0"
+  }
+}
