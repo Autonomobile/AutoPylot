@@ -19,19 +19,20 @@ def load_dataset(dirpath):
     return datas
 
 
-def load_multiple_dataset(dirpaths, flat=False):
+def load_multiple_dataset(dirpath, flat=False):
     """load multiple dataset
     Args:
-        dirpaths (string): string to multiple folders
+        dirpath (string): path to folder.
     Returns:
         list[list[dict]] : loaded data.
     """
     datas = []
-    for dirpath in glob.glob(dirpaths):
-        if flat:
-            datas += load_dataset(dirpath)
-        else:
-            datas.append(load_dataset(dirpath))
+    for path in glob.glob(dirpath + "*"):
+        if os.path.isdir(path):
+            if flat:
+                datas += load_dataset(path)
+            else:
+                datas.append(load_dataset(path))
     return datas
 
 
