@@ -94,14 +94,23 @@ We also created a Github action to automate the testing of our project ! Every i
 On top of that, before committing code, we run a code linter that clean our code, adds and removes whitespace where they should or should not be, rearranges long lines so that they fit into the screen. \\
 All in  all, we are confident to say that we came up with a great set of rules and a great project structure to avoid spending time on solving issues that could arise from a poor project setup.
 
-% Ellerbach
-\subsection{Arduino}
 
 % Ellerbach
-\subsection{Car control}
+\subsection{Arduino and car control}
+This task is essential to the success of this project, this is the lowest code level we will deal with. The arduino code is the code that drives our motor and servomotor, without this part nothing works ! Any issue coming from this part of the code would mean a crash into a wall. To ensure that this part was working as expected, we run a lot of testing with the real car, trying different scenario to see what to expect for example if we lost the connection between the arduino and raspberry pi or if it didn't receive orders for a given amount of time. As all the team could not have direct access to the car, we did a virtual clone of the car using TinkerCad, simulating and live debugging our code before feeding it to our real car !\\
+Here is the TinkerCad simplified version of the car:
+
+\centerline{\includegraphics[width=16cm]{../../docs/car-hardware.png}}
+
+You can see here two arduinos, but on the car we only have one, why is that ? TinkerCad didn't have a raspberry pi, so we added an other arduino to simulate the serial connection between the raspberry pi and the arduino. The arduino on the top sends steering and throttle information (as the raspberry pi would do) to the other arduino that processes those information received on the serial port and then controls both the servomotor and motor that are running on a 9V battery here but in real life on a 7.2V battery.
+This virtual simplified car really helped us in the process of developping the core of our car !
+
+When the arduino part was finished, we could start the python part, that consisted in sending the right bytes to the serial port connected to the arduino, it was hard to debug when there were issues on the one hand, but really satisfying when it did work ! We are now able to send steering and throttle to the arduino making the car controllable using python !
 
 % Ellerbach
 \subsection{Camera}
+The next step was to build a class to fetch images from our webcam, thankfully, the python module opencv has already some functions to do exactly that ! 
+We only needed to add a wrapper around all of that to match our needs. We are now able to fetch images from our camera into a numpy array that we can manipulate. On top of that, we did create a `dummy` version of this camera class in case we did not have access to a camera to run some tests, this class return a black image when we grab a new image form it. We use this class in some of our automated tests.
 
 % Girold
 \subsection{Load and save data}
