@@ -82,6 +82,18 @@ Both of those framework are written in python and use packages such as Tensorflo
 
 \section{Realized tasks}
 
+\subsection{Project Setup}
+Prior to start programming, we had to setup a good Github repository. First, we created a new Github Organization called Autonomobile, this is where all of our repositories are located. We then created the AutoPylot repository. We decided to put everything related to this project in the same repo for simplicity, so we have a repo divided into four main parts:
+\begin{itemize}
+\item The autopylot python module. While creating it, we searched online for best practices regarding python packages. We learnt a lot regarding that part !
+\item Some main scripts that uses autopylot module
+\item Everything related to the presentation website and telemetry website.
+\item Documentation ! Even if it is not the funniest part of the project, it is still a really important one: keeping track of how to install the project, our dependencies and so on. We also keep in this part every project report and work we had to do for the presentations as we may need them in the future !
+\end{itemize}
+We also created a Github action to automate the testing of our project ! Every important functions coded is accompanied by its set of tests. This enables us to assert that the code we are currently working on works as expected. With this idea in mind, we added a really important rule: no addition of code on the main branch if it doesn't pass all the tests we wrote. This rule is really important to keep main clean from any major bug ! This rule induces one thing: we need to open branches and do Pull Requests for every features we add to the project. Moreover, we need the approval of someone else to merge the Pull Request into the main branch . We all forced ourself to respect this as much as we could, the result is that now we are totally used to this process and everyone is aware of what people are working on because they need to review their code.
+On top of that, before committing code, we run a code linter that clean our code, adds and removes whitespace where they should or should not be, rearranges long lines so that they fit into the screen. \\
+All in  all, we are confident to say that we came up with a great set of rules and a great project structure to avoid spending time on solving issues that could arise from a poor project setup.
+
 \subsection{Load and save data}
 
 \subsection{Data set}
