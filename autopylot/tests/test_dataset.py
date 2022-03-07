@@ -88,17 +88,24 @@ def test_load_multiple_dataset_empty_True():
 
 
 def test_load_dataset_generator():
-    """Testing if the function load_dataset_generator() works"""
+    """Testing if the function load_dataset_generator() works."""
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
     list_of_dict = list(dataset.load_dataset_generator(path_dir))
     assert len(list_of_dict) == 0
 
 
 def test___sort_paths_is_str():
-    """testing if __sort_paths() works"""
+    """Testing if __sort_paths() works."""
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
     for path in glob.glob(path_dir + "*.json"):
         assert isinstance(path, str)
+
+
+def test___sort_paths_is_sorted():
+    """Testing if __sort_paths() returns sorted elements."""
+    path_dir = ["mypath\\test\\1000.json", "hello/1.2.json", "yo/hella/weird/666.json"]
+    correct = ["hello/1.2.json", "yo/hella/weird/666.json", "mypath\\test\\1000.json"]
+    assert correct == dataset.__sort_paths(path_dir)
 
 
 def test___get_time_stamp():
