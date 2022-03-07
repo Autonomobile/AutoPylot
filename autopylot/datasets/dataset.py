@@ -5,6 +5,28 @@ import os
 from ..utils import io
 
 
+def __sort_paths(paths):
+    """sort paths
+    Args:
+        paths (list[string]): path of directory which contains sorted dataset (time.png and time.json).
+    Returns:
+        list[string]: Sorted paths.
+    """
+    return sorted(paths, key=__get_time_stamp)
+
+
+def __get_time_stamp(path):
+    """get time jsonfile
+    Args:
+        path (string): path of directory which contains sorted dataset (time.png and time.json).
+    Returns:
+        Float: The name of the json file in float
+    """
+    file = os.path.basename(path)
+    date = file.split(".json")[0]
+    return float(date)
+
+
 def load_dataset(dirpath):
     """load dataset (json and png from a folder).
         *ps glob.glob gives a list of path.
@@ -23,6 +45,7 @@ def load_multiple_dataset(dirpath, flat=False):
     """load multiple dataset
     Args:
         dirpath (string): path to folder.
+        flat(bool, optional): if True, returns list[dict]
     Returns:
         list[list[dict]] : loaded data.
     """
@@ -67,23 +90,32 @@ def load_sorted_dataset(dirpath):
     return load_dataset(__sort_paths(dirpath))
 
 
-def __sort_paths(paths):
-    """sort paths
+def load_multiple_sorted_dataset(dirpath):
+    """Load multiple sorted dataset
+
     Args:
-        paths (list[string]): path of directory which contains sorted dataset (time.png and time.json).
+        dirpath (string): path of directory which contains json and png.
+
     Returns:
-        list[string]: Sorted paths.
+       lsit[lsit[dict]]: sorted data.
     """
-    return sorted(paths, key=__get_time_stamp)
+    return load_multiple_dataset(__sort_paths(dirpath))
 
 
-def __get_time_stamp(path):
-    """get time jsonfile
+def load_multiple_data_set_generator(dirpath, flat=False):
+    """loads multiple dataset generator
+
     Args:
-        path (string): path of directory which contains sorted dataset (time.png and time.json).
-    Returns:
-        Float: The name of the json file in float
+        dirpath (string): path to directory which contains paths with json and png files.
+        flat (bool, optional):  if True, returns list[dict] (do the thing to check if none empty).
+
+    Yields:
+        list[list[dict]]: list of list of dictionnary containing image and json.
     """
-    file = os.path.basename(path)
-    date = file.split(".json")[0]
-    return float(date)
+    for path in glob.glob(dirpath + "*"):
+        if os.path.isdir(path):
+            if flat:
+                for data in load_dataset_generator(path):
+                    yield data
+            else:
+                yield load_dataset_generator(path)
