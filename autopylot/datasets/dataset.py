@@ -61,29 +61,26 @@ def load_sorted_dataset(dirpath):
     Returns:
         list[dict]: Loaded data (in order)
     """
-    return load_dataset(__sort_dataset(dirpath))
+    return load_dataset(__sort_paths(dirpath))
 
 
-def __sort_dataset(dirpath):
-    """sort dataset
+def __sort_paths(paths):
+    """sort paths
     Args:
-        dirpath (strign): path of directory which contains sorted dataset (time.png and time.json).
+        paths (list[string]): path of directory which contains sorted dataset (time.png and time.json).
     Returns:
-        list[dict]: Sorted dataset.
+        list[string]: Sorted paths.
     """
-    datas = []
-    date = __get_time_stamp(dirpath)
-    datas = sorted(dirpath, key=date)
-    return datas
+    return sorted(paths, key=__get_time_stamp)
 
 
-def __get_time_stamp(dirpath):
+def __get_time_stamp(path):
     """get time jsonfile
     Args:
-        dirpath (string): path of directory which contains sorted dataset (time.png and time.json).
+        path (string): path of directory which contains sorted dataset (time.png and time.json).
     Returns:
         Float: The name of the json file in float
     """
-    file = os.path.basename(dirpath)
+    file = os.path.basename(path)
     date = file.split(".json")[0]
     return float(date)

@@ -89,8 +89,8 @@ def test_load_multiple_dataset_empty_True():
 def test_load_dataset_generator():
     """Testing if the function load_dataset_generator() works"""
     path_dir = os.path.join(os.getcwd(), "testing_dataset")
-    list_of_dict = dataset.load_dataset_generator(path_dir)
-    assert list_of_dict == []
+    list_of_dict = list(dataset.load_dataset_generator(path_dir))
+    assert len(list_of_dict) == 0
 
 
 def test___sort_dataset_empty():
@@ -99,8 +99,7 @@ def test___sort_dataset_empty():
 
 def test___get_time_stamp():
     """Testing if the function __get_time_stamp() works"""
-    path_dir = os.path.join(os.getcwd(), "35438.455.json")
-    float_val = dataset.__get_time_stamp(path_dir)
+    float_val = dataset.__get_time_stamp("mypath\\test\\35438.455.json")
     assert isinstance(float_val, float)
 
 
