@@ -43,7 +43,7 @@ while True:
                 else:
                     print(j["msg"])
 
-    except OSError as e:
+    except OSError:
         # wait for the connection to be established
         conn, addr = s.accept()
 

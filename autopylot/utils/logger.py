@@ -11,8 +11,10 @@ from collections import deque
 import cv2
 import numpy as np
 
+pathlogs = __file__ + r"/../../../logs/logs.log"
 
-def init(name="", pathlogs=r"logs/logs.log", host="0.0.0.0", port=8080):
+
+def init(name="", pathlogs=pathlogs, host="0.0.0.0", port=8080):
     logger = logging.getLogger(name)
 
     # if the logger already exists, just return it
@@ -209,23 +211,15 @@ class TelemetryHandler(logging.Handler):
 
             if len(self.__logs_queue) != 0 and self.sock:
                 record = self.__logs_queue[0]
-
-                try:
-                    s = self.serialize(record)
-                    if self.send(s):
-                        self.__logs_queue.remove(record)
-                except Exception:
-                    self.handleError(record)
+                s = self.serialize(record)
+                if self.send(s):
+                    self.__logs_queue.remove(record)
 
             if len(self.__telemetry_queue) != 0 and self.sock:
                 record = self.__telemetry_queue[0]
-
-                try:
-                    s = self.serialize(record)
-                    if self.send(s):
-                        self.__telemetry_queue.remove(record)
-                except Exception:
-                    self.handleError(record)
+                s = self.serialize(record)
+                if self.send(s):
+                    self.__telemetry_queue.remove(record)
 
             if self.__stop_thread:
                 self.__stop_thread = False
@@ -234,7 +228,7 @@ class TelemetryHandler(logging.Handler):
     def start_thread(self):
         """Start the thread that sends messages and telemetry to the server."""
         if not self.__thread:
-            self.__thread = threading.Thread(target=self.__run_threaded__)
+            self.__thread = threading.Thread(target=self.__run_threaded__, daemon=True)
             self.__thread.start()
             logging.info("Started thread to send telemetry.")
         else:
