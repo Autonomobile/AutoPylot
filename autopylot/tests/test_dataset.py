@@ -73,25 +73,19 @@ def test_number_files():
 # Do to : make a test funtion for when flat is true then one for when flat is false.
 
 
-def test_load_multiple_dataset_empty_False():
+def test_load_multiple_dataset_empty():
     """Testing if the function load_multiple_dataset() works"""
-    path_dir = os.path.join(os.getcwd(), "testing_dataset")
-    list_of_list_of_dict = dataset.load_multiple_dataset(path_dir, False)
-    assert list_of_list_of_dict == [[]]
-
-
-def test_load_multiple_dataset_empty_True():
-    """Testing if the function load_multiple_dataset() works"""
-    path_dir = os.path.join(os.getcwd(), "testing_dataset")
-    list_of_dict = dataset.load_multiple_dataset(path_dir, True)
-    assert list_of_dict == []
+    path_dir = os.path.join(os.getcwd(), "testing_dataset\\")
+    ret_false = dataset.load_multiple_dataset(path_dir, False)
+    ret_true = dataset.load_multiple_dataset(path_dir, True)
+    assert ret_false == [] and ret_true == []
 
 
 def test_load_dataset_generator():
     """Testing if the function load_dataset_generator() works."""
-    path_dir = os.path.join(os.getcwd(), "testing_dataset")
+    path_dir = os.path.join(os.getcwd(), "testing_dataset\\")
     list_of_dict = list(dataset.load_dataset_generator(path_dir))
-    assert len(list_of_dict) == 0
+    assert len(list_of_dict) == 2
 
 
 def test___sort_paths_is_str():
