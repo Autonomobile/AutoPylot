@@ -117,6 +117,68 @@ We only needed to add a wrapper around all of that to match our needs. We are no
 
 % Gay
 \subsection{Data set}
+Previously, we created functions to load and save datas, those function handle json files and images. \\ \\
+Now we have to deal with data set but first, what is a data set ? \\ \\
+A data set is a folder which contains json files and images. Each file will have in its name the date followed by .png, the json should have the same name but it ends with .json instead of .png. In order to have the date, we have to use the time method time() which returns the time as a floating point number expressed in seconds since the epoch, in UTC.\\ \\
+
+Why dataset are so important ? \\ \\ 
+The goal of these part is to manipulate datat set. We take the information that the camera is giving to us and we can load, save and sort those datas in a cleaner way so that our training model and our Artificial inteligence model can use it.\\ \\
+
+We started by creating two files, the dataset.py file for the main functions and the test dataset.py in order to provide test functions to see if our code is working.\\ \\ 
+
+Firstly, for the dataset.py file, we had to import  two modules. \\ \\
+The first one is the glob module which finds all the pathnames matching a specified pattern according to the rules used by the Unix shell.\\ \\
+The second one is the OPS module. It provides functions for interacting with the operating system.\\ \\
+
+Secondly for the test file in addition to the module glob and os, we used the sys module. It provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter.
+We also used the shutil module which offers a number of high-level operations on files and collections of files. In particular, functions are provided which support file copying and removal. Furthermore, we used the numpy module to deal with matrices.\\ \\
+
+
+The dataset file is composed of ten functions :\\ \\
+
+The first is the load dataset function which load json and png file from a folder, the function takes the path of a directory which contains json and png and it returns a list of dictionnary containing the image and the json file.\\ \\
+
+The second function is the load multiple dataset, it is similar to the load dataset function but deals with multiple images and json files and it returns a list of list of dictionnary.  We also had a second argument named flat, if flat is equal to false,it means that we have to deal with a list of list, otherwise we have to deal with a simple list.\\ \\
+
+The third one is the load dataset generator function, it iterates image data, generators do not store all the values in memory, they generate the values on the fly.\\ \\
+
+The fourth one is the load multiple dataset generator. It is similar to the load dataset generator but it deals with several iamges and json files.\\ \\
+
+Then the load sorted dataset function sorts the loaded data and returns a list of ditionnary containing sorted data. Thanks to the function time.time() we have a chronogical view of our elements and we have to sort them. We had to use 2 subfunctions, the first is sort paths which sort all our elements thanks to the sorted function and the second subfunction is the get time stamp. The function split the name of an element in order to have only the part containing the date without the .json or .png  and then it convert it into a float.\\ \\
+
+
+The load multiple sorted dataset is similar to the load sorted dataset function but it deals with mutiple dataset and returns a list of list of dictionnary.\\ \\
+
+The two last function are the load sorted dataset generator and the load multiple sorted dataset generator.\\ \\
+It iterates sorted image data and do not store the values in the memory.\\ \\
+
+
+
+The test dataset file is composed of twenty-one functions.\\ \\
+
+We started to create the convert path function which is useful to convert path according to the current os because we encounter a major issue when we ran for the first time our test. Indeed, some errors appeared under Linux while under windows everythings works because the loading order is different under linux than under windows.\\ \\
+
+Then we created the test sort paths is sorted function which test if the function  sortpaths returns sorted elements. \\ \\
+
+The third function is the test get time stamp. It test if the get time stamp function works, and if the value that it returns is a float. \\ \\
+
+
+Afterwards, we had to create a test directory to generate files containing image datas with an image, some datas like the steering and the throttle in order to test the other functions. \\ \\
+
+Firstly, we check if the number of files that we have created  is the same number present in the test directory. \\ \\
+
+Secondly, we check if the load dataset function was working using the previous files that we have created. We did the same test for the function load dataset generator. \\ \\
+
+Thirdly, we have to test if our functions are capabe to sort our dataset, by naming our files with different dates we can check if after the function load sorted datase we have a list of dictionnary in increasing order. \\ \\
+
+Afterwards, we created multiple directories and multiple files to test our function that take as parameters multiple directories. \\ \\
+
+We have types of function load multiple dataset, with have a flat version and a not flat version. \\ \\
+The difference is that for the flat version, datas are in the same folder and for the not flat version, datas are in different files. Our test are successful as we can collect our files independently of there folder. \\ \\
+
+We made the same test for the function test load multiple dataset generator not flat and for test load multiple dataset generator flat. \\ \\
+
+To finish, to get a cleaner work space, we delete all our folders created for those test. \\ \\
 
 % Ellerbach
 \subsection{Data vis}
