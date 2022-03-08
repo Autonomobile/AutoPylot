@@ -218,8 +218,8 @@ def test_load_multiple_dataset_flat():
     assert datas[2]["steering"] == 0.1 and datas[2]["throttle"] == 0.1
 
 
-def test_load_multiple_sorted_dataset():
-    """Testing if the function load_multiple_sorted_dataset() works."""
+def test_load_multiple_sorted_dataset_not_flat():
+    """Testing if the function load_multiple_sorted_dataset() not flat works."""
     list_datas = dataset.load_multiple_sorted_dataset(path_dir)
 
     datas = list_datas[0]
