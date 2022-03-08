@@ -2,12 +2,14 @@
 
 import glob
 import os
-import sys
 import shutil
+import sys
+
 import numpy as np
+import pytest
+
 from ..datasets import dataset
 from ..utils import io
-
 
 path_dir = os.path.join(os.getcwd(), "testing_dataset")
 dir_one = os.path.join(path_dir, "1")
@@ -110,6 +112,7 @@ def test_number_files():
     assert len(imagepaths) == 2
 
 
+@pytest.mark.win
 def test_load_dataset():
     """Testing if the function load_dataset() works."""
     datas = dataset.load_dataset(path_dir)
@@ -118,6 +121,7 @@ def test_load_dataset():
     assert datas[1]["steering"] == 0.33 and datas[1]["throttle"] == 0.5
 
 
+@pytest.mark.win
 def test_load_dataset_generator():
     """Testing if the function load_dataset_generator() works."""
     generator = dataset.load_dataset_generator(path_dir)
@@ -188,6 +192,7 @@ def test_save_multiple_dataset():
     assert ret == (True, True)
 
 
+@pytest.mark.win
 def test_load_multiple_dataset_not_flat():
     """Testing if the function load_multiple_dataset() not flat works."""
     list_datas = dataset.load_multiple_dataset(path_dir)
@@ -202,6 +207,7 @@ def test_load_multiple_dataset_not_flat():
     assert datas[0]["steering"] == 0.1 and datas[0]["throttle"] == 0.1
 
 
+@pytest.mark.win
 def test_load_multiple_dataset_flat():
     """Testing if the function load_multiple_dataset() flat works."""
     datas = dataset.load_multiple_dataset(path_dir, True)
@@ -226,6 +232,7 @@ def test_load_multiple_sorted_dataset():
     assert datas[0]["steering"] == 0.1 and datas[0]["throttle"] == 0.1
 
 
+@pytest.mark.win
 def test_load_multiple_dataset_generator_not_flat():
     """Testing if the function load_multiple_dataset_generator() not flat works."""
     generator = dataset.load_multiple_dataset_generator(path_dir)
@@ -241,6 +248,7 @@ def test_load_multiple_dataset_generator_not_flat():
     assert data["steering"] == 0.1 and data["throttle"] == 0.1
 
 
+@pytest.mark.win
 def test_load_multiple_dataset_generator_flat():
     """Testing if the function load_multiple_dataset_generator() flat works."""
     generator = dataset.load_multiple_dataset_generator(path_dir, True)
@@ -249,6 +257,18 @@ def test_load_multiple_dataset_generator_flat():
     assert data["steering"] == -0.6 and data["throttle"] == 0.7
     data = next(generator)
     assert data["steering"] == 0.33 and data["throttle"] == 0.5
+    data = next(generator)
+    assert data["steering"] == 0.1 and data["throttle"] == 0.1
+
+
+def test_load_multiple_sorted_dataset_generator_flat():
+    """Testing if the function load_multiple_sorted_dataset_generator() flat works."""
+    generator = dataset.load_multiple_sorted_dataset_generator(path_dir, True)
+
+    data = next(generator)
+    assert data["steering"] == 0.33 and data["throttle"] == 0.5
+    data = next(generator)
+    assert data["steering"] == -0.6 and data["throttle"] == 0.7
     data = next(generator)
     assert data["steering"] == 0.1 and data["throttle"] == 0.1
 
