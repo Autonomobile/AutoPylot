@@ -1,7 +1,36 @@
-""" Here we will load and save dataset."""
+"""
+Here we will load and save dataset.
+
+Some usage examples :
+load_multiple_dataset(".", False)  # list of list
+load_multiple_dataset(".", True)  # 1 list
+for image_data in load_dataset_generator("dataset\\car\\"):
+    dosomething(image_data) 
+"""
 
 import glob
+import os
 from ..utils import io
+
+
+def __get_time_stamp(path):
+    """get time jsonfile
+    Args:
+        path (string): path of directory which contains sorted dataset (time.png and time.json).
+    Returns:
+        Float: The name of the json file in float
+    """
+    return float(os.path.basename(path).split(".json")[0])
+
+
+def __sort_paths(paths):
+    """sort paths
+    Args:
+        paths (list[string]): path of directory which contains sorted dataset (time.png and time.json).
+    Returns:
+        list[string]: Sorted paths.
+    """
+    return sorted(paths, key=__get_time_stamp)
 
 
 def load_dataset(dirpath):
@@ -13,24 +42,28 @@ def load_dataset(dirpath):
         list[dict]: list of dictionnary containing image and json.
     """
     datas = []
-    for filepath in glob.glob(dirpath + "*.json"):
+    for filepath in glob.glob(dirpath + os.sep + "*.json"):
         datas.append(io.load_image_data(filepath))
     return datas
 
 
-def load_multiple_dataset(dirpaths, flat=False):
+def load_multiple_dataset(dirpath, flat=False):
     """load multiple dataset
     Args:
-        dirpaths (string): string to multiple folders
+        dirpath (string): path of a directory containing other directories that contain json and png.
+        flat(bool, optional): if True, returns list[dict]
     Returns:
         list[list[dict]] : loaded data.
     """
     datas = []
-    for dirpath in glob.glob(dirpaths):
-        if flat:
-            datas += load_dataset(dirpath)
-        else:
-            datas.append(load_dataset(dirpath))
+    for path in glob.glob(dirpath + os.sep + "*"):
+        if os.path.isdir(path):
+            if flat:
+                datas += load_dataset(path)
+            else:
+                data = load_dataset(path)
+                if data != []:
+                    datas.append(data)
     return datas
 
 
@@ -38,16 +71,90 @@ def load_dataset_generator(dirpath):
     """Load dataset generator.
     Args:
         dirpath (string): path of directory which contains json and png.
-    Returns:
+    Yields:
         list[dict]: list of dictionnary containing image and json.
     """
-    for filepath in glob.glob(dirpath + "*.json"):
+    for filepath in glob.glob(dirpath + os.sep + "*.json"):
         yield io.load_image_data(filepath)
 
 
-""" Some usage examples :
-load_multiple_dataset(".", False)  # list of list
-load_multiple_dataset(".", True)  # 1 list
-for image_data in load_dataset_generator("dataset\\car\\"):
-   dosomething(image_data) 
-"""
+def load_multiple_dataset_generator(dirpath, flat=False):
+    """loads multiple dataset generator
+
+    Args:
+        dirpath (string): path of a directory containing other directories that contain json and png.
+        flat (bool, optional):  if True, returns list[dict].
+
+    Yields:
+        list[list[dict]]: list of list of dictionnary containing image and json.
+    """
+    for path in glob.glob(dirpath + os.sep + "*"):
+        if os.path.isdir(path):
+            if flat:
+                for data in load_dataset_generator(path):
+                    yield data
+            else:
+                yield load_dataset_generator(path)
+
+
+def load_sorted_dataset(dirpath):
+    """Load sorted data.
+    Args:
+        dirpath (string): path of directory which contains sorted dataset (time.png and time.json) .
+    Returns:
+        list[dict]: Loaded data (in order)
+    """
+    datas = []
+    for filepath in __sort_paths(glob.glob(dirpath + os.sep + "*.json")):
+        datas.append(io.load_image_data(filepath))
+    return datas
+
+
+def load_multiple_sorted_dataset(dirpath, flat=False):
+    """Load multiple sorted dataset
+
+    Args:
+        dirpath (string): path of a directory containing other directories that contain json and png.
+        flat (bool, optional):  if True, returns list[dict].
+
+    Returns:
+        list[list[dict]]: sorted data.
+    """
+    datas = []
+    for path in glob.glob(dirpath + os.sep + "*"):
+        if os.path.isdir(path):
+            if flat:
+                datas += load_sorted_dataset(path)
+            else:
+                data = load_sorted_dataset(path)
+                if data != []:
+                    datas.append(data)
+    return datas
+
+
+def load_sorted_dataset_generator(dirpath):
+    """Load sorted dataset generator.
+    Args:
+        dirpath (string): path of directory which contains json and png.
+    Returns:
+        list[dict]: list of dictionnary containing image and json.
+    """
+    for filepath in __sort_paths(glob.glob(dirpath + os.sep + "*.json")):
+        yield io.load_image_data(filepath)
+
+
+def load_multiple_sorted_dataset_generator(dirpath, flat=False):
+    """Load multiple sorted dataset generator.
+    Args:
+        dirpath (string): path of a directory containing other directories that contain json and png.
+        flat (bool, optional):  if True, yields list[dict].
+    Yields:
+        list[list[dict]]: list of dictionnary containing image and json.
+    """
+    for path in glob.glob(dirpath + os.sep + "*"):
+        if os.path.isdir(path):
+            if flat:
+                for data in load_sorted_dataset_generator(path):
+                    yield data
+            else:
+                yield load_sorted_dataset_generator(path)

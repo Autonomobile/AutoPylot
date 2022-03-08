@@ -1,8 +1,10 @@
 """Control the car using serial port."""
+import logging
 import threading
 import time
 
 import serial
+
 from ..utils import utils
 
 
@@ -61,13 +63,13 @@ class SerialControl:
         try:
             if not self.ser.isOpen():
                 self.ser.open()
-                print(self.ser.portstr)  # check which port was really used
-
                 self.start_thread()
-                print("Serial port open")
+
+                # check which port was really used
+                logging.info(f"Serial port {self.ser.portstr} opened")
 
         except Exception as e:
-            print("Error opening port: " + str(e))
+            logging.error(f"Error opening port: {e}")
 
     def stop(self):
         self.__isRuning = False
