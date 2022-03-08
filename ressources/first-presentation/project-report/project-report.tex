@@ -32,7 +32,7 @@
 
 \maketitle
 
-\centerline{\includegraphics[height=7cm]{../../logos/logo-transparent-black.png}}
+\centerline{\includegraphics[height=8cm]{../../logos/logo-transparent-black.png}}
 \newpage
 
 \tableofcontents
@@ -118,7 +118,7 @@ When the Arduino part was finished, we could start the python part, that consist
 
 % Ellerbach
 \subsection{Camera}
-The next step was to build a class to fetch images from our webcam, thankfully, the python module OpenCV has already some functions to do exactly that ! 
+The next step was to build a class to fetch images from our webcam, thankfully, the python module OpenCV has already some functions to do exactly that ! \\
 We only needed to add a wrapper around all of that to match our needs. We are now able to fetch images from our camera into a NumPy array that we can manipulate. On top of that, we did create a `dummy` version of this camera class in case we did not have access to a camera to run some tests, this class return a black image when we grab a new image form it. We use this class in some of our automated tests.
 
 % Girold
@@ -211,8 +211,8 @@ To finish, to get a cleaner work space, we delete all our folders created for th
 
 % Ellerbach
 \subsection{Data visualization}
-In order to properly visualize our fetched data, we created some utils functions to do so.
-The figures ~\ref{fig:a} shows a left turn and ~\ref{fig:b} a straight line. But How does that work ? Every saved images have labels : steering, throttle and speed, once we load them using our previously developped functions, we are left with a dictionnary containing the image in a NumPy array, and floating points values steering, throttle and speed. We then draw onto the image some lines and text using openCV's functions. We draw a line in the middle using our steering float, the line on the right represents the throttle, and finally on the left, the speed ! We disigned those functions to be as modular as possible, if we ever need to add a new data to visualize, we just need to add a single line ! You can imagine layering outputs of differents models to determine which one is better. We can also imagine in a near future that our model would predict positions with confidence metrics, we could totally represent those using thoses visualization functions. In short, they will be essential to debug what is going on and provide key informations to our eyes.
+In order to properly visualize our fetched data, we created some utils functions to do so.\\
+The figures ~\ref{fig:a} shows a left turn and ~\ref{fig:b} a straight line. \\ But How does that work ? \\ Every saved images have labels : steering, throttle and speed, once we load them using our previously developped functions, we are left with a dictionnary containing the image in a NumPy array, and floating points values steering, throttle and speed. We then draw onto the image some lines and text using openCV's functions. We draw a line in the middle using our steering float, the line on the right represents the throttle, and finally on the left, the speed ! We disigned those functions to be as modular as possible, if we ever need to add a new data to visualize, we just need to add a single line ! You can imagine layering outputs of differents models to determine which one is better. We can also imagine in a near future that our model would predict positions with confidence metrics, we could totally represent those using thoses visualization functions. In short, they will be essential to debug what is going on and provide key informations to our eyes.
 
 \begin{figure}[h]
     \centering
@@ -239,6 +239,8 @@ So we began searching for a nice way to do this easily without having to change 
 
 % Girold
 \subsection{Creation of the logo}
+\centerline{\includegraphics[height=8cm]{../../logos/logo-transparent-black.png}}\\
+As we were working on our project, we decided it needed a visual identity that could be easily remembered yet have meaning behind it. With this idea in mind, we brainstormed all together and came up with something new, something we believe is a good compromise of information style and personal touch. After a lot of work, we have come up with the logo printed above. Of course, by now our visual identity has a different version, each of them answering to a problem we have faced or will face.\\
 
 % Girold
 \subsection{Realization of t-shirt}
