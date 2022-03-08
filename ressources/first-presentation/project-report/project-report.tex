@@ -86,24 +86,32 @@ Both of those frameworks are written in python and use packages such as Tensorfl
 \subsection{Project Setup}
 Prior to start programming, we had to set up a good GitHub repository. First, we created a new GitHub Organization called Autonomobile, this is where all of our repositories are located. We then created the AutoPylot repository. We decided to put everything related to this project in the same repo for simplicity, so we have a repo divided into four main parts:
 \begin{itemize}
-\item The autopylot python module. While creating it, we searched online for best practices regarding python packages. We learned a lot regarding that part !
+\item The autopylot python module. While creating it, we searched online for best practices regarding python packages. We learned a lot regarding that part ! We put in place a python virtual env (venv) so that every members could easily install every required package: OpenCV, Tensorflow, Numpy and more.
 \item Some main scripts that use autopylot module.
 \item Everything related to the presentation website and telemetry website.
-\item Documentation ! Even if it is not the funniest part of the project, it is still a really important one: keeping track of how to install the project, our dependencies and so on. We also keep in this part every project report and work we had to do for the presentations as we may need them in the future !
+\item Documentation ! Even if it is not the funniest part of the project, it is still a really important one: keeping track of how to install the project, our dependencies and so on. We also keep in this part every project report and work we had to do for the presentations as we may need them in the future ! It is important to keep track of what is done and what is to be done !
 \end{itemize}
 We also created a GitHub action to automate the testing of our project ! Every important functions coded is accompanied by its set of tests. This enables us to assert that the code we are currently working on works as expected. With this idea in mind, we added a really important rule: no addition of code on the main branch if it doesn't pass all the tests we wrote. This rule is really important to keep main clean from any major bug ! This rule induces one thing: we need to open branches and do Pull Requests for every feature we add to the project. Moreover, we need the approval of someone else to merge the Pull Request into the main branch. We all forced ourself to respect this as much as we could, the result is that now we are totally used to this process and everyone is aware of what people are working on because they need to review their code.
 On top of that, before committing code, we run a code linter that clean our code, adds and removes whitespace where they should or should not be, rearranges long lines so that they fit into the screen. \\
 All in  all, we are confident to say that we came up with a great set of rules and a great project structure to avoid spending time on solving issues that could arise from a poor project setup.
 
+\newpage
 
 % Ellerbach
 \subsection{Arduino and car control}
+
+\begin{figure}[b!]
+    \includegraphics[width=\textwidth]{../../docs/car-hardware.png}
+    \caption{TinkerCad Circuit}
+    \label{fig:tinkercad}
+\end{figure}
+
 This task is essential to the success of this project, this is the lowest code level we will deal with. The Arduino code is the code that drives our motor and servomotor, without this part nothing works ! Any issue coming from this part of the code would mean a crash into a wall. To ensure that this part was working as expected, we run a lot of testing with the real car, trying different scenario to see what to expect for example if we lost the connection between the Arduino and Raspberry Pi or if it didn't receive orders for a given amount of time. As all the team could not have direct access to the car, we did a virtual clone of the car using TinkerCad, simulating and live debugging our code before feeding it to our real car !\\
-Here is the TinkerCad simplified version of the car:
+You can see on the figure ~\ref{fig:tinkercad} the TinkerCad simplified version of the car.
 
-\centerline{\includegraphics[width=16cm]{../../docs/car-hardware.png}}
 
-You can see here two Arduinos, but on the car we only have one, why is that ? TinkerCad didn't have a Raspberry Pi, so we added another Arduino to simulate the serial connection between the Raspberry Pi and the Arduino. The Arduino on the top sends steering and throttle information (as the Raspberry Pi would do) to the other Arduino that processes this information received on the serial port and then controls both the servomotor and motor. They are both running on a 9V battery here but in real life on a 7.2V battery.
+
+You can see here two Arduinos, but on the car we only have one, why is that ? TinkerCad didn't have a Raspberry Pi, so we added another Arduino to simulate the serial connection between the Raspberry Pi and the Arduino. The Arduino on the top sends steering and throttle information (as the Raspberry Pi would do) to the other Arduino that processes this information received on the serial port and then controls both the servomotor and motor. They are both running on a 9V battery here but in real life on a 7.2V battery. We then read the signal sent by the sensored motor, using an interrupt pin. The rpm of the motor is then deduced from this signal and then sent back to the Raspberry Pi.
 This virtual simplified car really helped us in the process of developing the core of our car !
 
 When the Arduino part was finished, we could start the python part, that consisted in sending the right bytes to the serial port connected to the Arduino, it was hard to debug when there were issues on the one hand, but really satisfying when it did work ! We are now able to send steering and throttle to the Arduino making the car controllable using python !
@@ -184,9 +192,9 @@ To finish, to get a cleaner work space, we delete all our folders created for th
 % Ellerbach
 \subsection{Data visualization}
 In order to properly visualize our fetched data, we created some utils functions to do so.
-The figure \ref{fig:a} shows a left turn and \ref{fig:b} a straight line.
+The figures ~\ref{fig:a} shows a left turn and ~\ref{fig:b} a straight line. But How does that work ? Every saved images have labels : steering, throttle and speed, once we load them using our previously developped functions, we are left with a dictionnary containing the image in a NumPy array, and floating points values steering, throttle and speed. We then draw onto the image some lines and text using openCV's functions. We draw a line in the middle using our steering float, the line on the right represents the throttle, and finally on the left, the speed ! We disigned those functions to be as modular as possible, if we ever need to add a new data to visualize, we just need to add a single line ! You can imagine layering outputs of differents models to determine which one is better. We can also imagine in a near future that our model would predict positions with confidence metrics, we could totally represent those using thoses visualization functions. In short, they will be essential to debug what is going on and provide key informations to our eyes.
 
-\begin{figure}[h] 
+\begin{figure}[h]
     \centering
     \subfloat[Left Turn]{%
         \includegraphics[width=0.49\textwidth]{../../docs/left-turn.png}%
@@ -197,7 +205,7 @@ The figure \ref{fig:a} shows a left turn and \ref{fig:b} a straight line.
         \includegraphics[width=0.49\textwidth]{../../docs/forward.png}%
         \label{fig:b}%
         }%
-    \caption{An example of two visualized data}
+    \caption{An example of two visualized images}
 \end{figure}
 
 % Bobovitch
