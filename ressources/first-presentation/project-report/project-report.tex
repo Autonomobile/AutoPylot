@@ -123,6 +123,26 @@ We only needed to add a wrapper around all of that to match our needs. We are no
 
 % Girold
 \subsection{Load and save data}
+In this section, we will talk about of the project, data is defined as an image.png or the same image as a JSON file. We want to have both types of data because the JSON files are easy to manipulate and the png images will be used to display the images captured by the car's camera.\\
+
+Let’s dive deeper into how we managed to make it work. Firstly, we will need to make use of different modules and packages. For this part, we will use 3 modules: Json, cv2, and s. A more detail explanation of those modules can be found in the next section.\\ 
+
+ 
+Let’s go throw the different functions: \\ 
+
+Firstly, we have the load functions. There are present to make it easier for us to use images for future functions. The first of these functions load’s an image (.png) from a given path and returns it as a NumPy array (multidimensional array object) which is amazingly fast for computing a large amount of data, exactly what will we do in the future.\\ 
+
+Secondly, we have the function save, these are simple but are quite important. Indeed, the first save function simply saves an image given as a NumPy array to a file. The second one saves a JSON file into dictionaries of the content of a JSON file. 
+
+One important function which will be used later is the save image data. 
+
+The goal of this function is to save an image as a NumPy array into two files, one .png and the other one .json. We will use this function quite often throughout the next weeks.\\ 
+
+As for all the functions we will make, we will want to make sure they are working correctly and the way we intended them to. To do so, we must make test functions. Writing tests is essential to be able to maintain clean and usable code. It certainly is necessary for preventing problems with your code later. It will also help when adding new functionality or refactoring your code, making sure you haven’t broken anything you didn’t intend to. This is done through the use of assert and yield which have different properties which we will not discuss here as they aren’t the main subject of our project.\\ 
+
+In this case, we will make use of 4 different modules: os, shutil, NumPy, and test. To successfully conduct the tests, we need to create a temporary directory, we will inside this directory then remove it at the end.  
+
+The test to the load and save function have 10 function which tests each function on specific outcomes. We want to be sure that our functions do save the images and JSON files into the correct directory.  
 
 % Gay
 \subsection{Data set}
