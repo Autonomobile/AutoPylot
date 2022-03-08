@@ -14,7 +14,7 @@ def test_serial_high_speed():
     ser.ser.write(b"1234\r\n")
 
     # give some time for the decoding thread
-    time.sleep(0.001)
+    time.sleep(0.01)
 
     # stop the thread
     ser.stop()
@@ -32,7 +32,7 @@ def test_serial_normal_speed():
     ser.ser.write(b"5678\r\n")
 
     # give some time for the decoding thread
-    time.sleep(0.001)
+    time.sleep(0.01)
 
     # stop the thread
     ser.stop()
@@ -50,7 +50,7 @@ def test_serial_no_speed():
     ser.ser.write(b"27001\r\n")
 
     # give some time for the decoding thread
-    time.sleep(0.001)
+    time.sleep(0.01)
 
     # stop the thread
     ser.stop()
@@ -68,7 +68,7 @@ def test_serial_invalid_bitarray():
     ser.ser.write(b"1234")
 
     # give some time for the decoding thread
-    time.sleep(0.001)
+    time.sleep(0.01)
 
     # stop the thread
     ser.stop()
