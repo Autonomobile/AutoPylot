@@ -199,8 +199,21 @@ The figures ~\ref{fig:a} shows a left turn and ~\ref{fig:b} a straight line. \\ 
     \caption{An example of two visualized images}
 \end{figure}
 
+\newpage
+
 % Bobovitch
 \subsection{Basic car loop}
+This is a mandatory part. It contains the main function to run. The Main Control Loop will call various processing functions. We successfully achieved fetching of images from the camera, fetching commands from the controller and we successfully updated the general car memory state so now we are able to send multiple signals and commands to the hardware driver. \\
+
+We made real life testing that confirmed our progression. We plan next to maintain our modular philosophy to easily add or remove features. This part seems easy to implement but remains one of the most important. We have to be sure that each component and modules are working perfectly to avoid performance issues. \\
+
+Now we will mainly focus on the driving part and the neural network.
+
+\begin{figure}[h!]
+    \includegraphics[width=\textwidth]{../../docs/control-loop.png}
+    \caption{Diagram of the Control loop}
+    \label{fig:control-loop}
+\end{figure}
 
 % Ellerbach
 \subsection{Logging}
@@ -212,13 +225,55 @@ This handler development is parallel to the server's development, this requires 
 We came up with a prototype of the python client with a simple python server, but have not completely finished the telemetry server. When the handler is called with a new log to send, it is being added to a queue of logs and telemetry messages, those are being sent by a thread so that we do not wait for the item to be sent to continue in the program. \\
 To conclude, this part will be of great help for debugging and will be allowing us to go back in time after a run and take a look back at the main events we had, crashes and more. We aim to have this part finished and functional by the next presentation.
 
-
 \begin{figure}[h!]
     \includegraphics[width=\textwidth]{../../docs/logs.png}
     \caption{Preview of the logs saved to file}
     \label{fig:logs}
 \end{figure}
 
+\newpage 
+
+% Bobovitch
+\subsection{Telemetry}
+Why use telemetry? \\
+
+In our context, we face different problems that may be hard to solve without accessing the device. Our code runs on an Rasberry Pi which make difficult the debugging. \\
+
+Moreover, artificial intelligence is a black box. We don't know what's happening during the execution process. That said, once the program has finished, you can observe the past events thanks to the logs. However, this approach to debugging is not practical and not efficient enough for our use case. To better understand the background processes, we decided to use telemetry. It will allow us to collect valuable data in real time. \\
+
+Since we are dealing with an “intelligent” device, we should fully control it at any moment. It would be a disaster if the device does not obey us, as it can create a security treat for the environment. As we know, security is always one of the most important point to keep in mind. In the case where the car is moving at full speed towards a child, how could we stop it? \\
+
+We came to the point of building a telemetry server combined with a remote controller. It will fill all our requirements. The server will permit us to communicate with the car in real-time, so we can detect any problems before they happen. In addition, the telemetry server will be able to exchange any type of data with the car. For instance, the view of the camera with or without the OpenCV filters. We will be able can to launch a remote debugging session and remote-control steering and throttle. We could also activate certain parameters of the car if desired. \\
+
+The number of cars is not limited to one: we assume that we can control several cars and that each car can share their data with multsiple users through an authentication system if they want to. We use many-to-many approach. \\
+
+Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. At first, we extended the functionalities of the logger while maintaining a modular philosophy. \\
+
+The logger gained the ability to send logs and images through a network. Then we built a server to save and retransmit the data. The server is acting as a middleman. We discovered the socket.io project which allows us to create Full-Duplex Bidirectional and low-latency communication for every platform. \\
+
+We created a 2 in 1 server which combine a socket.io + an HTTP server to permit the simplest possible deployment. We used the JavaScript language (Node JS) to code the servers as it offers great flexibility, it is very efficient for networking and IO tasks thanks to its event management. As JavaScript is used for front-end and backend, the choice was natural. Nevertheless, it requires great vigilance because the language is not typed. Any bug could lead to performance issues and memory leaks. But it still remains the best choice for a socket.io server. \\
+
+Socket.io, it is an open-source cross-platform library that allows event-based messaging. Each client has a non-blocking function waiting for an event. Thanks to this feature, it is very accessible for us to create communication between servers and clients. In addition, socket.io has a great feature called “rooms”, which provides an easy way to manage clients-to-clients communication. Multiple clients can receive messages from other clients. We can therefore very easily target messages to different recipients and identify them. \\
+
+This opens the doors to many possibilities of communications between different types of clients. Speaking of clients, we have planned for the moment 2 types of clients: UI-Clients and PY-Clients. UI-Clients are just real users that interact with the web page created by the HTTP server. The PY-Clients are autonomous cars that run a python client instance inside a Rasberry Pi. The PY-Clients will generally be the transmitters, as they will send images and logs to the clients through the server. The UI-Clients will only consume the information. However, each UI-Client will be able to send commands to the PY-Client for various reasons. \\
+
+For now, only 25\% of the telemetry sever is finished. We will continuously develop and add expected features. You can see below the server diagram on figure ~\ref{fig:diagram} and a prototype of the telemetry server dashboard on figure ~\ref{fig:telemetry}.
+
+
+\begin{figure}[b!]
+    \includegraphics[width=\textwidth]{../../docs/diagram.png}
+    \caption{Server diagram}
+    \label{fig:diagram}
+\end{figure}
+
+\begin{figure}[b!]
+    \centering
+    \includegraphics[height=.8\textwidth, angle=90]{../../docs/telemetry.png}
+    \caption{Telemetry server dashboard prototype}
+    \label{fig:telemetry}
+\end{figure}
+
+\newpage
 
 % Girold
 \subsection{Creation of the logo}
@@ -239,9 +294,37 @@ The t-shirt took a bit of work as we spend a couple of hours deciding on the fab
 
 To make our purchase we have used a site with a good reputation and pretty good quality products. The name of the website and company is Printful.  We are quite happy with the result and are proud to wear these t-shirts on for any occasion we will have to promote our project. 
 
+\newpage
+
 % Bobovitch
 \subsection{Website}
+As seen before we already developed a web app for our telemetry server. Also, in parallel we developed a static showcase website (available at \href{https://autonomobile.github.io/}{presentation website}). \\
 
+This site is purely static. The mission is to keep it the most professional and simple possible. It is still under construction. We eventually add new content and sections as our progression follows . Our site aims to reflect the efforts and motivation of our team. To deploy the site, We used the excellent quality service offered by Github Pages. \\
+
+We have created our own organization on GitHub, as it enable us to publish the project under our team’s name. Hosting our site in the same place as our code repository allows us to offer a greater visibility to people. Moreover, for the development, it is even easier to manage because all resources are in the same place. \\
+
+In both cases, We used the Next.js framework, a React framework. It allows the creation of web applications and static websites. In terms of stylling, we used UI libraries such as Tailwind CSS and Material UI to increase productivity and produce content that meets the high standards of the web in 2022. With Next.js the backend and the frontend part are merged together which help the development process. \\
+
+In this project we aim to learn the best practice regardless of the technology used. As learning remains our main goal.
+
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.8\textwidth]{../../docs/website1.png}
+    \caption{page1}
+    \label{fig:page1}
+\end{figure}
+
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=.8\textwidth]{../../docs/website2.png}
+    \caption{page2}
+    \label{fig:page2}
+\end{figure}
+
+
+\newpage
 
 % sout : 7 / 03 & 25 / 04 & 06 / 06
 \section {Planning}
@@ -250,7 +333,7 @@ The objectives we set ourselves for this presentation were acheived, for the nex
 
 \subsection {Races}
 
-\begin{tabular}{|l|c|c|c|c|c|c|} 
+\begin{tabular}{|l|c|c|c|c|c|c|}
 \hline
 Tasks & Race 1 & Race 2 & Race 3 & Race 4 & Race 5 & Race 6  \\ 
 \hline
