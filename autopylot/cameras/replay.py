@@ -1,4 +1,4 @@
-"""Dataset camera."""
+"""Replay camera."""
 import logging
 
 import cv2
@@ -14,7 +14,6 @@ class Replay:
 
         Args:
             dataset_path (string): path to the dataset to load.
-            index (int, optional): index of the camera. Defaults to 0.
             shape (tuple, optional): shape of the output image. Defaults to (160, 120, 3).
         """
         self.memory = memory
@@ -39,11 +38,7 @@ class Replay:
         logging.info("Instantiated Replay camera.")
 
     def update(self):
-        """Read image from the camera.
-
-        Raises:
-            ValueError: if couldn't grab the image, raise a valueError.
-        """
+        """Read image by fetching the next element from the generator."""
 
         img = self.fetch_image()
         img = cv2.resize(img, (self.w, self.h))
