@@ -11,7 +11,7 @@ from collections import deque
 import cv2
 import numpy as np
 
-pathlogs = os.path.join(os.getcwd(), __file__ + r"/../../../logs/logs.log")
+pathlogs = os.path.join(os.getcwd(), "logs/logs.log")
 
 
 def init(name="", pathlogs=pathlogs, host="0.0.0.0", port=8080):
