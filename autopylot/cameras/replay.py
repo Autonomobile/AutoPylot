@@ -52,8 +52,8 @@ class Replay:
 
     def fetch_image(self):
         try:
-            data = next(self.generator)
+            return next(self.generator)["image"]
         except StopIteration:
             # re-create a generator (loop the dataset)
             self.generator = self.create_generator()
-        return data["image"]
+            return next(self.generator)["image"]
