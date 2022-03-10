@@ -8,9 +8,10 @@ usage example: 'python load_and_vis_data.py C:\\Users\\user\\datasets\\dataset1'
 import cProfile
 import io
 import logging
+import os
 import pstats
 
-pathlogs = __file__ + r"/../../../logs/profiler.log"
+pathlogs = os.path.join(__file__, r"../../../logs/profiler.log")
 
 
 class Profiler:

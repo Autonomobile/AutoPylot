@@ -1,5 +1,4 @@
 import logging
-import os
 
 import numpy as np
 
@@ -36,7 +35,7 @@ def test_serialize_json():
 def test_file_logs():
     logging.info("test logging to file !")
 
-    with open(os.path.join(os.getcwd(), "logs/logs.log"), "r") as f:
+    with open(logger.pathlogs, "r") as f:
         lines = f.readlines()
 
     assert lines[-1].endswith("test logging to file !\n")
