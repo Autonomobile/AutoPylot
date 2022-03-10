@@ -1,8 +1,19 @@
-import sys
+"""
+Load and visualization of a dataset example,
+using the load_sorted_dataset_generator, visualize every image one by one.
+
+usage example: 'python load_and_vis_data.py C:\\Users\\user\\datasets\\dataset1'
+"""
+
+
 import os
+import sys
 
 from autopylot.datasets import dataset
-from autopylot.utils import vis
+from autopylot.utils import logger, vis
+
+# init the logger handlers, select the address to the telemetry server
+logger.init(host="localhost", port=8080)
 
 
 def main(path):

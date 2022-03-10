@@ -1,3 +1,7 @@
+"""
+Example script for the telemetry server in python (testing purpose).
+"""
+
 import base64
 import json
 import socket

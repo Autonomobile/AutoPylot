@@ -212,3 +212,9 @@ def compare(image_datas, image_key="image"):
         vis_images.append(vis_all(image_data))
 
     return np.concatenate(vis_images, axis=1)
+
+
+def show(image, name="image", waitkey=1):
+    cv2.imshow(name, image)
+    if waitkey:
+        cv2.waitKey(waitkey)

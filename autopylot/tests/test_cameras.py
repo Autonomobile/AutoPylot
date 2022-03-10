@@ -1,4 +1,6 @@
 """Test the cameras."""
+import pytest
+
 from ..cameras import camera
 
 
@@ -18,3 +20,16 @@ def test_dummy_color():
     cam = camera.Camera(test_memory, camera_type="dummy", shape=shape)
     cam.update()
     assert test_memory["image"].shape == shape
+
+
+def test_replay_cam_error():
+    shape = (120, 160, 1)
+    test_memory = {}
+
+    with pytest.raises(ValueError):
+        camera.Camera(
+            test_memory,
+            camera_type="replay",
+            shape=shape,
+            dataset_path="this/is/a/fake/path",
+        )
