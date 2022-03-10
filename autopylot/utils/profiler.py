@@ -6,8 +6,9 @@ usage example: 'python load_and_vis_data.py C:\\Users\\user\\datasets\\dataset1'
 """
 
 import cProfile
-import pstats
 import io
+import logging
+import pstats
 
 pathlogs = __file__ + r"/../../../logs/profiler.log"
 
@@ -22,6 +23,8 @@ class Profiler:
 
         self.pr = cProfile.Profile()
         self.pr.enable()
+
+        logging.info("Profiler class initialized.")
 
     def update(self, filters=["autopylot"], sort_by="cumulative"):
         if self.it % self.n_iter == 0:
