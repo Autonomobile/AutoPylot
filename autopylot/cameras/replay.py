@@ -40,20 +40,22 @@ class Replay:
     def update(self):
         """Read image by fetching the next element from the generator."""
 
-        img = self.fetch_image()
-        img = cv2.resize(img, (self.w, self.h))
-        if self.c == 3:
-            self.memory["image"] = img
-        else:
-            self.memory["image"] = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        image_data = self.fetch_image_data()
+        image_data["image"] = cv2.resize(image_data["image"], (self.w, self.h))
+        if self.c == 1:
+            image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2GRAY)
+        elif self.c == 3 and image_data["image"].shape[-1] == 1:
+            image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_GRAY2BGR)
+
+        self.memory + image_data
 
     def create_generator(self):
         return dataset.load_sorted_dataset_generator(self.dataset_path)
 
-    def fetch_image(self):
+    def fetch_image_data(self):
         try:
-            return next(self.generator)["image"]
+            return next(self.generator)
         except StopIteration:
             # re-create a generator (loop the dataset)
             self.generator = self.create_generator()
-            return next(self.generator)["image"]
+            return next(self.generator)
