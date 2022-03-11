@@ -1,11 +1,13 @@
 """State switcher class that will be used in the main control loop."""
 import logging
 
+from ..utils import memory
+
 
 class StateSwitcher:
     """State switcher class."""
 
-    def __init__(self, memory):
+    def __init__(self, memory=memory.mem):
         """Init of the class.
 
         Args:

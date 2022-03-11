@@ -10,10 +10,10 @@ from autopylot.utils import logger, memory, profiler
 pr = profiler.Profiler(n_iter=100)
 
 # init the logger handlers, select the address to the telemetry server
-logger.init(host="http://localhost:8080")
+logger.init()
 
-mem = memory.Memory()
-cam = camera.Camera(mem)
+mem = memory.mem
+cam = camera.Camera()
 
 
 # this is a text log

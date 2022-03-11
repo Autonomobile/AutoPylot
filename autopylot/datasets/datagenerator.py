@@ -2,8 +2,8 @@
 Class to load data on the go to train the model.
 This class inherits from Sequence, a tensorflow.keras utils.
 """
-from tensorflow.keras.utils import Sequence
 import numpy as np
+from tensorflow.keras.utils import Sequence
 
 from ..utils import io
 

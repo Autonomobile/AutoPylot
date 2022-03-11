@@ -3,7 +3,9 @@ from collections import deque
 import uuid
 
 import socketio
+from . import memory
 
+mem = memory.mem
 log_queue = deque(maxlen=100)
 telemetry_queue = deque(maxlen=5)
 stop_thread = False
@@ -23,14 +25,15 @@ def on_disconnect():
     print("disconnected")
 
 
-@sio.on("receive-msg")
-def on_message(data):
+@sio.on("test")
+def on_test(data):
     print(data)
 
 
 def wait_for_connection(host, sleep=1):
     while not sio.connected and not stop_thread:
         try:
+            print(mem)
             sio.connect(host)
         except Exception:
             time.sleep(sleep)
@@ -54,7 +57,7 @@ def run_threaded(host):
 
     while not stop_thread:
         if not sio.connected:
-            wait_for_connection(host)
+            wait_for_reconnection(host)
 
         for _ in range(len(log_queue)):
             send_log(log_queue[0])

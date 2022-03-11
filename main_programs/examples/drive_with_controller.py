@@ -7,12 +7,12 @@ from autopylot.utils import logger, memory
 # init the logger handlers
 logger.init()
 
-mem = memory.Memory()
+mem = memory.mem
 
-state = state_switcher.StateSwitcher(mem)
-serial = serial_control.SerialControl(mem)
-cam = camera.Camera(mem)
-js = controller.XboxOneJoystick(mem)
+state = state_switcher.StateSwitcher()
+serial = serial_control.SerialControl()
+cam = camera.Camera()
+js = controller.XboxOneJoystick()
 js.init()
 
 

@@ -1,9 +1,16 @@
 """Wrapper for cameras."""
-from .webcam import Webcam
+from ..utils import memory
 from .dummy import Dummy
+from .webcam import Webcam
 
 
-def Camera(memory, camera_type="webcam", shape=(120, 160, 3), *args, **kwargs):
+def Camera(
+    memory=memory.mem,
+    camera_type="webcam",
+    shape=(120, 160, 3),
+    *args,
+    **kwargs,
+):
     """Init Camera class.
 
     Args:
