@@ -11,7 +11,11 @@ import logging
 import os
 import pstats
 
-pathlogs = os.path.join(os.getcwd(), "logs/profiler.log")
+
+pathlogs = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "logs/profiler.log",
+)
 
 
 class Profiler:
