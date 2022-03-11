@@ -9,13 +9,13 @@ telemetry_queue = deque(maxlen=5)
 stop_thread = False
 
 sio = socketio.Client()
-uid = uuid.uuid4()
+uuidhex = uuid.uuid4().hex
 
 
 @sio.on("connect")
 def on_connect():
     print("connected")
-    sio.emit("py-client-connected", uid)
+    sio.emit("py-client-connected", uuidhex)
 
 
 @sio.on("disconnect")
