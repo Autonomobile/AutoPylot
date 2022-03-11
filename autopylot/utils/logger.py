@@ -10,7 +10,10 @@ import numpy as np
 
 from . import socketioclient
 
-pathlogs = __file__ + r"/../../../logs/logs.log"
+pathlogs = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "logs/logs.log",
+)
 
 
 def init(name="", pathlogs=pathlogs, host="ws://localhost:3000"):
@@ -32,7 +35,7 @@ def init(name="", pathlogs=pathlogs, host="ws://localhost:3000"):
     )
 
     # this is to write in the logs/log file
-    fileHandler = logging.FileHandler(os.path.join(os.getcwd(), pathlogs), mode="w")
+    fileHandler = logging.FileHandler(pathlogs, mode="w")
     fileHandler.setFormatter(formatter)
     fileHandler.setLevel(logging.DEBUG)
     logger.addHandler(fileHandler)
