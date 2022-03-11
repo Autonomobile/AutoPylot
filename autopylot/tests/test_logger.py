@@ -30,7 +30,7 @@ def test_serialize_json():
     assert isinstance(log.handlers[2], logger.TelemetryHandler)
     serialized = log.handlers[2].serialize(mem)
 
-    assert isinstance(serialized, bytes) and len(serialized) == 1286
+    assert isinstance(serialized, str) and len(serialized) == 1286
 
 
 def test_file_logs():
