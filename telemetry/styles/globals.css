@@ -5,12 +5,16 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --vh: 1vh;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: Roboto, sans-serif;
-  max-height: 100vh;
+  height: calc(var(--vh, 1vh) * 100);
+  overflow: hidden;
 }
 
 a {
@@ -28,4 +32,8 @@ a {
 
 .google-shadow {
   box-shadow: 0 5px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+}
+
+.screen-height {
+  height: calc(var(--vh, 1vh) * 100);
 }

@@ -3,17 +3,24 @@ import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { socketAtom } from "../utils/client";
 
+
 export default function Home() {
   const [socket, setSocket] = useAtom(socketAtom);
 
   useEffect(() => {
-    socket.on("receive-msg", (data) => {
-      console.log("data", data);
+    socket.off("receive-logs");
+    socket.on("receive-logs", (data) => {
+      console.log("logs", data);
+    });
+    socket.off("receive-telemetry");
+    socket.on("receive-telemetry", (data) => {
+      console.log("telemetry", data);
     });
   }, [socket, setSocket]);
 
   function sendMessage() {
-    socket.emit("telemetry", "hello");
+    const msg = document.getElementById("msg").value;
+    socket.emit("py-test", msg);
   }
 
   return (
@@ -22,6 +29,7 @@ export default function Home() {
         <title>Dashboard</title>
       </Head>
       <button onClick={sendMessage}>Send Message</button>
+      <input id="msg" type="text" />
     </>
   );
 }

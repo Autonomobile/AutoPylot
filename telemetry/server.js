@@ -1,3 +1,4 @@
+const logger = require("npmlog");
 const app = require("express")();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
@@ -11,7 +12,7 @@ const nextapp = next({ dev, hostname, port });
 const nextHandler = nextapp.getRequestHandler();
 
 const clients = {};
-
+logger.level = process.env.LOG_LEVEL || "debug";
 
 nextapp.prepare().then(() => {
   app.get("*", (req, res) => {
@@ -20,39 +21,49 @@ nextapp.prepare().then(() => {
 
   server.listen(port, (err) => {
     if (err) throw err;
-    console.log(`> Ready on http://localhost:${port}`);
+    logger.info("App", `Ready on http://localhost:${port}`);
   });
 });
 
 io.on("connection", (socket) => {
   socket.broadcast.emit("new client connected");
 
-  socket.on("ui-client-connected", () => {
-    console.log(`${socket.id} UI-client is connected`);
-    clients[socket.id] = { socket: socket, type: "UI", cars: [] };
+  socket.on("ui-client-connected", (uuid) => {
+    logger.info(
+      `[socket.io][UI]`,
+      `[${uuid}][${socket.id}] is connected`
+    );
+    clients[socket.id] = { socket: socket, uuid: uuid, type: "UI", cars: [] };
   });
 
-  socket.on("py-client-connected", () => {
-    console.log(`${socket.id} PY-client is connected`);
-    clients[socket.id] = { socket: socket, type: "PY" };
+  socket.on("py-client-connected", (uuid) => {
+    logger.info(
+      `[socket.io][PY]`,
+      `[${uuid}][${socket.id}] is connected`
+    );
+    clients[socket.id] = { socket: socket, uuid: uuid, type: "PY", cars: [] };
   });
 
   socket.on("disconnect", () => {
     if (clients[socket.id]) {
-      let type = clients[socket.id].type;
+      const uuid = clients[socket.id].uuid;
+      const type = clients[socket.id].type;
       delete clients[socket.id];
-      console.log(`${socket.id} ${type}-client is disconnected`);
+      logger.info(`[socket.io][${type}]`, `[${uuid}][${socket.id}] is disconnected`);
     } else {
-      console.log(`${socket.id} is disconnected`);
+      logger.info(`[socket.io][--]`, `[unknown] is disconnected`);
     }
   });
 
   socket.on("telemetry", (data) => {
-    // socket.broadcast.emit('receive-msg', msg)
-    console.log(`${socket.id} telemetry: ${data}`);
-    io.emit("receive-msg", data);
+    socket.broadcast.emit("receive-telemetry", data);
+  });
+
+  socket.on("logs", (data) => {
+    socket.broadcast.emit("receive-logs", data);
+  });
+
+  socket.on("py-test", (data) => {
+    socket.broadcast.emit("test", data);
   });
 });
-
-
-// TODO: check if id exists

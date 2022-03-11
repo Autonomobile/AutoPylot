@@ -1,15 +1,14 @@
 import "../styles/globals.css";
 import { Provider } from "jotai";
-import { socketAtom } from "../utils/client";
 import { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { IconButton } from "@mui/material";
 import { Drawer } from "@mui/material";
 import SideBar from "../components/SideBar";
 import Head from "next/head";
+import { useEffect } from "react";
 
 function TelementryServer({ Component, pageProps }) {
-  const { initialState } = pageProps;
   const [drawerState, setDrawerState] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
@@ -22,17 +21,27 @@ function TelementryServer({ Component, pageProps }) {
     setDrawerState(open);
   };
 
+  useEffect(() => {
+
+    const appHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    }
+    window.addEventListener('resize', appHeight)
+    appHeight()
+  }, []);
+
   return (
-    <Provider initialValues={initialState && [[socketAtom, initialState]]}>
+    <Provider>
       <Head>
         <link rel="icon" href="/favicon.ico" />
         <meta
           name="viewport"
-          content="initial-scale=1.0, width=device-width"
-        ></meta>
+          content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi"
+        />
       </Head>
 
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col screen-height overflow-auto">
         <Drawer anchor="left" open={drawerState} onClose={toggleDrawer(false)}>
           <SideBar closeDrawer={() => setDrawerState(false)} />
         </Drawer>

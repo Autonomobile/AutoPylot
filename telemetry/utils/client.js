@@ -1,10 +1,20 @@
 import { atom } from "jotai";
 import io from "socket.io-client";
+import crypto from "crypto";
 
 export function getSocket() {
-  const socket = io();
+  const uiid = getUiid();
+  const socket = io({
+    reconnection: true,
+    reconnectionAttempts: 10,
+    reconnectionDelay: 1000,
+  });
   socket.on("connect", () => {
-    socket.emit("ui-client-connected");
+    socket.emit("ui-client-connected", uiid);
+  });
+  socket.on("reconnect", () => {
+    socket.emit("ui-client-connected", uiid);
+    console.log("reconnect");
   });
   const onError = (error) => {
     socket.disconnect();
@@ -17,6 +27,16 @@ export function getSocket() {
     console.log("disconnect");
   });
   return socket;
+}
+
+function getUiid() {
+  if (typeof window !== "undefined") {
+    const uiid = localStorage.getItem("uiid");
+    if (uiid) return uiid;
+    const newUiid = crypto.randomBytes(16).toString("hex");
+    localStorage.setItem("uiid", newUiid);
+    return newUiid;
+  }
 }
 
 export const socketAtom = atom(getSocket());
