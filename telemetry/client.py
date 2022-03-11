@@ -1,9 +1,6 @@
 import socketio
-import requests
 
-# standard Python
 sio = socketio.Client()
-
 
 @sio.on('connect')
 def on_connect():
@@ -18,9 +15,4 @@ def on_disconnect():
 def on_message(data):
     print(data)
 
-
-response = requests.get('http://localhost:3000/api/socket-io')
-print(response.text)
-
 sio.connect('ws://localhost:3000')
-sio.wait()

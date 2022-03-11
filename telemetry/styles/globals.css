@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,300;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200;0,300;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:300,400,500,700&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -14,7 +14,7 @@ body {
 }
 
 a {
-  color: inherit;
+  color: black;
   text-decoration: none;
 }
 
@@ -22,7 +22,10 @@ a {
   box-sizing: border-box;
 }
 
-.scp-font {
-  font-family: 'Source Code Pro', monospace;
-  font-size: 1.2em;
+.google-font {
+  font-family: "Open Sans", sans-serif;
+}
+
+.google-shadow {
+  box-shadow: 0 5px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
 }

@@ -4,9 +4,9 @@
   "description": "this web server will collect data such as images and logs from python clients",
   "main": "index.js",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint"
   },
   "repository": {
@@ -26,11 +26,14 @@
     "@material-ui/icons": "^4.11.2",
     "@mui/icons-material": "^5.5.0",
     "@mui/material": "^5.5.0",
+    "express": "^4.17.3",
     "jotai": "^1.6.0",
     "next": "12.1.0",
     "postcss": "^8.4.8",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-router": "^6.2.2",
+    "react-router-dom": "^6.2.2",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
     "styled-components": "^5.3.3",
