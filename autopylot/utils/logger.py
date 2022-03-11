@@ -96,10 +96,10 @@ class TelemetryHandler(logging.Handler):
     def emit(self, record):
         """Add a record to the queue."""
         record_dict = dict(record.__dict__)
-        if isinstance(record_dict["msg"], str):
-            socketioclient.log_queue.append(self.serialize(record_dict))
-        else:
+        if isinstance(record_dict["msg"], dict):
             socketioclient.telemetry_queue.append(self.serialize(record_dict))
+        else:
+            socketioclient.log_queue.append(self.serialize(record_dict))
 
     def stop_thread(self):
         socketioclient.stop_thread = True
