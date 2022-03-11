@@ -20,7 +20,7 @@ def test_compress_image():
     img = np.zeros((120, 160, 3))
     compressed = logger.compress_image(img)
 
-    assert compressed.shape == (947,)
+    assert compressed.shape[0] == 947
 
 
 def test_serialize_json():

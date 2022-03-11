@@ -5,7 +5,7 @@ import os
 
 
 def load_image(image_path):
-    """Load an image from a path.
+    """Loads an image from a path.
 
     Args:
         image_path (string): path of the image to load.
@@ -17,7 +17,7 @@ def load_image(image_path):
 
 
 def load_json(json_path):
-    """Load a json file
+    """Loads a json file
 
     Args:
         json_path (string): path of the json file to load
@@ -31,7 +31,7 @@ def load_json(json_path):
 
 
 def save_image(path, image):
-    """Save an image to a file.
+    """Saves an image to a file.
 
     Args:
         path (string): path of the saved image.
@@ -45,7 +45,7 @@ def save_image(path, image):
 
 
 def save_json(json_path, to_save):
-    """Save the Json file
+    """Saves the Json file
 
     Args:
         json_path (string): path of where we want to save it.
@@ -76,7 +76,7 @@ def save_image_data(image_data, json_path):
 
 
 def load_image_data(json_path):
-    """load a json file and an image
+    """loads a json file and an image
 
     Args:
         json_path (string): path of the json file.

@@ -42,4 +42,4 @@ jobs:
     - name: Test with pytest
       run: |
         # execute only the tests that are not vis related
-        pytest autopylot/ -m "not vis" -v
+        pytest autopylot/ -m "not vis and not win" -v
