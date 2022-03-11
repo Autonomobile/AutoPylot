@@ -1,0 +1,5 @@
+# Apply override to all files in the ressources directory
+ressources/** linguist-documentation
+
+# Removes every MarkDown files from the statistics
+*.md linguist-documentation
