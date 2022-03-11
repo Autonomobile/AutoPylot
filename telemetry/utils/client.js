@@ -15,7 +15,6 @@ export function getSocket() {
   socket.on("error", onError);
   socket.on("disconnect", () => {
     console.log("disconnect");
-    setSocket(io());
   });
   return socket;
 }
