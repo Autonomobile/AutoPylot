@@ -82,7 +82,7 @@ class TelemetryHandler(logging.Handler):
         logging.Handler.__init__(self)
 
         self.thread = threading.Thread(target=socketioclient.run_threaded, args=(host,))
-        self.thread.start()
+        self.start_thread()
 
     def handleError(self, record):
         """
@@ -98,6 +98,9 @@ class TelemetryHandler(logging.Handler):
         """Add a record to the queue."""
         record_dict = dict(record.__dict__)
         socketioclient.log_queue.append(serialize(record_dict))
+
+    def start_thread(self):
+        self.thread.start()
 
     def stop_thread(self):
         socketioclient.stop_thread = True

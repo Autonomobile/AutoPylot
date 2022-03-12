@@ -32,7 +32,6 @@ def on_test(data):
 def wait_for_connection(host, sleep=1):
     while not sio.connected and not stop_thread:
         try:
-            print(mem)
             sio.connect(host)
         except Exception:
             time.sleep(sleep)
@@ -66,3 +65,5 @@ def run_threaded(host):
             send_telemetry(logger.serialize(mem))
         else:
             time.sleep(1)
+
+    sio.disconnect()
