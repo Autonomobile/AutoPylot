@@ -10,18 +10,22 @@ import os
 import sys
 
 from autopylot.datasets import dataset
-from autopylot.utils import logger, vis
+from autopylot.utils import logger, profiler, vis
 
 # init the logger handlers, select the address to the telemetry server
 logger.init(host="localhost", port=8080)
 
+# init the profiler, logs into logs/profiler.log
+pr = profiler.Profiler(n_iter=100)
 
 def main(path):
     for image_data in dataset.load_sorted_dataset_generator(path):
         vis_image = vis.vis_all(image_data)
 
+        pr.update()
+
         vis.cv2.imshow("vis_image", vis_image)
-        vis.cv2.waitKey(0)
+        vis.cv2.waitKey(1)
 
 
 if __name__ == "__main__":

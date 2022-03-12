@@ -11,7 +11,10 @@ from collections import deque
 import cv2
 import numpy as np
 
-pathlogs = __file__ + r"/../../../logs/logs.log"
+pathlogs = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
+    "logs/logs.log",
+)
 
 
 def init(name="", pathlogs=pathlogs, host="0.0.0.0", port=8080):
@@ -33,7 +36,7 @@ def init(name="", pathlogs=pathlogs, host="0.0.0.0", port=8080):
     )
 
     # this is to write in the logs/log file
-    fileHandler = logging.FileHandler(os.path.join(os.getcwd(), pathlogs), mode="w")
+    fileHandler = logging.FileHandler(pathlogs, mode="w")
     fileHandler.setFormatter(formatter)
     fileHandler.setLevel(logging.DEBUG)
     logger.addHandler(fileHandler)
@@ -213,13 +216,13 @@ class TelemetryHandler(logging.Handler):
                 record = self.__logs_queue[0]
                 s = self.serialize(record)
                 if self.send(s):
-                    self.__logs_queue.remove(record)
+                    del self.__logs_queue[0]
 
             if len(self.__telemetry_queue) != 0 and self.sock:
                 record = self.__telemetry_queue[0]
                 s = self.serialize(record)
                 if self.send(s):
-                    self.__telemetry_queue.remove(record)
+                    del self.__telemetry_queue[0]
 
             if self.__stop_thread:
                 self.__stop_thread = False
