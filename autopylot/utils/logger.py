@@ -67,6 +67,10 @@ class NumpyArrayEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self, obj)
 
 
+def serialize(data):
+    return json.dumps(data, cls=NumpyArrayEncoder)
+
+
 class TelemetryHandler(logging.Handler):
     """
     A handler class which writes logging records, in json format, to
@@ -90,16 +94,10 @@ class TelemetryHandler(logging.Handler):
         """
         logging.Handler.handleError(self, record)
 
-    def serialize(self, data):
-        return json.dumps(data, cls=NumpyArrayEncoder)
-
     def emit(self, record):
         """Add a record to the queue."""
         record_dict = dict(record.__dict__)
-        if isinstance(record_dict["msg"], dict):
-            socketioclient.telemetry_queue.append(self.serialize(record_dict))
-        else:
-            socketioclient.log_queue.append(self.serialize(record_dict))
+        socketioclient.log_queue.append(serialize(record_dict))
 
     def stop_thread(self):
         socketioclient.stop_thread = True

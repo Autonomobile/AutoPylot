@@ -3,11 +3,10 @@ from collections import deque
 import uuid
 
 import socketio
-from . import memory
+from . import memory, logger
 
 mem = memory.mem
 log_queue = deque(maxlen=100)
-telemetry_queue = deque(maxlen=5)
 stop_thread = False
 
 sio = socketio.Client()
@@ -63,6 +62,7 @@ def run_threaded(host):
             send_log(log_queue[0])
             del log_queue[0]
 
-        for _ in range(len(telemetry_queue)):
-            send_telemetry(telemetry_queue[0])
-            del telemetry_queue[0]
+        if "image" in mem.keys():
+            send_telemetry(logger.serialize(mem))
+        else:
+            time.sleep(1)

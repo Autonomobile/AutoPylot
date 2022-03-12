@@ -2,11 +2,11 @@ import Head from "next/head";
 import { useEffect } from "react";
 import { useAtom } from "jotai";
 import { socketAtom } from "../utils/client";
-import { usestate } from "react";
+import { useState } from "react";
 
 export default function Home() {
   const [socket, setSocket] = useAtom(socketAtom);
-  const [img, setImg] = usestate("");
+  const [img, setImg] = useState("");
 
 
   useEffect(() => {
@@ -16,8 +16,8 @@ export default function Home() {
     });
     socket.off("receive-telemetry");
     socket.on("receive-telemetry", (data) => {
-      console.log("telemetry", data);
-      const image = `data:image/jpeg;base64,${data.msg.image}`;
+      const json = JSON.parse(data);
+      const image = `data:image/jpeg;base64,${json.image}`;
       setImg(image);
     });
   }, [socket, setSocket, setImg]);
