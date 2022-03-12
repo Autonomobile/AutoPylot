@@ -1,11 +1,9 @@
-import logging
-
 from autopylot.cameras import camera
 from autopylot.controls import controller, serial_control, state_switcher
 from autopylot.utils import logger, memory
 
 # init the logger handlers
-logger.init()
+logger.init(send_telemetry=False)
 
 mem = memory.mem
 
@@ -40,7 +38,6 @@ def main():
             mem["throttle"] = mem["controller"]["throttle"]
 
             cam.update()  # get the last frame from the camera
-            logging.log(logging.TELEMETRY, mem)
 
         serial.update()  # send commands to the memory
 

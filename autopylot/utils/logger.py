@@ -16,71 +16,17 @@ pathlogs = os.path.join(
 )
 
 
-def init(name="", pathlogs=pathlogs, host="ws://localhost:3000"):
-    logger = logging.getLogger(name)
-
-    # if the logger already exists, just return it
-    for hdlr in logger.handlers:
-        if isinstance(hdlr, TelemetryHandler):
-            return logger
-
-    logger.handlers = []
-
-    logging.TELEMETRY = logging.DEBUG - 5
-    logging.addLevelName(logging.TELEMETRY, "TELEMETRY")
-
-    logger.setLevel(logging.TELEMETRY)
-    formatter = logging.Formatter(
-        "%(asctime)s [%(threadName)s] [%(name)s] [%(module)s] %(message)s"
-    )
-
-    # this is to write in the logs/log file
-    fileHandler = logging.FileHandler(pathlogs, mode="w")
-    fileHandler.setFormatter(formatter)
-    fileHandler.setLevel(logging.DEBUG)
-    logger.addHandler(fileHandler)
-
-    # this is to display logs in the stdout
-    streamHandler = logging.StreamHandler(sys.stdout)
-    streamHandler.setFormatter(formatter)
-    streamHandler.setLevel(logging.DEBUG)
-    logger.addHandler(streamHandler)
-
-    # this is to send records to the server
-    telemetryHandler = TelemetryHandler(host)
-    telemetryHandler.setLevel(logging.TELEMETRY)
-    logger.addHandler(telemetryHandler)
-    return logger
-
-
-def compress_image(img, encode_params=[int(cv2.IMWRITE_JPEG_QUALITY), 90]):
-    _, encimg = cv2.imencode(".jpg", img, encode_params)
-    return encimg
-
-
-class NumpyArrayEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, np.ndarray):
-            if len(obj.shape) == 3:  # we are dealing with an image
-                return base64.b64encode(compress_image(obj)).decode("utf-8")
-            return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
-
-
-def serialize(data):
-    return json.dumps(data, cls=NumpyArrayEncoder)
-
-
-class TelemetryHandler(logging.Handler):
+class SocketIOHandler(logging.Handler):
     """
     A handler class which writes logging records, in json format, to
     a streaming socket. The socket is kept open across logging calls.
     If the peer resets it, an attempt is made to reconnect on the next call.
     """
 
-    def __init__(self, host):
+    def __init__(self, host, do_send_telemetry=False):
         logging.Handler.__init__(self)
 
+        socketioclient.do_send_telemetry = do_send_telemetry
         self.thread = threading.Thread(target=socketioclient.run_threaded, args=(host,))
         self.start_thread()
 
@@ -110,3 +56,73 @@ class TelemetryHandler(logging.Handler):
     def close(self):
         self.stop_thread()
         logging.Handler.close(self)
+
+
+def has_dtype(dtype, iterable):
+    for item in iterable:
+        if isinstance(item, dtype):
+            return True
+
+
+def has_dtypes(dtypes, iterable):
+    for dtype in dtypes:
+        if not has_dtype(dtype, iterable):
+            return False
+    return True
+
+
+def init(
+    name="",
+    pathlogs=pathlogs,
+    host="ws://localhost:3000",
+    handlers=[logging.FileHandler, logging.StreamHandler, SocketIOHandler],
+    do_send_telemetry=False,
+):
+    logger = logging.getLogger(name)
+
+    # if the logger already exists, just return it
+    if has_dtypes(handlers, logger.handlers):
+        return logger
+
+    logger.handlers = []
+
+    logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(
+        "%(asctime)s [%(threadName)s] [%(name)s] [%(module)s] %(message)s"
+    )
+
+    # this is to write in the logs/log file
+    fileHandler = logging.FileHandler(pathlogs, mode="w")
+    fileHandler.setFormatter(formatter)
+    fileHandler.setLevel(logging.DEBUG)
+    logger.addHandler(fileHandler)
+
+    # this is to display logs in the stdout
+    streamHandler = logging.StreamHandler(sys.stdout)
+    streamHandler.setFormatter(formatter)
+    streamHandler.setLevel(logging.DEBUG)
+    logger.addHandler(streamHandler)
+
+    # this is to send records to the server
+    socketIOHandler = SocketIOHandler(host, do_send_telemetry)
+    socketIOHandler.setLevel(logging.DEBUG)
+    logger.addHandler(socketIOHandler)
+    return logger
+
+
+def compress_image(img, encode_params=[int(cv2.IMWRITE_JPEG_QUALITY), 90]):
+    _, encimg = cv2.imencode(".jpg", img, encode_params)
+    return encimg
+
+
+class NumpyArrayEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            if len(obj.shape) == 3:  # we are dealing with an image
+                return base64.b64encode(compress_image(obj)).decode("utf-8")
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
+
+
+def serialize(data):
+    return json.dumps(data, cls=NumpyArrayEncoder)

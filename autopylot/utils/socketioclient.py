@@ -7,10 +7,11 @@ from . import memory, logger
 
 mem = memory.mem
 log_queue = deque(maxlen=100)
-stop_thread = False
 
 last_sent = time.time()
 telemetry_delay = 0.03
+do_send_telemetry = False
+stop_thread = False
 
 sio = socketio.Client()
 uuidhex = uuid.uuid4().hex
@@ -66,16 +67,12 @@ def run_threaded(host):
             send_log(log_queue[0])
             del log_queue[0]
 
-        now = time.time()
-        # will need to remove the check of image key at some point
-        if (
-            mem.last_modified > last_sent
-            and (now - last_sent) > telemetry_delay
-            and "image" in mem.keys()
-        ):
-            send_telemetry(logger.serialize(mem))
-            last_sent = now
-        else:
-            time.sleep(now - last_sent)
+        if do_send_telemetry:
+            now = time.time()
+            if mem.last_modified > last_sent and (now - last_sent) > telemetry_delay:
+                send_telemetry(logger.serialize(mem))
+                last_sent = now
+            else:
+                time.sleep(now - last_sent)
 
     sio.disconnect()
