@@ -84,11 +84,17 @@ useful tools:
 
 - make sure to have NodeJS and NPM installed
 - Open the telemetry/ folder in another VS-Code window
-#### Dev
+
+#### Installation
+```shell
+npm i
+```
+
+#### Start dev build
 ```shell
 npm run dev
 ```
-#### Production
+#### Start Production build
 ```shell
 npm run build
 npm run start
