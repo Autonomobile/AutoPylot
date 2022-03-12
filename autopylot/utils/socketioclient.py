@@ -9,6 +9,9 @@ mem = memory.mem
 log_queue = deque(maxlen=100)
 stop_thread = False
 
+last_sent = time.time()
+telemetry_delay = 0.03
+
 sio = socketio.Client()
 uuidhex = uuid.uuid4().hex
 
@@ -51,6 +54,8 @@ def send_telemetry(telemetry):
 
 
 def run_threaded(host):
+    global last_sent
+
     wait_for_connection(host)
 
     while not stop_thread:
@@ -61,9 +66,16 @@ def run_threaded(host):
             send_log(log_queue[0])
             del log_queue[0]
 
-        if "image" in mem.keys():
+        now = time.time()
+        # will need to remove the check of image key at some point
+        if (
+            mem.last_modified > last_sent
+            and (now - last_sent) > telemetry_delay
+            and "image" in mem.keys()
+        ):
             send_telemetry(logger.serialize(mem))
+            last_sent = now
         else:
-            time.sleep(1)
+            time.sleep(now - last_sent)
 
     sio.disconnect()
