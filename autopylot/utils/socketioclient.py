@@ -60,7 +60,7 @@ def run_threaded(host):
     wait_for_connection(host)
 
     while not stop_thread:
-        if not sio.connected:
+        if not sio.connected and not stop_thread:
             wait_for_reconnection(host)
 
         for _ in range(len(log_queue)):
