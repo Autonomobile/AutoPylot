@@ -1,18 +1,16 @@
-import logging
-
 from autopylot.cameras import camera
 from autopylot.controls import controller, serial_control, state_switcher
 from autopylot.utils import logger, memory
 
 # init the logger handlers
-logger.init()
+logger.init(send_telemetry=True)
 
-mem = memory.Memory()
+mem = memory.mem
 
-state = state_switcher.StateSwitcher(mem)
-serial = serial_control.SerialControl(mem)
-cam = camera.Camera(mem)
-js = controller.XboxOneJoystick(mem)
+state = state_switcher.StateSwitcher()
+serial = serial_control.SerialControl()
+cam = camera.Camera()
+js = controller.XboxOneJoystick()
 js.init()
 
 
@@ -22,6 +20,7 @@ def main():
         js.update()  # update joystick
 
         state.update()  # car state
+        cam.update()  # get the last frame from the camera
 
         if mem["state"] == "stop":
             mem["steering"] = 0.0
@@ -38,9 +37,6 @@ def main():
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"]
             mem["throttle"] = mem["controller"]["throttle"]
-
-            cam.update()  # get the last frame from the camera
-            logging.log(logging.TELEMETRY, mem)
 
         serial.update()  # send commands to the memory
 

@@ -5,7 +5,7 @@ from ..cameras import camera
 
 def test_controller():
     """Test the controller dict when joystick is not connected."""
-    mem = memory.Memory()
+    mem = memory.mem
     cam = camera.Camera(mem, camera_type="dummy")
     cam.update()
 

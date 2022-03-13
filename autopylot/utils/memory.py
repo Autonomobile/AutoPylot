@@ -31,3 +31,6 @@ class Memory(dict):
             super().update(other)
         else:
             raise TypeError("other must be a dict")
+
+
+mem = Memory()

@@ -5,7 +5,7 @@ import time
 
 import serial
 
-from ..utils import utils
+from ..utils import memory, utils
 
 
 class SerialControl:
@@ -13,7 +13,7 @@ class SerialControl:
 
     def __init__(
         self,
-        memory: dict,
+        memory=memory.mem,
         port="/dev/ttyUSB0",
         steering_key="steering",
         throttle_key="throttle",
@@ -22,7 +22,7 @@ class SerialControl:
         """Initialize the class.
 
         Args:
-            memory (dict): memory object.
+            memory (dict, optional): memory object.
             port (str, optional): serial port. Defaults to "/dev/ttyUSB0". example /dev/ttyS2 or /dev/ttyUSB0
             steering_key (str, optional): key of the steering in the memory. Defaults to "steering".
             throttle_key (str, optional): key of the throttle in the memory. Defaults to "throttle".
@@ -102,9 +102,6 @@ class SerialControl:
             try:
                 out = self.ser.readlines()[-1]
                 self.__decode_out__(out)
-
-            except:
-                pass
 
             finally:
                 self.__isOperation = False

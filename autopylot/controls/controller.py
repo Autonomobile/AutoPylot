@@ -6,7 +6,7 @@ import os
 import struct
 import threading
 
-from ..utils import utils
+from ..utils import memory, utils
 
 
 class Joystick(object):
@@ -152,7 +152,7 @@ class XboxOneJoystick(Joystick):
     https://github.com/Ezward/donkeypart_ps3_controller/blob/master/donkeypart_ps3_controller/part.py
     """
 
-    def __init__(self, memory, *args, **kwargs):
+    def __init__(self, memory=memory.mem, *args, **kwargs):
         """Controller class init"""
         super(XboxOneJoystick, self).__init__(*args, **kwargs)
 

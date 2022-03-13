@@ -1,12 +1,15 @@
 """Dummy camera for testing purposes."""
 import logging
+
 import numpy as np
+
+from ..utils import memory
 
 
 class Dummy:
     """Dummy camera."""
 
-    def __init__(self, memory, shape=(120, 160, 3)):
+    def __init__(self, memory=memory.mem, shape=(120, 160, 3)):
         """Camera init.
 
         Args:

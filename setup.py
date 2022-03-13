@@ -14,6 +14,7 @@ setup(
         "numpy >= 1.17",
         "glob2",
         "pyserial",
+        "python-socketio[client]",
     ],
     extras_require={"dev": ["pytest", "flake8", "black", "pre-commit"]},
 )
