@@ -78,9 +78,12 @@ class Settings:
 
 try:
     settings = Settings()
-    # settings.__generate_class_from_json(pathsettings)
-    settings.from_json(pathsettings)
-    settings.to_json(pathsettings)
+    if os.path.exists(pathsettings):
+        # settings.__generate_class_from_json(pathsettings)
+        settings.from_json(pathsettings)
+        settings.to_json(pathsettings)
+    else:
+        settings.to_json(pathsettings)
 except Exception:
     raise ValueError(
         "Could not load and save settings from json, please check your settings file."
