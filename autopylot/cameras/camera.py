@@ -1,5 +1,5 @@
 """Wrapper for cameras."""
-from ..utils import memory
+from ..utils import memory, settings
 from .dummy import Dummy
 from .replay import Replay
 from .webcam import Webcam
@@ -8,7 +8,7 @@ from .webcam import Webcam
 def Camera(
     memory=memory.mem,
     camera_type="webcam",
-    shape=(120, 160, 3),
+    shape=tuple(settings.settings.image_shape),
     *args,
     **kwargs,
 ):

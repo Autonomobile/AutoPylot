@@ -3,7 +3,7 @@ from autopylot.controls import controller, serial_control, state_switcher
 from autopylot.utils import logger, memory
 
 # init the logger handlers
-logger.init(send_telemetry=True)
+logger.init()
 
 mem = memory.mem
 

@@ -13,10 +13,10 @@ from autopylot.datasets import dataset
 from autopylot.utils import logger, profiler, vis
 
 # init the logger handlers, select the address to the telemetry server
-logger.init(host="localhost", port=8080)
+logger.init()
 
 # init the profiler, logs into logs/profiler.log
-pr = profiler.Profiler(n_iter=100)
+pr = profiler.Profiler()
 
 
 def main(path):

@@ -3,13 +3,18 @@ import logging
 
 import cv2
 
-from ..utils import memory
+from ..utils import memory, settings
 
 
 class Webcam:
     """Webcam class."""
 
-    def __init__(self, memory=memory.mem, index=0, shape=(120, 160, 3)):
+    def __init__(
+        self,
+        memory=memory.mem,
+        index=0,
+        shape=tuple(settings.settings.image_shape),
+    ):
         """Camera init.
 
         Args:

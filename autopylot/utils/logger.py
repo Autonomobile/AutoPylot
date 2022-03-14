@@ -8,7 +8,9 @@ import threading
 import cv2
 import numpy as np
 
-from . import socketioclient
+from . import settings, socketioclient
+
+settings = settings.settings
 
 pathlogs = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -23,10 +25,9 @@ class SocketIOHandler(logging.Handler):
     If the peer resets it, an attempt is made to reconnect on the next call.
     """
 
-    def __init__(self, host, do_send_telemetry=False):
+    def __init__(self, host):
         logging.Handler.__init__(self)
 
-        socketioclient.do_send_telemetry = do_send_telemetry
         self.thread = threading.Thread(target=socketioclient.run_threaded, args=(host,))
         self.start_thread()
 
@@ -74,7 +75,7 @@ def has_dtypes(dtypes, iterable):
 def init(
     name="",
     pathlogs=pathlogs,
-    host="ws://localhost:3000",
+    host=settings.server_address,
     handlers=[logging.FileHandler, logging.StreamHandler, SocketIOHandler],
     do_send_telemetry=False,
 ):
@@ -91,21 +92,26 @@ def init(
         "%(asctime)s [%(threadName)s] [%(name)s] [%(module)s] %(message)s"
     )
 
+    if settings.logs_level == "debug":
+        level = logging.DEBUG
+    else:
+        level = logging.INFO
+
     # this is to write in the logs/log file
     fileHandler = logging.FileHandler(pathlogs, mode="w")
     fileHandler.setFormatter(formatter)
-    fileHandler.setLevel(logging.DEBUG)
+    fileHandler.setLevel(level)
     logger.addHandler(fileHandler)
 
     # this is to display logs in the stdout
     streamHandler = logging.StreamHandler(sys.stdout)
     streamHandler.setFormatter(formatter)
-    streamHandler.setLevel(logging.DEBUG)
+    streamHandler.setLevel(level)
     logger.addHandler(streamHandler)
 
     # this is to send records to the server
-    socketIOHandler = SocketIOHandler(host, do_send_telemetry)
-    socketIOHandler.setLevel(logging.DEBUG)
+    socketIOHandler = SocketIOHandler(host)
+    socketIOHandler.setLevel(level)
     logger.addHandler(socketIOHandler)
     return logger
 

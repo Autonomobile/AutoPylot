@@ -1,16 +1,16 @@
 import time
-from collections import deque
 import uuid
+from collections import deque
 
 import socketio
-from . import memory, logger
 
-mem = memory.mem
+from . import logger
+from .settings import settings
+from .memory import mem
+
 log_queue = deque(maxlen=100)
 
 last_sent = time.time()
-telemetry_delay = 0.03
-do_send_telemetry = False
 stop_thread = False
 
 sio = socketio.Client()
@@ -67,9 +67,12 @@ def run_threaded(host):
             send_log(log_queue[0])
             del log_queue[0]
 
-        if do_send_telemetry:
+        if settings.do_send_telemetry:
             now = time.time()
-            if mem.last_modified > last_sent and (now - last_sent) > telemetry_delay:
+            if (
+                mem.last_modified > last_sent
+                and (now - last_sent) > settings.telemetry_delay
+            ):
                 send_telemetry(logger.serialize(mem))
                 last_sent = now
             else:

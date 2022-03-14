@@ -1,5 +1,7 @@
 import cv2
 
+from . import memory
+
 
 def identity_transform(memory, image_key):
     """Simple function to return the image at "image_key" in the memory.
@@ -19,7 +21,7 @@ class Display:
 
     def __init__(
         self,
-        memory,
+        memory=memory.mem,
         window_names=["image"],
         image_keys=["image"],
         transform_funcs=[identity_transform],
