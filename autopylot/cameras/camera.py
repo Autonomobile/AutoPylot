@@ -22,10 +22,10 @@ def Camera(
         ValueError: raise a valueError if camera_type is not supported.
     """
     if camera_type == "webcam":
-        return Webcam(memory, *args, **kwargs, shape=shape)
+        return Webcam(memory=memory, shape=shape, *args, **kwargs)
     elif camera_type == "dummy":
-        return Dummy(memory, *args, **kwargs, shape=shape)
+        return Dummy(memory=memory, shape=shape, *args, **kwargs)
     elif camera_type == "replay":
-        return Replay(memory, *args, **kwargs, shape=shape)
+        return Replay(memory=memory, shape=shape, *args, **kwargs)
     else:
         raise ValueError("Unknown camera type")
