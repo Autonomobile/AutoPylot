@@ -77,7 +77,7 @@ const secondary_items = [
   },
 ];
 
-const SideBar = (props) => {
+export default function SideBar(props) {
   const router = useRouter();
 
   const handleClick = (e, href) => {
@@ -85,20 +85,26 @@ const SideBar = (props) => {
     router.push(href);
   };
 
+  const getStyles = (href) => (router.pathname === href ? "bg-blue-200" : "");
+
   return (
     <div className="w-60 bg-white">
       <List>
-        {primary_items.map((item, index) =>
-          item.text === "Notifications" ? (
-            <Link
-              key={index}
-              href={item.href}
-              style={{ textDecoration: "none", color: "black" }}
-              onClick={(e) => handleClick(e, item.href)}
-              passHref
-            >
-              <a>
-                <ListItem button onClick={props.closeDrawer}>
+        {primary_items.map((item, index) => (
+          <Link
+            key={index}
+            href={item.href}
+            style={{ textDecoration: "none", color: "black" }}
+            onClick={(e) => handleClick(e, item.href)}
+            passHref
+          >
+            <a>
+              <ListItem
+                button
+                onClick={props.closeDrawer}
+                className={getStyles(item.href)}
+              >
+                {item.text === "Notifications" ? (
                   <Badge
                     badgeContent={1}
                     color="primary"
@@ -109,28 +115,18 @@ const SideBar = (props) => {
                     variant="dot"
                   >
                     <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
                   </Badge>
-                  <ListItemText primary={item.text} />
-                </ListItem>
-              </a>
-            </Link>
-          ) : (
-            <Link
-              key={index}
-              href={item.href}
-              style={{ textDecoration: "none", color: "black" }}
-              onClick={(e) => handleClick(e, item.href)}
-              passHref
-            >
-              <a>
-                <ListItem button onClick={props.closeDrawer}>
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText primary={item.text} />
-                </ListItem>
-              </a>
-            </Link>
-          )
-        )}
+                ) : (
+                  <>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </>
+                )}
+              </ListItem>
+            </a>
+          </Link>
+        ))}
       </List>
       <Divider />
       <List>
@@ -156,5 +152,3 @@ const SideBar = (props) => {
 SideBar.propTypes = {
   closeDrawer: PropTypes.func,
 };
-
-export default SideBar;

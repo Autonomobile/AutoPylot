@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import io from "socket.io-client";
 import crypto from "crypto";
 
-export function getSocket() {
+function getSocket() {
   const uiid = getUiid();
   const socket = io({
     reconnection: true,
@@ -16,9 +16,7 @@ export function getSocket() {
     socket.emit("ui-client-connected", uiid);
     console.log("reconnect");
   });
-  const onError = (error) => {
-    socket.disconnect();
-  };
+  const onError = (error) => socket.disconnect();
   socket.on("connect_failed", onError);
   socket.on("connect_error", onError);
   socket.on("connect_timeout", onError);
@@ -39,4 +37,6 @@ function getUiid() {
   }
 }
 
-export const socketAtom = atom(getSocket());
+const socketAtom = atom(getSocket());
+
+export default socketAtom;
