@@ -1,28 +1,15 @@
 import Head from "next/head";
-import { useEffect } from "react";
+import Image from "next/image";
 import { useAtom } from "jotai";
-import { socketAtom } from "../utils/client";
-import { useState } from "react";
+import socketAtom from "../utils/client";
+import memAtom from "../utils/memory";
+import Skeleton from "@mui/material/Skeleton";
 
 export default function Home() {
-  const [socket, setSocket] = useAtom(socketAtom);
-  const [img, setImg] = useState("");
+  const [socket] = useAtom(socketAtom);
+  const [memory] = useAtom(memAtom);
 
-
-  useEffect(() => {
-    socket.off("receive-logs");
-    socket.on("receive-logs", (data) => {
-      console.log("logs", data);
-    });
-    socket.off("receive-telemetry");
-    socket.on("receive-telemetry", (data) => {
-      const json = JSON.parse(data);
-      if (json.image) {
-        const image = `data:image/jpeg;base64,${json.image}`;
-        setImg(image);
-      }
-    });
-  }, [socket, setSocket, setImg]);
+  const getImage = () => "data:image/jpeg;base64," + memory.image;
 
   function sendMessage() {
     const msg = document.getElementById("msg").value;
@@ -34,9 +21,13 @@ export default function Home() {
       <Head>
         <title>Dashboard</title>
       </Head>
-      <button onClick={sendMessage}>Send Message</button>
+      <button onClick={sendMessage}> Send Message </button>
       <input id="msg" type="text" />
-      <img src={img} alt="live" />
+      {memory.image ? (
+        <Image src={getImage()} alt="live" layout="responsive" />
+      ) : (
+        <Skeleton variant="rectangular" width="100%" height="100%" />
+      )}
     </>
   );
 }
