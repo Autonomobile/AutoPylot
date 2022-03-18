@@ -5,12 +5,11 @@ from collections import deque
 import socketio
 
 from . import logger
-from .settings import settings
 from .memory import mem
+from .settings import settings
 
 log_queue = deque(maxlen=100)
 
-last_sent = time.time()
 stop_thread = False
 
 sio = socketio.Client()
@@ -34,6 +33,12 @@ def on_test(data):
 
 
 def wait_for_connection(host, sleep=1):
+    """Wait for the connection to be established.
+
+    Args:
+        host (string): the host.
+        sleep (int, optional): sleep time. Defaults to 1.
+    """
     while not sio.connected and not stop_thread:
         try:
             sio.connect(host)
@@ -42,21 +47,35 @@ def wait_for_connection(host, sleep=1):
 
 
 def wait_for_reconnection(sleep=1):
+    """Wait for the client to reconnect.
+
+    Args:
+        sleep (int, optional): sleep time. Defaults to 1.
+    """
     while not sio.connected:
         time.sleep(sleep)
 
 
 def send_log(log):
+    """Send log message to the server.
+
+    Args:
+        log (any): the log to send.
+    """
     sio.emit("logs", log)
 
 
 def send_telemetry(telemetry):
+    """Send telemetry message to the server.
+
+    Args:
+        telemetry (any): the telemetry to send.
+    """
     sio.emit("telemetry", telemetry)
 
 
 def run_threaded(host):
-    global last_sent
-
+    last_sent = time.time()
     wait_for_connection(host)
 
     while not stop_thread:
@@ -64,18 +83,15 @@ def run_threaded(host):
             wait_for_reconnection(host)
 
         for _ in range(len(log_queue)):
-            send_log(log_queue[0])
-            del log_queue[0]
+            log = log_queue.popleft()
+            send_log(log)
 
         if settings.do_send_telemetry:
             now = time.time()
-            if (
-                mem.last_modified > last_sent
-                and (now - last_sent) > settings.telemetry_delay
-            ):
+            if (now - last_sent) > settings.telemetry_delay:
                 send_telemetry(logger.serialize(mem))
                 last_sent = now
             else:
-                time.sleep(now - last_sent)
+                time.sleep(max(settings.telemetry_delay - (now - last_sent), 0))
 
     sio.disconnect()

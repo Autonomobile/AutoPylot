@@ -1,6 +1,7 @@
 import base64
 import json
 import logging
+import multiprocessing
 import os
 import sys
 import threading
@@ -28,8 +29,12 @@ class SocketIOHandler(logging.Handler):
     def __init__(self, host):
         logging.Handler.__init__(self)
 
-        self.thread = threading.Thread(target=socketioclient.run_threaded, args=(host,))
-        self.start_thread()
+        # self.thread = threading.Thread(target=socketioclient.run_threaded, args=(host,))
+        # self.start_thread()
+        self.thread = multiprocessing.Process(
+            target=socketioclient.run_threaded, args=(host,)
+        )
+        self.thread.start()
 
     def handleError(self, record):
         """
