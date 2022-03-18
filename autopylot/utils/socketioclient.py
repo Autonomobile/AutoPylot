@@ -1,16 +1,14 @@
 import time
-from collections import deque
 import uuid
 
+import queue
 import socketio
-from . import memory, logger
 
-mem = memory.mem
-log_queue = deque(maxlen=100)
+from . import logger
+from .memory import mem
+from .settings import settings
 
-last_sent = time.time()
-telemetry_delay = 0.03
-do_send_telemetry = False
+log_queue = queue.Queue()
 stop_thread = False
 
 sio = socketio.Client()
@@ -34,6 +32,12 @@ def on_test(data):
 
 
 def wait_for_connection(host, sleep=1):
+    """Wait for the connection to be established.
+
+    Args:
+        host (string): the host.
+        sleep (int, optional): sleep time. Defaults to 1.
+    """
     while not sio.connected and not stop_thread:
         try:
             sio.connect(host)
@@ -42,37 +46,54 @@ def wait_for_connection(host, sleep=1):
 
 
 def wait_for_reconnection(sleep=1):
+    """Wait for the client to reconnect.
+
+    Args:
+        sleep (int, optional): sleep time. Defaults to 1.
+    """
     while not sio.connected:
         time.sleep(sleep)
 
 
 def send_log(log):
+    """Send log message to the server.
+
+    Args:
+        log (any): the log to send.
+    """
     sio.emit("logs", log)
 
 
 def send_telemetry(telemetry):
+    """Send telemetry message to the server.
+
+    Args:
+        telemetry (any): the telemetry to send.
+    """
     sio.emit("telemetry", telemetry)
 
 
 def run_threaded(host):
-    global last_sent
-
+    last_sent = time.time()
     wait_for_connection(host)
 
     while not stop_thread:
         if not sio.connected and not stop_thread:
             wait_for_reconnection(host)
 
-        for _ in range(len(log_queue)):
-            send_log(log_queue[0])
-            del log_queue[0]
+        for _ in range(log_queue.qsize()):
+            log = log_queue.get()
+            send_log(log)
 
-        if do_send_telemetry:
+        if settings.DO_SEND_TELEMETRY:
             now = time.time()
-            if mem.last_modified > last_sent and (now - last_sent) > telemetry_delay:
-                send_telemetry(logger.serialize(mem))
+            if (now - last_sent) > settings.TELEMETRY_DELAY:
+                to_send = mem.copy()
+                if "image" in to_send.keys():
+                    to_send["image"] = logger.compress_image(mem["image"])
+                send_telemetry(to_send)
                 last_sent = now
             else:
-                time.sleep(now - last_sent)
+                time.sleep(max(settings.TELEMETRY_DELAY - (now - last_sent), 0))
 
     sio.disconnect()

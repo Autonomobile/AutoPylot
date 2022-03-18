@@ -8,29 +8,19 @@ def test_profiler_logs():
         os.remove(profiler.pathlogs)
 
     pr = profiler.Profiler()
-    pr.update()
+    pr.update(n_iter=1)
 
     assert os.path.exists(profiler.pathlogs)
 
 
-def test_profiler_no_logs():
+def test_PROFILER_N_ITER():
     if os.path.exists(profiler.pathlogs):
         os.remove(profiler.pathlogs)
 
-    pr = profiler.Profiler(save=False)
-    pr.update()
-
-    assert not os.path.exists(profiler.pathlogs)
-
-
-def test_profiler_n_iter():
-    if os.path.exists(profiler.pathlogs):
-        os.remove(profiler.pathlogs)
-
-    pr = profiler.Profiler(n_iter=5)
+    pr = profiler.Profiler()
     for i in range(4):
-        pr.update()
+        pr.update(n_iter=5)
         assert not os.path.exists(profiler.pathlogs)
 
-    pr.update()
+    pr.update(n_iter=5)
     assert os.path.exists(profiler.pathlogs)

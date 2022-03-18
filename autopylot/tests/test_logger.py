@@ -20,17 +20,7 @@ def test_compress_image():
     img = np.zeros((120, 160, 3))
     compressed = logger.compress_image(img)
 
-    assert compressed.shape[0] == 947
-
-
-def test_serialize_json():
-    log = logger.init()
-    mem = {"msg": {"image": np.zeros((120, 160, 3))}}
-
-    assert isinstance(log.handlers[2], logger.SocketIOHandler)
-    serialized = logger.serialize(mem)
-
-    assert isinstance(serialized, str) and len(serialized) == 1286
+    assert len(compressed) == 1264
 
 
 def test_file_logs():

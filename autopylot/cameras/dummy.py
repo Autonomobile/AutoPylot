@@ -3,13 +3,17 @@ import logging
 
 import numpy as np
 
-from ..utils import memory
+from ..utils import memory, settings
 
 
 class Dummy:
     """Dummy camera."""
 
-    def __init__(self, memory=memory.mem, shape=(120, 160, 3)):
+    def __init__(
+        self,
+        memory=memory.mem,
+        shape=tuple(settings.settings.IMAGE_SHAPE),
+    ):
         """Camera init.
 
         Args:

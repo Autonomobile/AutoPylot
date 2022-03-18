@@ -11,6 +11,7 @@ import logging
 import os
 import pstats
 
+from .settings import settings
 
 pathlogs = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -19,29 +20,29 @@ pathlogs = os.path.join(
 
 
 class Profiler:
-    def __init__(self, n_iter=1, reset=False, save=True):
-        self.n_iter = n_iter
+    def __init__(self):
         self.it = 1
-
-        self.reset = reset
-        self.save = save
 
         self.pr = cProfile.Profile()
         self.pr.enable()
 
         logging.info("Profiler class initialized.")
 
-    def update(self, filters=["autopylot"], sort_by="cumulative"):
-        if self.it % self.n_iter == 0:
+    def update(
+        self,
+        filters=settings.PROFILER_FILTERS,
+        sort_by=settings.PROFILER_SORT_BY,
+        n_iter=settings.PROFILER_N_ITER,
+    ):
+        if self.it % n_iter == 0:
             s = io.StringIO()
             ps = pstats.Stats(self.pr, stream=s).sort_stats(sort_by)
             ps.print_stats(*filters)
 
-            if self.save:
-                with open(pathlogs, "w") as f:
-                    f.write(s.getvalue())
+            with open(pathlogs, "w") as f:
+                f.write(s.getvalue())
 
-            if self.reset:
+            if settings.PROFILER_RESET:
                 self.pr = cProfile.Profile()
 
             self.it = 1

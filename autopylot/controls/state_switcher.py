@@ -37,5 +37,5 @@ class StateSwitcher:
             self.state = self.states[3]
 
         if self.memory["state"] != self.state:
-            logging.info(f"State changed to: {self.state}")
+            logging.debug(f"State changed to: {self.state}")
             self.memory["state"] = self.state
