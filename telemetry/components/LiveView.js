@@ -1,15 +1,30 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { memAtom } from "../utils/mem";
+import { memoryAtom } from "../utils/memory";
 import Ratio from "react-ratio";
+import Skeleton from "@mui/material/Skeleton";
 
 const LiveView = () => {
-  const [mem, setMem] = useAtom(memAtom);
+  const [memory] = useAtom(memoryAtom);
+  const getImage = () => "data:image/jpeg;base64," + memory.image;
 
-  const base64toImg = (base64) => "data:image/jpeg;base64," + base64;
-
-
-  return <div>LiveView</div>;
+  return (
+    <Ratio
+      ratio={4 / 3}
+      className="w-full md:w-11/12 lg:w-10/12 xl:w-9/12 2xl:w-8/12 hd:w-7/12 uhd:w-6/12 mx-auto 2xl:mx-0"
+    >
+      {memory.image ? (
+        <img src={getImage()} alt="live" className="w-full h-full" />
+      ) : (
+        <Skeleton
+          sx={{ bgcolor: "grey.300" }}
+          animation="wave"
+          variant="rectangular"
+          className="w-full h-full"
+        />
+      )}
+    </Ratio>
+  );
 };
 
 export default LiveView;

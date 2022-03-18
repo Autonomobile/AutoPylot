@@ -4,13 +4,13 @@ import { useAtom } from "jotai";
 import { IconButton, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SideBar from "../components/SideBar";
-import memAtom from "../utils/memory";
+import memoryAtom from "../utils/memory";
 import socketAtom from "../utils/client";
 
 export default function App({ children }) {
   const [drawerState, setDrawerState] = useState(false);
   const [socket] = useAtom(socketAtom);
-  const [memory, setMemory] = useAtom(memAtom);
+  const [memory, setMemory] = useAtom(memoryAtom);
 
   const toggleDrawer = (open) => (event) => {
     if (

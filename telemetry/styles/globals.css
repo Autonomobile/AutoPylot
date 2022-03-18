@@ -37,8 +37,3 @@ a {
 .screen-height {
   height: calc(var(--vh, 1vh) * 100);
 }
-
-img {
-  height: 480px;
-  width: 640px;
-}

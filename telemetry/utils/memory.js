@@ -1,5 +1,5 @@
 import { atom } from "jotai";
 
-export const memAtom = atom({});
+export const memoryAtom = atom({});
 
-export default memAtom;
+export default memoryAtom;

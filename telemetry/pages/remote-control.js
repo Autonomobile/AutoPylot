@@ -1,9 +1,16 @@
-import React from "react";
+import LiveView from "../components/LiveView";
 
 const remote_control = () => {
   return (
-    <div>remote_control</div>
-  )
-}
+    <div className="w-full">
+      <div className="h-5 w-full"></div>
 
-export default remote_control
+      <div className="w-full px-5">
+        <LiveView />
+        {/* coucou */}
+      </div>
+    </div>
+  );
+};
+
+export default remote_control;
