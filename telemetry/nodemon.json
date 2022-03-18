@@ -1,0 +1,12 @@
+{
+  "ignore": [
+    "components/**.js",
+    "pages/**.js",
+    "public/**.js",
+    "styles/**.js",
+    "utils/**.js"
+  ],
+  "watch": [
+    "server.js"
+  ]
+}
