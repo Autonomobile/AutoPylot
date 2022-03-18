@@ -1,15 +1,14 @@
 import time
 import uuid
-from collections import deque
 
+import queue
 import socketio
 
 from . import logger
 from .memory import mem
 from .settings import settings
 
-log_queue = deque(maxlen=100)
-
+log_queue = queue.Queue()
 stop_thread = False
 
 sio = socketio.Client()
@@ -82,8 +81,8 @@ def run_threaded(host):
         if not sio.connected and not stop_thread:
             wait_for_reconnection(host)
 
-        for _ in range(len(log_queue)):
-            log = log_queue.popleft()
+        for _ in range(log_queue.qsize()):
+            log = log_queue.get()
             send_log(log)
 
         if settings.do_send_telemetry:
