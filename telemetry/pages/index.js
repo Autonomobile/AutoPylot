@@ -16,9 +16,8 @@ export default function Home() {
     });
     socket.off("receive-telemetry");
     socket.on("receive-telemetry", (data) => {
-      const json = JSON.parse(data);
-      if (json.image) {
-        const image = `data:image/jpeg;base64,${json.image}`;
+      if (data.image) {
+        const image = `data:image/jpeg;base64,${data.image}`;
         setImg(image);
       }
     });

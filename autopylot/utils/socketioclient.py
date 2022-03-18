@@ -85,12 +85,15 @@ def run_threaded(host):
             log = log_queue.get()
             send_log(log)
 
-        if settings.do_send_telemetry:
+        if settings.DO_SEND_TELEMETRY:
             now = time.time()
-            if (now - last_sent) > settings.telemetry_delay:
-                send_telemetry(logger.serialize(mem))
+            if (now - last_sent) > settings.TELEMETRY_DELAY:
+                to_send = mem.copy()
+                if "image" in to_send.keys():
+                    to_send["image"] = logger.compress_image(mem["image"])
+                send_telemetry(to_send)
                 last_sent = now
             else:
-                time.sleep(max(settings.telemetry_delay - (now - last_sent), 0))
+                time.sleep(max(settings.TELEMETRY_DELAY - (now - last_sent), 0))
 
     sio.disconnect()

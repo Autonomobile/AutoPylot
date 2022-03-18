@@ -8,7 +8,7 @@ from .webcam import Webcam
 def Camera(
     memory=memory.mem,
     camera_type="webcam",
-    shape=tuple(settings.settings.image_shape),
+    shape=tuple(settings.settings.IMAGE_SHAPE),
     *args,
     **kwargs,
 ):

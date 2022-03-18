@@ -12,7 +12,7 @@ class Dummy:
     def __init__(
         self,
         memory=memory.mem,
-        shape=tuple(settings.settings.image_shape),
+        shape=tuple(settings.settings.IMAGE_SHAPE),
     ):
         """Camera init.
 

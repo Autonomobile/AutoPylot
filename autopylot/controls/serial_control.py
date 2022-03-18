@@ -14,7 +14,7 @@ class SerialControl:
     def __init__(
         self,
         memory=memory.mem,
-        port=settings.settings.serial_port,
+        port=settings.settings.SERIAL_PORT,
         steering_key="steering",
         throttle_key="throttle",
         speed_key="speed",

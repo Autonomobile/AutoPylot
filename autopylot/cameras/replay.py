@@ -14,7 +14,7 @@ class Replay:
         self,
         dataset_path,
         memory=memory.mem,
-        shape=tuple(settings.settings.image_shape),
+        shape=tuple(settings.settings.IMAGE_SHAPE),
     ):
         """Camera init.
 

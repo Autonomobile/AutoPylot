@@ -1,12 +1,10 @@
 import base64
-import json
 import logging
 import os
 import sys
 import threading
 
 import cv2
-import numpy as np
 
 from . import settings, socketioclient
 
@@ -43,8 +41,7 @@ class SocketIOHandler(logging.Handler):
 
     def emit(self, record):
         """Add a record to the queue."""
-        record_dict = dict(record.__dict__)
-        socketioclient.log_queue.put(serialize(record_dict))
+        socketioclient.log_queue.put(dict(record.__dict__))
 
     def start_thread(self):
         self.thread.start()
@@ -75,9 +72,9 @@ def has_dtypes(dtypes, iterable):
 def init(
     name="",
     pathlogs=pathlogs,
-    host=settings.server_address,
+    host=settings.SERVER_ADDRESS,
     handlers=[logging.FileHandler, logging.StreamHandler, SocketIOHandler],
-    do_send_telemetry=False,
+    DO_SEND_TELEMETRY=False,
 ):
     logger = logging.getLogger(name)
 
@@ -92,7 +89,7 @@ def init(
         "%(asctime)s [%(threadName)s] [%(name)s] [%(module)s] %(message)s"
     )
 
-    if settings.logs_level == "debug":
+    if settings.LOG_LEVEL == "debug":
         level = logging.DEBUG
     else:
         level = logging.INFO
@@ -118,17 +115,4 @@ def init(
 
 def compress_image(img, encode_params=[int(cv2.IMWRITE_JPEG_QUALITY), 90]):
     _, encimg = cv2.imencode(".jpg", img, encode_params)
-    return encimg
-
-
-class NumpyArrayEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if isinstance(obj, np.ndarray):
-            if len(obj.shape) == 3:  # we are dealing with an image
-                return base64.b64encode(compress_image(obj)).decode("utf-8")
-            return obj.tolist()
-        return json.JSONEncoder.default(self, obj)
-
-
-def serialize(data):
-    return json.dumps(data, cls=NumpyArrayEncoder)
+    return base64.b64encode(encimg).decode("utf-8")

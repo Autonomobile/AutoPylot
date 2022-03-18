@@ -12,18 +12,18 @@ class Settings:
 
     def __init__(self):
         """Init of the Settings class."""
-        self.image_shape = [120, 160, 3]
-        self.serial_port = "/dev/ttyUSB0"
-        self.server_address = "ws://localhost:3000"
+        self.IMAGE_SHAPE = [120, 160, 3]
+        self.SERIAL_PORT = "/dev/ttyUSB0"
+        self.SERVER_ADDRESS = "ws://localhost:3000"
 
-        self.logs_level = "debug"
-        self.do_send_telemetry = True
-        self.telemetry_delay = 0.03
+        self.LOG_LEVEL = "debug"
+        self.DO_SEND_TELEMETRY = True
+        self.TELEMETRY_DELAY = 0.03
 
-        self.profiler_reset = False
-        self.profiler_n_iter = 100
-        self.profiler_filters = ["autopylot"]
-        self.profiler_sort_by = "cumulative"
+        self.PROFILER_RESET = False
+        self.PROFILER_N_ITER = 100
+        self.PROFILER_FILTERS = ["autopylot"]
+        self.PROFILER_SORT_BY = "cumulative"
         pass
 
     def setattr(self, key, value):

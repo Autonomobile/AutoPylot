@@ -13,7 +13,7 @@ class Webcam:
         self,
         memory=memory.mem,
         index=0,
-        shape=tuple(settings.settings.image_shape),
+        shape=tuple(settings.settings.IMAGE_SHAPE),
     ):
         """Camera init.
 

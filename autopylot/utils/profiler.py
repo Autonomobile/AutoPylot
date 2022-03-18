@@ -20,11 +20,8 @@ pathlogs = os.path.join(
 
 
 class Profiler:
-    def __init__(self, n_iter=settings.profiler_n_iter, reset=settings.profiler_reset):
-        self.n_iter = n_iter
+    def __init__(self):
         self.it = 1
-
-        self.reset = reset
 
         self.pr = cProfile.Profile()
         self.pr.enable()
@@ -33,10 +30,11 @@ class Profiler:
 
     def update(
         self,
-        filters=settings.profiler_filters,
-        sort_by=settings.profiler_sort_by,
+        filters=settings.PROFILER_FILTERS,
+        sort_by=settings.PROFILER_SORT_BY,
+        n_iter=settings.PROFILER_N_ITER,
     ):
-        if self.it % self.n_iter == 0:
+        if self.it % n_iter == 0:
             s = io.StringIO()
             ps = pstats.Stats(self.pr, stream=s).sort_stats(sort_by)
             ps.print_stats(*filters)
@@ -44,7 +42,7 @@ class Profiler:
             with open(pathlogs, "w") as f:
                 f.write(s.getvalue())
 
-            if self.reset:
+            if settings.PROFILER_RESET:
                 self.pr = cProfile.Profile()
 
             self.it = 1
