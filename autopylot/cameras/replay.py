@@ -4,12 +4,18 @@ import logging
 import cv2
 
 from ..datasets import dataset
+from ..utils import memory, settings
 
 
 class Replay:
     """Replay camera class."""
 
-    def __init__(self, memory, dataset_path, shape=(120, 160, 3)):
+    def __init__(
+        self,
+        dataset_path,
+        memory=memory.mem,
+        shape=tuple(settings.settings.IMAGE_SHAPE),
+    ):
         """Camera init.
 
         Args:

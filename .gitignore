@@ -136,3 +136,6 @@ dmypy.json
 *.synctex.gz
 *.toc
 *.aux
+
+# settings json file
+/settings.json
