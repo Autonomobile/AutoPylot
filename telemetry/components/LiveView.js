@@ -6,7 +6,6 @@ import Skeleton from "@mui/material/Skeleton";
 
 const LiveView = () => {
   const [memory] = useAtom(memoryAtom);
-  const getImage = () => "data:image/jpeg;base64," + memory.image;
 
   return (
     <Ratio
@@ -14,7 +13,7 @@ const LiveView = () => {
       className="w-full md:w-11/12 lg:w-10/12 xl:w-9/12 2xl:w-8/12 hd:w-7/12 uhd:w-6/12 mx-auto 2xl:mx-0"
     >
       {memory.image ? (
-        <img src={getImage()} alt="live" className="w-full h-full" />
+        <img src={"data:image/jpeg;base64," + memory.image} alt="live" className="w-full h-full" />
       ) : (
         <Skeleton
           sx={{ bgcolor: "grey.300" }}
