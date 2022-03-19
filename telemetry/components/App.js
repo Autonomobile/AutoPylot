@@ -4,13 +4,19 @@ import { useAtom } from "jotai";
 import { IconButton, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SideBar from "../components/SideBar";
-import memoryAtom from "../utils/memory";
 import socketAtom from "../utils/client";
+import memoryAtom from "../utils/memory";
+import logsAtom from "../utils/logs";
+import settingsAtom from "../utils/settings";
+// import notificationsAtom from "../utils/notifications";
 
 export default function App({ children }) {
   const [drawerState, setDrawerState] = useState(false);
   const [socket] = useAtom(socketAtom);
-  const [memory, setMemory] = useAtom(memoryAtom);
+  const [, setMemory] = useAtom(memoryAtom);
+  const [, setLogs] = useAtom(logsAtom);
+  const [, setSettings] = useAtom(settingsAtom);
+  // const [, setNotification] = useAtom(notificationsAtom);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -21,23 +27,38 @@ export default function App({ children }) {
     setDrawerState(open);
   };
 
+  const appHeight = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  };
+
   useEffect(() => {
+    window.addEventListener("resize", appHeight);
+    appHeight();
+
+    console.debug("App.js: useEffect");
+
     socket.off("receive-telemetry"); // remove old listener
     socket.on("receive-telemetry", (data) => {
       setMemory(data);
       console.log("memory app", data);
     });
+
     socket.off("receive-logs"); // remove old listener
     socket.on("receive-logs", (data) => {
-      console.log(data);
+      setLogs(data);
+      console.log("logs app", data);
     });
-    const appHeight = () => {
-      const vh = window.innerHeight * 0.01;
-      document.documentElement.style.setProperty("--vh", `${vh}px`);
-    };
-    window.addEventListener("resize", appHeight);
-    appHeight();
-  }, [socket, setMemory, memory]);
+
+    socket.off("receive-settings"); // remove old listener
+    socket.on("receive-settings", (data) => {
+      setSettings(data);
+      console.log("settings app", data);
+    });
+
+    //TODO: add notification listener
+
+  }, [setLogs, setMemory, setSettings, socket]);
 
   return (
     <>
@@ -81,4 +102,4 @@ export default function App({ children }) {
       </div>
     </>
   );
-};
+}

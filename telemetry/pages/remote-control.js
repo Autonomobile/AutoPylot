@@ -7,7 +7,6 @@ const remote_control = () => {
 
       <div className="w-full px-5">
         <LiveView />
-        {/* coucou */}
       </div>
     </div>
   );

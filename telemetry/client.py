@@ -4,7 +4,6 @@ import socketio
 import uuid
 
 uid = uuid.uuid4().hex
-
 sio = socketio.Client()
 
 
@@ -19,8 +18,6 @@ def on_connect():
         sio.emit("telemetry", {'image': black_base64_img})
         sio.emit("logs", input(">> "))
         sio.emit("telemetry", {'image': gray_base64_img})
-
-
 
 
 @sio.on("disconnect")
