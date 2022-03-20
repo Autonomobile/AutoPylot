@@ -1,5 +1,4 @@
 const os = require("os");
-const find = require('local-devices');
 
 module.exports = {
   getLocalIpAdress: function getLocalIpAdress() {
@@ -18,9 +17,4 @@ module.exports = {
     }
     return addresses[0];
   },
-  getLocalDevices: function getLocalDevices() {
-    find().then(devices => {
-      return devices;
-    })
-  }
 };
