@@ -2,11 +2,11 @@
     "name": "telemetry",
     "version": "0.2.0",
     "description": "this web server will collect data such as images and logs from python clients",
-    "main": "index.js",
+    "main": "server.js",
     "scripts": {
         "dev": "nodemon server.js",
         "build": "next build",
-        "start": "NODE_ENV=production node server.js",
+        "start": "node server.js",
         "lint": "next lint"
     },
     "repository": {
@@ -24,11 +24,13 @@
         "@emotion/styled": "^11.8.1",
         "@mui/icons-material": "^5.5.0",
         "@mui/material": "^5.5.0",
+        "dotenv": "^16.0.0",
         "express": "^4.17.3",
         "jotai": "^1.6.0",
         "next": "12.1.0",
         "npmlog": "^6.0.1",
         "postcss": "^8.4.8",
+        "qrcode-terminal": "^0.12.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
         "react-loading-skeleton": "^3.0.3",
