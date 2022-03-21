@@ -84,7 +84,7 @@ export default function SideBar(props) {
   const styles = (href) => (router.pathname === href ? "primary textless" : "");
 
   return (
-    <div className="w-60 h-full sidebar primary">
+    <div className="w-60 h-full sidebar secondary">
       <List>
         {primary_items.map((item, index) => (
           <Link
