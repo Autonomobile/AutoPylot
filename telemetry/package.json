@@ -7,7 +7,8 @@
         "dev": "nodemon server.js",
         "build": "next build",
         "start": "node server.js",
-        "lint": "next lint"
+        "lint": "next lint",
+        "clear": "rm -rf ./node_modules && rm package-lock.json"
     },
     "repository": {
         "type": "git",
@@ -37,12 +38,12 @@
         "react-ratio": "^0.1.5",
         "socket.io": "^4.4.1",
         "socket.io-client": "^4.4.1",
-        "tailwindcss": "^3.0.23",
+        "tailwindcss": "^1.1.4",
         "toml": "^3.0.0"
     },
     "devDependencies": {
         "eslint": "8.10.0",
-        "eslint-config-next": "12.1.0",
+        "eslint-config-next": "^0.2.4",
         "nodemon": "^2.0.15"
     }
 }
