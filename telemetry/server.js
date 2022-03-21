@@ -2,7 +2,7 @@ const logger = require("npmlog");
 const app = require("express")();
 const server = require("http").Server(app);
 const io = require("socket.io")(server);
-const qrcode = require('qrcode-terminal');
+const qrcode = require("qrcode-terminal");
 const network = require("./utils/network");
 
 const config = require("./utils/config");
@@ -17,7 +17,7 @@ const nextHandler = nextapp.getRequestHandler();
 
 const clients = {};
 
-const ip = network.getLocalIpAdress();
+const ips = network.getLocalIpAdress();
 
 nextapp.prepare().then(() => {
   app.get("*", (req, res) => {
@@ -26,8 +26,10 @@ nextapp.prepare().then(() => {
 
   server.listen(port, (err) => {
     if (err) throw err;
-    logger.info("Server", `Ready on http://${ip}:${port}`);
-    qrcode.generate(`http://${ip}:${port}`, { small: true });
+    for (const ip of ips) {
+      logger.info("Server", `Ready on http://${ip}:${port}`);
+      qrcode.generate(`http://${ip}:${port}`, { small: true });
+    }
   });
 });
 
@@ -35,18 +37,12 @@ io.on("connection", (socket) => {
   socket.broadcast.emit("new client connected");
 
   socket.on("ui-client-connected", (uuid) => {
-    logger.info(
-      `[socket.io][UI]`,
-      `[${uuid}][${socket.id}] is connected`
-    );
+    logger.info(`[socket.io][UI]`, `[${uuid}][${socket.id}] is connected`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "UI", cars: [] };
   });
 
   socket.on("py-client-connected", (uuid) => {
-    logger.info(
-      `[socket.io][PY]`,
-      `[${uuid}][${socket.id}] is connected`
-    );
+    logger.info(`[socket.io][PY]`, `[${uuid}][${socket.id}] is connected`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "PY", cars: [] };
   });
 
@@ -55,7 +51,10 @@ io.on("connection", (socket) => {
       const uuid = clients[socket.id].uuid;
       const type = clients[socket.id].type;
       delete clients[socket.id];
-      logger.info(`[socket.io][${type}]`, `[${uuid}][${socket.id}] is disconnected`);
+      logger.info(
+        `[socket.io][${type}]`,
+        `[${uuid}][${socket.id}] is disconnected`
+      );
     } else {
       logger.info(`[socket.io][--]`, `[unknown] is disconnected`);
     }

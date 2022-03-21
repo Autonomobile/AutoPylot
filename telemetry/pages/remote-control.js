@@ -1,6 +1,6 @@
 import LiveView from "../components/LiveView";
 
-const remote_control = () => {
+export default function RemoteControl() {
   return (
     <div className="w-full">
       <div className="h-5 w-full"></div>
@@ -10,6 +10,4 @@ const remote_control = () => {
       </div>
     </div>
   );
-};
-
-export default remote_control;
+}

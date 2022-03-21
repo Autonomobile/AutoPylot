@@ -1,6 +1,6 @@
 {
     "name": "telemetry",
-    "version": "0.3.0",
+    "version": "0.3.2",
     "description": "this web server will collect data such as images and logs from python clients",
     "main": "server.js",
     "scripts": {

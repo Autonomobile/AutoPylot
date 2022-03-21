@@ -15,6 +15,6 @@ module.exports = {
     if (addresses.length === 0) {
       return "";
     }
-    return addresses[0];
+    return addresses;
   },
 };

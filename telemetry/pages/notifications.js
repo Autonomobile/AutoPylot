@@ -1,10 +1,10 @@
-import Alert from "@mui/material/Alert";
 import { useAtom } from "jotai";
-import notificationsAtom from "../utils/notificationsAtom";
+import { notificationsAtom } from "../utils/atoms";
+import Alert from "@mui/material/Alert";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useAtom(notificationsAtom);
-  
+
   function handleClose(index) {
     notifications.splice(index, 1);
     setNotifications([...notifications]);
@@ -17,11 +17,11 @@ export default function Notifications() {
           key={index}
           severity={notification.severity}
           onClose={() => handleClose(index)}
-          className="border-2 mb-4"
+          className="border-3 mb-4 primary text"
         >
           {notification.message}
         </Alert>
       ))}
     </div>
   );
-};
+}

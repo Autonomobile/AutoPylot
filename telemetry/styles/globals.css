@@ -15,10 +15,11 @@ body {
   margin: 0;
   height: calc(var(--vh, 1vh) * 100);
   overflow: hidden;
+  background-color: #121212;
 }
 
 a {
-  color: black;
+  /* color: black; */
   text-decoration: none;
 }
 
@@ -36,4 +37,30 @@ a {
 
 .screen-height {
   height: calc(var(--vh, 1vh) * 100);
+}
+
+.primary {
+  background-color: #2f2f2f;  
+}
+
+.secondary {
+  background-color: #121212;
+}
+
+.divider {
+  background-color: #2f2f2f;
+}
+
+.sidebar {
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-right-color: #292929;
+}
+
+.text {
+  color: #fafafa;
+}
+
+.textless {
+  color: #b8b8b8;
 }
