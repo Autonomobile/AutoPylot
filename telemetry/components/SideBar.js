@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { useRouter } from "next/router";
 import Link from "next/link";
@@ -20,6 +19,8 @@ import {
   Divider,
   Badge,
 } from "@mui/material";
+import { useAtom } from "jotai";
+import notificationsAtom from "../utils/notificationsAtom";
 
 const primary_items = [
   {
@@ -79,6 +80,7 @@ const secondary_items = [
 
 export default function SideBar(props) {
   const router = useRouter();
+  const [notifications] = useAtom(notificationsAtom);
 
   const handleClick = (e, href) => {
     e.preventDefault();
@@ -86,7 +88,7 @@ export default function SideBar(props) {
   };
 
   const getStyles = (href) => (router.pathname === href ? "bg-blue-200" : "");
-
+  console.log(notifications);
   return (
     <div className="w-60 bg-white">
       <List>
@@ -104,25 +106,25 @@ export default function SideBar(props) {
                 onClick={props.closeDrawer}
                 className={getStyles(item.href)}
               >
-                {item.text === "Notifications" ? (
-                  <Badge
-                    badgeContent={1}
-                    color="primary"
-                    anchorOrigin={{
-                      vertical: "top",
-                      horizontal: "left",
-                    }}
-                    variant="dot"
-                  >
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text} />
-                  </Badge>
-                ) : (
-                  <>
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text} />
-                  </>
-                )}
+                <ListItemIcon>
+                  {item.text === "Notifications" ? (
+                    <Badge
+                      badgeContent={notifications.length}
+                      color="error"
+                      anchorOrigin={{
+                        vertical: "top",
+                        horizontal: "left",
+                      }}
+                      overlap="circular"
+                      invisible={notifications.length === 0}
+                    >
+                      {item.icon}
+                    </Badge>
+                  ) : (
+                    <>{item.icon}</>
+                  )}
+                </ListItemIcon>
+                <ListItemText primary={item.text} />
               </ListItem>
             </a>
           </Link>
@@ -147,7 +149,7 @@ export default function SideBar(props) {
       </List>
     </div>
   );
-};
+}
 
 SideBar.propTypes = {
   closeDrawer: PropTypes.func,

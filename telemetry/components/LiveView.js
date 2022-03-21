@@ -1,6 +1,6 @@
 import React from "react";
 import { useAtom } from "jotai";
-import { memoryAtom } from "../utils/memory";
+import memoryAtom from "../utils/memory";
 import Ratio from "react-ratio";
 import Skeleton from "@mui/material/Skeleton";
 
