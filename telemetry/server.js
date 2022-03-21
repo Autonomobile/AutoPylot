@@ -1,4 +1,3 @@
-require('dotenv').config()
 const logger = require("npmlog");
 const app = require("express")();
 const server = require("http").Server(app);
@@ -6,16 +5,17 @@ const io = require("socket.io")(server);
 const qrcode = require('qrcode-terminal');
 const network = require("./utils/network");
 
-const dev = process.env.NODE_ENV !== "production";
-const hostname = process.env.HOSTNAME || "0.0.0.0";
-const port = process.env.PORT || 3000;
+const config = require("./utils/config");
+const dev = config["NODE_ENV"] !== "production";
+const hostname = config["HOSTNAME"] || "0.0.0.0";
+const port = config["PORT"] || 3000;
+logger.level = config["LOG_LEVEL"] || "debug";
 
 const next = require("next");
 const nextapp = next({ dev, hostname, port });
 const nextHandler = nextapp.getRequestHandler();
 
 const clients = {};
-logger.level = process.env.LOG_LEVEL || "debug";
 
 const ip = network.getLocalIpAdress();
 
@@ -26,7 +26,7 @@ nextapp.prepare().then(() => {
 
   server.listen(port, (err) => {
     if (err) throw err;
-    logger.info("App", `Ready on http://${ip}:${port}`);
+    logger.info("Server", `Ready on http://${ip}:${port}`);
     qrcode.generate(`http://${ip}:${port}`, { small: true });
   });
 });
