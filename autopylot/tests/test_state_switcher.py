@@ -1,5 +1,5 @@
 """File to test the state switcher that will determine our current state in function of the controller inputs."""
-from ..controllers import joystick
+from ..controllers import Controller
 from ..utils import state_switcher
 
 
@@ -17,7 +17,7 @@ def test_switcher_stop_disconnected():
     """If the controller is not connected, then stop."""
     mem = {}
 
-    js = joystick.XboxOneJoystick(mem)
+    js = Controller(mem, controller_type="xbox", do_init=False)
     sw = state_switcher.StateSwitcher(mem)
 
     js.update()
