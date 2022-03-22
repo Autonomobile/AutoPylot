@@ -12,7 +12,7 @@ class Settings:
 
     def __init__(self):
         """Init of the Settings class."""
-        self.LOG_LEVEL = "debug"
+        self.LOG_LEVEL = "info"
         self.DO_SEND_TELEMETRY = True
         self.TELEMETRY_DELAY = 0.03
 

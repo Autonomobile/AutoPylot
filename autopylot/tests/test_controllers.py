@@ -1,4 +1,4 @@
-from ..controllers import joystick
+from ..controllers import Controller
 from ..utils import memory
 from ..cameras import camera
 
@@ -9,7 +9,7 @@ def test_joystick_not_init():
     cam = camera.Camera(mem, camera_type="dummy")
     cam.update()
 
-    js = joystick.XboxOneJoystick(mem, do_init=False)
+    js = Controller(mem, controller_type="xbox")
     js.update()
 
     # no controls as controller is not init

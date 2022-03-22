@@ -1,5 +1,3 @@
-# script based on https://github.com/autorope/donkeycar/blob/dev/donkeycar/parts/controller.py
-
 from ..utils import memory, settings
 from .joystick import XboxOneJoystick
 from .keyboard import Keyboard
