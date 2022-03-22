@@ -55,6 +55,10 @@ export const memoryAtom = atom({});
 
 export const settingsAtom = atom({});
 
+export const carsAtom = atom([]);
+
+export const carAtom = atom("");
+
 export const notificationsAtom = atom([
   {
     severity: "success",

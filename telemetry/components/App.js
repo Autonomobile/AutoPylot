@@ -5,6 +5,7 @@ import { socketAtom, memoryAtom, logsAtom, settingsAtom } from "../utils/atoms";
 import { IconButton, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SideBar from "../components/SideBar";
+import DropDown from "../components/DropDown";
 
 export default function App({ children }) {
   const [drawerState, setDrawerState] = useState(false);
@@ -32,20 +33,20 @@ export default function App({ children }) {
     window.addEventListener("resize", appHeight);
     appHeight();
 
-    socket.on("receive-telemetry", (data) => {
-      setMemory(data);
-      console.log("memory app", data);
-    });
+    // socket.on("receive-telemetry", (data) => {
+    //   setMemory(data);
+    //   console.log("memory app", data);
+    // });
 
-    socket.on("receive-logs", (data) => {
-      setLogs(data);
-      console.log("logs app", data);
-    });
+    // socket.on("receive-logs", (data) => {
+    //   setLogs(data);
+    //   console.log("logs app", data);
+    // });
 
-    socket.on("receive-settings", (data) => {
-      setSettings(data);
-      console.log("settings app", data);
-    });
+    // socket.on("receive-settings", (data) => {
+    //   setSettings(data);
+    //   console.log("settings app", data);
+    // });
 
     //TODO: add notification listener
   }, [setLogs, setMemory, setSettings, socket]);
@@ -78,6 +79,11 @@ export default function App({ children }) {
               <h1 className="text-xl font-normal text select-none">
                 Telemetry Server
               </h1>
+            </div>
+          </div>
+          <div className="flex h-full w-16">
+            <div className="m-auto">
+              <DropDown />
             </div>
           </div>
         </div>

@@ -15,9 +15,12 @@ const next = require("next");
 const nextapp = next({ dev, hostname, port });
 const nextHandler = nextapp.getRequestHandler();
 
+const ips = network.getLocalIpAdress();
+
 const clients = {};
 
-const ips = network.getLocalIpAdress();
+const getPyClients = () =>
+  Object.values(clients).filter((c) => c.type === "PY");
 
 nextapp.prepare().then(() => {
   app.get("*", (req, res) => {
@@ -34,16 +37,23 @@ nextapp.prepare().then(() => {
 });
 
 io.on("connection", (socket) => {
-  socket.broadcast.emit("new client connected");
+  // socket.broadcast.emit("new client connected");
 
   socket.on("ui-client-connected", (uuid) => {
     logger.info(`[socket.io][UI]`, `[${uuid}][${socket.id}] is connected`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "UI", cars: [] };
+    socket.join("UI");
   });
 
   socket.on("py-client-connected", (uuid) => {
     logger.info(`[socket.io][PY]`, `[${uuid}][${socket.id}] is connected`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "PY", cars: [] };
+    socket.join("PY");
+    const pyClients = getPyClients();
+    io.to("UI").emit(
+      "GET-CARS",
+      pyClients.map((c) => c.uuid)
+    );
   });
 
   socket.on("disconnect", () => {
@@ -51,24 +61,50 @@ io.on("connection", (socket) => {
       const uuid = clients[socket.id].uuid;
       const type = clients[socket.id].type;
       delete clients[socket.id];
+
       logger.info(
         `[socket.io][${type}]`,
         `[${uuid}][${socket.id}] is disconnected`
       );
+
+      if (type === "PY") {
+        const pyClients = getPyClients();
+        io.to("UI").emit(
+          "GET-CARS",
+          pyClients.map((c) => c.uuid)
+        );
+      }
     } else {
       logger.info(`[socket.io][--]`, `[unknown] is disconnected`);
     }
   });
 
-  socket.on("telemetry", (data) => {
-    socket.broadcast.emit("receive-telemetry", data);
-  });
+  // // from py to ui
+  // socket.on("SET-TELEMETRY", (data) => {
+  //   socket.broadcast.emit("GET-TELEMETRY", data);
+  // });
 
-  socket.on("logs", (data) => {
-    socket.broadcast.emit("receive-logs", data);
-  });
+  // // from py to ui
+  // socket.on("SET-LOGS", (data) => {
+  //   socket.broadcast.emit("GET-LOGS", data);
+  // });
 
-  socket.on("py-test", (data) => {
-    socket.broadcast.emit("test", data);
+  // // from py to ui
+  // socket.on("SET-SETTINGS", (data) => {
+  //   socket.broadcast.emit("GET-SETTINGS", data);
+  // });
+
+  // // from ui to py
+  // socket.on("PUT-SETTINGS", (data) => {
+  //   socket.broadcast.emit("receive-config", data);
+  // });
+
+  socket.on("GET-CARS", () => {
+    console.log("GET-CARS");
+    const pyClients = getPyClients();
+    socket.emit(
+      "GET-CARS",
+      pyClients.map((c) => c.uuid)
+    );
   });
 });

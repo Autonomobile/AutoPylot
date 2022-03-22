@@ -57,10 +57,10 @@ a {
   border-right-color: #292929;
 }
 
-.text {
-  color: #fafafa;
+.text, svg {
+  color: #fafafa !important;
 }
 
-.textless {
+.textless, svg {
   color: #b8b8b8;
 }
