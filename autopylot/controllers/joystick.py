@@ -150,7 +150,7 @@ class XboxOneJoystick(Joystick):
     https://github.com/Ezward/donkeypart_ps3_controller/blob/master/donkeypart_ps3_controller/part.py
     """
 
-    def __init__(self, memory=memory.mem, *args, **kwargs):
+    def __init__(self, memory=memory.mem, do_init=True, *args, **kwargs):
         """Controller class init"""
         super(XboxOneJoystick, self).__init__(*args, **kwargs)
 
@@ -181,7 +181,8 @@ class XboxOneJoystick(Joystick):
             0x137: "button_rb",
         }
 
-        self.init()
+        if do_init:
+            self.init()
 
     def update(self):
         """Update function for the controller.

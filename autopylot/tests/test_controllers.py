@@ -3,13 +3,13 @@ from ..utils import memory
 from ..cameras import camera
 
 
-def test_controller():
+def test_joystick_not_init():
     """Test the controller dict when joystick is not connected."""
     mem = memory.mem
     cam = camera.Camera(mem, camera_type="dummy")
     cam.update()
 
-    js = joystick.XboxOneJoystick(mem)
+    js = joystick.XboxOneJoystick(mem, do_init=False)
     js.update()
 
     # no controls as controller is not init
