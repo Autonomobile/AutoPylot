@@ -1,12 +1,9 @@
-import base64
 import logging
 import os
 import sys
 import threading
 
-import cv2
-
-from . import settings, socketioclient
+from . import settings, socketio_client
 
 settings = settings.settings
 
@@ -26,7 +23,9 @@ class SocketIOHandler(logging.Handler):
     def __init__(self, host):
         logging.Handler.__init__(self)
 
-        self.thread = threading.Thread(target=socketioclient.run_threaded, args=(host,))
+        self.thread = threading.Thread(
+            target=socketio_client.run_threaded, args=(host,)
+        )
         self.thread.start()
 
     def handleError(self, record):
@@ -41,15 +40,15 @@ class SocketIOHandler(logging.Handler):
 
     def emit(self, record):
         """Add a record to the queue."""
-        socketioclient.log_queue.put(dict(record.__dict__))
+        socketio_client.log_queue.put(dict(record.__dict__))
 
     def start_thread(self):
         self.thread.start()
 
     def stop_thread(self):
-        socketioclient.stop_thread = True
+        socketio_client.stop_thread = True
         self.thread.join()
-        socketioclient.stop_thread = False
+        socketio_client.stop_thread = False
 
     def close(self):
         self.stop_thread()
