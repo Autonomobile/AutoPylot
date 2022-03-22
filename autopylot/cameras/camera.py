@@ -3,11 +3,12 @@ from ..utils import memory, settings
 from .dummy import Dummy
 from .replay import Replay
 from .webcam import Webcam
+from .sim_webcam import SimWebcam
 
 
 def Camera(
     memory=memory.mem,
-    camera_type="webcam",
+    camera_type=settings.settings.CAMERA_TYPE,
     shape=tuple(settings.settings.IMAGE_SHAPE),
     *args,
     **kwargs,
@@ -27,5 +28,7 @@ def Camera(
         return Dummy(memory=memory, shape=shape, *args, **kwargs)
     elif camera_type == "replay":
         return Replay(memory=memory, shape=shape, *args, **kwargs)
+    elif camera_type == "sim":
+        return SimWebcam(memory=memory, shape=shape, *args, **kwargs)
     else:
-        raise ValueError("Unknown camera type")
+        raise ValueError(f"Unknown camera type {camera_type}")

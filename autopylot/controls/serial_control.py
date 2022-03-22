@@ -133,8 +133,6 @@ class SerialControl:
         Args:
             steering (float): steering between -1 and 1.
         """
-        steering = self.__memory.get(self.__steering_key, 0)
-
         self.__steering = int(utils.map_value(steering, -1, 1, 0, 255))
         self.__command[1] = self.__steering
         self.ser.write(self.__command)

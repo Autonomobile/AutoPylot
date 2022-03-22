@@ -15,6 +15,8 @@ setup(
         "glob2",
         "pyserial",
         "python-socketio[client]",
+        "gym-donkeycar @ git+https://github.com/tawnkramer/gym-donkeycar",
+        "keyboard",
     ],
     extras_require={"dev": ["pytest", "flake8", "black", "pre-commit"]},
 )

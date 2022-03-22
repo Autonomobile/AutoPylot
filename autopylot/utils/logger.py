@@ -111,8 +111,3 @@ def init(
     socketIOHandler.setLevel(level)
     logger.addHandler(socketIOHandler)
     return logger
-
-
-def compress_image(img, encode_params=[int(cv2.IMWRITE_JPEG_QUALITY), 90]):
-    _, encimg = cv2.imencode(".jpg", img, encode_params)
-    return base64.b64encode(encimg).decode("utf-8")
