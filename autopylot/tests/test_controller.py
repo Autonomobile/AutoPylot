@@ -1,4 +1,4 @@
-from ..controls import controller
+from ..controllers import joystick
 from ..utils import memory
 from ..cameras import camera
 
@@ -9,7 +9,7 @@ def test_controller():
     cam = camera.Camera(mem, camera_type="dummy")
     cam.update()
 
-    js = controller.XboxOneJoystick(mem)
+    js = joystick.XboxOneJoystick(mem)
     js.update()
 
     # no controls as controller is not init
