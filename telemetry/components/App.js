@@ -75,7 +75,7 @@ export default function App({ children }) {
           </div>
           <div className="flex flex-1 h-full">
             <div className="my-auto ml-0 md:ml-8">
-              <h1 className="google-font text-xl font-normal text select-none">
+              <h1 className="text-xl font-normal text select-none">
                 Telemetry Server
               </h1>
             </div>

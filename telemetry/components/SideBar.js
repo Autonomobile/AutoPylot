@@ -122,7 +122,7 @@ export default function SideBar(props) {
                     <>{item.icon}</>
                   )}
                 </ListItemIcon>
-                <ListItemText className="textless" primary={item.text} />
+                <ListItemText className="textless" primary={item.text}/>
               </ListItem>
             </a>
           </Link>
