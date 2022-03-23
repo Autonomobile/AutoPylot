@@ -1,17 +1,17 @@
 import { useState, useEffect } from "react";
 
-import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import NativeSelect from "@mui/material/NativeSelect";
 import { useAtom } from "jotai";
 import { carsAtom, carAtom, socketAtom } from "../utils/atoms";
-import { CarRental } from "@mui/icons-material";
+
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
 export default function NativeSelectDemo() {
   const [socket] = useAtom(socketAtom);
   const [cars, setCars] = useAtom(carsAtom);
   const [car, setCar] = useAtom(carAtom);
-
+  const [age, setAge] = useState("");
   useEffect(() => {
     socket.on("GET-CARS", (data) => {
       console.log("car test", data);
@@ -34,36 +34,61 @@ export default function NativeSelectDemo() {
 
   function handleChange(event) {
     setCar(event.target.value);
+    setAge(event.target.value);
   }
 
   return (
-    <Box sx={{ maxWidth: 40 }}>
-      <FormControl fullWidth>
-        <NativeSelect
-          value={car}
-          inputProps={{
-            name: "age",
-            id: "uncontrolled-native",
-          }}
-          sx={{
-            "&:before": {
-              borderColor: "white",
+    <FormControl
+      sx={{ m: 1, minWidth: 120 }}
+    >
+      <Select
+        value={age}
+        onChange={handleChange}
+        displayEmpty
+        inputProps={{ "aria-label": "Without label" }}
+        sx={{
+          // remove the default blue border on focus
+          border: "none",
+          borderBottom: "1px solid",
+          borderColor: "gray.300",
+          "&:focus": {
+            borderColor: "gray.300",
+            outline: "none",
+          },
+          "& $notchedOutline": {
+            borderWidth: 0
+          },
+          "&:hover $notchedOutline": {
+            borderWidth: 0
+          },
+          "&$focused $notchedOutline": {
+            borderWidth: 0
+          }
+        }}
+        MenuProps={{
+          sx: {
+            "&& .Mui-selected": {
+              backgroundColor: "#292929"
             },
-            "&:after": {
-              borderColor: "white",
-            },
-            color: "white",
-          }}
-          onChange={handleChange}
-        >
-          <option value={""}>-</option>
-          {cars.map((item, index) => (
-            <option key={index} value={item}>
-              {index + 1}
-            </option>
-          ))}
-        </NativeSelect>
-      </FormControl>
-    </Box>
+            // same but with hover effect:
+            "&&:hover .Mui-selected": {
+              backgroundColor: "#292929"
+            }
+          }
+        }}
+      >
+        <MenuItem value="">
+          <em>None</em>
+        </MenuItem>
+        {cars.map((car) => (
+          <MenuItem key={car} value={car}>
+            {car}
+          </MenuItem>
+        ))}
+        <MenuItem value={10}>Ten</MenuItem>
+        <MenuItem value={20}>Twenty</MenuItem>
+        <MenuItem value={30}>Thirty</MenuItem>
+      </Select>
+    </FormControl>
   );
 }

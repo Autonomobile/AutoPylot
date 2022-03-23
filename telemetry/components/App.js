@@ -81,8 +81,8 @@ export default function App({ children }) {
               </h1>
             </div>
           </div>
-          <div className="flex h-full w-16">
-            <div className="m-auto">
+          <div className="flex h-full w-32">
+            <div className="my-auto">
               <DropDown />
             </div>
           </div>

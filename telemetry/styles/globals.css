@@ -31,7 +31,13 @@ a {
   font-family: "Product Sans", sans-serif !important;
 }
 
-.google-shadow{
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none !important;
+}
+
+.google-shadow {
   box-shadow: 0 5px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
@@ -57,10 +63,36 @@ a {
   border-right-color: #292929;
 }
 
-.text, svg {
+.text,
+svg {
   color: #fafafa !important;
 }
 
-.textless, svg {
+.textless,
+svg {
   color: #b8b8b8;
+}
+
+.MuiFormControl-root {
+  margin: 0;
+}
+
+.MuiSelect-select {
+  padding-top: 5px;
+  padding-bottom: 5px;
+  color: white;
+}
+
+.MuiMenuItem-root {
+  color: #b8b8b8;
+}
+
+.MuiMenuItem-root:hover {
+  background-color: #292929;
+}
+
+.MuiList-root,
+.MuiPaper-root,
+.MuiMenuItem-root {
+  background-color: #121212;
 }
