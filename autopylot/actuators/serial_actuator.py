@@ -8,7 +8,7 @@ import serial
 from ..utils import memory, settings, utils
 
 
-class SerialControl:
+class SerialActuator:
     """This classs send through serial port commands to an Arduino to pilot a motors and a servo motor using PWM."""
 
     def __init__(

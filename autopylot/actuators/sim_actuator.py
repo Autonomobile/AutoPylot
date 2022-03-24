@@ -1,7 +1,7 @@
 from ..utils import memory, sim_client
 
 
-class SimControl:
+class SimActuator:
     def __init__(
         self,
         client=sim_client.client,

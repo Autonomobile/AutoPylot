@@ -26,13 +26,13 @@ def test_switcher_stop_disconnected():
     assert mem["state"] == "stop"
 
 
-def test_switcher_stop_button():
+def test_switcher_x_button():
     """If the controller is connected and the button Y is pressed, then stop."""
     mem = {
         "controller": {
             "steering": 0.2,
             "throttle": 0.1,
-            "button_y": True,
+            "button_x": True,
             "button_a": False,
         }
     }
@@ -40,7 +40,7 @@ def test_switcher_stop_button():
     sw = state_switcher.StateSwitcher(mem)
     sw.update()
 
-    assert mem["state"] == "stop"
+    assert mem["state"] == "manual"
 
 
 def test_switcher_autonomous():
@@ -49,7 +49,7 @@ def test_switcher_autonomous():
         "controller": {
             "steering": 0.0,
             "throttle": 0.0,
-            "button_y": False,
+            "button_x": False,
             "button_a": False,
         }
     }
@@ -66,7 +66,7 @@ def test_switcher_collect():
         "controller": {
             "steering": 0.0,
             "throttle": 0.0,
-            "button_y": False,
+            "button_x": False,
             "button_a": True,
         }
     }
@@ -83,7 +83,7 @@ def test_switcher_manual():
         "controller": {
             "steering": 0.2,
             "throttle": 0.1,
-            "button_y": False,
+            "button_x": False,
             "button_a": False,
         }
     }

@@ -1,3 +1,4 @@
+import logging
 import json
 import os
 
@@ -18,7 +19,7 @@ class Settings:
 
         self.IMAGE_SHAPE = [120, 160, 3]
         self.CAMERA_TYPE = "webcam"  # "sim" / "dummy" / "replay"
-        self.CONTROL_TYPE = "serial"  # "sim"
+        self.ACTUATOR_TYPE = "serial"  # "sim"
         self.CONTROLLER_TYPE = "xbox"  # "keyboard"
         self.DATASET_PATH = ""
 
@@ -95,8 +96,10 @@ try:
         # settings.__generate_class_from_json(pathsettings)
         settings.from_json(pathsettings)
         settings.to_json(pathsettings)
+        logging.info(f"Loaded settings from {pathsettings}")
     else:
         settings.to_json(pathsettings)
+        logging.info(f"Created settings.json at {pathsettings}")
 except Exception as e:
     raise ValueError(
         f"Could not load and save settings from json, please check your settings file. {e}"
