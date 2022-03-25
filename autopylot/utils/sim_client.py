@@ -73,7 +73,4 @@ class SimClient(SDClient):
         return self.image
 
 
-if settings.CAMERA_TYPE == "sim" or settings.CONTROL_TYPE == "sim":
-    client = SimClient()
-else:
-    client = None
+client = SimClient()

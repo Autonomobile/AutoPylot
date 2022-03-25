@@ -15,6 +15,7 @@ class Keyboard:
             "d": 1,
         }
         self.bkeys = ["s"]
+        self.key_recording = "r"
 
     def update(self):
         """Update function for the keyboard controller.
@@ -48,4 +49,6 @@ class Keyboard:
         self.memory["controller"] = {
             "steering": steering,
             "throttle": throttle,
+            "button_a": keyboard.is_pressed(self.key_recording),
+            "button_x": any(pressed),
         }

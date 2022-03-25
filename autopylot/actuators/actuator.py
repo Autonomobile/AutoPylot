@@ -1,6 +1,4 @@
 from ..utils import memory, settings
-from .serial_actuator import SerialActuator
-from .sim_actuator import SimActuator
 
 
 def Actuator(
@@ -10,8 +8,12 @@ def Actuator(
     **kwargs,
 ):
     if actuator_type == "serial":
+        from .serial_actuator import SerialActuator
+
         return SerialActuator(memory=memory, *args, **kwargs)
     elif actuator_type == "sim":
+        from .sim_actuator import SimActuator
+
         return SimActuator(memory=memory, *args, **kwargs)
     else:
         raise ValueError(f"Unknown actuator type {actuator_type}")

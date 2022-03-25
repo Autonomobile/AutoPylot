@@ -21,7 +21,8 @@ class Settings:
         self.CAMERA_TYPE = "webcam"  # "sim" / "dummy" / "replay"
         self.ACTUATOR_TYPE = "serial"  # "sim"
         self.CONTROLLER_TYPE = "xbox"  # "keyboard"
-        self.DATASET_PATH = ""
+        self.DATASET_PATH = "~/collect/"
+        self.JSON_FILE_FORMAT = "{t}.json"
 
         self.SIM_HOST = "127.0.0.1"
         self.SIM_PORT = 9091
