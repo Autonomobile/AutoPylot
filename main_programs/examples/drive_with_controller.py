@@ -11,7 +11,11 @@ logger.init()
 
 mem = memory.mem
 settings = settings.settings
+
+# set dataset paths
 settings.DATASET_PATH = os.path.expanduser(settings.DATASET_PATH)
+if not os.path.exists(settings.DATASET_PATH):
+    os.mkdir(settings.DATASET_PATH)
 
 sw = state_switcher.StateSwitcher()
 actuator = Actuator()
