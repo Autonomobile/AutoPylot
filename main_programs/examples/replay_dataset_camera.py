@@ -12,7 +12,7 @@ from autopylot.cameras import camera
 from autopylot.utils import logger, memory, vis
 
 # init the logger handlers, select the address to the telemetry server
-logger.init(host="localhost", port=8080)
+logger.init()
 
 mem = memory.mem
 
@@ -21,7 +21,7 @@ def main(path):
     cam = camera.Camera(camera_type="replay", dataset_path=path)
     while True:
         cam.update()
-        vis.show(mem["image"])
+        vis.show(vis.vis_all(mem))
 
 
 if __name__ == "__main__":

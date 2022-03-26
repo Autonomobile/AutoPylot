@@ -13,7 +13,7 @@ def test_profiler_logs():
     assert os.path.exists(profiler.pathlogs)
 
 
-def test_PROFILER_N_ITER():
+def test_profiler_n_iter():
     if os.path.exists(profiler.pathlogs):
         os.remove(profiler.pathlogs)
 

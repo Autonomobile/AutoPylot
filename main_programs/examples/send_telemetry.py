@@ -1,11 +1,10 @@
 """
-Example script for the logging of telemetry.
+Example script to send telemetry and logs to the server.
 """
 import logging
 
 from autopylot.cameras import camera
 from autopylot.utils import logger, profiler
-
 
 # init the profiler
 pr = profiler.Profiler()

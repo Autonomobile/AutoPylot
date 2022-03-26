@@ -4,7 +4,7 @@ import uuid
 import queue
 import socketio
 
-from . import logger
+from .utils import encode_image
 from .memory import mem
 from .settings import settings
 
@@ -90,7 +90,7 @@ def run_threaded(host):
             if (now - last_sent) > settings.TELEMETRY_DELAY:
                 to_send = mem.copy()
                 if "image" in to_send.keys():
-                    to_send["image"] = logger.compress_image(mem["image"])
+                    to_send["image"] = encode_image(mem["image"])
                 send_telemetry(to_send)
                 last_sent = now
             else:
