@@ -1,4 +1,9 @@
-## autopylot python module
+---
+title: autopylot
+has_children: true
+---
+
+## Autopylot python module
 This is where all the classes, functions and methods we use in main_programs are located.
 
 
