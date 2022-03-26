@@ -1,1 +1,11 @@
 remote_theme: just-the-docs/just-the-docs
+
+collections:
+  autopylot:
+    permalink: "/:collection/:path/"
+    output: true
+
+just_the_docs:
+  collections:
+    autopylot:
+      name: autopylot module
