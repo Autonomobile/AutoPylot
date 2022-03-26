@@ -1,3 +1,8 @@
+---
+title: Actuators
+parent: Autopylot
+---
+
 ## Actuators
 An actuator is something that is responsible for the moving of the car. \
 In our case, it will refer to "how should we use our steering and throttle output ?".
