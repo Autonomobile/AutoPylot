@@ -43,8 +43,8 @@ actuator.update()
 At every `actuator.update()` call, the steering and throttle output in the memory will be sent to the Arduino, making the car move.
 
 
-### Actuator
-This actuator is useful if we want to control our car in the simulator. It can be selected using the ACTUATOR_TYPE = "sim" option. \
+### SimActuator
+This actuator is useful if we want to control our car in the simulator. It can be selected using the ACTUATOR_TYPE: "sim" option. \
 If you want to force the use of the sim actuator without specifying the ACTUATOR_TYPE, you can use the following:
 ```python
 from autopylot.actuators import Actuator
