@@ -1,4 +1,4 @@
 ---
 title: Controllers
-parent: Autopylot
+parent: autopylot
 ---

@@ -1,6 +1,6 @@
 ---
 title: Actuators
-parent: Autopylot
+parent: autopylot
 ---
 
 ## Actuators
@@ -9,9 +9,9 @@ In our case, it will refer to "how should we use our steering and throttle outpu
 
 
 ### Actuator
-To simplify the way to instantiate classes corresponding to the ACTUATOR_TYPE needed, we use the method Actuator() declared in autopylot.actuators.py. \
+To simplify the way to instantiate actuator classes, we use the method Actuator() declared in autopylot.actuators.py. \
 It takes in argument the actuator type you want to instantiate and returns the instance of that class.
-If no arguments are provided, the instance will be created with the ACTUATOR_TYPE from the JSON settings file.
+If no arguments are provided, the instance will be created according to the ACTUATOR_TYPE from the JSON settings file.
 
 Example:
 ```json
@@ -30,6 +30,7 @@ Would instantiate the actuator referring to the ACTUATOR_TYPE: "serial" (SerialA
 
 *Note: this is the only public method available to instantiate actuators (all the following classes are private).*
 
+
 ### SerialActuator
 This is the default actuator, it can be selected using the ACTUATOR_TYPE = "serial" option. \
 If you want to force the use of the serial actuator without specifying the ACTUATOR_TYPE, you can use the following:
@@ -39,8 +40,8 @@ from autopylot.actuators import Actuator
 actuator = Actuator(actuator_type="serial")
 actuator.update()
 ```
+At every `actuator.update()` call, the steering and throttle output in the memory will be sent to the Arduino, making the car move.
 
-If selected, the SerialActuator class will be instantiated and will be updated at every `actuator.update()` call.
 
 ### Actuator
 This actuator is useful if we want to control our car in the simulator. It can be selected using the ACTUATOR_TYPE = "sim" option. \
@@ -51,5 +52,4 @@ from autopylot.actuators import Actuator
 actuator = Actuator(actuator_type="sim")
 actuator.update()
 ```
-
-If selected, the SimActuator class will be instantiated and will be updated at every `actuator.update()` call.
+At every `actuator.update()` call, the steering and throttle output in the memory will be sent to the simulator, making the simulated car move.

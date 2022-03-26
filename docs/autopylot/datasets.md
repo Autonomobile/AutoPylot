@@ -1,4 +1,4 @@
 ---
 title: Datasets
-parent: Autopylot
+parent: autopylot
 ---

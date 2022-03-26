@@ -1,4 +1,4 @@
 ---
 title: Models
-parent: Autopylot
+parent: autopylot
 ---

@@ -1,5 +1,5 @@
 ---
-title: Autopylot
+title: autopylot
 has_children: true
 ---
 
