@@ -30,6 +30,13 @@ class Settings:
         self.SERIAL_PORT = "/dev/ttyUSB0"
         self.SERVER_ADDRESS = "ws://localhost:3000"
 
+        self.ROOT_PATH = os.path.dirname(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        )
+        self.MODELS_PATH = os.path.join(self.ROOT_PATH, "models")
+        self.LOGS_PATH = os.path.join(self.ROOT_PATH, "logs", "logs.log")
+        self.PROFILER_PATH = os.path.join(self.ROOT_PATH, "logs", "profiler.log")
+
         self.PROFILER_RESET = False
         self.PROFILER_N_ITER = 100
         self.PROFILER_FILTERS = ["autopylot"]

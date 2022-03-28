@@ -7,11 +7,6 @@ from . import settings, socketio_client
 
 settings = settings.settings
 
-pathlogs = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-    "logs/logs.log",
-)
-
 
 class SocketIOHandler(logging.Handler):
     """
@@ -70,7 +65,7 @@ def has_dtypes(dtypes, iterable):
 
 def init(
     name="",
-    pathlogs=pathlogs,
+    pathlogs=settings.LOGS_PATH,
     host=settings.SERVER_ADDRESS,
     handlers=[logging.FileHandler, logging.StreamHandler, SocketIOHandler],
     DO_SEND_TELEMETRY=False,
@@ -94,7 +89,7 @@ def init(
         level = logging.INFO
 
     # this is to write in the logs/log file
-    fileHandler = logging.FileHandler(pathlogs, mode="w")
+    fileHandler = logging.FileHandler(settings.LOGS_PATH, mode="w")
     fileHandler.setFormatter(formatter)
     fileHandler.setLevel(level)
     logger.addHandler(fileHandler)

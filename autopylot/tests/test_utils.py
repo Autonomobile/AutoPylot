@@ -1,4 +1,6 @@
 """Tests the utils functions."""
+import numpy as np
+
 from ..utils import utils
 
 
@@ -35,3 +37,13 @@ def test_deadzone_outside_deadzone_offcenter():
 def test_deadzone_in_deadzone_offcenter():
     """It should return 1.0 as the value is in the deadzone."""
     assert utils.deadzone(1.05, 0.1, center=1.0) == 1.0
+
+
+def test_encode_decode_image():
+    """Test the encoding and decoding of a base64 image."""
+    img = np.zeros((120, 160, 3))
+    enc = utils.encode_image(img)
+    dec = utils.decode_image(enc)
+
+    assert len(enc) == 1264
+    assert dec.shape == (120, 160, 3)
