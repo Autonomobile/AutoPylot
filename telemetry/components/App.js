@@ -33,10 +33,10 @@ export default function App({ children }) {
     window.addEventListener("resize", appHeight);
     appHeight();
 
-    // socket.on("receive-telemetry", (data) => {
-    //   setMemory(data);
-    //   console.log("memory app", data);
-    // });
+    socket.on("GET_MEMORY", (data) => {
+      setMemory(data);
+      console.log("memory app", data);
+    });
 
     // socket.on("receive-logs", (data) => {
     //   setLogs(data);

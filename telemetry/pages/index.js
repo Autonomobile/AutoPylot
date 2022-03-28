@@ -7,7 +7,7 @@ export default function Home() {
   const [socket] = useAtom(socketAtom);
 
   function getCars() {
-    socket.emit("GET-CARS");
+    // socket.emit("test");
   }
 
   return (

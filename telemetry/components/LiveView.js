@@ -1,10 +1,18 @@
+import { useState } from "react";
 import { useAtom } from "jotai";
 import { memoryAtom } from "../utils/atoms";
 import Ratio from "react-ratio";
 import Skeleton from "@mui/material/Skeleton";
+import { useEffect } from "react";
 
 const LiveView = () => {
   const [memory] = useAtom(memoryAtom);
+  const [image, setImage] = useState("");
+
+  useEffect(() => {
+    console.log("memory", memory);
+    setImage(memory.image);
+  }, [memory]);
 
   return (
     <Ratio
@@ -13,7 +21,7 @@ const LiveView = () => {
     >
       {memory.image ? (
         <img
-          src={"data:image/jpeg;base64," + memory.image}
+          src={"data:image/jpeg;base64," + image}
           alt="live"
           className="w-full h-full"
         />

@@ -1,3 +1,4 @@
+// @ts-check
 import { useState, useEffect } from "react";
 
 import { useAtom } from "jotai";
@@ -11,36 +12,35 @@ export default function NativeSelectDemo() {
   const [socket] = useAtom(socketAtom);
   const [cars, setCars] = useAtom(carsAtom);
   const [car, setCar] = useAtom(carAtom);
-  const [age, setAge] = useState("");
-  useEffect(() => {
-    socket.on("GET-CARS", (data) => {
-      console.log("car test", data);
-      setCars(data);
-    });
-    socket.emit("GET-CARS");
-  }, [setCar, setCars, socket]);
 
   useEffect(() => {
-    console.log("cars update", cars);
-    if (car === "") {
-      if (cars.length === 0) {
-        setCar("");
-      } else {
-        setCar(cars[0]);
-      }
+    socket.on("GET_CARS", (data) => {
+      setCars(data)
+    });
+    socket.emit("GET_CARS");
+  }, [socket]);
+
+  useEffect(() => {
+    console.log("car", car);
+  }, [car]);
+
+  useEffect(() => {
+    console.log("cars", cars);
+    if (!cars.includes(car)) {
+      setCar("");
+
     }
-    console.log("car update", car);
-  }, [car, cars, setCar]);
+  }, [cars]);
 
   function handleChange(event) {
     setCar(event.target.value);
-    setAge(event.target.value);
+    socket.emit("SET_CAR", event.target.value);
   }
 
   return (
     <FormControl>
       <Select
-        value={age}
+        value={car}
         onChange={handleChange}
         displayEmpty
         inputProps={{ "aria-label": "Without label" }}
@@ -74,14 +74,11 @@ export default function NativeSelectDemo() {
         <MenuItem value="">
           <em>None</em>
         </MenuItem>
-        {cars.map((car) => (
+        {cars.map((car, index) => (
           <MenuItem key={car} value={car}>
-            {car}
+            {index + 1}
           </MenuItem>
         ))}
-        <MenuItem value={10}>Ten</MenuItem>
-        <MenuItem value={20}>Twenty</MenuItem>
-        <MenuItem value={30}>Thirty</MenuItem>
       </Select>
     </FormControl>
   );

@@ -29,6 +29,7 @@
     "@mui/material": "^5.5.0",
     "@mui/styles": "^5.5.1",
     "@next/bundle-analyzer": "^12.1.0",
+    "@prisma/client": "^3.11.1",
     "concat-stream": "^2.0.0",
     "express": "^4.17.3",
     "jotai": "^1.6.0",
@@ -48,6 +49,7 @@
   "devDependencies": {
     "eslint": "8.10.0",
     "eslint-config-next": "^0.2.4",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "prisma": "^3.11.1"
   }
 }
