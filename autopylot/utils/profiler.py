@@ -8,15 +8,9 @@ usage example: 'python load_and_vis_data.py C:\\Users\\user\\datasets\\dataset1'
 import cProfile
 import io
 import logging
-import os
 import pstats
 
 from .settings import settings
-
-pathlogs = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
-    "logs/profiler.log",
-)
 
 
 class Profiler:
@@ -39,7 +33,7 @@ class Profiler:
             ps = pstats.Stats(self.pr, stream=s).sort_stats(sort_by)
             ps.print_stats(*filters)
 
-            with open(pathlogs, "w") as f:
+            with open(settings.PROFILER_PATH, "w") as f:
                 f.write(s.getvalue())
 
             if settings.PROFILER_RESET:
