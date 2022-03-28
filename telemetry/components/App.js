@@ -81,7 +81,7 @@ export default function App({ children }) {
               </h1>
             </div>
           </div>
-          <div className="flex h-full w-32">
+          <div className="flex h-full mr-3">
             <div className="my-auto">
               <DropDown />
             </div>
@@ -92,7 +92,7 @@ export default function App({ children }) {
             <SideBar />
           </div>
           <div className="flex flex-col flex-1 secondary">
-            <div className="flex-1 overflow-y-auto">{children}</div>
+            <div className="flex-1 overflow-y-auto child-text">{children}</div>
           </div>
         </div>
       </div>

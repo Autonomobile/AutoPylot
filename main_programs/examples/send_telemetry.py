@@ -13,7 +13,7 @@ pr = profiler.Profiler()
 # init the logger handlers, select the address to the telemetry server
 logger.init()
 
-cam = camera.Camera(index=1)
+cam = camera.Camera(index=0)
 
 # this is a text log
 logging.log(logging.DEBUG, "printing !")

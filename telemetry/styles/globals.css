@@ -11,6 +11,10 @@
 
 :root {
   --vh: 1vh;
+  --primary-color: #2f2f2f;
+  --secondary-color: #121212;
+  --text: #fafafa;
+  --text-secondary: #ddd;
 }
 
 html,
@@ -31,12 +35,6 @@ a {
   font-family: "Product Sans", sans-serif !important;
 }
 
-input:focus,
-textarea:focus,
-select:focus {
-  outline: none !important;
-}
-
 .google-shadow {
   box-shadow: 0 5px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
@@ -46,53 +44,29 @@ select:focus {
 }
 
 .primary {
-  background-color: #2f2f2f;
+  background-color: var(--primary-color);
 }
 
 .secondary {
-  background-color: #121212;
+  background-color: var(--secondary-color);
 }
 
 .divider {
-  background-color: #2f2f2f;
+  background-color: var(--primary-color);
 }
 
 .sidebar {
-  border-right-width: 1px;
-  border-right-style: solid;
-  border-right-color: #292929;
+  border-right: 1px solid var(--primary-color);
 }
 
-.text,
-svg {
-  color: #fafafa !important;
+.text {
+  color: var(--text);
 }
 
-.textless,
-svg {
-  color: #b8b8b8;
+.blanc-casse {
+  color: var(--text-secondary);
 }
 
-.MuiFormControl-root {
-  margin: 0;
-}
-
-.MuiSelect-select {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  color: white;
-}
-
-.MuiMenuItem-root {
-  color: #b8b8b8;
-}
-
-.MuiMenuItem-root:hover {
-  background-color: #292929;
-}
-
-.MuiList-root,
-.MuiPaper-root,
-.MuiMenuItem-root {
-  background-color: #121212;
+.child-text > * {
+  color: var(--text-secondary);
 }

@@ -81,7 +81,7 @@ export default function SideBar(props) {
     router.push(href);
   };
 
-  const styles = (href) => (router.pathname === href ? "primary textless" : "");
+  const styles = (href) => (router.pathname === href ? "primary blanc-casse" : "");
 
   return (
     <div className="w-60 h-full sidebar secondary">
@@ -104,7 +104,7 @@ export default function SideBar(props) {
                   },
                 }}
               >
-                <ListItemIcon className="textless">
+                <ListItemIcon className="blanc-casse">
                   {item.text === "Notifications" ? (
                     <Badge
                       badgeContent={notifications.length}
@@ -122,7 +122,7 @@ export default function SideBar(props) {
                     <>{item.icon}</>
                   )}
                 </ListItemIcon>
-                <ListItemText className="textless" primary={item.text} />
+                <ListItemText className="blanc-casse" primary={item.text} />
               </ListItem>
             </a>
           </Link>
@@ -141,8 +141,8 @@ export default function SideBar(props) {
                 },
               }}
             >
-              <ListItemIcon className="textless">{item.icon}</ListItemIcon>
-              <ListItemText className="textless" primary={item.text} />
+              <ListItemIcon className="blanc-casse">{item.icon}</ListItemIcon>
+              <ListItemText className="blanc-casse" primary={item.text} />
             </ListItem>
           </a>
         ))}

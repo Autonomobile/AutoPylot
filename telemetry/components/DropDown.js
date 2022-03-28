@@ -38,41 +38,35 @@ export default function NativeSelectDemo() {
   }
 
   return (
-    <FormControl
-      sx={{ m: 1, minWidth: 120 }}
-    >
+    <FormControl>
       <Select
         value={age}
         onChange={handleChange}
         displayEmpty
         inputProps={{ "aria-label": "Without label" }}
         sx={{
-          // remove the default blue border on focus
           border: "none",
-          borderBottom: "1px solid",
-          borderColor: "gray.300",
-          "&:focus": {
-            borderColor: "gray.300",
-            outline: "none",
+          borderBottom: "1px solid #666666",
+          backgroundColor: "#121212",
+          color: "white",
+          height: "40px",
+          minWidth: "90px",
+          outline: "none",
+          "&& > svg": {
+            fill: "#b8b8b8",
           },
-          "& $notchedOutline": {
-            borderWidth: 0
-          },
-          "&:hover $notchedOutline": {
-            borderWidth: 0
-          },
-          "&$focused $notchedOutline": {
-            borderWidth: 0
-          }
         }}
         MenuProps={{
           sx: {
             "&& .Mui-selected": {
-              backgroundColor: "#292929"
+              backgroundColor: "#121212"
             },
-            // same but with hover effect:
             "&&:hover .Mui-selected": {
               backgroundColor: "#292929"
+            },
+            "&& .MuiPaper-root": {
+              backgroundColor: "#121212",
+              color: "white"
             }
           }
         }}
