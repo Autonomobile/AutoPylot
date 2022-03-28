@@ -58,9 +58,13 @@ class DataGenerator(Sequence):
         # if we have outputs = [""steering", "throttle"]
         # Y[0].shape = (N, 1) | we have N steering scalar.
         # Y[1].shape = (N, 1) | we have N throttle scalar.
+        nb_path = 32
 
-        X = []
-        Y = []
+        (x, y) = np.where("loaded image" != [0])  # method to retrieve a tuple indices
+        (X, Y) = zip(x, y)  # get a list of tuples containing those points.
+
+        # X = []
+        # Y = []
         return X, Y
 
     def __len__(self):
