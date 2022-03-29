@@ -1,5 +1,5 @@
 """Test the serial control."""
-from ..controls import serial_control
+from ..actuators.serial_actuator import SerialActuator
 import time
 
 
@@ -7,7 +7,7 @@ def test_serial_high_speed():
     test_memory = {}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.start_thread()
 
     # corresponds to normal-ish RPM
@@ -25,7 +25,7 @@ def test_serial_normal_speed():
     test_memory = {}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.start_thread()
 
     # corresponds to normal-ish RPM
@@ -44,7 +44,7 @@ def test_serial_no_speed():
     test_memory = {}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.start_thread()
 
     ser.ser.write(b"27001\r\n")
@@ -62,7 +62,7 @@ def test_serial_invalid_bitarray():
     test_memory = {}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.start_thread()
 
     ser.ser.write(b"1234")
@@ -80,7 +80,7 @@ def test_serial_send_positive_steering():
     test_memory = {"steering": 0.5}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
@@ -92,7 +92,7 @@ def test_serial_send_negative_steering():
     test_memory = {"steering": -0.5}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
@@ -104,7 +104,7 @@ def test_serial_send_positive_throttle():
     test_memory = {"throttle": 0.5}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
@@ -116,7 +116,7 @@ def test_serial_send_negative_throttle():
     test_memory = {"throttle": -0.5}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]
@@ -128,7 +128,7 @@ def test_serial_send_both():
     test_memory = {"steering": 0.5, "throttle": 0.5}
 
     # open a test serial
-    ser = serial_control.SerialControl(test_memory, port="loop://")
+    ser = SerialActuator(test_memory, port="loop://")
     ser.update()
 
     out = ser.ser.readlines()[-1]

@@ -1,9 +1,8 @@
 import logging
-import os
 
 import numpy as np
 
-from ..utils import logger
+from ..utils import logger, utils
 
 
 def test_init_root():
@@ -16,11 +15,13 @@ def test_init_root():
     assert isinstance(log.handlers[2], logger.SocketIOHandler)
 
 
-def test_compress_image():
+def test_encode_decode_image():
     img = np.zeros((120, 160, 3))
-    compressed = logger.compress_image(img)
+    enc = utils.encode_image(img)
+    dec = utils.decode_image(enc)
 
-    assert len(compressed) == 1264
+    assert len(enc) == 1264
+    assert dec.shape == (120, 160, 3)
 
 
 def test_file_logs():
