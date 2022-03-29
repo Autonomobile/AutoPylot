@@ -2,6 +2,7 @@
 Class to load data on the go to train the model.
 This class inherits from Sequence, a tensorflow.keras utils.
 """
+import random
 import numpy as np
 from tensorflow.keras.utils import Sequence
 
@@ -9,12 +10,7 @@ from ..utils import io
 
 
 class DataGenerator(Sequence):
-    def __init__(
-        self,
-        paths,
-        inputs=["image"],
-        outputs=["steering"],
-    ):
+    def __init__(self, paths, inputs=["image"], outputs=["steering"], batch_size=64):
         """Init of the class.
 
         Args:
@@ -27,6 +23,7 @@ class DataGenerator(Sequence):
         """
 
         # determine whether we were given a list or a list of list
+        self.batch_size = batch_size
         assert len(paths) != 0, "paths should be non-empty"
         if isinstance(paths[0], str):
             self.dimensions = 0
@@ -43,7 +40,7 @@ class DataGenerator(Sequence):
         assert len(outputs) != 0, "there should be at least one output"
         self.outputs = outputs
 
-    def __data_generation(self):
+    def __data_generation(self, paths):
         # TODO
         # pick a given amount of paths,
         # load them using io.load_image_data
@@ -58,13 +55,15 @@ class DataGenerator(Sequence):
         # if we have outputs = [""steering", "throttle"]
         # Y[0].shape = (N, 1) | we have N steering scalar.
         # Y[1].shape = (N, 1) | we have N throttle scalar.
-        nb_path = 32
 
-        (x, y) = np.where("loaded image" != [0])  # method to retrieve a tuple indices
-        (X, Y) = zip(x, y)  # get a list of tuples containing those points.
+        X = np.empty((self.batch_size))  # empty list or array of the size of batch ?
+        Y = []
+        for i in range(self.batch_size):
+            index = random(0, self.batch_size)
+            loaded_img = io.load_image_data(paths[index])
+            X[i] = np.load(loaded_img)  # takes an .npy (to check)
+            Y[i] = self.inputs
 
-        # X = []
-        # Y = []
         return X, Y
 
     def __len__(self):
