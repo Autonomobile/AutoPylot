@@ -1,3 +1,4 @@
+"""Test functions related to the model creation, loading, saving and prediction."""
 import os
 import shutil
 
@@ -12,6 +13,7 @@ dirpath = os.path.join(settings.settings.MODELS_PATH, "test", "test")
 
 @pytest.mark.models
 def test_create_model_save():
+    """Test the creation and the saving of a model."""
     model = architectures.test_model(
         [
             # testing with "list" shape
@@ -32,6 +34,7 @@ def test_create_model_save():
 
 @pytest.mark.models
 def test_input_shapes():
+    """Test the expected input and output shape."""
     model, model_info = utils.load_model("test/test.tflite")
 
     for input_detail, (_, shape) in zip(model.input_details, model_info["inputs"]):
@@ -43,6 +46,7 @@ def test_input_shapes():
 
 @pytest.mark.models
 def test_expected_error():
+    """If the memory doens't have the right data, it should raise an Exception."""
     model, model_info = utils.load_model("test/test.tflite")
     prepare_data = preparedata.PrepareData(model_info)
 
@@ -52,6 +56,7 @@ def test_expected_error():
 
 @pytest.mark.models
 def test_tflite_predict():
+    """Test the prediction on the .tflite model."""
     model, model_info = utils.load_model("test/test.tflite")
     prepare_data = preparedata.PrepareData(model_info)
     camera = Camera(camera_type="dummy")
@@ -66,6 +71,7 @@ def test_tflite_predict():
 
 @pytest.mark.models
 def test_tf_predict():
+    """Test the prediction on the .h5 model."""
     model, model_info = utils.load_model("test/test.h5")
     prepare_data = preparedata.PrepareData(model_info)
     camera = Camera(camera_type="dummy")
