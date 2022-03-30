@@ -23,5 +23,11 @@ class PrepareData:
         """
         input_data = []
         for name, _ in self.inputs:
-            input_data.append(np.expand_dims(mem[name], 0).astype(np.float32))
+            try:
+                data = np.expand_dims(mem[name], 0).astype(np.float32)
+                if len(data.shape) < 2:
+                    data = np.expand_dims(data, 0)
+                input_data.append(data)
+            except KeyError:
+                raise ValueError(f"input name {name} is not in memory")
         return input_data

@@ -7,7 +7,6 @@ from autopylot.datasets import preparedata
 from autopylot.models import architectures, utils
 from autopylot.utils import memory, settings
 
-
 dirpath = os.path.join(settings.settings.MODELS_PATH, "test", "test")
 
 
@@ -43,16 +42,25 @@ def test_input_shapes():
 
 
 @pytest.mark.models
+def test_expected_error():
+    model, model_info = utils.load_model("test/test.tflite")
+    prepare_data = preparedata.PrepareData(model_info)
+
+    with pytest.raises(ValueError):
+        prepare_data(memory.mem)
+
+
+@pytest.mark.models
 def test_tflite_predict():
     model, model_info = utils.load_model("test/test.tflite")
     prepare_data = preparedata.PrepareData(model_info)
     camera = Camera(camera_type="dummy")
 
     camera.update()
+    memory.mem["speed"] = 0.123
 
     input_data = prepare_data(memory.mem)
     predictions = model.predict(input_data)
-    print(predictions)
     assert predictions != {}
 
 
@@ -63,10 +71,10 @@ def test_tf_predict():
     camera = Camera(camera_type="dummy")
 
     camera.update()
+    memory.mem["speed"] = 2.3
 
     input_data = prepare_data(memory.mem)
     predictions = model.predict(input_data)
-    print(predictions)
     assert predictions != {}
 
 

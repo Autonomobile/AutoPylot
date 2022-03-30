@@ -46,8 +46,11 @@ def test_model(output_layers: dict):
 
     inp = Input(shape=(120, 160, 3), name="image")
     inputs.append(inp)
-
     x = GlobalAveragePooling2D()(inp)
+
+    inp2 = Input(shape=(1), name="speed")
+    inputs.append(inp2)
+    x = Concatenate()([x, inp2])
 
     for (name, shape) in output_layers:
         y = Dense(get_number_of_neurons(shape), name=name)(x)
