@@ -1,3 +1,4 @@
+"""Class to prepare the data before prediction."""
 import numpy as np
 
 
@@ -5,7 +6,7 @@ class PrepareData:
     """Class to prepare data from the memory according to the needed model inputs."""
 
     def __init__(self, model_info):
-        """init of the class
+        """Init of the class.
 
         Args:
             model_info (dict): the inputs / outputs info of the model.
