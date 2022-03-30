@@ -38,6 +38,9 @@ def get_number_of_neurons(shape):
 def test_model(output_layers: dict):
     """This model does nothing, it's just a dummy model to test our functions.
 
+    We should respect the main structure of this function,
+    But the parameters, inputs and outputs may vary: we can hardcode inputs and outputs if we want.
+
     Args:
         outputs (dict): dict containing the name and the shape of the output.
     """
