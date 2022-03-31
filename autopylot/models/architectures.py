@@ -1,7 +1,9 @@
 """This is where we will store our different model architectures."""
 
-import tensorflow as tf
-from tensorflow.keras import Input
+import logging
+
+from keras_flops import get_flops
+from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import (
     Activation,
     BatchNormalization,
@@ -20,8 +22,8 @@ from tensorflow.keras.layers import (
 )
 
 
-def get_number_of_neurons(shape):
-    """Get the number of dense neurons for the given shape.
+def shape_flatten(shape):
+    """Get the number of dense neurons required the given shape.
 
     Args:
         shape (iterable): the shape of the output
@@ -35,14 +37,14 @@ def get_number_of_neurons(shape):
     return tot
 
 
-def test_model(output_layers: dict):
+def test_model(output_layers=[("steering", (1,))]):
     """This model does nothing, it's just a dummy model to test our functions.
 
     We should respect the main structure of this function,
     But the parameters, inputs and outputs may vary: we can hardcode inputs and outputs if we want.
 
     Args:
-        outputs (dict): dict containing the name and the shape of the output.
+        outputs (list): list of tuple containing the name and the shape of the output.
     """
     inputs = []
     outputs = []
@@ -56,7 +58,15 @@ def test_model(output_layers: dict):
     x = Concatenate()([x, inp2])
 
     for (name, shape) in output_layers:
-        y = Dense(get_number_of_neurons(shape), name=name)(x)
+        y = Dense(shape_flatten(shape), name=name)(x)
         outputs.append(y)
 
-    return tf.keras.models.Model(inputs=inputs, outputs=outputs)
+    # Create the model
+    model = Model(inputs=inputs, outputs=outputs)
+
+    # Compile it
+    model.compile(optimizer="adam", loss="mse")
+
+    # Get the number of floating operations required to run the model
+    logging.info(f"created test_model with {get_flops(model)} FLOPS")
+    return model

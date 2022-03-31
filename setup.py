@@ -17,6 +17,7 @@ setup(
         "python-socketio[client]",
         "gym-donkeycar @ git+https://github.com/tawnkramer/gym-donkeycar",
         "keyboard",
+        "keras-flops",
     ],
     extras_require={
         "dev": ["pytest", "flake8", "black", "pre-commit"],
