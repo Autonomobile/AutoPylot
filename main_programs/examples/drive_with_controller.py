@@ -13,9 +13,8 @@ mem = memory.mem
 settings = settings.settings
 
 # set dataset paths
-settings.DATASET_PATH = os.path.expanduser(settings.DATASET_PATH)
-if not os.path.exists(settings.DATASET_PATH):
-    os.mkdir(settings.DATASET_PATH)
+if not os.path.exists(settings.COLLECT_PATH):
+    os.mkdir(settings.COLLECT_PATH)
 
 sw = state_switcher.StateSwitcher()
 actuator = Actuator()
@@ -45,7 +44,7 @@ def main():
             io.save_image_data(
                 mem,
                 os.path.join(
-                    settings.DATASET_PATH,
+                    settings.COLLECT_PATH,
                     settings.JSON_FILE_FORMAT.format(t=time.time()),
                 ),
             )

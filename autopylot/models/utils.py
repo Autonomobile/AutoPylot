@@ -3,13 +3,14 @@ import logging
 import os
 
 import tensorflow as tf
+from tensorflow.keras.models import Model
 
 from ..utils import settings
 
 settings = settings.settings
 
 
-def load_model(model_path):
+def load_model(model_path, *args, **kwargs):
     """Load a model.
 
     Args:
@@ -19,28 +20,34 @@ def load_model(model_path):
         ValueError: raised if the model path is not valid
 
     Returns:
-        tuple(tf.keras.models.Model, dict): the loaded model and its inputs / outputs info.
+        tuple(Model, dict): the loaded model and its inputs / outputs info.
     """
     model_path = os.path.join(settings.MODELS_PATH, model_path)
 
     if model_path.endswith(".h5"):
-        model = tf.keras.models.load_model(model_path)
-        model_info = create_model_info(model)
-        model.predict = predict_decorator(model, model_info["outputs"])
-        return model, model_info
+        try:
+            model = tf.keras.models.load_model(model_path, *args, **kwargs)
+            model_info = create_model_info(model)
+            model.predict = predict_decorator(model, model_info["outputs"])
+            return model, model_info
+        except OSError:
+            raise ValueError(f"Invalid path to model: {model_path}")
     elif model_path.endswith(".tflite"):
-        return TFLiteModel(model_path), load_model_info(model_path)
+        try:
+            return TFLiteModel(model_path, *args, **kwargs), load_model_info(model_path)
+        except OSError:
+            raise ValueError(f"Invalid path to model: {model_path}")
     else:
         raise ValueError("Invalid model path")
 
 
-def save(model, name):
+def save_model(model, name, model_info={}):
     """Save a model in the settings.MODELS_PATH folder.
 
     creates a subfolder to store the .h5 / .tflite and .info files
 
     Args:
-        model (tf.keras.models.Model): the model to save.
+        model (Model): the model to save.
         name (string): the name of the model.
     """
     folder_name = os.path.join(settings.MODELS_PATH, name)
@@ -55,18 +62,20 @@ def save(model, name):
     tflitepath = os.path.join(folder_name, name + ".tflite")
     save_to_tflite(model, tflitepath)
 
-    # load model info
+    # save model info
     infopath = os.path.join(folder_name, name + ".info")
-    info = create_model_info(model)
+
+    if model_info == {}:
+        model_info = create_model_info(model)
     with open(infopath, "w") as f:
-        json.dump(info, f)
+        json.dump(model_info, f)
 
 
 def save_to_tflite(model, model_path):
     """saves a model to its tflite equivalent.
 
     Args:
-        model (tf.keras.models.Model): the model.
+        model (Model): the model.
         model_path (string): the full path of where to save the model.
     """
     converter = tf.lite.TFLiteConverter.from_keras_model(model)

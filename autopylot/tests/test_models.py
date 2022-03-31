@@ -17,13 +17,13 @@ def test_create_model_save():
     model = architectures.test_model(
         [
             # testing with "list" shape
-            ("steering", [1, 1]),
+            ["steering", [1, 1]],
             # testing with "tuple" shape
             ("test_output", (1, 20)),
         ]
     )
     model.summary()
-    utils.save(model, "test")
+    utils.save_model(model, "test")
 
     assert (
         os.path.exists(dirpath + ".h5")
@@ -45,7 +45,7 @@ def test_input_shapes():
 
 
 @pytest.mark.models
-def test_expected_error():
+def test_missing_data():
     """If the memory doens't have the right data, it should raise an Exception."""
     model, model_info = utils.load_model("test/test.tflite")
     prepare_data = preparedata.PrepareData(model_info)
