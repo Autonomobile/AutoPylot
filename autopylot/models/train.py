@@ -50,7 +50,7 @@ class TrainModel:
         dataset_path=settings.DATASET_PATH,
         epochs=settings.TRAIN_EPOCHS,
         batch_size=settings.TRAIN_BATCH_SIZE,
-        split_ratio=settings.TRAIN_SPLITS,
+        train_split=settings.TRAIN_SPLITS,
         shuffle=settings.TRAIN_SHUFFLE,
         verbose=settings.TRAIN_VERBOSE,
     ):
@@ -60,31 +60,30 @@ class TrainModel:
             dataset_path (str, optional): path to the dataset. Defaults to settings.DATASET_PATH.
             epochs (int, optional): number of epochs. Defaults to settings.TRAIN_EPOCHS.
             batch_size (int, optional): number of samples per batch. Defaults to settings.TRAIN_BATCH_SIZE.
-            split_ratio (float, optional): ratio of the dataset to split. Defaults to settings.TRAIN_SPLITS.
+            train_split (float, optional): ratio of the dataset to split. Defaults to settings.TRAIN_SPLITS.
             shuffle (bool, optional): shuffle the dataset. Defaults to settings.TRAIN_SHUFFLE.
             verbose (bool, optional): print verbose messages. Defaults to settings.TRAIN_VERBOSE.
 
         Raises:
-            ValueError: raised if the split_ratio is not between 0 and 1.
+            ValueError: raised if the train_split is not between 0 and 1.
             ValueError: raised if the dataset path is not valid.
         """
-        if not 0 <= split_ratio <= 1:
-            raise ValueError("split_ratio should be between 0 and 1")
+        if not 0 <= train_split <= 1:
+            raise ValueError("train_split should be between 0 and 1")
 
         if not os.path.exists(dataset_path):
             raise ValueError(f"Dataset path {dataset_path} not found")
 
-        paths = dataset.__sort_paths(
-            glob.glob(os.path.join(dataset_path, "**", "*.json"))
-        )
+        paths = dataset.sort_paths(dataset.get_every_json_paths(dataset_path))
+        print(dataset_path, paths)
 
         # shuffle the list of paths
         if shuffle:
             random.shuffle(paths)
 
         datalen = len(paths)
-        train_paths = paths[: int(datalen * split_ratio)]
-        test_paths = paths[int(datalen * split_ratio) :]
+        train_paths = paths[: int(datalen * train_split)]
+        test_paths = paths[int(datalen * train_split) :]
 
         # Create train and test datagenerators
         train_generator = datagenerator.DataGenerator(
@@ -112,7 +111,7 @@ class TrainModel:
                 "dataset_path": dataset_path,
                 "epochs": epochs,
                 "batch_size": batch_size,
-                "split_ratio": split_ratio,
+                "train_split": train_split,
                 "shuffle": shuffle,
                 "verbose": verbose,
             }

@@ -60,8 +60,8 @@ class Settings:
         self.MODEL_PATH = os.path.join(self.MODELS_PATH, f"{self.MODEL_NAME}.h5")
         self.LOGS_PATH = os.path.join(self.ROOT_PATH, "logs", "logs.log")
         self.PROFILER_PATH = os.path.join(self.ROOT_PATH, "logs", "profiler.log")
-        self.COLLECT_PATH = os.path.expanduser("~/collect/")
-        self.DATASET_PATH = os.path.expanduser("~/datasets/")
+        self.COLLECT_PATH = os.path.normpath(os.path.expanduser("~/collect/"))
+        self.DATASET_PATH = os.path.normpath(os.path.expanduser("~/datasets/"))
 
         pass
 
