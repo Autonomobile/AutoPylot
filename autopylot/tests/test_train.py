@@ -1,11 +1,13 @@
 """Test the the TrainerModel class."""
 import os
-import pytest
-import numpy as np
 import shutil
+import time
+
+import numpy as np
+import pytest
 
 from ..models import train, utils
-from ..utils import settings
+from ..utils import io, settings
 
 settings = settings.settings
 
@@ -58,3 +60,36 @@ def test_model_successfull_load():
         assert np.array_equal(w1, w2)
 
     shutil.rmtree(os.path.join(settings.MODELS_PATH, trainer.name))
+
+
+@pytest.mark.models
+def test_model_training():
+    """Save dummy dataset to file and trains the model."""
+    trainer = train.TrainModel(name="test_model_training", try_load=False)
+    assert trainer.model is not None
+    assert trainer.model_info is not None
+    assert trainer.name == "test_model_training"
+
+    dataset_path = os.path.join(settings.DATASET_PATH, "test_model_training")
+    if not os.path.exists(dataset_path):
+        os.mkdir(dataset_path)
+
+    for _ in range(100):
+        image_data = {
+            "image": np.zeros((120, 160, 3), dtype=np.uint8),
+            "steering": (np.random.random() - 0.5) * 2,
+            "throttle": np.random.random(),
+        }
+        assert io.save_image_data(
+            image_data,
+            os.path.join(
+                dataset_path,
+                settings.JSON_FILE_FORMAT.format(t=time.time()),
+            ),
+        ) == (True, True)
+
+    # this is normal for the moment as datagenerator is not implemented yet
+    with pytest.raises(IndexError):
+        trainer.train(dataset_path, batch_size=8, epochs=1)
+
+    shutil.rmtree(dataset_path)
