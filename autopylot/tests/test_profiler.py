@@ -1,5 +1,6 @@
 import os
 
+import pytest
 from autopylot.utils import profiler, settings
 
 settings = settings.settings
@@ -26,3 +27,12 @@ def test_profiler_n_iter():
 
     pr.update(n_iter=5)
     assert os.path.exists(settings.PROFILER_PATH)
+
+
+def test_profiler_n_iter_incorrect():
+    if os.path.exists(settings.PROFILER_PATH):
+        os.remove(settings.PROFILER_PATH)
+
+    pr = profiler.Profiler()
+    with pytest.raises(ZeroDivisionError):
+        pr.update(n_iter=0)
