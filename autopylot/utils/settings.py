@@ -63,6 +63,11 @@ class Settings:
         self.COLLECT_PATH = os.path.normpath(os.path.expanduser("~/collect/"))
         self.DATASET_PATH = os.path.normpath(os.path.expanduser("~/datasets/"))
 
+        if not os.path.exists(self.COLLECT_PATH):
+            os.mkdir(self.COLLECT_PATH)
+        if not os.path.exists(self.DATASET_PATH):
+            os.mkdir(self.DATASET_PATH)
+
         pass
 
     def setattr(self, key, value):
