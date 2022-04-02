@@ -28,6 +28,8 @@ def main():
         controller.update()  # update joystick
         sw.update()  # car state
 
+        print(mem["state"])
+
         if mem["state"] == "stop":
             mem["steering"] = 0.0
             mem["throttle"] = 0.0
@@ -50,9 +52,6 @@ def main():
             )
             mem["steering"] = mem["controller"]["steering"]
             mem["throttle"] = mem["controller"]["throttle"]
-
-        mem["steering"] = mem["controller"]["steering"]
-        mem["throttle"] = mem["controller"]["throttle"]
 
         actuator.update()
 
