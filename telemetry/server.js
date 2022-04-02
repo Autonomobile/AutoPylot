@@ -1,4 +1,3 @@
-// @ts-check
 const logger = require("npmlog");
 const app = require("express")();
 const server = require("http").Server(app);
