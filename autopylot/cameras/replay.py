@@ -12,7 +12,7 @@ class Replay:
 
     def __init__(
         self,
-        dataset_path,
+        dataset_path=settings.settings.DATASET_PATH,
         memory=memory.mem,
         shape=tuple(settings.settings.IMAGE_SHAPE),
     ):

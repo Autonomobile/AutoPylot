@@ -8,7 +8,7 @@ import serial
 from ..utils import memory, settings, utils
 
 
-class SerialControl:
+class SerialActuator:
     """This classs send through serial port commands to an Arduino to pilot a motors and a servo motor using PWM."""
 
     def __init__(
@@ -133,8 +133,6 @@ class SerialControl:
         Args:
             steering (float): steering between -1 and 1.
         """
-        steering = self.__memory.get(self.__steering_key, 0)
-
         self.__steering = int(utils.map_value(steering, -1, 1, 0, 255))
         self.__command[1] = self.__steering
         self.ser.write(self.__command)

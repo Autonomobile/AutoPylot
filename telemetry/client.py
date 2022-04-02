@@ -15,9 +15,9 @@ def on_connect():
         black_base64_img = "R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs="
         gray_base64_img = "R0lGODlhAQABAIAAAMLCwgAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
         sio.emit("logs", input(">> "))
-        sio.emit("telemetry", {'image': black_base64_img})
+        sio.emit("telemetry", {"image": black_base64_img})
         sio.emit("logs", input(">> "))
-        sio.emit("telemetry", {'image': gray_base64_img})
+        sio.emit("telemetry", {"image": gray_base64_img})
 
 
 @sio.on("disconnect")
