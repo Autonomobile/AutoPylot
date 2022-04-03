@@ -18,6 +18,7 @@ setup(
         "gym-donkeycar @ git+https://github.com/tawnkramer/gym-donkeycar",
         "keyboard",
         "keras-flops",
+        "numpy-quaternion",
     ],
     extras_require={
         "dev": ["pytest", "flake8", "black", "pre-commit"],
