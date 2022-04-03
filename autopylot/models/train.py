@@ -53,6 +53,7 @@ class TrainModel:
         train_split=settings.TRAIN_SPLITS,
         shuffle=settings.TRAIN_SHUFFLE,
         verbose=settings.TRAIN_VERBOSE,
+        do_save=True,
     ):
         """Trains the model on the given dataset.
 
@@ -63,6 +64,7 @@ class TrainModel:
             train_split (float, optional): ratio of the dataset to split. Defaults to settings.TRAIN_SPLITS.
             shuffle (bool, optional): shuffle the dataset. Defaults to settings.TRAIN_SHUFFLE.
             verbose (bool, optional): print verbose messages. Defaults to settings.TRAIN_VERBOSE.
+            do_save (bool, optional): save the model. Defaults to True.
 
         Raises:
             ValueError: raised if the train_split is not between 0 and 1.
@@ -115,4 +117,5 @@ class TrainModel:
                 "shuffle": shuffle,
                 "verbose": verbose,
             }
-        utils.save_model(self.model, self.name, model_info=self.model_info)
+        if do_save:
+            utils.save_model(self.model, self.name, model_info=self.model_info)
