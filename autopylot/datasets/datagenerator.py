@@ -40,7 +40,7 @@ class DataGenerator(Sequence):
         assert len(outputs) != 0, "there should be at least one output"
         self.outputs = outputs
 
-    def __data_generation(self, paths):
+    def __data_generation(self):
         # TODO
         # pick a given amount of paths,
         # load them using io.load_image_data
@@ -59,10 +59,12 @@ class DataGenerator(Sequence):
         X = np.empty((self.batch_size))  # empty list or array of the size of batch ?
         Y = []
         for i in range(self.batch_size):
-            index = random(0, self.batch_size)
-            loaded_img = io.load_image_data(paths[index])
-            X[i] = np.load(loaded_img)  # takes an .npy (to check)
-            Y[i] = self.inputs
+            # TODO fix this
+            # index = random(0, self.batch_size)
+            # loaded_img = io.load_image_data(self.paths[index])
+            # X[i] = np.load(loaded_img)  # takes an .npy (to check)
+            # Y[i] = self.inputs
+            pass
 
         return X, Y
 
