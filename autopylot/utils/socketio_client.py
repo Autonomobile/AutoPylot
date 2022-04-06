@@ -6,7 +6,7 @@ import socketio
 
 from .utils import encode_image
 from .memory import mem
-from .settings import settings
+from .settings import settings, restart_car
 
 log_queue = queue.Queue()
 stop_thread = False
@@ -24,6 +24,29 @@ def on_connect():
 @sio.on("disconnect")
 def on_disconnect():
     print("disconnected")
+
+
+@sio.on("SET_MEMORY")
+def on_set_memory(data):
+    mem.update(data)
+    sio.emit("SET_MEMORY", "successful")
+
+
+@sio.on("GET_SETTINGS")
+def on_get_settings():
+    sio.emit("GET_SETTINGS", settings)
+
+
+@sio.on("SET_SETTINGS")
+def on_set_settings(data):
+    settings.update(data)
+    settings.to_json()
+    sio.emit("SET_SETTINGS", "successful")
+
+
+@sio.on("RESTART")
+def on_restart():
+    restart_car()
 
 
 @sio.on("test")
