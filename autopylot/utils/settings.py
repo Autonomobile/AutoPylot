@@ -1,6 +1,7 @@
 import logging
 import json
 import os
+import sys
 
 pathsettings = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -101,7 +102,7 @@ class Settings:
                             f.write(f"        self.{key} = {value}\n")
                 f.write(line)
 
-    def from_json(self, filepath):
+    def from_json(self, filepath=pathsettings):
         """Loads values from a json file.
 
         Args:
@@ -111,7 +112,7 @@ class Settings:
         for key, value in settings_dict.items():
             self.setattr(key, value)
 
-    def to_json(self, filepath):
+    def to_json(self, filepath=pathsettings):
         """Saves the settings dictionary to a json file.
 
         Args:
@@ -124,15 +125,25 @@ class Settings:
         return self.__dict__.__repr__()
 
 
+def restart_car():
+    """save settings and reload the car."""
+    settings.to_json()
+    logging.info("Restarting car")
+
+    command = f"{sys.executable} {' '.join(sys.argv)}"
+    os.system(command)
+    sys.exit()
+
+
 try:
     settings = Settings()
     if os.path.exists(pathsettings):
         # settings.__generate_class_from_json(pathsettings)
-        settings.from_json(pathsettings)
-        settings.to_json(pathsettings)
+        settings.from_json()
+        settings.to_json()
         logging.info(f"Loaded settings from {pathsettings}")
     else:
-        settings.to_json(pathsettings)
+        settings.to_json()
         logging.info(f"Created settings.json at {pathsettings}")
 except Exception as e:
     raise ValueError(
