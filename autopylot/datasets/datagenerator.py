@@ -56,13 +56,16 @@ class DataGenerator(Sequence):
         # Y[0].shape = (N, 1) | we have N steering scalar.
         # Y[1].shape = (N, 1) | we have N throttle scalar.
 
-        X = np.empty((self.batch_size))  # empty list or array of the size of batch ?
+        X = []
         Y = []
-        for i in range(self.batch_size):
-            index = random(0, self.batch_size)
-            loaded_img = io.load_image_data(paths[index])
-            X[i] = np.load(loaded_img)  # takes an .npy (to check)
-            Y[i] = self.inputs
+
+        for ele in self.inputs:
+            L = []
+            for i in range(self.batch_size):
+                path = random.choice(paths)
+                n = list(io.load_image_data(path).items())
+                L.append(np.array(n))
+        X.append(np.array(L))
 
         return X, Y
 
