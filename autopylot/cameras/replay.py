@@ -53,7 +53,7 @@ class Replay:
         elif self.c == 3 and image_data["image"].shape[-1] == 1:
             image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_GRAY2BGR)
 
-        self.memory + image_data
+        self.memory.update(image_data)
 
     def create_generator(self):
         return dataset.load_sorted_dataset_generator(self.dataset_path)

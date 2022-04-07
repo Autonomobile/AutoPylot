@@ -67,18 +67,24 @@ def test_replay_cam():
         ) == (True, True)
 
     test_memory = {}
-    cam = Camera(
+    replay_cam = Camera(
         test_memory,
         camera_type="replay",
         shape=shape,
         dataset_path=dataset_path,
     )
 
-    prev_image = np.zeros(shape)
+    replay_cam.update()
+    first_image = test_memory["image"]
+    prev_image = first_image
+
     for _ in range(100):
-        assert (test_memory.get("image") != prev_image).any()
+        replay_cam.update()
+        image = test_memory["image"]
+        assert (image != prev_image).any()
+        prev_image = image
 
     # assert that the replay loops
-    assert (test_memory.get("image") != prev_image).any()
+    assert (image == first_image).all()
 
     shutil.rmtree(dataset_path)
