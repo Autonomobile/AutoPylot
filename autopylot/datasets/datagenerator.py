@@ -40,7 +40,7 @@ class DataGenerator(Sequence):
         assert len(outputs) != 0, "there should be at least one output"
         self.outputs = outputs
 
-    def __data_generation(self, paths):
+    def __data_generation(self):
         # TODO
         # pick a given amount of paths,
         # load them using io.load_image_data
