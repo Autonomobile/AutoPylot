@@ -5,12 +5,19 @@ from autopylot.actuators import Actuator
 from autopylot.cameras import Camera
 from autopylot.controllers import Controller
 from autopylot.utils import io, logger, memory, settings, state_switcher
+from autopylot.models import utils
+from autopylot.datasets import preparedata
 
 # init the logger handlers
 logger.init()
 
 mem = memory.mem
 settings = settings.settings
+
+model, model_info = utils.load_model(
+    f"{settings.MODEL_NAME}/{settings.MODEL_NAME}.tflite"
+)
+prepare_data = preparedata.PrepareData(model_info)
 
 # set dataset paths
 if not os.path.exists(settings.COLLECT_PATH):
@@ -37,8 +44,11 @@ def main():
             mem["throttle"] = mem["controller"]["throttle"]
 
         elif mem["state"] == "autonomous":
-            mem["steering"] = 0.0
-            mem["throttle"] = 0.0
+            input_data = prepare_data(mem)
+            predictions = model.predict(input_data)
+            mem.update(predictions)
+            mem["steering"] *= 3
+            mem["throttle"] = 0.35
 
         elif mem["state"] == "collect":
             io.save_image_data(

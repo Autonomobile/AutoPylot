@@ -103,9 +103,9 @@ class TrainModel:
 
         self.model.fit(
             train_generator,
-            steps_per_epoch=len(train_generator),
+            steps_per_epoch=len(train_generator) // batch_size + 1,
             validation_data=test_generator,
-            validation_steps=len(test_generator),
+            validation_steps=len(test_generator) // batch_size + 1,
             epochs=epochs,
         )
 

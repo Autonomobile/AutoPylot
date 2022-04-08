@@ -14,7 +14,7 @@ def load_model(model_path, *args, **kwargs):
     """Load a model.
 
     Args:
-        model_path (_type_): model_path relative to the settings.MODELS_PATH.
+        model_path (string): model_path relative to the settings.MODELS_PATH.
 
     Raises:
         ValueError: raised if the model path is not valid

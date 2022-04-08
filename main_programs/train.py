@@ -9,8 +9,10 @@ if __name__ == "__main__":
     trainer = train.TrainModel(
         name=settings.MODEL_NAME,
         try_load=settings.TRAIN_LOAD_MODEL,
-        model_type=architectures.test_model,
+        model_type=architectures.steering_model,
     )
+
+    trainer.model.summary()
 
     trainer.train(
         dataset_path=settings.DATASET_PATH,

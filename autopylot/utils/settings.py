@@ -46,7 +46,7 @@ class Settings:
         self.MODEL_SAVE_SETTINGS = True
 
         # Training settings
-        self.TRAIN_LOAD_MODEL = True
+        self.TRAIN_LOAD_MODEL = False
         self.TRAIN_BATCH_SIZE = 32
         self.TRAIN_EPOCHS = 10
         self.TRAIN_SPLITS = 0.9
@@ -58,7 +58,6 @@ class Settings:
             os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         )
         self.MODELS_PATH = os.path.join(self.ROOT_PATH, "models")
-        self.MODEL_PATH = os.path.join(self.MODELS_PATH, f"{self.MODEL_NAME}.h5")
         self.LOGS_PATH = os.path.join(self.ROOT_PATH, "logs", "logs.log")
         self.PROFILER_PATH = os.path.join(self.ROOT_PATH, "logs", "profiler.log")
         self.COLLECT_PATH = os.path.normpath(os.path.expanduser("~/collect/"))

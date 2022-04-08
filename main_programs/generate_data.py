@@ -17,7 +17,7 @@ def get_steering(car_pos, car_rot, target_node_pos, target_node_rot):
 
     x_difference = no_rot_relative_pos[0]
 
-    steering = np.clip(x_difference * 1.0, -1.0, 1.0)
+    steering = np.clip(x_difference * 1.5, -1.0, 1.0)
     return steering
 
 
@@ -55,9 +55,9 @@ def generate_data(
     while self.total_nodes == 0:
         time.sleep(self.poll_socket_sleep_sec)
 
-    for i in range(self.total_nodes):
-        # fetch all the nodes info
-        self.get_node_info(i)
+    # for i in range(self.total_nodes):
+    #     # fetch all the nodes info
+    #     self.get_node_info(i)
 
     i = 0
     while i < self.total_nodes:
