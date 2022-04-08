@@ -95,7 +95,7 @@ def run_threaded(host):
 
     while not stop_thread:
         if not sio.connected and not stop_thread:
-            wait_for_reconnection(host)
+            wait_for_reconnection()
 
         for _ in range(log_queue.qsize()):
             log = log_queue.get()
