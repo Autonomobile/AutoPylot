@@ -2,6 +2,7 @@
 Class to load data on the go to train the model.
 This class inherits from Sequence, a tensorflow.keras utils.
 """
+import random
 import numpy as np
 from tensorflow.keras.utils import Sequence
 
@@ -9,12 +10,7 @@ from ..utils import io
 
 
 class DataGenerator(Sequence):
-    def __init__(
-        self,
-        paths,
-        inputs=["image"],
-        outputs=["steering"],
-    ):
+    def __init__(self, paths, inputs=["image"], outputs=["steering"], batch_size=64):
         """Init of the class.
 
         Args:
@@ -27,6 +23,7 @@ class DataGenerator(Sequence):
         """
 
         # determine whether we were given a list or a list of list
+        self.batch_size = batch_size
         assert len(paths) != 0, "paths should be non-empty"
         if isinstance(paths[0], str):
             self.dimensions = 0
@@ -59,8 +56,35 @@ class DataGenerator(Sequence):
         # Y[0].shape = (N, 1) | we have N steering scalar.
         # Y[1].shape = (N, 1) | we have N throttle scalar.
 
-        X = []
-        Y = []
+        X = list()
+        Y = list()
+        # possible to add a while (n < self.paths_len) in order to load in advance and use Yield instead of return
+        for input in self.inputs:
+            L = list()
+            try:
+                for j in range(self.batch_size):
+                    # pick a random path
+                    path = random.choice(self.paths)
+                    data = dict(io.load_image_data(path).items())
+                    data = np.array(data[input])
+                    if len(data.shape) < 2:
+                        data = np.expand_dims(data, axis=0)
+                    L.append(list(data))
+                X.append(np.array(L))
+            except Exception as e:
+                pass
+
+        for output in self.outputs:
+            L = list()
+            try:
+                for j in range(self.batch_size):
+                    data = np.array(output)
+                    if len(data.shape) < 2:
+                        data = np.expand_dims(data, axis=0)
+                    L.append(list(data))
+                Y.append(np.array(L))
+            except Exception as e:
+                pass
         return X, Y
 
     def __len__(self):
