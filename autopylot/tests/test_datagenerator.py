@@ -57,6 +57,7 @@ def test_call_no_image():
     """Test the call of the DataGenerator class when no image is present."""
 
     dataGenerator = datagenerator.DataGenerator(
+        ["dummy_path.json"],
         inputs=["speed", "throttle"],
         outputs=["steering", "throttle"],
         batch_size=32,

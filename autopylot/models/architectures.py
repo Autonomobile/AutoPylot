@@ -68,5 +68,5 @@ def test_model(output_layers=[("steering", (1,))]):
     model.compile(optimizer="adam", loss="mse")
 
     # Get the number of floating operations required to run the model
-    logging.info(f"created test_model with {get_flops(model)} FLOPS")
+    # logging.info(f"created test_model with {get_flops(model)} FLOPS")
     return model

@@ -1,5 +1,4 @@
 """Train a model with a given dataset."""
-import glob
 import os
 import random
 
@@ -77,7 +76,6 @@ class TrainModel:
             raise ValueError(f"Dataset path {dataset_path} not found")
 
         paths = dataset.sort_paths(dataset.get_every_json_paths(dataset_path))
-        print(dataset_path, paths)
 
         # shuffle the list of paths
         if shuffle:
@@ -87,17 +85,20 @@ class TrainModel:
         train_paths = paths[: int(datalen * train_split)]
         test_paths = paths[int(datalen * train_split) :]
 
+        inputs = [i[0] for i in self.model_info["inputs"]]
+        outputs = [i[0] for i in self.model_info["outputs"]]
+
         # Create train and test datagenerators
         train_generator = datagenerator.DataGenerator(
             paths=train_paths,
-            inputs=self.model_info["inputs"][:][0],
-            outputs=self.model_info["outputs"][:][0],
+            inputs=inputs,
+            outputs=outputs,
         )
 
         test_generator = datagenerator.DataGenerator(
             paths=test_paths,
-            inputs=self.model_info["inputs"][:][0],
-            outputs=self.model_info["outputs"][:][0],
+            inputs=inputs,
+            outputs=outputs,
         )
 
         self.model.fit(

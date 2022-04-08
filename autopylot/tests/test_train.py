@@ -77,6 +77,7 @@ def test_model_training():
     for _ in range(100):
         image_data = {
             "image": np.zeros((120, 160, 3), dtype=np.uint8),
+            "speed": np.random.random() * 5,
             "steering": (np.random.random() - 0.5) * 2,
             "throttle": np.random.random(),
         }
@@ -88,8 +89,6 @@ def test_model_training():
             ),
         ) == (True, True)
 
-    # this is normal for the moment as datagenerator is not implemented yet
-    with pytest.raises(IndexError):
-        trainer.train(dataset_path, batch_size=8, epochs=1)
-
+    trainer.train(dataset_path, batch_size=8, epochs=1)
     shutil.rmtree(dataset_path)
+    shutil.rmtree(os.path.join(settings.MODELS_PATH, "test_model_training"))
