@@ -29,7 +29,6 @@ def on_disconnect():
 @sio.on("SET_MEMORY")
 def on_set_memory(data):
     mem.update(data)
-    sio.emit("SET_MEMORY", "successful")
 
 
 @sio.on("GET_SETTINGS")
@@ -41,17 +40,11 @@ def on_get_settings():
 def on_set_settings(data):
     settings.update(data)
     settings.to_json()
-    sio.emit("SET_SETTINGS", "successful")
 
 
 @sio.on("RESTART")
 def on_restart():
     restart_car()
-
-
-@sio.on("test")
-def on_test(data):
-    print(data)
 
 
 def wait_for_connection(host, sleep=1):
@@ -84,7 +77,7 @@ def send_log(log):
     Args:
         log (any): the log to send.
     """
-    sio.emit("logs", log)
+    sio.emit("GET_LOGS", log)
 
 
 def send_telemetry(telemetry):
@@ -93,7 +86,7 @@ def send_telemetry(telemetry):
     Args:
         telemetry (any): the telemetry to send.
     """
-    sio.emit("telemetry", telemetry)
+    sio.emit("GET_MEMORY", telemetry)
 
 
 def run_threaded(host):
