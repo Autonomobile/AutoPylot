@@ -53,6 +53,22 @@ def test_call():
     assert Ys[1].shape == (64, 1)  # the throttle output
 
 
+def test_call_no_image():
+    """Test the call of the DataGenerator class when no image is present."""
+
+    dataGenerator = datagenerator.DataGenerator(
+        inputs=["speed", "throttle"],
+        outputs=["steering", "throttle"],
+        batch_size=32,
+    )
+    Xs, Ys = dataGenerator[0]  # calls the __getitem__ method
+    assert Xs[0].shape == (32, 1)  # the speed input
+    assert Xs[1].shape == (32, 1)  # the throttle input
+
+    assert Ys[0].shape == (32, 1)  # the steering output
+    assert Ys[1].shape == (32, 1)  # the throttle output
+
+
 def test_delete_data():
     """Delete the previously created image and json."""
     os.remove("dummy_path.json")

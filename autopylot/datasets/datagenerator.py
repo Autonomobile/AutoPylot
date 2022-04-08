@@ -61,25 +61,30 @@ class DataGenerator(Sequence):
         # possible to add a while (n < self.paths_len) in order to load in advance and use Yield instead of return
         for input in self.inputs:
             L = list()
-            for j in range(self.batch_size):
-                # pick a random path
-                path = random.choice(self.paths)
-                data = dict(io.load_image_data(path).items())
-                data = np.array(data[input])
-                if len(data.shape) < 2:
-                    data = np.expand_dims(data, axis=0)
-                L.append(list(data))
-            X.append(np.array(L))
+            try:
+                for j in range(self.batch_size):
+                    # pick a random path
+                    path = random.choice(self.paths)
+                    data = dict(io.load_image_data(path).items())
+                    data = np.array(data[input])
+                    if len(data.shape) < 2:
+                        data = np.expand_dims(data, axis=0)
+                    L.append(list(data))
+                X.append(np.array(L))
+            except Exception as e:
+                pass
 
         for output in self.outputs:
             L = list()
-            for j in range(self.batch_size):
-                data = np.array(output)
-                if len(data.shape) < 2:
-                    data = np.expand_dims(data, axis=0)
-                L.append(list(data))
-            Y.append(np.array(L))
-
+            try:
+                for j in range(self.batch_size):
+                    data = np.array(output)
+                    if len(data.shape) < 2:
+                        data = np.expand_dims(data, axis=0)
+                    L.append(list(data))
+                Y.append(np.array(L))
+            except Exception as e:
+                pass
         return X, Y
 
     def __len__(self):
