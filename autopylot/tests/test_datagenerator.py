@@ -47,10 +47,10 @@ def test_call():
     assert isinstance(Xs, list) and isinstance(Ys, list)
 
     assert Xs[0].shape == (64, 120, 160, 3)  # the image input
-    assert Xs[1].shape == (64, 1, 1)  # the speed input
+    assert Xs[1].shape == (64, 1)  # the speed input
 
-    assert Ys[0].shape == (64, 1, 1)  # the steering output
-    assert Ys[1].shape == (64, 1, 1)  # the throttle output
+    assert Ys[0].shape == (64, 1)  # the steering output
+    assert Ys[1].shape == (64, 1)  # the throttle output
 
 
 def test_delete_data():

@@ -56,31 +56,30 @@ class DataGenerator(Sequence):
         # Y[0].shape = (N, 1) | we have N steering scalar.
         # Y[1].shape = (N, 1) | we have N throttle scalar.
 
-        X = []
-        Y = []
-        loaded_img = []
-        loaded_speed = []
-        loaded_throttle = []
-        loaded_steering = []
-        for i in range(64):
-            path = random.choice(self.paths)
-            data = np.array(list(io.load_image_data(path).items()))
-            if data[0][0] == "image" : #case where input == image 
-                loaded_img.append(data[0][1])
-            if data[1][0] == "speed" : #case where input == speed 
-                loaded_speed.append([data[1][1]])
-        X.append(np.array(loaded_img))
-        X.append(np.array(loaded_speed))
+        X = list()
+        Y = list()
+        # possible to add a while (n < self.paths_len) in order to load in advance and use Yield instead of return
+        for input in self.inputs:
+            L = list()
+            for j in range(self.batch_size):
+                # pick a random path
+                path = random.choice(self.paths)
+                data = dict(io.load_image_data(path).items())
+                data = np.array(data[input])
+                if len(data.shape) < 2:
+                    data = np.expand_dims(data, axis=0)
+                L.append(list(data))
+            X.append(np.array(L))
 
-        for j in range(64):
-            path = random.choice(self.paths)
-            data = np.array(list(io.load_image_data(path).items())) #data= list of list of items 
-            if data[2][0] == "throttle" : #case where input == steering 
-                loaded_steering.append([data[2][1]])
-            if data[3][0] == "steering" : #case where input == throttle 
-                loaded_throttle.append([data[3][1]])
-        Y.append(np.array(loaded_steering))
-        Y.append(np.array(loaded_throttle))
+        for output in self.outputs:
+            L = list()
+            for j in range(self.batch_size):
+                data = np.array(output)
+                if len(data.shape) < 2:
+                    data = np.expand_dims(data, axis=0)
+                L.append(list(data))
+            Y.append(np.array(L))
+
         return X, Y
 
     def __len__(self):
