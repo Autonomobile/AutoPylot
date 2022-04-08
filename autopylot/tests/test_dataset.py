@@ -218,6 +218,7 @@ def test_load_multiple_dataset_flat():
     assert datas[2]["steering"] == 0.1 and datas[2]["throttle"] == 0.1
 
 
+@pytest.mark.win
 def test_load_multiple_sorted_dataset_not_flat():
     """Testing if the function load_multiple_sorted_dataset() not flat works."""
     list_datas = dataset.load_multiple_sorted_dataset(dataset_path)
@@ -261,6 +262,7 @@ def test_load_multiple_dataset_generator_flat():
     assert data["steering"] == 0.1 and data["throttle"] == 0.1
 
 
+@pytest.mark.win
 def test_load_multiple_sorted_dataset_generator_flat():
     """Testing if the function load_multiple_sorted_dataset_generator() flat works."""
     generator = dataset.load_multiple_sorted_dataset_generator(dataset_path, True)
