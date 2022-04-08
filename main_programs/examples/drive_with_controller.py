@@ -47,7 +47,7 @@ def main():
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
             mem.update(predictions)
-            mem["steering"] *= 3
+            mem["steering"] = float(mem["steering"]) * 1.0
             mem["throttle"] = 0.35
 
         elif mem["state"] == "collect":

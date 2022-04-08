@@ -23,10 +23,10 @@ def get_steering(car_pos, car_rot, target_node_pos, target_node_rot):
 
 def generate_data(
     self=sim_client.client,
-    track_name="roboracingleague_1",
+    track_name="mountain_track",
     collect_path=settings.COLLECT_PATH,
     look_ahead=10,
-    height_offset=0.1,
+    height_offset=0.3,
     n_lat=2,
     n_rot_y=3,
     road_width=1.5,

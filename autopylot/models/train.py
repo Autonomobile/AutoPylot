@@ -52,6 +52,7 @@ class TrainModel:
         train_split=settings.TRAIN_SPLITS,
         shuffle=settings.TRAIN_SHUFFLE,
         verbose=settings.TRAIN_VERBOSE,
+        augm_freq=settings.TRAIN_AUGM_FREQ,
         do_save=True,
     ):
         """Trains the model on the given dataset.
@@ -93,12 +94,14 @@ class TrainModel:
             paths=train_paths,
             inputs=inputs,
             outputs=outputs,
+            freq=augm_freq,
         )
 
         test_generator = datagenerator.DataGenerator(
             paths=test_paths,
             inputs=inputs,
             outputs=outputs,
+            freq=0.0,
         )
 
         self.model.fit(
@@ -107,6 +110,8 @@ class TrainModel:
             validation_data=test_generator,
             validation_steps=len(test_generator) // batch_size + 1,
             epochs=epochs,
+            max_queue_size=8,
+            workers=4,
         )
 
         if settings.MODEL_SAVE_SETTINGS:

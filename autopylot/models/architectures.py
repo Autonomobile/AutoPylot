@@ -92,7 +92,7 @@ def steering_model():
     x = Dense(100, use_bias=False, activation="relu")(x)
     x = Dense(50, use_bias=False, activation="relu")(x)
 
-    y = Dense(1, use_bias=False, activation="linear", name="steering")(x)
+    y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
     outputs.append(y)
 
     # Create the model

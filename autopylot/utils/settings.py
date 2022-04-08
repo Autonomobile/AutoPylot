@@ -41,7 +41,7 @@ class Settings:
         self.PROFILER_SORT_BY = "cumulative"
 
         # Model settings
-        self.MODEL_NAME = "model"
+        self.MODEL_NAME = "pretrained"
         self.MODEL_SAVE_EVERY = 1
         self.MODEL_SAVE_SETTINGS = True
 
@@ -52,6 +52,7 @@ class Settings:
         self.TRAIN_SPLITS = 0.9
         self.TRAIN_SHUFFLE = True
         self.TRAIN_VERBOSE = 1
+        self.TRAIN_AUGM_FREQ = 0.3
 
         # Paths
         self.ROOT_PATH = os.path.dirname(
