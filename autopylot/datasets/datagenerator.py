@@ -56,15 +56,31 @@ class DataGenerator(Sequence):
         # Y[0].shape = (N, 1) | we have N steering scalar.
         # Y[1].shape = (N, 1) | we have N throttle scalar.
 
-        X = np.empty((self.batch_size))  # empty list or array of the size of batch ?
+        X = []
         Y = []
-        for i in range(self.batch_size):
-            # TODO fix this
-            # index = random(0, self.batch_size)
-            # loaded_img = io.load_image_data(self.paths[index])
-            # X[i] = np.load(loaded_img)  # takes an .npy (to check)
-            # Y[i] = self.inputs
-            pass
+        loaded_img = []
+        loaded_speed = []
+        loaded_throttle = []
+        loaded_steering = []
+        for i in range(64):
+            path = random.choice(self.paths)
+            data = np.array(list(io.load_image_data(path).items()))
+            if data[0][0] == "image" : #case where input == image 
+                loaded_img.append(data[0][1])
+            if data[1][0] == "speed" : #case where input == speed 
+                loaded_speed.append([data[1][1]])
+        X.append(np.array(loaded_img))
+        X.append(np.array(loaded_speed))
+
+        for j in range(64):
+            path = random.choice(self.paths)
+            data = np.array(list(io.load_image_data(path).items())) #data= list of list of items 
+            if data[2][0] == "throttle" : #case where input == steering 
+                loaded_steering.append([data[2][1]])
+            if data[3][0] == "steering" : #case where input == throttle 
+                loaded_throttle.append([data[3][1]])
+        Y.append(np.array(loaded_steering))
+        Y.append(np.array(loaded_throttle))       
 
         return X, Y
 
