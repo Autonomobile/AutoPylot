@@ -1,9 +1,4 @@
-import React from "react";
+export default function Metrics() {
+  return <div></div>;
+};
 
-const metrics = () => {
-  return (
-    <div>metrics</div>
-  )
-}
-
-export default metrics
