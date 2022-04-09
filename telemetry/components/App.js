@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useAtom } from "jotai";
-import { socketAtom, memoryAtom, logsAtom, settingsAtom } from "../utils/atoms";
+import { socketAtom, memoryAtom, logsAtom, settingsAtom, notificationsAtom } from "../utils/atoms";
 import { IconButton, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SideBar from "../components/SideBar";
@@ -13,7 +13,7 @@ export default function App({ children }) {
   const [, setMemory] = useAtom(memoryAtom);
   const [, setLogs] = useAtom(logsAtom);
   const [, setSettings] = useAtom(settingsAtom);
-  // const [, setNotification] = useAtom(notificationsAtom);
+  const [notifications, setNotifications] = useAtom(notificationsAtom);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -36,6 +36,11 @@ export default function App({ children }) {
     socket.on("GET_MEMORY", (data) => {
       setMemory(data);
       console.log("memory app", data);
+    });
+
+    socket.on("GET_NOTIFICATIONS", (data) => {
+      console.log("notifications app", data);
+      setNotifications([...notifications, ...data]);
     });
 
     // socket.on("receive-logs", (data) => {

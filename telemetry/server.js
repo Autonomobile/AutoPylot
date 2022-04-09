@@ -114,9 +114,17 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("telemetry", (data) => {
+  socket.on("GET_MEMORY", (data) => {
     emitToStreamers(socket, "GET_MEMORY", data);
   });
+
+  socket.on("GET_LOGS", (data) => {
+    emitToStreamers(socket, "GET_LOGS", data);
+  });
+
+  function emitNotification(severity, message) {
+    io.to("UI").emit("GET_NOTIFICATIONS", { severity, message });
+  }
 
   function getPyClients() {
     return Object.values(clients).filter((c) => c.type === "PY");
