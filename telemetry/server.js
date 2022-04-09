@@ -40,6 +40,7 @@ io.on("connection", (socket) => {
     logger.info(`[SIO][UI]`, `[${socket.id}][${uuid}] is authenticated`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "UI", car: "" };
     socket.join("UI");
+    emitNotification("error", "Welcome to the dashboard");
   });
 
   socket.on("py-client-connected", (uuid) => {
