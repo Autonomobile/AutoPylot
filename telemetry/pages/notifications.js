@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useAtom } from "jotai";
 import { notificationsAtom } from "../utils/atoms";
 import Alert from "@mui/material/Alert";
+import { useEffect } from "react";
 
 export default function Notifications() {
   const [notifications, setNotifications] = useAtom(notificationsAtom);

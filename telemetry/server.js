@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
     logger.info(`[SIO][UI]`, `[${socket.id}][${uuid}] is authenticated`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "UI", car: "" };
     socket.join("UI");
-    emitNotification("error", "Welcome to the dashboard");
+    emitNotificationToSocket(socket, "success", "Welcome to the dashboard");
   });
 
   socket.on("py-client-connected", (uuid) => {
@@ -53,6 +53,7 @@ io.on("connection", (socket) => {
     };
     socket.join("PY");
     updateCars();
+    emitNotificationToAll("success", "A new car is available");
   });
 
   socket.on("disconnect", () => {
@@ -72,6 +73,7 @@ io.on("connection", (socket) => {
             ui_client.car = "";
           }
         }
+        emitNotificationToAll("warning", `car : ${socket.id} is not available anymore`);
       } else if (type === "UI") {
         forgetUIClient(socket.id);
       }
@@ -123,8 +125,12 @@ io.on("connection", (socket) => {
     emitToStreamers(socket, "GET_LOGS", data);
   });
 
-  function emitNotification(severity, message) {
+  function emitNotificationToAll(severity, message) {
     io.to("UI").emit("GET_NOTIFICATIONS", { severity, message });
+  }
+
+  function emitNotificationToSocket(socket, severity, message) {
+    socket.emit("GET_NOTIFICATIONS", { severity, message });
   }
 
   function getPyClients() {

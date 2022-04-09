@@ -35,23 +35,18 @@ export default function App({ children }) {
 
     socket.on("GET_MEMORY", (data) => {
       setMemory(data);
-      console.log("memory app", data);
+      console.log("memory :", data);
+    });
+
+    socket.on("GET_LOGS", (data) => {
+      setLogs(data);
+      console.log("logs :", data);
     });
 
     socket.on("GET_NOTIFICATIONS", (data) => {
       console.log("notifications app", data);
-      setNotifications([...notifications, ...data]);
+      setNotifications([...notifications, data]);
     });
-
-    // socket.on("receive-logs", (data) => {
-    //   setLogs(data);
-    //   console.log("logs app", data);
-    // });
-
-    // socket.on("receive-settings", (data) => {
-    //   setSettings(data);
-    //   console.log("settings app", data);
-    // });
 
     //TODO: add notification listener
   }, [setLogs, setMemory, setSettings, socket]);

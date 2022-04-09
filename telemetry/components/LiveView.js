@@ -14,10 +14,25 @@ const LiveView = () => {
     setImage(memory.image);
   }, [memory]);
 
+  function requestFullscreen() {
+    var element = document.getElementById("liveview");
+    if (element.requestFullscreen) {
+      element.requestFullscreen();
+    } else if (element.mozRequestFullScreen) {
+      element.mozRequestFullScreen();
+    } else if (element.webkitRequestFullscreen) {
+      element.webkitRequestFullscreen();
+    } else if (element.msRequestFullscreen) {
+      element.msRequestFullscreen();
+    }
+  }
+
   return (
     <Ratio
+      id="liveview"
       ratio={4 / 3}
       className="w-full md:w-11/12 lg:w-10/12 xl:w-9/12 xxl:w-8/12 hd:w-7/12 uhd:w-6/12 mx-auto xxl:mx-0 google-shadow"
+      onDoubleClick={requestFullscreen}
     >
       {memory.image ? (
         <img
