@@ -9,15 +9,17 @@ import numpy as np
 import pytest
 
 from ..datasets import dataset
-from ..utils import io
+from ..utils import io, settings
 
-path_dir = os.path.join(os.getcwd(), "testing_dataset")
-dir_one = os.path.join(path_dir, "1")
-dir_two = os.path.join(path_dir, "2")
+settings = settings.settings
+
+dataset_path = os.path.join(settings.DATASET_PATH, "test_dataset")
+dataset_one = os.path.join(dataset_path, "1")
+dataset_two = os.path.join(dataset_path, "2")
 
 
 def __convert_path(path):
-    """Util function to convert path according to the current os
+    """Util function to convert path according to the current os.
 
     Args:
         path (str): the path.
@@ -31,8 +33,8 @@ def __convert_path(path):
         return path.replace("\\", "/")
 
 
-def test___sort_paths_is_sorted():
-    """Testing if __sort_paths() returns sorted elements."""
+def test_sort_paths_is_sorted():
+    """Testing if sort_paths() returns sorted elements."""
     paths = [
         __convert_path("mypath\\test\\1000.json"),
         __convert_path("hello/1.2.json"),
@@ -43,34 +45,32 @@ def test___sort_paths_is_sorted():
         __convert_path("yo/hella/weird/666.json"),
         __convert_path("mypath\\test\\1000.json"),
     ]
-    assert correct == dataset.__sort_paths(paths)
+    assert correct == dataset.sort_paths(paths)
 
 
 def test___get_time_stamp():
-    """Testing if the function __get_time_stamp() works"""
+    """Testing if the function __get_time_stamp() works."""
     float_val = dataset.__get_time_stamp(__convert_path("mypath\\test\\35438.455.json"))
     assert isinstance(float_val, float)
 
 
 def test_create_directory():
-    """Create a testing_io directory.
-    Returns:
-        string : path to testing_io directory.
-    """
-    os.mkdir(path_dir)
-    assert os.path.isdir(path_dir)
+    """Create a testing_io directory."""
+    if not os.path.exists(dataset_path):
+        os.mkdir(dataset_path)
+    assert os.path.isdir(dataset_path)
 
 
 def test_load_dataset_empty():
-    """test if the function load_dataset works."""
-    list_of_dict = dataset.load_dataset(path_dir)
+    """Test if the function load_dataset works."""
+    list_of_dict = dataset.load_dataset(dataset_path)
     assert list_of_dict == []
 
 
 def test_load_multiple_dataset_empty():
-    """Testing if the function load_multiple_dataset() works"""
-    ret_false = dataset.load_multiple_dataset(path_dir, False)
-    ret_true = dataset.load_multiple_dataset(path_dir, True)
+    """Testing if the function load_multiple_dataset() works."""
+    ret_false = dataset.load_multiple_dataset(dataset_path, False)
+    ret_true = dataset.load_multiple_dataset(dataset_path, True)
     assert ret_false == [] and ret_true == []
 
 
@@ -89,33 +89,32 @@ def test_save_dataset():
         },
     ]
 
-    ret = io.save_image_data(image_datas[0], path_dir + os.sep + "2.json")
+    ret = io.save_image_data(image_datas[0], dataset_path + os.sep + "2.json")
     assert ret == (True, True)
 
-    ret = io.save_image_data(image_datas[1], path_dir + os.sep + "11.json")
+    ret = io.save_image_data(image_datas[1], dataset_path + os.sep + "11.json")
     assert ret == (True, True)
 
 
 def test_number_files():
     """Check the number of files in the directory."""
-
     # In total, there should be 2 * 2 = 4 files
-    filepaths = glob.glob(path_dir + os.sep + "*")
+    filepaths = glob.glob(dataset_path + os.sep + "*")
     assert len(filepaths) == 4
 
     # 2 .json
-    jsonpaths = glob.glob(path_dir + os.sep + "*.json")
+    jsonpaths = glob.glob(dataset_path + os.sep + "*.json")
     assert len(jsonpaths) == 2
 
     # 2 .png
-    imagepaths = glob.glob(path_dir + os.sep + "*.png")
+    imagepaths = glob.glob(dataset_path + os.sep + "*.png")
     assert len(imagepaths) == 2
 
 
 @pytest.mark.win
 def test_load_dataset():
     """Testing if the function load_dataset() works."""
-    datas = dataset.load_dataset(path_dir)
+    datas = dataset.load_dataset(dataset_path)
     assert len(datas) == 2
     assert datas[0]["steering"] == -0.6 and datas[0]["throttle"] == 0.7
     assert datas[1]["steering"] == 0.33 and datas[1]["throttle"] == 0.5
@@ -124,7 +123,7 @@ def test_load_dataset():
 @pytest.mark.win
 def test_load_dataset_generator():
     """Testing if the function load_dataset_generator() works."""
-    generator = dataset.load_dataset_generator(path_dir)
+    generator = dataset.load_dataset_generator(dataset_path)
 
     data = next(generator)
     assert data["steering"] == -0.6 and data["throttle"] == 0.7
@@ -135,7 +134,7 @@ def test_load_dataset_generator():
 
 def test_load_sorted_dataset():
     """Testing if the function load_sorted_dataset() works."""
-    datas = dataset.load_sorted_dataset(path_dir)
+    datas = dataset.load_sorted_dataset(dataset_path)
     assert len(datas) == 2
     assert datas[0]["steering"] == 0.33 and datas[0]["throttle"] == 0.5
     assert datas[1]["steering"] == -0.6 and datas[1]["throttle"] == 0.7
@@ -143,23 +142,24 @@ def test_load_sorted_dataset():
 
 def test_delete_directory():
     """Deletes the created directory."""
-    shutil.rmtree(path_dir)
-    assert os.path.exists(path_dir) is False
+    shutil.rmtree(dataset_path)
+    assert os.path.exists(dataset_path) is False
 
 
 def test_create_multiple_directories():
     """Create a testing_io directory containing two other directories.
+
     Returns:
         string : path to testing_io directory.
     """
-    os.mkdir(path_dir)
-    assert os.path.isdir(path_dir)
+    os.mkdir(dataset_path)
+    assert os.path.isdir(dataset_path)
 
-    os.mkdir(dir_one)
-    assert os.path.isdir(dir_one)
+    os.mkdir(dataset_one)
+    assert os.path.isdir(dataset_one)
 
-    os.mkdir(dir_two)
-    assert os.path.isdir(dir_two)
+    os.mkdir(dataset_two)
+    assert os.path.isdir(dataset_two)
 
 
 def test_save_multiple_dataset():
@@ -182,20 +182,20 @@ def test_save_multiple_dataset():
         },
     ]
 
-    ret = io.save_image_data(image_datas[0], dir_one + os.sep + "2.json")
+    ret = io.save_image_data(image_datas[0], dataset_one + os.sep + "2.json")
     assert ret == (True, True)
 
-    ret = io.save_image_data(image_datas[1], dir_one + os.sep + "11.json")
+    ret = io.save_image_data(image_datas[1], dataset_one + os.sep + "11.json")
     assert ret == (True, True)
 
-    ret = io.save_image_data(image_datas[2], dir_two + os.sep + "1.2.json")
+    ret = io.save_image_data(image_datas[2], dataset_two + os.sep + "1.2.json")
     assert ret == (True, True)
 
 
 @pytest.mark.win
 def test_load_multiple_dataset_not_flat():
     """Testing if the function load_multiple_dataset() not flat works."""
-    list_datas = dataset.load_multiple_dataset(path_dir)
+    list_datas = dataset.load_multiple_dataset(dataset_path)
 
     datas = list_datas[0]
     assert len(datas) == 2
@@ -210,7 +210,7 @@ def test_load_multiple_dataset_not_flat():
 @pytest.mark.win
 def test_load_multiple_dataset_flat():
     """Testing if the function load_multiple_dataset() flat works."""
-    datas = dataset.load_multiple_dataset(path_dir, True)
+    datas = dataset.load_multiple_dataset(dataset_path, True)
 
     assert len(datas) == 3
     assert datas[0]["steering"] == -0.6 and datas[0]["throttle"] == 0.7
@@ -218,9 +218,10 @@ def test_load_multiple_dataset_flat():
     assert datas[2]["steering"] == 0.1 and datas[2]["throttle"] == 0.1
 
 
+@pytest.mark.win
 def test_load_multiple_sorted_dataset_not_flat():
     """Testing if the function load_multiple_sorted_dataset() not flat works."""
-    list_datas = dataset.load_multiple_sorted_dataset(path_dir)
+    list_datas = dataset.load_multiple_sorted_dataset(dataset_path)
 
     datas = list_datas[0]
     assert len(datas) == 2
@@ -235,7 +236,7 @@ def test_load_multiple_sorted_dataset_not_flat():
 @pytest.mark.win
 def test_load_multiple_dataset_generator_not_flat():
     """Testing if the function load_multiple_dataset_generator() not flat works."""
-    generator = dataset.load_multiple_dataset_generator(path_dir)
+    generator = dataset.load_multiple_dataset_generator(dataset_path)
 
     gen = next(generator)
     data = next(gen)
@@ -251,7 +252,7 @@ def test_load_multiple_dataset_generator_not_flat():
 @pytest.mark.win
 def test_load_multiple_dataset_generator_flat():
     """Testing if the function load_multiple_dataset_generator() flat works."""
-    generator = dataset.load_multiple_dataset_generator(path_dir, True)
+    generator = dataset.load_multiple_dataset_generator(dataset_path, True)
 
     data = next(generator)
     assert data["steering"] == -0.6 and data["throttle"] == 0.7
@@ -261,9 +262,10 @@ def test_load_multiple_dataset_generator_flat():
     assert data["steering"] == 0.1 and data["throttle"] == 0.1
 
 
+@pytest.mark.win
 def test_load_multiple_sorted_dataset_generator_flat():
     """Testing if the function load_multiple_sorted_dataset_generator() flat works."""
-    generator = dataset.load_multiple_sorted_dataset_generator(path_dir, True)
+    generator = dataset.load_multiple_sorted_dataset_generator(dataset_path, True)
 
     data = next(generator)
     assert data["steering"] == 0.33 and data["throttle"] == 0.5
@@ -275,5 +277,5 @@ def test_load_multiple_sorted_dataset_generator_flat():
 
 def test_delete_multiple_directories():
     """Deletes the created directory."""
-    shutil.rmtree(path_dir)
-    assert os.path.exists(path_dir) is False
+    shutil.rmtree(dataset_path)
+    assert os.path.exists(dataset_path) is False

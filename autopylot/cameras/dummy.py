@@ -32,4 +32,4 @@ class Dummy:
 
     def update(self):
         """Create a dummy image."""
-        self.memory["image"] = np.random.random(self.shape) * 255
+        self.memory["image"] = (np.random.random(self.shape) * 255).astype(np.int32)

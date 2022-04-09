@@ -12,6 +12,7 @@ class Keyboard:
         self.keys_to_steer = {
             "q": -1,
             "z": 0,
+            "s": 0,
             "d": 1,
         }
         self.bkeys = ["s"]

@@ -2,7 +2,9 @@ import logging
 
 import numpy as np
 
-from ..utils import logger, utils
+from ..utils import logger, utils, settings
+
+settings = settings.settings
 
 
 def test_init_root():
@@ -15,19 +17,10 @@ def test_init_root():
     assert isinstance(log.handlers[2], logger.SocketIOHandler)
 
 
-def test_encode_decode_image():
-    img = np.zeros((120, 160, 3))
-    enc = utils.encode_image(img)
-    dec = utils.decode_image(enc)
-
-    assert len(enc) == 1264
-    assert dec.shape == (120, 160, 3)
-
-
 def test_file_logs():
     logging.info("test logging to file !")
 
-    with open(logger.pathlogs, "r") as f:
+    with open(settings.LOGS_PATH, "r") as f:
         lines = f.readlines()
 
     assert lines[-1].endswith("test logging to file !\n")
