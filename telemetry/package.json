@@ -1,45 +1,54 @@
 {
-    "name": "telemetry",
-    "version": "0.2.0",
-    "description": "this web server will collect data such as images and logs from python clients",
-    "main": "index.js",
-    "scripts": {
-        "dev": "nodemon server.js",
-        "build": "next build",
-        "start": "NODE_ENV=production node server.js",
-        "lint": "next lint"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/Autonomobile/AutoPylot.git"
-    },
-    "author": "Mickael Bobovitch",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/Autonomobile/AutoPylot/issues"
-    },
-    "homepage": "https://github.com/Autonomobile/AutoPylot#readme",
-    "dependencies": {
-        "@emotion/react": "^11.8.1",
-        "@emotion/styled": "^11.8.1",
-        "@mui/icons-material": "^5.5.0",
-        "@mui/material": "^5.5.0",
-        "express": "^4.17.3",
-        "jotai": "^1.6.0",
-        "next": "12.1.0",
-        "npmlog": "^6.0.1",
-        "postcss": "^8.4.8",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
-        "react-loading-skeleton": "^3.0.3",
-        "react-ratio": "^0.1.5",
-        "socket.io": "^4.4.1",
-        "socket.io-client": "^4.4.1",
-        "tailwindcss": "^3.0.23"
-    },
-    "devDependencies": {
-        "eslint": "8.10.0",
-        "eslint-config-next": "12.1.0",
-        "nodemon": "^2.0.15"
-    }
+  "name": "telemetry",
+  "version": "0.3.2",
+  "description": "this web server will collect data such as images and logs from python clients",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "build": "next build",
+    "start": "node server.js",
+    "lint": "next lint",
+    "clear": "rm -rf ./node_modules && rm package-lock.json",
+    "analyze": "ANALYZE=true next build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Autonomobile/AutoPylot.git"
+  },
+  "author": "Mickael Bobovitch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Autonomobile/AutoPylot/issues"
+  },
+  "homepage": "https://github.com/Autonomobile/AutoPylot#readme",
+  "dependencies": {
+    "@emotion/react": "^11.8.1",
+    "@emotion/styled": "^11.8.1",
+    "@headlessui/react": "^1.5.0",
+    "@mui/icons-material": "^5.5.0",
+    "@mui/material": "^5.5.0",
+    "@mui/styles": "^5.5.1",
+    "@next/bundle-analyzer": "^12.1.0",
+    "@prisma/client": "^3.11.1",
+    "concat-stream": "^2.0.0",
+    "express": "^4.17.3",
+    "jotai": "^1.6.0",
+    "next": "12.1.0",
+    "npmlog": "^6.0.1",
+    "postcss": "^8.4.8",
+    "qrcode-terminal": "^0.12.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-ratio": "^0.1.5",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
+    "tailwindcss": "^1.1.4",
+    "toml": "^3.0.0"
+  },
+  "devDependencies": {
+    "eslint": "8.10.0",
+    "eslint-config-next": "^0.2.4",
+    "nodemon": "^2.0.15",
+    "prisma": "^3.11.1"
+  }
 }
