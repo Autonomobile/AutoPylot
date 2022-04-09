@@ -34,7 +34,9 @@ class TrainModel:
         if callable(model_type):
             if try_load:
                 try:
-                    self.model, self.model_info = utils.load_model(self.name)
+                    self.model, self.model_info = utils.load_model(
+                        f"{self.name}/{self.name}.h5"
+                    )
                 except ValueError:
                     self.model = model_type(*args, **kwargs)
                     self.model_info = utils.create_model_info(self.model)
