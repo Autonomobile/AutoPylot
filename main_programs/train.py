@@ -9,7 +9,7 @@ if __name__ == "__main__":
     trainer = train.TrainModel(
         name=settings.MODEL_NAME,
         try_load=settings.TRAIN_LOAD_MODEL,
-        model_type=architectures.steering_model,
+        model_type=architectures.get_model_constructor_by_name(settings.MODEL_TYPE),
     )
 
     trainer.model.summary()
