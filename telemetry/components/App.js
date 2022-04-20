@@ -45,7 +45,8 @@ export default function App({ children }) {
 
     socket.on("GET_NOTIFICATIONS", (data) => {
       console.log("notifications app", data);
-      setNotifications([...notifications, data]);
+      notifications.push(data);
+      setNotifications(notifications);
     });
 
     //TODO: add notification listener
