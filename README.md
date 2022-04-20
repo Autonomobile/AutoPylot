@@ -128,6 +128,7 @@ Note: by default a model will be loaded, if you don't touch anything, you will e
 Then training !
 
 there are plenty settings for the training script:
+- "MODEL_TYPE": you need to set the type of the model you want to build. For example, if you made a new method to create a model in architectures.py in the Models class called "steering_model". You can set the "model_type" field to `steering_model` and when training your model, it will be created using this function.
 - "MODEL_NAME": the name of the model you want to train, the model will be saved under this name. If you wish to retrain it later, make sure to use the same name (if you wish you can copy a model, change its name and then train it again to avoid loosing the previously trained one).
 - "TRAIN_LOAD_MODEL": whether you want to load the model or create one from scratch.
 - "TRAIN_BATCH_SIZE": How much data you want in one batch.
@@ -135,7 +136,6 @@ there are plenty settings for the training script:
 - "TRAIN_SPLITS": Proportion of data in the training set and testing set. If set to 0.9, this will result in having 90% of the data going to the training set and 10% going to the testing set. 
 - "TRAIN_AUGM_FREQ": How frequent we want data to be augmented using data augmentation functions.
 
-in the main_programs/train.py script, you can also change the type of the model you want to build. For example, if you create a new function to create a model in architectures.py called "steering_model", you can set the "model_type" field to `architectures.steering_model`.
 
 you can now start this training script with:
 ```bash
