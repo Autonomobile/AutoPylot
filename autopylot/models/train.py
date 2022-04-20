@@ -16,7 +16,7 @@ class TrainModel:
         self,
         name=settings.MODEL_NAME,
         try_load=settings.TRAIN_LOAD_MODEL,
-        model_type=architectures.test_model,
+        model_type=architectures.Models.test_model,
         *args,
         **kwargs,
     ):
