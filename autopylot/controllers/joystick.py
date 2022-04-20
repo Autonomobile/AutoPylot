@@ -34,7 +34,7 @@ class Joystick(object):
             return False
 
         if not os.path.exists(self.dev_fn):
-            logging.warning(self.dev_fn, "is missing")
+            logging.warning(f"{self.dev_fn} is missing")
             return False
 
         """

@@ -2,10 +2,13 @@
 Class to load data on the go to train the model.
 This class inherits from Sequence, a tensorflow.keras utils.
 """
+import logging
+
 import numpy as np
 from tensorflow.keras.utils import Sequence
 
 from ..utils import io
+from . import augmentation
 
 
 class DataGenerator(Sequence):
@@ -14,6 +17,8 @@ class DataGenerator(Sequence):
         paths,
         inputs=["image"],
         outputs=["steering"],
+        batch_size=64,
+        freq=0.2,
     ):
         """Init of the class.
 
@@ -27,6 +32,7 @@ class DataGenerator(Sequence):
         """
 
         # determine whether we were given a list or a list of list
+        self.batch_size = batch_size
         assert len(paths) != 0, "paths should be non-empty"
         if isinstance(paths[0], str):
             self.dimensions = 0
@@ -43,24 +49,48 @@ class DataGenerator(Sequence):
         assert len(outputs) != 0, "there should be at least one output"
         self.outputs = outputs
 
+        self.augm = augmentation.Augmentation(freq)
+
     def __data_generation(self):
-        # TODO
-        # pick a given amount of paths,
-        # load them using io.load_image_data
-        # put those data the X / Y lists with the right
-        # shape/dimension using inputs and outputs list of keys.
+        """Prepare a batch of data for training.
 
-        # X represents the input data, and Y the expected outputs (as in Y=f(X))
-        # both are list of numpy arrays containing the data.
-        # For example, if we have N data and inputs = ["image", "speed"]
-        # X[0].shape = (N, 120, 160, 3) | we have N images of shape (120, 160, 3).
-        # X[1].shape = (N, 1) | we have N speed scalar.
-        # if we have outputs = [""steering", "throttle"]
-        # Y[0].shape = (N, 1) | we have N steering scalar.
-        # Y[1].shape = (N, 1) | we have N throttle scalar.
+        X represents the input data, and Y the expected outputs (as in Y=f(X))
+        both are list of numpy arrays containing the data.
+        For example, if we have N data and inputs = ["image", "speed"]
+        X[0].shape = (N, 120, 160, 3) | we have N images of shape (120, 160, 3).
+        X[1].shape = (N, 1) | we have N speed scalar.
+        if we have outputs = [""steering", "throttle"]
+        Y[0].shape = (N, 1) | we have N steering scalar.
+        Y[1].shape = (N, 1) | we have N throttle scalar.
 
-        X = []
-        Y = []
+        Returns:
+            tuple(list, list): X and Y.
+        """
+        X = [[] for _ in range(len(self.inputs))]
+        Y = [[] for _ in range(len(self.outputs))]
+
+        rdm_paths = np.random.choice(self.paths, size=self.batch_size)
+        for path in rdm_paths:
+            try:
+                image_data = io.load_image_data(path)
+                self.augm(image_data)
+                for i, inp in enumerate(self.inputs):
+                    data = np.array(image_data[inp])
+                    if len(data.shape) < 2:
+                        data = np.expand_dims(data, axis=0)
+                    X[i].append(data)
+
+                for i, out in enumerate(self.outputs):
+                    data = np.array(image_data[out])
+                    if len(data.shape) < 2:
+                        data = np.expand_dims(data, axis=0)
+                    Y[i].append(data)
+            except Exception:
+                logging.debug(f"Error processing {path}")
+
+        X = [np.array(x) for x in X]
+        Y = [np.array(y) for y in Y]
+
         return X, Y
 
     def __len__(self):
