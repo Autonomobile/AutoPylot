@@ -35,7 +35,13 @@ class Settings:
         self.PROFILER_FILTERS = ["autopylot"]
         self.PROFILER_SORT_BY = "cumulative"
 
-        pass
+        self.KEYMAP = {
+            "forward": "z",
+            "backward": "s",
+            "left": "q",
+            "right": "d",
+            "recording": "r",
+        }
 
     def setattr(self, key, value):
         """Change the value of the attribute.
