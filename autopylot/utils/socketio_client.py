@@ -6,7 +6,7 @@ import socketio
 
 from .utils import encode_image
 from .memory import mem
-from .settings import settings
+from .settings import settings, restart_car
 
 log_queue = queue.Queue()
 stop_thread = False
@@ -26,9 +26,25 @@ def on_disconnect():
     print("disconnected")
 
 
-@sio.on("test")
-def on_test(data):
-    print(data)
+@sio.on("SET_MEMORY")
+def on_set_memory(data):
+    mem.update(data)
+
+
+@sio.on("GET_SETTINGS")
+def on_get_settings():
+    sio.emit("GET_SETTINGS", settings)
+
+
+@sio.on("SET_SETTINGS")
+def on_set_settings(data):
+    settings.update(data)
+    settings.to_json()
+
+
+@sio.on("RESTART")
+def on_restart():
+    restart_car()
 
 
 def wait_for_connection(host, sleep=1):
@@ -61,7 +77,7 @@ def send_log(log):
     Args:
         log (any): the log to send.
     """
-    sio.emit("logs", log)
+    sio.emit("GET_LOGS", log)
 
 
 def send_telemetry(telemetry):
@@ -70,7 +86,7 @@ def send_telemetry(telemetry):
     Args:
         telemetry (any): the telemetry to send.
     """
-    sio.emit("telemetry", telemetry)
+    sio.emit("GET_MEMORY", telemetry)
 
 
 def run_threaded(host):
@@ -79,7 +95,7 @@ def run_threaded(host):
 
     while not stop_thread:
         if not sio.connected and not stop_thread:
-            wait_for_reconnection(host)
+            wait_for_reconnection()
 
         for _ in range(log_queue.qsize()):
             log = log_queue.get()
