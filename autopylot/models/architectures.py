@@ -82,32 +82,43 @@ def ConNet():
     # First layer.
     x = BatchNormalization()(image_inp)
     x = Conv2D(
-        16,
-        (5, 5),
-        strides=(2, 2),
+        8,
+        (7, 7),
+        strides=(3, 3),
         padding="valid",
         activation="relu",
         use_bias=False,
         name="conv1",
     )(x)
-    x = GlobalAveragePooling2D(pool_size=(3, 3), name="pool1")(x)
+
+    x = GlobalAveragePooling2D(pool_size=(4, 4), name="pool1")(x)
     print(x.get_shape())
 
     # Second layer.
     x = Conv2D(
-        32, (3, 3), strides=(2, 2), activation="relu", use_bias=False, name="conv3"
+        16, (5, 5), strides=(2, 2), activation="relu", use_bias=False, name="conv2"
     )(x)
-    x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool2")(x)
+
+    x = Conv2D(
+        24, (3, 3), strides=(2, 2), activation="relu", use_bias=False, name="conv3"
+    )(x)
+
+    x = GlobalAveragePooling2D(pool_size=(3, 3), name="pool2")(x)
 
     # Third layer.
     x = Conv2D(
-        64, (3, 3), strides=(1, 1), activation="relu", use_bias=False, name="conv5"
+        32, (3, 3), strides=(2, 2), activation="relu", use_bias=False, name="conv4"
     )(x)
-    x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool2")(x)
+
+    x = Conv2D(
+        48, (3, 3), strides=(1, 1), activation="relu", use_bias=False, name="conv5"
+    )(x)
+
+    x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool3")(x)
 
     # FC aand flatten the layer.
     x = Flatten(name="flatten")(x)
-    x = Dropout(0.4)(x)
+    x = Dropout(0.3)(x)
     x = Dense(64, activation="relu", use_bias=False, name="fc1")(x)
     x = Dense(32, activation="relu", use_bias=False, name="fc2")(x)
 
