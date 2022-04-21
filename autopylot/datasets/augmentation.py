@@ -68,18 +68,33 @@ def _blur(image_data):
 
 def _flip(image_data):
     image_data["image"] = cv2.flip(image_data["image"], 1)
-    image_data["steering"] *= -1
+    image_data["steering"] = image_data["steering"] * -1.0
 
 
 def _noise(image_data):
     image_data["image"] += np.random.uniform(-25, 25, size=settings.IMAGE_SHAPE)
 
 
+def _shift(image_data):
+    x_offset = np.random.randint(-20, 20)
+    y_offset = np.random.randint(-20, 20)
+    M = np.float32([[1, 0, x_offset], [0, 1, y_offset]])
+
+    image_data["image"] = cv2.warpAffine(
+        image_data["image"],
+        M,
+        (settings.IMAGE_SHAPE[1], settings.IMAGE_SHAPE[0]),
+        borderMode=cv2.BORDER_CONSTANT,
+        borderValue=(127, 127, 127),
+    )
+    image_data["steering"] += (x_offset * 2) / settings.IMAGE_SHAPE[0]
+
+
 class Augmentation:
     def __init__(self, frequency, do_flip=True):
         self.frequency = frequency
         self.do_flip = do_flip
-        self.functions = [_brightness, _shadow, _blur, _noise]
+        self.functions = [_brightness, _shift, _shadow, _blur, _noise]
 
     def __call__(self, image_data):
         if self.do_flip and np.random.uniform() < 0.5:
