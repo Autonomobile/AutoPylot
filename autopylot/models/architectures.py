@@ -1,7 +1,7 @@
 """This is where we will store our different model architectures."""
 
 import logging
-
+import tensorflow as tf
 from keras_flops import get_flops
 from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import (
@@ -84,23 +84,39 @@ class ConvNet(object):
         inputs = []
         outputs = []
 
-        inp = Input(shape=(img_shape[0], img_shape[1], img_shape[2]), name="image")
+        inp = Input(shape=(120, 160, 3), name="image")
         inputs.append(inp)
 
         # First layer.
         x = BatchNormalization()(inp)
-        x = Conv2D(16, (5, 5), strides=(2, 2), activation="relu", name="conv1")(x)
-        x = Conv2D(32, (5, 5), strides=(2, 2), activation="relu", name="conv2")(x)
-        x = MaxPooling2D(pool_size=(2, 2), name="pool1")(x)
-        x = BatchNormalization()(x)
+        x = Conv2D(
+            16, (5, 5), strides=(2, 2), activation="relu", use_bias=False, name="conv1"
+        )(x)
+        x = GlobalAveragePooling2D(pool_size=(3, 3), name="pool1")(x)
+        print(x.get_shape())
 
         # Second layer.
-        x = Conv2D(24, (3, 3), strides=(2, 2), activation="relu", name="conv3")(x)
-        x = Conv2D(48, (3, 3), strides=(2, 2), activation="relu", name="conv4")(x)
-        x = MaxPooling2D(pool_size=(2, 2), name="pool2")(x)
-        x = BatchNormalization()(x)
+        x = Conv2D(
+            32, (3, 3), strides=(2, 2), activation="relu", use_bias=False, name="conv3"
+        )(x)
+        x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool2")(x)
 
         # Third layer.
+        x = Conv2D(
+            64, (3, 3), strides=(1, 1), activation="relu", use_bias=False, name="conv5"
+        )(x)
+        x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool2")(x)
+
+        # FC aand flatten the layer.
+        x = Flatten(name="flatten")(x)
+        x = Dropout(0.4)(x)
+        x = Dense(64, activation="relu", use_bias=False, name="fc1")(x)
+        x = Dense(32, activation="relu", use_bias=False, name="fc2")(x)
+
+        # Output layer.
+        y = Dense(1, name="steering")(x)
+        y = tf.keras.activations.sigmoid(y)
+        outputs.append(y)
 
 
 def steering_model():
