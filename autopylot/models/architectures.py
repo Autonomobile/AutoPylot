@@ -72,56 +72,58 @@ def test_model(output_layers=[("steering", (1,))]):
     return model
 
 
-class ConvNet(object):
-    def __init__(self, img_shape):
-        self.model = None
-        self.img_shape = img_shape
+def ConNet():
+    inputs = []
+    outputs = []
 
-        # Build the ConvNet
-        self.build(self.img_shape)
+    image_inp = Input(shape=(120, 160, 3), name="image")
+    inputs.append(image_inp)
 
-    def steering_model(self, img_shape):
-        inputs = []
-        outputs = []
+    # First layer.
+    x = BatchNormalization()(image_inp)
+    x = Conv2D(
+        16,
+        (5, 5),
+        strides=(2, 2),
+        padding="valid",
+        activation="relu",
+        use_bias=False,
+        name="conv1",
+    )(x)
+    x = GlobalAveragePooling2D(pool_size=(3, 3), name="pool1")(x)
+    print(x.get_shape())
 
-        inp = Input(shape=(120, 160, 3), name="image")
-        inputs.append(inp)
+    # Second layer.
+    x = Conv2D(
+        32, (3, 3), strides=(2, 2), activation="relu", use_bias=False, name="conv3"
+    )(x)
+    x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool2")(x)
 
-        # First layer.
-        x = BatchNormalization()(inp)
-        x = Conv2D(
-            16, (5, 5), strides=(2, 2), activation="relu", use_bias=False, name="conv1"
-        )(x)
-        x = GlobalAveragePooling2D(pool_size=(3, 3), name="pool1")(x)
-        print(x.get_shape())
+    # Third layer.
+    x = Conv2D(
+        64, (3, 3), strides=(1, 1), activation="relu", use_bias=False, name="conv5"
+    )(x)
+    x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool2")(x)
 
-        # Second layer.
-        x = Conv2D(
-            32, (3, 3), strides=(2, 2), activation="relu", use_bias=False, name="conv3"
-        )(x)
-        x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool2")(x)
+    # FC aand flatten the layer.
+    x = Flatten(name="flatten")(x)
+    x = Dropout(0.4)(x)
+    x = Dense(64, activation="relu", use_bias=False, name="fc1")(x)
+    x = Dense(32, activation="relu", use_bias=False, name="fc2")(x)
 
-        # Third layer.
-        x = Conv2D(
-            64, (3, 3), strides=(1, 1), activation="relu", use_bias=False, name="conv5"
-        )(x)
-        x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool2")(x)
+    # Output layer.
+    y = Dense(1, name="steering")(x)
+    y = tf.keras.activations.sigmoid(y)
+    outputs.append(y)
 
-        # FC aand flatten the layer.
-        x = Flatten(name="flatten")(x)
-        x = Dropout(0.4)(x)
-        x = Dense(64, activation="relu", use_bias=False, name="fc1")(x)
-        x = Dense(32, activation="relu", use_bias=False, name="fc2")(x)
+    # Get throttle
+    throttle_inp = Input(shape=(1,), name="throttle")
+    inputs.append(throttle_inp)
 
-        # Output layer.
-        y = Dense(1, name="steering")(x)
-        y = tf.keras.activations.sigmoid(y)
-        outputs.append(y)
+    # Create the model
+    model = Model(inputs=inputs, outputs=outputs)
 
-        # Create the model
-        model = Model(inputs=inputs, outputs=outputs)
+    # Compile it
+    model.compile(optimizer="adam", loss="mse")
 
-        # Compile it
-        model.compile(optimizer="adam", loss="mse")
-
-        return model
+    return model
