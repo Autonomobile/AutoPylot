@@ -72,6 +72,37 @@ def test_model(output_layers=[("steering", (1,))]):
     return model
 
 
+class ConvNet(object):
+    def __init__(self, img_shape):
+        self.model = None
+        self.img_shape = img_shape
+
+        # Build the ConvNet
+        self.build(self.img_shape)
+
+    def steering_model(self, img_shape):
+        inputs = []
+        outputs = []
+
+        inp = Input(shape=(img_shape[0], img_shape[1], img_shape[2]), name="image")
+        inputs.append(inp)
+
+        # First layer.
+        x = BatchNormalization()(inp)
+        x = Conv2D(16, (5, 5), strides=(2, 2), activation="relu", name="conv1")(x)
+        x = Conv2D(32, (5, 5), strides=(2, 2), activation="relu", name="conv2")(x)
+        x = MaxPooling2D(pool_size=(2, 2), name="pool1")(x)
+        x = BatchNormalization()(x)
+
+        # Second layer.
+        x = Conv2D(24, (3, 3), strides=(2, 2), activation="relu", name="conv3")(x)
+        x = Conv2D(48, (3, 3), strides=(2, 2), activation="relu", name="conv4")(x)
+        x = MaxPooling2D(pool_size=(2, 2), name="pool2")(x)
+        x = BatchNormalization()(x)
+
+        # Third layer.
+
+
 def steering_model():
     inputs = []
     outputs = []
