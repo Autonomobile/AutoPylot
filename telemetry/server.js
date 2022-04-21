@@ -40,7 +40,7 @@ io.on("connection", (socket) => {
     logger.info(`[SIO][UI]`, `[${socket.id}][${uuid}] is authenticated`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "UI", car: "" };
     socket.join("UI");
-    emitNotificationToSocket(socket, "success", "Welcome to the dashboard");
+    emitNotification("info", "Welcome to the dashboard", false);
   });
 
   socket.on("py-client-connected", (uuid) => {
@@ -53,7 +53,7 @@ io.on("connection", (socket) => {
     };
     socket.join("PY");
     updateCars();
-    emitNotificationToAll("success", "A new car is available");
+    emitNotification("success", "A new car is available", true);
   });
 
   socket.on("disconnect", () => {
@@ -73,7 +73,7 @@ io.on("connection", (socket) => {
             ui_client.car = "";
           }
         }
-        emitNotificationToAll("warning", `car : ${socket.id} is not available anymore`);
+        emitNotification("warning", `Car with ID [${socket.id}] is not available anymore`, true);
       } else if (type === "UI") {
         forgetUIClient(socket.id);
       }
@@ -118,19 +118,21 @@ io.on("connection", (socket) => {
   });
 
   socket.on("GET_MEMORY", (data) => {
-    emitToStreamers(socket, "GET_MEMORY", data);
+    emitToStreamers("GET_MEMORY", data);
   });
 
   socket.on("GET_LOGS", (data) => {
-    emitToStreamers(socket, "GET_LOGS", data);
+    console.log(data);
+    emitToStreamers("GET_LOGS", data);
   });
 
-  function emitNotificationToAll(severity, message) {
-    io.to("UI").emit("GET_NOTIFICATIONS", { severity, message });
-  }
-
-  function emitNotificationToSocket(socket, severity, message) {
-    socket.emit("GET_NOTIFICATIONS", { severity, message });
+  function emitNotification(severity, message, everyone = false) {
+    if (everyone) {
+      io.to("UI").emit("GET_NOTIFICATIONS", { severity, message });
+    }
+    else {
+      socket.emit("GET_NOTIFICATIONS", { severity, message });
+    }
   }
 
   function getPyClients() {
@@ -149,16 +151,16 @@ io.on("connection", (socket) => {
     );
   }
   
-  function forgetUIClient(id) {
+  function forgetUIClient(ui_client_id) {
     const py_clients = getPyClients();
     for (const py_client of py_clients) {
-      if (py_client.streamers.includes(id)) {
-        py_client.streamers.splice(py_client.streamers.indexOf(id), 1);
+      if (py_client.streamers.includes(ui_client_id)) {
+        py_client.streamers.splice(py_client.streamers.indexOf(ui_client_id), 1);
       }
     }
   }
   
-  function emitToStreamers(socket, event, data) {
+  function emitToStreamers(event, data) {
     const py_client = clients[socket.id];
     for (const streamer of py_client.streamers) {
       socket.to(streamer).emit(event, data);

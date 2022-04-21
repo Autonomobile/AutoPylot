@@ -28,6 +28,7 @@
     "@mui/icons-material": "^5.5.0",
     "@mui/material": "^5.5.0",
     "@mui/styles": "^5.5.1",
+    "@mui/x-data-grid": "^5.9.0",
     "@next/bundle-analyzer": "^12.1.0",
     "@prisma/client": "^3.11.1",
     "concat-stream": "^2.0.0",

@@ -1,16 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
-import { memoryAtom } from "../utils/atoms";
+import { memoryAtom, carAtom } from "../utils/atoms";
 import Ratio from "react-ratio";
 import Skeleton from "@mui/material/Skeleton";
-import { useEffect } from "react";
 
 const LiveView = () => {
   const [memory] = useAtom(memoryAtom);
   const [image, setImage] = useState("");
+  const [car] = useAtom(carAtom);
 
   useEffect(() => {
-    console.log("memory", memory);
     setImage(memory.image);
   }, [memory]);
 
@@ -34,7 +33,7 @@ const LiveView = () => {
       className="w-full md:w-11/12 lg:w-10/12 xl:w-9/12 xxl:w-8/12 hd:w-7/12 uhd:w-6/12 mx-auto xxl:mx-0 google-shadow"
       onDoubleClick={requestFullscreen}
     >
-      {memory.image ? (
+      {memory.image && car !== "" ? (
         <img
           src={"data:image/jpeg;base64," + image}
           alt="live"

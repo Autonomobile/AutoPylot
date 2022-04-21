@@ -49,7 +49,7 @@ function getSocket() {
 
 export const socketAtom = atom(getSocket());
 
-export const logsAtom = atom({});
+export const logsAtom = atom([]);
 
 export const memoryAtom = atom({});
 

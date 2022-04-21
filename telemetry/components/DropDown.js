@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 import { useAtom } from "jotai";
-import { carsAtom, carAtom, socketAtom } from "../utils/atoms";
+import { carsAtom, carAtom, socketAtom, memoryAtom } from "../utils/atoms";
 
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -13,6 +13,7 @@ export default function NativeSelectDemo() {
   const [cars, setCars] = useAtom(carsAtom);
   const [car, setCar] = useAtom(carAtom);
 
+
   useEffect(() => {
     socket.on("GET_CARS", (data) => {
       setCars(data)
@@ -20,15 +21,11 @@ export default function NativeSelectDemo() {
     socket.emit("GET_CARS");
   }, [socket]);
 
-  useEffect(() => {
-    console.log("car", car);
-  }, [car]);
 
   useEffect(() => {
     console.log("cars", cars);
     if (!cars.includes(car)) {
       setCar("");
-
     }
   }, [cars]);
 
