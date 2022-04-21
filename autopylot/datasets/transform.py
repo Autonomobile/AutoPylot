@@ -97,8 +97,8 @@ class Functions:
         )
         image_data["steering"] += (x_offset * 2) / settings.IMAGE_SHAPE[0]
 
-    def bgr_to_gray(image):
-        return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    def bgr_to_gray(image_data):
+        image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2GRAY)
 
 
 class Transform:
