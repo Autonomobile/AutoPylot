@@ -1,4 +1,5 @@
 """Train a model with a given dataset."""
+import logging
 import os
 import random
 
@@ -54,7 +55,6 @@ class TrainModel:
         train_split=settings.TRAIN_SPLITS,
         shuffle=settings.TRAIN_SHUFFLE,
         verbose=settings.TRAIN_VERBOSE,
-        augm_freq=settings.TRAIN_AUGM_FREQ,
         do_save=True,
     ):
         """Trains the model on the given dataset.
@@ -91,19 +91,15 @@ class TrainModel:
         inputs = [i[0] for i in self.model_info["inputs"]]
         outputs = [i[0] for i in self.model_info["outputs"]]
 
+        logging.info(f"training model on {len(train_paths)} samples")
+
         # Create train and test datagenerators
         train_generator = datagenerator.DataGenerator(
-            paths=train_paths,
-            inputs=inputs,
-            outputs=outputs,
-            freq=augm_freq,
+            paths=train_paths, inputs=inputs, outputs=outputs
         )
 
         test_generator = datagenerator.DataGenerator(
-            paths=test_paths,
-            inputs=inputs,
-            outputs=outputs,
-            freq=0.0,
+            paths=test_paths, inputs=inputs, outputs=outputs
         )
 
         self.model.fit(

@@ -6,7 +6,7 @@ from autopylot.cameras import Camera
 from autopylot.controllers import Controller
 from autopylot.utils import io, logger, memory, settings, state_switcher
 from autopylot.models import utils
-from autopylot.datasets import preparedata
+from autopylot.datasets import preparedata, transform
 
 # init the logger handlers
 logger.init()
@@ -18,6 +18,9 @@ model, model_info = utils.load_model(
     f"{settings.MODEL_NAME}/{settings.MODEL_NAME}.tflite"
 )
 prepare_data = preparedata.PrepareData(model_info)
+
+settings.ENABLE_TRANSFORM = False
+transform = transform.Transform()
 
 # set dataset paths
 if not os.path.exists(settings.COLLECT_PATH):
@@ -44,6 +47,7 @@ def main():
             mem["throttle"] = mem["controller"]["throttle"]
 
         elif mem["state"] == "autonomous":
+            transform(mem)
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
             mem.update(predictions)

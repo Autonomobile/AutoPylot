@@ -8,18 +8,11 @@ import numpy as np
 from tensorflow.keras.utils import Sequence
 
 from ..utils import io
-from . import augmentation
+from . import transform
 
 
 class DataGenerator(Sequence):
-    def __init__(
-        self,
-        paths,
-        inputs=["image"],
-        outputs=["steering"],
-        batch_size=64,
-        freq=0.2,
-    ):
+    def __init__(self, paths, inputs=["image"], outputs=["steering"], batch_size=64):
         """Init of the class.
 
         Args:
@@ -49,7 +42,7 @@ class DataGenerator(Sequence):
         assert len(outputs) != 0, "there should be at least one output"
         self.outputs = outputs
 
-        self.augm = augmentation.Augmentation(freq)
+        self.augm = transform.Transform()
 
     def __data_generation(self):
         """Prepare a batch of data for training.

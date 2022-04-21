@@ -61,7 +61,17 @@ class Settings:
         self.TRAIN_SPLITS = 0.9
         self.TRAIN_SHUFFLE = True
         self.TRAIN_VERBOSE = 1
-        self.TRAIN_AUGM_FREQ = 0.3
+
+        # transform functions
+        self.ENABLE_TRANSFORM = True
+        self.TRANSFORM_FUNCTIONS = {
+            "flip": 0.5,
+            "brightness": 0.2,
+            "shift": 0.2,
+            "shadow": 0.2,
+            "blur": 0.2,
+            "noise": 0.2,
+        }
 
         # Paths
         self.ROOT_PATH = os.path.dirname(
