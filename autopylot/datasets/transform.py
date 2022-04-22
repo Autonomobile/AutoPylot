@@ -85,7 +85,7 @@ class Functions:
 
     def shift(image_data):
         x_offset = np.random.randint(-20, 20)
-        y_offset = np.random.randint(-20, 20)
+        y_offset = np.random.randint(-5, 5)
         M = np.float32([[1, 0, x_offset], [0, 1, y_offset]])
 
         image_data["image"] = cv2.warpAffine(

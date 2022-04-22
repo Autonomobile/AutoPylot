@@ -51,7 +51,6 @@ class Settings:
         # Model settings
         self.MODEL_TYPE = "steering_model"
         self.MODEL_NAME = "exotic"
-        self.MODEL_SAVE_EVERY = 1
         self.MODEL_SAVE_SETTINGS = True
 
         # Training settings

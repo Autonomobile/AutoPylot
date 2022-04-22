@@ -38,12 +38,15 @@ class TrainModel:
                     self.model, self.model_info = utils.load_model(
                         f"{self.name}/{self.name}.h5"
                     )
+                    logging.info("Loaded model")
                 except ValueError:
                     self.model = model_type(*args, **kwargs)
                     self.model_info = utils.create_model_info(self.model)
+                    logging.info("Failed loading model, created new one")
             else:
                 self.model = model_type(*args, **kwargs)
                 self.model_info = utils.create_model_info(self.model)
+                logging.info("Created model")
         else:
             raise ValueError("model_type should be a function")
 
@@ -95,11 +98,11 @@ class TrainModel:
 
         # Create train and test datagenerators
         train_generator = datagenerator.DataGenerator(
-            paths=train_paths, inputs=inputs, outputs=outputs
+            paths=train_paths, inputs=inputs, outputs=outputs, batch_size=batch_size
         )
 
         test_generator = datagenerator.DataGenerator(
-            paths=test_paths, inputs=inputs, outputs=outputs
+            paths=test_paths, inputs=inputs, outputs=outputs, batch_size=batch_size
         )
 
         self.model.fit(
@@ -107,9 +110,9 @@ class TrainModel:
             steps_per_epoch=len(train_generator) // batch_size + 1,
             validation_data=test_generator,
             validation_steps=len(test_generator) // batch_size + 1,
-            epochs=epochs,
-            max_queue_size=8,
-            workers=4,
+            epochs=settings.TRAIN_EPOCHS,
+            max_queue_size=32,
+            workers=16,
         )
 
         if settings.MODEL_SAVE_SETTINGS:
@@ -121,5 +124,4 @@ class TrainModel:
                 "shuffle": shuffle,
                 "verbose": verbose,
             }
-        if do_save:
-            utils.save_model(self.model, self.name, model_info=self.model_info)
+        utils.save_model(self.model, self.name, model_info=self.model_info)

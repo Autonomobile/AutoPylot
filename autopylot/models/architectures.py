@@ -108,7 +108,7 @@ class Models:
 
         return model
 
-    def separableconv_model():
+    def gigachad_model():
         inputs = []
         outputs = []
 
@@ -148,8 +148,11 @@ class Models:
         x = BatchNormalization()(x)
         x = Activation("relu")(x)
 
-        y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
-        outputs.append(y)
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
+        outputs.append(y1)
+
+        y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        outputs.append(y2)
 
         # Create the model
         model = Model(inputs=inputs, outputs=outputs)

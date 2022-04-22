@@ -69,14 +69,10 @@ class DataGenerator(Sequence):
                 self.augm(image_data)
                 for i, inp in enumerate(self.inputs):
                     data = np.array(image_data[inp])
-                    if len(data.shape) < 2:
-                        data = np.expand_dims(data, axis=0)
                     X[i].append(data)
 
                 for i, out in enumerate(self.outputs):
                     data = np.array(image_data[out])
-                    if len(data.shape) < 2:
-                        data = np.expand_dims(data, axis=0)
                     Y[i].append(data)
             except Exception:
                 logging.debug(f"Error processing {path}")
