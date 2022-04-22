@@ -17,7 +17,7 @@ def paths_to_sequences(paths, max_sleep=1):
     sequences = []
 
     prev_time = None
-    for path in paths:
+    for path in tqdm(paths):
         time = dataset.__get_time_stamp(path)
         if prev_time is None:
             sequences.append([path])
@@ -44,7 +44,7 @@ def sliding_average(sequences, window=20):
         list[list]: _description_
     """
     seq_averages = []
-    for seq in sequences:
+    for seq in tqdm(sequences):
         averages = []
         for i in range(len(seq)):
             ahead_abs_steering = seq[i : min(i + window, len(seq))]
@@ -67,7 +67,7 @@ def detect_turns(steering_sequences, turn_th=0.3):
     return [np.array(seq) > turn_th for seq in steering_sequences]
 
 
-def make_labels(path_sequences, turn_sequences, look_ahead=10):
+def make_labels(path_sequences, turn_sequences, look_ahead=20):
     for (path_seq, turn_seq) in tqdm(zip(path_sequences, turn_sequences)):
         for i in range(len(turn_seq)):
             # look ahead and check if there is a turn
@@ -84,8 +84,6 @@ def make_labels(path_sequences, turn_sequences, look_ahead=10):
 
             if distance_before_turn == look_ahead:
                 label = [1, 0, 0]
-            elif distance_before_turn == 0:
-                label = [0, 1, 0]
             else:
                 label = [0, 1 - norm_distance, norm_distance]
 

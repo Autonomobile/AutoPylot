@@ -1,12 +1,13 @@
 import os
 import time
 
+import numpy as np
 from autopylot.actuators import Actuator
 from autopylot.cameras import Camera
 from autopylot.controllers import Controller
-from autopylot.utils import io, logger, memory, settings, state_switcher
-from autopylot.models import utils
 from autopylot.datasets import preparedata, transform
+from autopylot.models import utils
+from autopylot.utils import io, logger, memory, settings, state_switcher
 
 # init the logger handlers
 logger.init()
@@ -31,6 +32,8 @@ actuator = Actuator()
 camera = Camera()
 controller = Controller()
 
+lookup_zone = [0.5, 0.3, -0.3]
+
 
 def main():
     while True:
@@ -51,10 +54,18 @@ def main():
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
             mem.update(predictions)
-            print(mem["zone"])
 
-            mem["steering"] = float(mem["steering"]) * 1.3
-            mem["throttle"] = 0.2
+            if "zone" in mem.keys():
+                throttle = 0
+                for i in range(3):
+                    throttle += lookup_zone[i] * mem["zone"][i]
+            else:
+                throttle = 0.3
+
+            print(mem["zone"], throttle)
+
+            mem["steering"] = float(mem["steering"]) * 1.0
+            mem["throttle"] = throttle
 
         elif mem["state"] == "collect":
             io.save_image_data(
