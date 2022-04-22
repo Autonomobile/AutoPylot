@@ -14,6 +14,7 @@ from tensorflow.keras.layers import (
     DepthwiseConv2D,
     Dropout,
     Flatten,
+    AveragePooling2D,
     GlobalAveragePooling2D,
     Lambda,
     MaxPooling2D,
@@ -75,7 +76,7 @@ class Models:
         model.compile(optimizer="adam", loss="mse")
 
         # Get the number of floating operations required to run the model
-        # logging.info(f"created test_model with {get_flops(model)} FLOPS")
+        logging.info(f"created test_model with {get_flops(model)} FLOPS")
         return model
 
     def steering_model():
@@ -116,35 +117,23 @@ class Models:
 
         # First layer.
         x = BatchNormalization()(image_inp)
-        x = Conv2D(
-            8,
-            (7, 7),
-            strides=(3, 3),
-            padding="valid",
-            activation="relu",
-            use_bias=False,
-            name="conv1",
-        )(x)
-        x = GlobalAveragePooling2D(pool_size=(4, 4), name="pool1")(x)
-        print(x.get_shape())
+        x = Conv2D(8, 5, strides=2, activation="relu", use_bias=False, name="conv1")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool1")(x)
 
         # Second layer.
-        x = Conv2D(
-            16, (5, 5), strides=(2, 2), activation="relu", use_bias=False, name="conv2"
-        )(x)
-        x = Conv2D(
-            24, (3, 3), strides=(2, 2), activation="relu", use_bias=False, name="conv3"
-        )(x)
-        x = GlobalAveragePooling2D(pool_size=(3, 3), name="pool2")(x)
+        x = Conv2D(16, 5, strides=1, activation="relu", use_bias=False, name="conv2")(x)
+        x = Conv2D(24, 3, strides=2, activation="relu", use_bias=False, name="conv3")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool2")(x)
 
         # Third layer.
-        x = Conv2D(
-            32, (3, 3), strides=(2, 2), activation="relu", use_bias=False, name="conv4"
-        )(x)
-        x = Conv2D(
-            48, (3, 3), strides=(1, 1), activation="relu", use_bias=False, name="conv5"
-        )(x)
-        x = GlobalAveragePooling2D(pool_size=(2, 2), name="pool3")(x)
+        x = Conv2D(32, 3, strides=1, activation="relu", use_bias=False, name="conv4")(x)
+        x = Conv2D(48, 3, strides=2, activation="relu", use_bias=False, name="conv5")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool3")(x)
+
+        # Fourth layer.
+        x = Conv2D(64, 3, strides=1, activation="relu", use_bias=False, name="conv6")(x)
+        x = Conv2D(96, 3, strides=2, activation="relu", use_bias=False, name="conv7")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool4")(x)
 
         # FC aand flatten the layer.
         x = Flatten(name="flatten")(x)
@@ -153,8 +142,7 @@ class Models:
         x = Dense(100, activation="relu", use_bias=False, name="fc2")(x)
 
         # Output layer.
-        y = Dense(1, name="steering")(x)
-        y = tf.keras.activations.sigmoid(y)
+        y = Dense(1, name="steering", activation="tanh")(x)
         outputs.append(y)
         """
         # Get throttle
@@ -167,4 +155,5 @@ class Models:
         # Compile it
         model.compile(optimizer="adam", loss="mse")
 
+        # print(f"created test_model with {get_flops(model)} FLOPS")
         return model
