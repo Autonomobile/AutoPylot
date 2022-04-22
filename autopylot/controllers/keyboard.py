@@ -1,6 +1,6 @@
 import keyboard
 
-from ..utils import memory
+from ..utils import memory, settings
 
 
 class Keyboard:
@@ -9,14 +9,16 @@ class Keyboard:
     def __init__(self, memory=memory.mem, *args, **kwargs):
         self.memory = memory
 
+        keymap = settings.settings.KEYMAP
+
         self.keys_to_steer = {
-            "q": -1,
-            "z": 0,
-            "s": 0,
-            "d": 1,
+            keymap["left"]: -1,
+            keymap["forward"]: 0,
+            keymap["right"]: 1,
         }
-        self.bkeys = ["s"]
-        self.key_recording = "r"
+
+        self.bkeys = [keymap["backward"]]
+        self.key_recording = keymap["recording"]
 
     def update(self):
         """Update function for the keyboard controller.

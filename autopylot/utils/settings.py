@@ -40,7 +40,16 @@ class Settings:
         self.PROFILER_FILTERS = ["autopylot"]
         self.PROFILER_SORT_BY = "cumulative"
 
+        self.KEYMAP = {
+            "forward": "z",
+            "backward": "s",
+            "left": "q",
+            "right": "d",
+            "recording": "r",
+        }
+
         # Model settings
+        self.MODEL_TYPE = "steering_model"
         self.MODEL_NAME = "pretrained"
         self.MODEL_SAVE_EVERY = 1
         self.MODEL_SAVE_SETTINGS = True
@@ -68,8 +77,6 @@ class Settings:
             os.mkdir(self.COLLECT_PATH)
         if not os.path.exists(self.DATASET_PATH):
             os.mkdir(self.DATASET_PATH)
-
-        pass
 
     def setattr(self, key, value):
         """Change the value of the attribute.
