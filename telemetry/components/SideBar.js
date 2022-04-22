@@ -116,7 +116,7 @@ export default function SideBar(props) {
                     <>{item.icon}</>
                   )}
                 </ListItemIcon>
-                <ListItemText className="blanc-casse" primary={item.text} />
+                <ListItemText className="blanc-casse google-text" primary={item.text} />
               </ListItem>
             </a>
           </Link>

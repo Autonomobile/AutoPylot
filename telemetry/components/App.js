@@ -10,6 +10,7 @@ import DropDown from "../components/DropDown";
 
 export default function App({ children }) {
   const [drawerState, setDrawerState] = useState(false);
+  const [init, setInit] = useState(false);
   const [socket] = useAtom(socketAtom);
   const [, setNotifications] = useAtom(notificationsAtom);
   const [, setMemory] = useAtom(memoryAtom);
@@ -43,14 +44,15 @@ export default function App({ children }) {
     socket.on("GET_LOGS", (data) => {
       data["id"] = data["created"];
       setLogs(logs => [data, ...logs]);
-      console.log("GET_LOGS :", data);
+      // console.log("GET_LOGS :", data);
     });
 
     socket.on("GET_NOTIFICATIONS", (data) => {
       setNotifications(notifications => [data, ...notifications]);
-      console.log("GET_NOTIFICATIONS :", data);
+      // console.log("GET_NOTIFICATIONS :", data);
     });
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [socket]);
 
   return (

@@ -104,8 +104,10 @@ io.on("connection", (socket) => {
         `[SIO][UI]`,
         `[${socket.id}][${uuid}] choose [${py_client_id}] as main car`
       );
+        
+      console.log(py_client_id);
 
-      forgetUIClient(socket.id);
+      forgetUIClient(socket.id); // tell this car to forget the UI client
 
       const ui_client = clients[socket.id];
       ui_client.car = py_client_id;
@@ -122,11 +124,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on("GET_LOGS", (data) => {
-    console.log(data);
     emitToStreamers("GET_LOGS", data);
   });
 
   function emitNotification(severity, message, everyone = false) {
+    console.log(severity, message);
     if (everyone) {
       io.to("UI").emit("GET_NOTIFICATIONS", { severity, message });
     }

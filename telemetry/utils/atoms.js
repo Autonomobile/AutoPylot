@@ -5,11 +5,11 @@ import crypto from "crypto";
 function getUuid() {
   if (typeof window !== "undefined") {
     const uuid = localStorage.getItem("uuid");
-
-    if (uuid) return uuid;
-
+    
+    if (uuid) {
+      return uuid;
+    }
     const newUUID = crypto.randomBytes(16).toString("hex");
-
     localStorage.setItem("uuid", newUUID);
 
     return newUUID;
@@ -59,21 +59,4 @@ export const carsAtom = atom([]);
 
 export const carAtom = atom("");
 
-export const notificationsAtom = atom([
-  // {
-  //   severity: "success",
-  //   message: "This is an success alert — check it out",
-  // },
-  // {
-  //   severity: "error",
-  //   message: "This is an error alert — check it out",
-  // },
-  // {
-  //   severity: "warning",
-  //   message: "This is an warning alert — check it out",
-  // },
-  // {
-  //   severity: "info",
-  //   message: "This is an info alert — check it out",
-  // },
-]);
+export const notificationsAtom = atom([]);

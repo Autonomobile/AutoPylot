@@ -13,21 +13,21 @@ export default function NativeSelectDemo() {
   const [cars, setCars] = useAtom(carsAtom);
   const [car, setCar] = useAtom(carAtom);
 
-
   useEffect(() => {
     socket.on("GET_CARS", (data) => {
       setCars(data)
+      console.log("GET_CARS :", data);
     });
     socket.emit("GET_CARS");
-  }, [socket]);
+  }, [setCars, socket]);
 
 
   useEffect(() => {
     console.log("cars", cars);
-    if (!cars.includes(car)) {
+    if (!cars.includes(car) && car !== "") {
       setCar("");
     }
-  }, [cars]);
+  }, [car, cars, setCar]);
 
   function handleChange(event) {
     setCar(event.target.value);
