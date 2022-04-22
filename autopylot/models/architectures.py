@@ -114,18 +114,18 @@ def ConNet():
     # FC aand flatten the layer.
     x = Flatten(name="flatten")(x)
     x = Dropout(0.3)(x)
-    x = Dense(64, activation="relu", use_bias=False, name="fc1")(x)
-    x = Dense(32, activation="relu", use_bias=False, name="fc2")(x)
+    x = Dense(200, activation="relu", use_bias=False, name="fc1")(x)
+    x = Dense(100, activation="relu", use_bias=False, name="fc2")(x)
 
     # Output layer.
     y = Dense(1, name="steering")(x)
     y = tf.keras.activations.sigmoid(y)
     outputs.append(y)
-
+    """
     # Get throttle
     throttle_inp = Input(shape=(1,), name="throttle")
     inputs.append(throttle_inp)
-
+    """
     # Create the model
     model = Model(inputs=inputs, outputs=outputs)
 
