@@ -1,12 +1,13 @@
 import os
 import time
 
+import numpy as np
 from autopylot.actuators import Actuator
 from autopylot.cameras import Camera
 from autopylot.controllers import Controller
-from autopylot.utils import io, logger, memory, settings, state_switcher
+from autopylot.datasets import preparedata, transform
 from autopylot.models import utils
-from autopylot.datasets import preparedata
+from autopylot.utils import io, logger, memory, settings, state_switcher
 
 # init the logger handlers
 logger.init()
@@ -19,6 +20,9 @@ model, model_info = utils.load_model(
 )
 prepare_data = preparedata.PrepareData(model_info)
 
+settings.ENABLE_TRANSFORM = False
+transform = transform.Transform()
+
 # set dataset paths
 if not os.path.exists(settings.COLLECT_PATH):
     os.mkdir(settings.COLLECT_PATH)
@@ -27,6 +31,9 @@ sw = state_switcher.StateSwitcher()
 actuator = Actuator()
 camera = Camera()
 controller = Controller()
+
+lookup_zone = [0.6, 0.3, -1.0]
+min_speed = 1.75
 
 
 def main():
@@ -45,11 +52,39 @@ def main():
             mem["throttle"] = mem["controller"]["throttle"]
 
         elif mem["state"] == "autonomous":
+            transform(mem)
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
-            mem.update(predictions)
-            mem["steering"] = float(mem["steering"]) * 1.0
-            mem["throttle"] = 0.2
+
+            if "zone" in predictions.keys():
+                zone_idx = np.argmax(predictions["zone"])
+                if zone_idx == 0:
+                    throttle = lookup_zone[0] * predictions["zone"][0]
+                elif zone_idx == 1:
+                    throttle = (
+                        lookup_zone[1] * predictions["zone"][1]
+                        + lookup_zone[0] * predictions["zone"][0]
+                    )
+                else:
+                    throttle = (
+                        lookup_zone[2] * predictions["zone"][2]
+                        if mem["speed"] > min_speed
+                        else lookup_zone[1]
+                    )
+
+            else:
+                throttle = 0.3
+
+            mem["steering"] = float(predictions["steering"]) * 1.0
+            mem["throttle"] = throttle
+
+            io.save_image_data(
+                mem,
+                os.path.join(
+                    settings.COLLECT_PATH,
+                    settings.JSON_FILE_FORMAT.format(t=time.time()),
+                ),
+            )
 
         elif mem["state"] == "collect":
             io.save_image_data(

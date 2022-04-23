@@ -1,4 +1,5 @@
 """Train a model with a given dataset."""
+import logging
 import os
 import random
 
@@ -37,12 +38,15 @@ class TrainModel:
                     self.model, self.model_info = utils.load_model(
                         f"{self.name}/{self.name}.h5"
                     )
+                    logging.info("Loaded model")
                 except ValueError:
                     self.model = model_type(*args, **kwargs)
                     self.model_info = utils.create_model_info(self.model)
+                    logging.info("Failed loading model, created new one")
             else:
                 self.model = model_type(*args, **kwargs)
                 self.model_info = utils.create_model_info(self.model)
+                logging.info("Created model")
         else:
             raise ValueError("model_type should be a function")
 
@@ -54,7 +58,6 @@ class TrainModel:
         train_split=settings.TRAIN_SPLITS,
         shuffle=settings.TRAIN_SHUFFLE,
         verbose=settings.TRAIN_VERBOSE,
-        augm_freq=settings.TRAIN_AUGM_FREQ,
         do_save=True,
     ):
         """Trains the model on the given dataset.
@@ -91,19 +94,15 @@ class TrainModel:
         inputs = [i[0] for i in self.model_info["inputs"]]
         outputs = [i[0] for i in self.model_info["outputs"]]
 
+        logging.info(f"training model on {len(train_paths)} samples")
+
         # Create train and test datagenerators
         train_generator = datagenerator.DataGenerator(
-            paths=train_paths,
-            inputs=inputs,
-            outputs=outputs,
-            freq=augm_freq,
+            paths=train_paths, inputs=inputs, outputs=outputs, batch_size=batch_size
         )
 
         test_generator = datagenerator.DataGenerator(
-            paths=test_paths,
-            inputs=inputs,
-            outputs=outputs,
-            freq=0.0,
+            paths=test_paths, inputs=inputs, outputs=outputs, batch_size=batch_size
         )
 
         self.model.fit(
@@ -111,9 +110,9 @@ class TrainModel:
             steps_per_epoch=len(train_generator) // batch_size + 1,
             validation_data=test_generator,
             validation_steps=len(test_generator) // batch_size + 1,
-            epochs=epochs,
-            max_queue_size=8,
-            workers=4,
+            epochs=settings.TRAIN_EPOCHS,
+            max_queue_size=32,
+            workers=16,
         )
 
         if settings.MODEL_SAVE_SETTINGS:
@@ -125,5 +124,4 @@ class TrainModel:
                 "shuffle": shuffle,
                 "verbose": verbose,
             }
-        if do_save:
-            utils.save_model(self.model, self.name, model_info=self.model_info)
+        utils.save_model(self.model, self.name, model_info=self.model_info)
