@@ -140,7 +140,7 @@ class Models:
         y = Dense(1, name="steering", activation="tanh")(x)
         outputs.append(y)
         
-        speed = input(shape = (1,), name = "speed")
+        speed = Input(shape = (1,), name = "speed")
         
         x = Concatenate(x, axis=1)([x, speed])
         x = Dense(200, activation = "relu")(x)
