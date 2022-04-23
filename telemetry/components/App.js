@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useAtom } from "jotai";
-import { socketAtom, memoryAtom, logsAtom, settingsAtom, notificationsAtom, carAtom } from "../utils/atoms";
+import { socketAtom, memoryAtom, logsAtom, settingsAtom, notificationsAtom } from "../utils/atoms";
 import { IconButton, Drawer } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SideBar from "../components/SideBar";
@@ -10,13 +10,12 @@ import DropDown from "../components/DropDown";
 
 export default function App({ children }) {
   const [drawerState, setDrawerState] = useState(false);
-  const [init, setInit] = useState(false);
+
   const [socket] = useAtom(socketAtom);
   const [, setNotifications] = useAtom(notificationsAtom);
   const [, setMemory] = useAtom(memoryAtom);
-  const [logs, setLogs] = useAtom(logsAtom);
-  // const [, setSettings] = useAtom(settingsAtom);
-  const [car] = useAtom(carAtom);
+  const [, setLogs] = useAtom(logsAtom);
+  const [, setSettings] = useAtom(settingsAtom);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -50,6 +49,11 @@ export default function App({ children }) {
     socket.on("GET_NOTIFICATIONS", (data) => {
       setNotifications(notifications => [data, ...notifications]);
       // console.log("GET_NOTIFICATIONS :", data);
+    });
+
+    socket.on("GET_SETTINGS", (data) => {
+      setSettings(data);
+      console.log("GET_SETTINGS :", data);
     });
 
   // eslint-disable-next-line react-hooks/exhaustive-deps

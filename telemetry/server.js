@@ -1,6 +1,9 @@
+//@ts-check
 const logger = require("npmlog");
 const app = require("express")();
+// @ts-ignore
 const server = require("http").Server(app);
+// @ts-ignore
 const io = require("socket.io")(server);
 const qrcode = require("qrcode-terminal");
 const network = require("./utils/network");
@@ -12,11 +15,11 @@ const port = config["PORT"] || 3000;
 logger.level = config["LOG_LEVEL"] || "debug";
 
 const next = require("next");
+// @ts-ignore
 const nextapp = next({ dev, hostname, port });
 const nextHandler = nextapp.getRequestHandler();
 const ips = network.getLocalIpAdress();
 const clients = {};
-
 
 nextapp.prepare().then(() => {
   app.get("*", (req, res) => {
@@ -32,7 +35,6 @@ nextapp.prepare().then(() => {
   });
 });
 
-
 io.on("connection", (socket) => {
   logger.info(`[SIO][--]`, `[${socket.id}] is connected`);
 
@@ -40,7 +42,12 @@ io.on("connection", (socket) => {
     logger.info(`[SIO][UI]`, `[${socket.id}][${uuid}] is authenticated`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "UI", car: "" };
     socket.join("UI");
-    emitNotification("info", "Welcome to the dashboard", false);
+    const py_clients = getPyClients();
+    emitNotification(
+      "info",
+      `Welcome to the dashboard. You can now take the control of ${py_clients.length} available cars.`,
+      false
+    );
   });
 
   socket.on("py-client-connected", (uuid) => {
@@ -49,13 +56,13 @@ io.on("connection", (socket) => {
       socket: socket,
       uuid: uuid,
       type: "PY",
-      streamers: [],
     };
     socket.join("PY");
     updateCars();
     emitNotification("success", "A new car is available", true);
   });
 
+  // client to server
   socket.on("disconnect", () => {
     if (clients[socket.id]) {
       const uuid = clients[socket.id].uuid;
@@ -64,75 +71,79 @@ io.on("connection", (socket) => {
 
       logger.info(`[SIO][${type}]`, `[${socket.id}][${uuid}] is disconnected`);
 
-      const ui_clients = getUiClients();
-
       if (type === "PY") {
+        io.to(`PY_${socket.id}`).socketsLeave(`PY_${socket.id}`);
         updateCars();
-        for (const ui_client of ui_clients) {
-          if (ui_client.car === socket.id) {
-            ui_client.car = "";
-          }
-        }
-        emitNotification("warning", `Car with ID [${socket.id}] is not available anymore`, true);
-      } else if (type === "UI") {
-        forgetUIClient(socket.id);
+        emitNotification(
+          "warning",
+          `Car with ID [${socket.id}] is not available anymore`,
+          true
+        );
       }
     } else {
       logger.info(`[SIO][--]`, `[unknown] is disconnected`);
     }
   });
 
+  // ui to server
   socket.on("GET_CARS", () => {
     if (clients[socket.id]) {
       const uuid = clients[socket.id].uuid;
       logger.info(`[SIO][UI]`, `[${socket.id}][${uuid}] requested cars`);
-    }
-    else {
+    } else {
       logger.info(`[SIO][--]`, `[unknown] requested cars`);
     }
     const py_clients = getPyClients();
-    socket.emit(
-      "GET_CARS",
-      py_clients.map((client) => client.socket.id)
-    );
+    const cars = py_clients.map((client) => client.socket.id);
+    socket.emit("GET_CARS", cars);
   });
 
-  socket.on("SET_CAR", (py_client_id) => {
-    if (clients[socket.id]) {
+  // ui to server
+  socket.on("SET_CAR", (new_car) => {
+    const ui_client = clients[socket.id];
+    if (ui_client) {
       const uuid = clients[socket.id].uuid;
       logger.info(
         `[SIO][UI]`,
-        `[${socket.id}][${uuid}] choose [${py_client_id}] as main car`
+        `[${socket.id}][${uuid}] choose [${new_car}] as main car`
       );
-        
-      console.log(py_client_id);
 
-      forgetUIClient(socket.id); // tell this car to forget the UI client
-
-      const ui_client = clients[socket.id];
-      ui_client.car = py_client_id;
-
-      if (py_client_id !== "") {
-        const py_client = clients[py_client_id];
-        py_client.streamers.push(socket.id);
+      if (new_car !== "") {
+        socket.leave(`PY_${ui_client.car}`);
+        socket.join(`PY_${new_car}`);
       }
     }
   });
 
+  // py to ui
   socket.on("GET_MEMORY", (data) => {
-    emitToStreamers("GET_MEMORY", data);
+    socket.to(`PY_${socket.id}`).emit("GET_MEMORY", data);
   });
 
+  // py to ui
   socket.on("GET_LOGS", (data) => {
-    emitToStreamers("GET_LOGS", data);
+    socket.to(`PY_${socket.id}`).emit("GET_LOGS", data);
+  });
+
+  // ui to py
+  socket.on("GET_SETTINGS", (car_id) => {
+    if (car_id !== "") {
+      socket.join(`PY_${car_id}_SETTINGS`);
+      socket.to(car_id).emit("GET_SETTINGS_ASK");
+    }
+  });
+
+  // py to ui
+  socket.on("GET_SETTINGS_ANS", async (data) => {
+    const room = `PY_${socket.id}_SETTINGS`;
+    socket.to(room).emit("GET_SETTINGS", data);
+    io.to(room).socketsLeave(room);
   });
 
   function emitNotification(severity, message, everyone = false) {
-    console.log(severity, message);
     if (everyone) {
       io.to("UI").emit("GET_NOTIFICATIONS", { severity, message });
-    }
-    else {
+    } else {
       socket.emit("GET_NOTIFICATIONS", { severity, message });
     }
   }
@@ -140,32 +151,18 @@ io.on("connection", (socket) => {
   function getPyClients() {
     return Object.values(clients).filter((c) => c.type === "PY");
   }
-  
+
   function getUiClients() {
     return Object.values(clients).filter((c) => c.type === "UI");
   }
-  
+
   function updateCars() {
     const py_clients = getPyClients();
-    io.to("UI").emit(
-      "GET_CARS",
-      py_clients.map((c) => c.socket.id)
-    );
+    const cars = py_clients.map((client) => client.socket.id);
+    io.to("UI").emit("GET_CARS", cars);
   }
-  
-  function forgetUIClient(ui_client_id) {
-    const py_clients = getPyClients();
-    for (const py_client of py_clients) {
-      if (py_client.streamers.includes(ui_client_id)) {
-        py_client.streamers.splice(py_client.streamers.indexOf(ui_client_id), 1);
-      }
-    }
+
+  function getClientsInRoom(room) {
+    return Object.values(clients).filter((c) => c.socket.rooms[room]);
   }
-  
-  function emitToStreamers(event, data) {
-    const py_client = clients[socket.id];
-    for (const streamer of py_client.streamers) {
-      socket.to(streamer).emit(event, data);
-    }
-  }  
 });

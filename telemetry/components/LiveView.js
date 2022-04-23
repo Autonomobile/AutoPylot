@@ -7,17 +7,7 @@ import Skeleton from "@mui/material/Skeleton";
 
 const LiveView = () => {
   const [memory] = useAtom(memoryAtom);
-  const [display, setDisplay] = useState(false);
   const [car] = useAtom(carAtom);
-
-  useEffect(() => {
-    if (car !== "" && memory.hasOwnProperty("image")) {
-      setDisplay(true);
-    } else {
-      setDisplay(false);
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [memory]);
 
   function requestFullscreen() {
     var element = document.getElementById("liveview");
@@ -31,7 +21,7 @@ const LiveView = () => {
   }
 
   function LiveViewFactory() {
-    if (display) {
+    if (car !== "" && memory["image"] !== undefined) {
       return (
         <img
           src={getImage()}

@@ -1,5 +1,5 @@
 // @ts-check
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import { useAtom } from "jotai";
 import { carsAtom, carAtom, socketAtom, memoryAtom } from "../utils/atoms";
@@ -23,15 +23,23 @@ export default function NativeSelectDemo() {
 
 
   useEffect(() => {
-    console.log("cars", cars);
     if (!cars.includes(car) && car !== "") {
       setCar("");
+      socket.emit("SET_CAR", "");
+      console.log("SET_CAR :", "");
     }
-  }, [car, cars, setCar]);
+  }, [car, cars, setCar, socket]);
 
   function handleChange(event) {
-    setCar(event.target.value);
-    socket.emit("SET_CAR", event.target.value);
+    const id = event.target.value;
+    setCar(id);
+    socket.emit("SET_CAR", id);
+    console.log("SET_CAR :", id);
+
+    if (id !== "") {
+      socket.emit("GET_SETTINGS", id);
+      console.log("GET_SETTINGS");
+    }
   }
 
   return (

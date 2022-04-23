@@ -53,7 +53,7 @@ export const logsAtom = atom([]);
 
 export const memoryAtom = atom({});
 
-export const settingsAtom = atom({});
+export const settingsAtom = atom({"please choose a car": ":)"});
 
 export const carsAtom = atom([]);
 

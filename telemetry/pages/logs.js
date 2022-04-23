@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
 import Head from "next/head";
 import { useAtom } from "jotai";
-import { socketAtom, memoryAtom, logsAtom, settingsAtom, notificationsAtom, carAtom } from "../utils/atoms";
+import { logsAtom } from "../utils/atoms";
 import { DataGrid } from "@mui/x-data-grid";
 
 export default function Logs() {
