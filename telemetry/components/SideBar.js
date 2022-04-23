@@ -1,3 +1,4 @@
+//@ts-check
 import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import { notificationsAtom } from "../utils/atoms";
@@ -84,6 +85,7 @@ export default function SideBar(props) {
           <Link
             key={index}
             href={item.href}
+            // @ts-ignore
             onClick={(e) => handleClick(e, item.href)}
             passHref
           >

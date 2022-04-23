@@ -1,5 +1,4 @@
 //@ts-check
-import { useState, useEffect } from "react";
 import { useAtom } from "jotai";
 import { memoryAtom, carAtom } from "../utils/atoms";
 import Ratio from "react-ratio";
@@ -32,10 +31,9 @@ const LiveView = () => {
     } else {
       return (
         <Skeleton
-          sx={{ bgcolor: "#2f2f2f" }}
+          sx={{ bgcolor: "#2f2f2f", width: "100%", height: "100%" }}
           animation="wave"
           variant="rectangular"
-          className="w-full h-full"
         />
       );
     }

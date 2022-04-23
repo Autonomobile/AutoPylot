@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import Head from "next/head";
 import { useAtom } from "jotai";
 import { notificationsAtom } from "../utils/atoms";

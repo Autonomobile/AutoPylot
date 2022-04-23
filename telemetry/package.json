@@ -31,7 +31,7 @@
     "@mui/styles": "^5.5.1",
     "@mui/x-data-grid": "^5.9.0",
     "@next/bundle-analyzer": "^12.1.0",
-    "concat-stream": "^2.0.0",
+    "autoprefixer": "^10.4.4",
     "cssnano": "^5.1.7",
     "express": "^4.17.3",
     "jotai": "^1.6.0",
@@ -44,7 +44,7 @@
     "react-ratio": "^0.1.5",
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
-    "tailwindcss": "^1.1.4",
+    "tailwindcss": "^3.0.24",
     "toml": "^3.0.0"
   },
   "devDependencies": {

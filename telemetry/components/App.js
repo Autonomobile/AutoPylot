@@ -99,7 +99,7 @@ export default function App({ children }) {
           <div className="flex-none w-60 hidden md:block secondary">
             <SideBar />
           </div>
-          <div className="flex flex-col flex-1 secondary">
+          <div className="flex flex-col flex-1 secondary min-w-0">
             <div className="flex-1 overflow-y-auto child-text">{children}</div>
           </div>
         </div>

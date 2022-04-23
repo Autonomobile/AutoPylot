@@ -1,16 +1,16 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useAtom } from "jotai";
 import { settingsAtom, socketAtom, carAtom } from "../utils/atoms";
 const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
-import { Button } from "@mui/material";
+import Button from "@mui/material/Button";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 
 export default function Settings() {
-  const [settings] = useAtom(settingsAtom);
+  const [settings, setSettings] = useAtom(settingsAtom);
   const [socket] = useAtom(socketAtom);
   const [car] = useAtom(carAtom);
   const editorRef = useRef(null);
@@ -21,8 +21,21 @@ export default function Settings() {
     }
   }, [settings]);
 
+  useEffect(() => {
+    const editor = document.getElementById("editor");
+    editor.addEventListener("keydown", (e) => {
+      if (e.key === "s" && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        save();
+        console.log("SAVING...");
+      }
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
+    console.log(editor);
   }
 
   function restart() {
@@ -30,12 +43,18 @@ export default function Settings() {
   }
 
   function save() {
-    const newSettings = JSON.parse(editorRef.current.getValue());
-    console.log("SET_SETTINGS", newSettings);
-    console.log("car", car);
-    socket.emit("SET_SETTINGS", newSettings);
+    try {
+      if (car !== "") {
+        const newSettings = JSON.parse(editorRef.current.getValue());
+        setSettings(newSettings);
+        console.log("SET_SETTINGS", newSettings);
+        socket.emit("SET_SETTINGS", newSettings);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
-
+  
   return (
     <>
       <Head>
@@ -48,6 +67,13 @@ export default function Settings() {
             color="error"
             onClick={restart}
             startIcon={<RestartAltIcon />}
+            sx={{
+              backgroundColor: "#d32f2f !important",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#b71c1c !important",
+              },
+            }}
           >
             Restart
           </Button>
@@ -56,12 +82,19 @@ export default function Settings() {
             color="success"
             onClick={save}
             startIcon={<SaveAltIcon />}
-            className="ml-4"
+            sx={{
+              marginLeft: "1rem",
+              backgroundColor: "#2e7d32 !important",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#1b5e20 !important",
+              },
+            }}
           >
             Save
           </Button>
         </div>
-        <div className="h-full max-w-full min-w-full">
+        <div id="editor" className="h-full">
           <Editor
             height="100%"
             width="100%"
@@ -74,7 +107,6 @@ export default function Settings() {
               fontSize: 14,
             }}
             onMount={handleEditorDidMount}
-            onChange={(data, ev) => {}}
           />
         </div>
       </div>
