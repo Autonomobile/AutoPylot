@@ -108,9 +108,10 @@ io.on("connection", (socket) => {
         `[${socket.id}][${uuid}] choose [${new_car}] as main car`
       );
 
+      socket.leave(`PY_${ui_client.car}`);
       if (new_car !== "") {
-        socket.leave(`PY_${ui_client.car}`);
-        socket.join(`PY_${new_car}`);
+        ui_client.car = new_car;
+        socket.join(`PY_${ui_client.car}`);
       }
     }
   });
@@ -140,6 +141,18 @@ io.on("connection", (socket) => {
     io.to(room).socketsLeave(room);
   });
 
+  socket.on("SET_SETTINGS", (settings) => {
+    const car = clients[socket.id].car;
+    socket.to(car).emit("SET_SETTINGS", settings);
+    emitNotification("success", `Settings updated for ${car}`, true);
+  });
+
+  socket.on("RESTART", (car_id) => {
+    const car = clients[socket.id].car;
+    socket.to(car).emit("RESTART");
+    emitNotification("success", `Restarting ${car}`, true);
+  });
+
   function emitNotification(severity, message, everyone = false) {
     if (everyone) {
       io.to("UI").emit("GET_NOTIFICATIONS", { severity, message });
@@ -162,7 +175,4 @@ io.on("connection", (socket) => {
     io.to("UI").emit("GET_CARS", cars);
   }
 
-  function getClientsInRoom(room) {
-    return Object.values(clients).filter((c) => c.socket.rooms[room]);
-  }
 });

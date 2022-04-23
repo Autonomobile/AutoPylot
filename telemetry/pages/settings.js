@@ -2,22 +2,38 @@ import { useState, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useAtom } from "jotai";
-import { settingsAtom } from "../utils/atoms";
+import { settingsAtom, socketAtom, carAtom } from "../utils/atoms";
 const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
-export default function Settings() {
+import { Button } from "@mui/material";
+import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import SaveAltIcon from "@mui/icons-material/SaveAlt";
 
+export default function Settings() {
   const [settings] = useAtom(settingsAtom);
+  const [socket] = useAtom(socketAtom);
+  const [car] = useAtom(carAtom);
   const editorRef = useRef(null);
 
   useEffect(() => {
-    if (editorRef.current){
-      editorRef.current.setValue(JSON.stringify(settings, null, 4))
+    if (editorRef.current) {
+      editorRef.current.setValue(JSON.stringify(settings, null, 4));
     }
   }, [settings]);
 
   function handleEditorDidMount(editor, monaco) {
-    editorRef.current = editor; 
+    editorRef.current = editor;
+  }
+
+  function restart() {
+    socket.emit("RESTART", car);
+  }
+
+  function save() {
+    const newSettings = JSON.parse(editorRef.current.getValue());
+    console.log("SET_SETTINGS", newSettings);
+    console.log("car", car);
+    socket.emit("SET_SETTINGS", newSettings);
   }
 
   return (
@@ -25,7 +41,26 @@ export default function Settings() {
       <Head>
         <title>Settings</title>
       </Head>
-      <div className="h-full w-full pt-1 scp-font">
+      <div className="h-full w-full flex flex-col">
+        <div className="m-4">
+          <Button
+            variant="contained"
+            color="error"
+            onClick={restart}
+            startIcon={<RestartAltIcon />}
+          >
+            Restart
+          </Button>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={save}
+            startIcon={<SaveAltIcon />}
+            className="ml-4"
+          >
+            Save
+          </Button>
+        </div>
         <div className="h-full max-w-full min-w-full">
           <Editor
             height="100%"
@@ -39,8 +74,7 @@ export default function Settings() {
               fontSize: 14,
             }}
             onMount={handleEditorDidMount}
-            onChange={(data, ev) => {
-            }}
+            onChange={(data, ev) => {}}
           />
         </div>
       </div>
