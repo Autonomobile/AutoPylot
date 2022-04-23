@@ -14,7 +14,7 @@ dirpath = os.path.join(settings.settings.MODELS_PATH, "test", "test")
 @pytest.mark.models
 def test_create_model_save():
     """Test the creation and the saving of a model."""
-    model = architectures.test_model(
+    model = architectures.Models.test_model(
         [
             # testing with "list" shape
             ["steering", [1, 1]],
