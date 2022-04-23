@@ -31,9 +31,9 @@ def on_set_memory(data):
     mem.update(data)
 
 
-@sio.on("GET_SETTINGS")
+@sio.on("GET_SETTINGS_ASK")
 def on_get_settings():
-    sio.emit("GET_SETTINGS", settings)
+    sio.emit("GET_SETTINGS_ANS", settings.__dict__)
 
 
 @sio.on("SET_SETTINGS")

@@ -137,6 +137,15 @@ class Settings:
         with open(filepath, "w") as f:
             json.dump(self.__dict__, f, indent=4)
 
+    def update(self, settings: dict):
+        """Update the settings with a dictionary.
+
+        Args:
+            settings (dict): the settings to update.
+        """
+        for key, value in settings.items():
+            self.setattr(key, value)
+
     def __repr__(self):
         return self.__dict__.__repr__()
 
@@ -146,10 +155,8 @@ def restart_car():
     settings.to_json()
     logging.info("Restarting car")
 
-    command = f"{sys.executable} {' '.join(sys.argv)}"
-    os.system(command)
-    sys.exit()
-
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
 
 try:
     settings = Settings()
