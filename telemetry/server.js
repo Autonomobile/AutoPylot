@@ -38,6 +38,7 @@ nextapp.prepare().then(() => {
 io.on("connection", (socket) => {
   logger.info(`[SIO][--]`, `[${socket.id}] is connected`);
 
+  // TODO: add doc + better params name
   socket.on("ui-client-connected", (uuid) => {
     logger.info(`[SIO][UI]`, `[${socket.id}][${uuid}] is authenticated`);
     clients[socket.id] = { socket: socket, uuid: uuid, type: "UI", car: "" };
@@ -50,6 +51,7 @@ io.on("connection", (socket) => {
     );
   });
 
+  // TODO: add doc + better params name
   socket.on("py-client-connected", (uuid) => {
     logger.info(`[SIO][PY]`, `[${socket.id}][${uuid}] is authenticated`);
     clients[socket.id] = {
@@ -63,6 +65,7 @@ io.on("connection", (socket) => {
   });
 
   // client to server
+  // TODO: add doc + better params name
   socket.on("disconnect", () => {
     if (clients[socket.id]) {
       const uuid = clients[socket.id].uuid;
@@ -86,6 +89,7 @@ io.on("connection", (socket) => {
   });
 
   // ui to server
+  // TODO: add doc + better params name
   socket.on("GET_CARS", () => {
     if (clients[socket.id]) {
       const uuid = clients[socket.id].uuid;
@@ -99,6 +103,7 @@ io.on("connection", (socket) => {
   });
 
   // ui to server
+  // TODO: add doc + better params name
   socket.on("SET_CAR", (new_car) => {
     const ui_client = clients[socket.id];
     if (ui_client) {
@@ -117,16 +122,19 @@ io.on("connection", (socket) => {
   });
 
   // py to ui
+  // TODO: add doc + better params name
   socket.on("GET_MEMORY", (data) => {
     socket.to(`PY_${socket.id}`).emit("GET_MEMORY", data);
   });
 
   // py to ui
+  // TODO: add doc + better params name
   socket.on("GET_LOGS", (data) => {
     socket.to(`PY_${socket.id}`).emit("GET_LOGS", data);
   });
 
   // ui to py
+  // TODO: add doc + better params name
   socket.on("GET_SETTINGS", (car_id) => {
     if (car_id !== "") {
       socket.join(`PY_${car_id}_SETTINGS`);
@@ -135,24 +143,30 @@ io.on("connection", (socket) => {
   });
 
   // py to ui
+  // TODO: add doc + better params name + async
   socket.on("GET_SETTINGS_ANS", async (data) => {
     const room = `PY_${socket.id}_SETTINGS`;
     socket.to(room).emit("GET_SETTINGS", data);
     io.to(room).socketsLeave(room);
   });
 
+  // TODO: add doc + better params name
   socket.on("SET_SETTINGS", (settings) => {
     const car = clients[socket.id].car;
     socket.to(car).emit("SET_SETTINGS", settings);
     emitNotification("success", `Settings updated for ${car}`, true);
   });
 
+
+  // TODO: add doc + better params name
   socket.on("RESTART", (car_id) => {
     const car = clients[socket.id].car;
     socket.to(car).emit("RESTART");
     emitNotification("success", `Restarting ${car}`, true);
   });
 
+
+  // TODO: add doc
   function emitNotification(severity, message, everyone = false) {
     if (everyone) {
       io.to("UI").emit("GET_NOTIFICATIONS", { severity, message });
@@ -165,10 +179,12 @@ io.on("connection", (socket) => {
     return Object.values(clients).filter((c) => c.type === "PY");
   }
 
+  // TODO: remove this function
   function getUiClients() {
     return Object.values(clients).filter((c) => c.type === "UI");
   }
 
+  // TODO: add doc
   function updateCars() {
     const py_clients = getPyClients();
     const cars = py_clients.map((client) => client.socket.id);
