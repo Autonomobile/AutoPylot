@@ -2,7 +2,6 @@ import logging
 import json
 import os
 import sys
-import psutil
 
 pathsettings = os.path.join(
     os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))),
@@ -147,16 +146,8 @@ def restart_car():
     settings.to_json()
     logging.info("Restarting car")
 
-    try:
-        p = psutil.Process(os.getpid())
-        for handler in p.open_files() + p.connections():
-            os.close(handler.fd)
-    except Exception as e:
-        logging.error(e)
-
     python = sys.executable
     os.execl(python, python, *sys.argv)
-
 
 try:
     settings = Settings()
