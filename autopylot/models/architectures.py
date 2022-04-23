@@ -78,7 +78,7 @@ class Models:
         # Get the number of floating operations required to run the model
         logging.info(f"created test_model with {get_flops(model)} FLOPS")
         return model
-    
+
     def steering_model():
         inputs = []
         outputs = []
@@ -102,7 +102,6 @@ class Models:
         y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y)
 
-        
     def ConNet():
         inputs = []
         outputs = []
@@ -139,24 +138,25 @@ class Models:
         # Output layer.
         y = Dense(1, name="steering", activation="tanh")(x)
         outputs.append(y)
-        
-        speed = Input(shape = (1,), name = "speed")
-        
-        x = Concatenate(x, axis=1)([x, speed])
-        x = Dense(200, activation = "relu")(x)
+
+        speed = Input(shape=(1,), name="speed")
+        inputs.append(speed)
+        x = Concatenate(axis=1)([x, speed])
+
+        x = Dense(200, activation="relu")(x)
         x = BatchNormalization()(x)
-        x = Dropout(0,2)(x)
-        x = Dense(200, activation = "relu")(x)
+        x = Dropout(0.2)(x)
+        x = Dense(200, activation="relu")(x)
         x = BatchNormalization()(x)
-        
-        y = Dense(1, actvation = "sigmoid", name = "throttle",)(x)
+
+        y = Dense(1, activation="sigmoid", name="throttle")(x)
         outputs.append(y)
-       
+
         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
         model.compile(optimizer="adam", loss="mse")
 
-        # print(f"created test_model with {get_flops(model)} FLOPS")
+        print(f"created test_model with {get_flops(model)} FLOPS")
         return model
