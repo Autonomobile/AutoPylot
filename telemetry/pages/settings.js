@@ -35,7 +35,6 @@ export default function Settings() {
 
   function handleEditorDidMount(editor, monaco) {
     editorRef.current = editor;
-    console.log(editor);
   }
 
   function restart() {
