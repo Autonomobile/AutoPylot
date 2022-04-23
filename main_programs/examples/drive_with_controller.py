@@ -30,6 +30,7 @@ controller = Controller()
 
 
 def main():
+    mem["speed"] = 0.0
     while True:
         camera.update()  # get the last frame from the camera
         controller.update()  # update joystick
