@@ -101,7 +101,21 @@ class Models:
 
         y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y)
-
+        
+        
+        speed = input(shape = (1,), name = "speed")
+        
+        xs = Concatenate(x, axis=1)([xs, speed])
+        xs = Dense(200, activation = "relu")(xs)
+        xs = BatchNormalization()(xs)
+        xs = Dropout(0,2)(xs)
+        xs = Debse(200, activation = "relu")(xs)
+        xs = BatchNormalization()(xs)
+        
+        ys = Dense(1, actvation = "sigmoid", name = "throttle",)(xs)
+        outputs.append(ys)
+        
+        
         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
 
