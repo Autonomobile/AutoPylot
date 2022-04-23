@@ -1,10 +1,10 @@
 """program to generate throttle zones: acceleration zone, braking zone and turn.
 """
-
-from autopylot.datasets import dataset
-from autopylot.utils import settings, io
+import math
 
 import numpy as np
+from autopylot.datasets import dataset
+from autopylot.utils import io, settings
 from tqdm import tqdm
 
 settings = settings.settings
@@ -33,7 +33,7 @@ def paths_to_sequences(paths, max_sleep=1):
     return sequences
 
 
-def sliding_average(sequences, window=20):
+def sliding_average(sequences, window=30):
     """Calculate the average of abs(steering) on a sliding window.
 
     Args:
@@ -80,12 +80,14 @@ def make_labels(path_sequences, turn_sequences, look_ahead=20):
             ):
                 distance_before_turn += 1
 
-            norm_distance = distance_before_turn / len(turns_ahead)
+            # norm_distance = math.sqrt(distance_before_turn / len(turns_ahead))
 
             if distance_before_turn == look_ahead:
                 label = [1, 0, 0]
+            elif distance_before_turn == 0:
+                label = [0, 1, 0]
             else:
-                label = [0, 1 - norm_distance, norm_distance]
+                label = [0, 0, 1]
 
             data = io.load_json(path_seq[i])
             data["zone"] = label
