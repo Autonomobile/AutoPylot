@@ -158,6 +158,7 @@ def restart_car():
     python = sys.executable
     os.execl(python, python, *sys.argv)
 
+
 try:
     settings = Settings()
     if os.path.exists(pathsettings):

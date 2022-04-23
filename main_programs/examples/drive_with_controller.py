@@ -72,18 +72,10 @@ def main():
                     )
 
             else:
-                throttle = 0.3
+                throttle = 0.2
 
             mem["steering"] = float(predictions["steering"]) * 1.0
             mem["throttle"] = throttle
-
-            io.save_image_data(
-                mem,
-                os.path.join(
-                    settings.COLLECT_PATH,
-                    settings.JSON_FILE_FORMAT.format(t=time.time()),
-                ),
-            )
 
         elif mem["state"] == "collect":
             io.save_image_data(
