@@ -79,7 +79,7 @@ class Models:
         logging.info(f"created test_model with {get_flops(model)} FLOPS")
         return model
     
-    def steering_model():
+
         inputs = []
         outputs = []
 
@@ -101,27 +101,8 @@ class Models:
 
         y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y)
-       
-    def speed_model():
-        speed = input(shape = (1,), name = "speed")
-        
-        xs = Concatenate(x, axis=1)([xs, speed])
-        xs = Dense(200, activation = "relu")(xs)
-        xs = BatchNormalization()(xs)
-        xs = Dropout(0,2)(xs)
-        xs = Debse(200, activation = "relu")(xs)
-        xs = BatchNormalization()(xs)
-        
-        ys = Dense(1, actvation = "sigmoid", name = "throttle",)(xs)
-        outputs.append(ys)
-        
-        
-        # Create the model
-        model = Model(inputs=inputs, outputs=outputs)
 
-        # Compile it
-        model.compile(optimizer="adam", loss="mse")
-    
+        
     def ConNet():
         inputs = []
         outputs = []
@@ -158,11 +139,19 @@ class Models:
         # Output layer.
         y = Dense(1, name="steering", activation="tanh")(x)
         outputs.append(y)
-        """
-        # Get throttle
-        throttle_inp = Input(shape=(1,), name="throttle")
-        inputs.append(throttle_inp)
-        """
+        
+        speed = input(shape = (1,), name = "speed")
+        
+        xs = Concatenate(x, axis=1)([xs, speed])
+        xs = Dense(200, activation = "relu")(xs)
+        xs = BatchNormalization()(xs)
+        xs = Dropout(0,2)(xs)
+        xs = Debse(200, activation = "relu")(xs)
+        xs = BatchNormalization()(xs)
+        
+        ys = Dense(1, actvation = "sigmoid", name = "throttle",)(xs)
+        outputs.append(ys)
+       
         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
 
