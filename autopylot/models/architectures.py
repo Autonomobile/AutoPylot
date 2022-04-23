@@ -141,7 +141,7 @@ class Models:
 
         speed = Input(shape=(1,), name="speed")
         inputs.append(speed)
-        x = Concatenate(axis=1)([x, speed])
+        x = Concatenate(x, axis=1)([x, speed])
 
         x = Dense(100, activation="elu")(x)
         x = BatchNormalization()(x)
