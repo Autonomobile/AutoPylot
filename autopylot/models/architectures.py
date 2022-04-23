@@ -143,10 +143,10 @@ class Models:
         inputs.append(speed)
         x = Concatenate(axis=1)([x, speed])
 
-        x = Dense(200, activation="relu")(x)
+        x = Dense(100, activation="elu")(x)
         x = BatchNormalization()(x)
         x = Dropout(0.2)(x)
-        x = Dense(200, activation="relu")(x)
+        x = Dense(30, activation="elu")(x)
         x = BatchNormalization()(x)
 
         y = Dense(1, activation="sigmoid", name="throttle")(x)
