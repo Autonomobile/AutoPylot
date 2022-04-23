@@ -32,7 +32,7 @@ actuator = Actuator()
 camera = Camera()
 controller = Controller()
 
-lookup_zone = [0.65, 0.3, -1.0]
+lookup_zone = [0.6, 0.3, -1.0]
 min_speed = 1.75
 
 
@@ -77,6 +77,14 @@ def main():
 
             mem["steering"] = float(mem["steering"]) * 1.0
             mem["throttle"] = throttle
+
+            io.save_image_data(
+                mem,
+                os.path.join(
+                    settings.COLLECT_PATH,
+                    settings.JSON_FILE_FORMAT.format(t=time.time()),
+                ),
+            )
 
         elif mem["state"] == "collect":
             io.save_image_data(
