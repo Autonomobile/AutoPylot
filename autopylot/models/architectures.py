@@ -101,8 +101,8 @@ class Models:
 
         y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y)
-        
-        
+       
+    def speed_model():
         speed = input(shape = (1,), name = "speed")
         
         xs = Concatenate(x, axis=1)([xs, speed])
