@@ -1,6 +1,7 @@
 """This is where we will store our different model architectures."""
 
 import logging
+from pyexpat import model
 
 from keras_flops import get_flops
 from tensorflow.keras import Input, Model
@@ -108,3 +109,48 @@ class Models:
         model.compile(optimizer="adam", loss="mse")
 
         return model
+
+    def mickaNet():
+        # 1 preparing the model ========================
+        inputs = []
+        outputs = []
+
+        # 2 input layer ========================
+        image = Input(shape=(120, 160, 3), name="image")
+        speed = Input(shape=(1,), name="speed")
+
+        inputs.append(image)
+        inputs.append(speed)
+
+        # 3 convolutional layers ========================
+        x = BatchNormalization()(image) # normalize data
+        x = Conv2D(3, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(6, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(12, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(24, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
+        x = Conv2D(48, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
+
+        # 4 flatten layer ========================
+        x = Flatten()(x) # flatten the data
+        x = Dropout(0.3)(x) # dropout to avoid overfitting
+
+        # 5 fully connected layers ========================
+        x = Concatenate(axis=-1)([x, speed]) # put inputs together
+        x = Dense(100, use_bias=False, activation="relu")(x) # layer with 100 neurons
+        x = Dropout(0.05)(x) # dropout to avoid overfitting
+        x = Dense(100, use_bias=False, activation="relu")(x) 
+        x = Dropout(0.05)(x)
+
+        # 6 output layer ========================
+        y = Dense(1, use_bias=False, activation="tanh", name="steering")(x) # output layer
+        outputs.append(y)
+
+        # create the model
+        model = Model(inputs=inputs, outputs=outputs)
+
+        # compile the model
+        model.compile(optimizer="adam", loss="mse")
+
+        return model
+
+        
