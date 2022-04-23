@@ -54,20 +54,19 @@ def main():
             transform(mem)
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
-            mem.update(predictions)
 
-            if "zone" in mem.keys():
-                zone_idx = np.argmax(mem["zone"])
+            if "zone" in predictions.keys():
+                zone_idx = np.argmax(predictions["zone"])
                 if zone_idx == 0:
-                    throttle = lookup_zone[0] * mem["zone"][0]
+                    throttle = lookup_zone[0] * predictions["zone"][0]
                 elif zone_idx == 1:
                     throttle = (
-                        lookup_zone[1] * mem["zone"][1]
-                        + lookup_zone[0] * mem["zone"][0]
+                        lookup_zone[1] * predictions["zone"][1]
+                        + lookup_zone[0] * predictions["zone"][0]
                     )
                 else:
                     throttle = (
-                        lookup_zone[2] * mem["zone"][2]
+                        lookup_zone[2] * predictions["zone"][2]
                         if mem["speed"] > min_speed
                         else lookup_zone[1]
                     )
@@ -75,7 +74,7 @@ def main():
             else:
                 throttle = 0.3
 
-            mem["steering"] = float(mem["steering"]) * 1.0
+            mem["steering"] = float(predictions["steering"]) * 1.0
             mem["throttle"] = throttle
 
             io.save_image_data(
