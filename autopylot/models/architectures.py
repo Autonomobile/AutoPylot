@@ -78,7 +78,7 @@ class Models:
         # Get the number of floating operations required to run the model
         logging.info(f"created test_model with {get_flops(model)} FLOPS")
         return model
-
+    
     def steering_model():
         inputs = []
         outputs = []
@@ -121,7 +121,7 @@ class Models:
 
         # Compile it
         model.compile(optimizer="adam", loss="mse")
-
+    
     def ConNet():
         inputs = []
         outputs = []
