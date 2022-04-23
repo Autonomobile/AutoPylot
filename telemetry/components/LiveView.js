@@ -1,29 +1,41 @@
-import { useState } from "react";
+//@ts-check
 import { useAtom } from "jotai";
-import { memoryAtom } from "../utils/atoms";
+import { memoryAtom, carAtom } from "../utils/atoms";
 import Ratio from "react-ratio";
 import Skeleton from "@mui/material/Skeleton";
-import { useEffect } from "react";
 
 const LiveView = () => {
   const [memory] = useAtom(memoryAtom);
-  const [image, setImage] = useState("");
-
-  useEffect(() => {
-    console.log("memory", memory);
-    setImage(memory.image);
-  }, [memory]);
+  const [car] = useAtom(carAtom);
 
   function requestFullscreen() {
     var element = document.getElementById("liveview");
     if (element.requestFullscreen) {
       element.requestFullscreen();
-    } else if (element.mozRequestFullScreen) {
-      element.mozRequestFullScreen();
-    } else if (element.webkitRequestFullscreen) {
-      element.webkitRequestFullscreen();
-    } else if (element.msRequestFullscreen) {
-      element.msRequestFullscreen();
+    }
+  }
+
+  function getImage(){
+    return "data:image/jpeg;base64," + memory["image"];
+  }
+
+  function LiveViewFactory() {
+    if (car !== "" && memory["image"] !== undefined) {
+      return (
+        <img
+          src={getImage()}
+          alt="live"
+          className="w-full h-full"
+        />
+      );
+    } else {
+      return (
+        <Skeleton
+          sx={{ bgcolor: "#2f2f2f", width: "100%", height: "100%" }}
+          animation="wave"
+          variant="rectangular"
+        />
+      );
     }
   }
 
@@ -34,20 +46,7 @@ const LiveView = () => {
       className="w-full md:w-11/12 lg:w-10/12 xl:w-9/12 xxl:w-8/12 hd:w-7/12 uhd:w-6/12 mx-auto xxl:mx-0 google-shadow"
       onDoubleClick={requestFullscreen}
     >
-      {memory.image ? (
-        <img
-          src={"data:image/jpeg;base64," + image}
-          alt="live"
-          className="w-full h-full"
-        />
-      ) : (
-        <Skeleton
-          sx={{ bgcolor: "#2f2f2f" }}
-          animation="wave"
-          variant="rectangular"
-          className="w-full h-full"
-        />
-      )}
+      <LiveViewFactory />
     </Ratio>
   );
 };

@@ -19,6 +19,7 @@ setup(
         "keyboard",
         "keras-flops",
         "numpy-quaternion",
+        "psutil",
     ],
     extras_require={
         "dev": ["pytest", "flake8", "black", "pre-commit"],
