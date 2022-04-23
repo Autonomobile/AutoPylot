@@ -1,6 +1,10 @@
 """Train a model using autopylot."""
-from autopylot.models import train, architectures
-from autopylot.utils import settings
+import logging
+
+from autopylot.models import architectures, train
+from autopylot.utils import logger, settings
+
+logger.init(handlers=[logging.FileHandler, logging.StreamHandler])
 
 settings = settings.settings
 

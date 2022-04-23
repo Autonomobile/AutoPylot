@@ -8,18 +8,11 @@ import numpy as np
 from tensorflow.keras.utils import Sequence
 
 from ..utils import io
-from . import augmentation
+from . import transform
 
 
 class DataGenerator(Sequence):
-    def __init__(
-        self,
-        paths,
-        inputs=["image"],
-        outputs=["steering"],
-        batch_size=64,
-        freq=0.2,
-    ):
+    def __init__(self, paths, inputs=["image"], outputs=["steering"], batch_size=64):
         """Init of the class.
 
         Args:
@@ -49,7 +42,7 @@ class DataGenerator(Sequence):
         assert len(outputs) != 0, "there should be at least one output"
         self.outputs = outputs
 
-        self.augm = augmentation.Augmentation(freq)
+        self.augm = transform.Transform()
 
     def __data_generation(self):
         """Prepare a batch of data for training.
@@ -76,14 +69,10 @@ class DataGenerator(Sequence):
                 self.augm(image_data)
                 for i, inp in enumerate(self.inputs):
                     data = np.array(image_data[inp])
-                    if len(data.shape) < 2:
-                        data = np.expand_dims(data, axis=0)
                     X[i].append(data)
 
                 for i, out in enumerate(self.outputs):
                     data = np.array(image_data[out])
-                    if len(data.shape) < 2:
-                        data = np.expand_dims(data, axis=0)
                     Y[i].append(data)
             except Exception:
                 logging.debug(f"Error processing {path}")

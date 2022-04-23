@@ -19,6 +19,7 @@ setup(
         "keyboard",
         "keras-flops",
         "numpy-quaternion",
+        "tqdm",
         "psutil",
     ],
     extras_require={

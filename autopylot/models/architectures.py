@@ -20,7 +20,7 @@ from tensorflow.keras.layers import (
     Reshape,
     SeparableConv2D,
 )
-from tensorflow.keras.losses import MeanSquaredError
+from tensorflow.keras.regularizers import l1_l2
 from tensorflow.keras.optimizers import Adam
 
 
@@ -75,7 +75,7 @@ class Models:
         model.compile(optimizer="adam", loss="mse")
 
         # Get the number of floating operations required to run the model
-        # logging.info(f"created test_model with {get_flops(model)} FLOPS")
+        logging.info(f"created test_model with {get_flops(model)} FLOPS")
         return model
 
     def steering_model():
@@ -107,4 +107,52 @@ class Models:
         # Compile it
         model.compile(optimizer="adam", loss="mse")
 
+        logging.info(f"created steering model with {get_flops(model)} FLOPS")
+        return model
+
+    def gigachad_model():
+        inputs = []
+        outputs = []
+
+        inp = Input(shape=(120, 160, 3), name="image")
+        inputs.append(inp)
+
+        x = Cropping2D(cropping=((20, 20), (0, 0)))(inp)
+        x = BatchNormalization()(x)
+
+        x = Conv2D(12, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = Conv2D(24, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = Conv2D(32, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = Conv2D(48, 3, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = Conv2D(64, 3, strides=1, use_bias=False)(x)
+        x = Activation("relu")(x)
+
+        x = Flatten()(x)
+        x = Dropout(0.2)(x)
+
+        x = Dense(200, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = Dense(100, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = Dense(100, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = Dropout(0.1)(x)
+
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
+        outputs.append(y1)
+
+        y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        outputs.append(y2)
+
+        # Create the model
+        model = Model(inputs=inputs, outputs=outputs)
+
+        # Compile it
+        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 0.75])
+
+        logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model
