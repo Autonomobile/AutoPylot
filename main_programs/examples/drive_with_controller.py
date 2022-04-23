@@ -37,7 +37,6 @@ min_speed = 1.75
 
 
 def main():
-    mem["speed"] = 0.0
     while True:
         camera.update()  # get the last frame from the camera
         controller.update()  # update joystick
