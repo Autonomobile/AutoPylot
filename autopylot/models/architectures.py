@@ -79,7 +79,7 @@ class Models:
         logging.info(f"created test_model with {get_flops(model)} FLOPS")
         return model
     
-
+    def steering_model():
         inputs = []
         outputs = []
 
