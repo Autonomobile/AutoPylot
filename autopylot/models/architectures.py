@@ -142,15 +142,15 @@ class Models:
         
         speed = input(shape = (1,), name = "speed")
         
-        xs = Concatenate(x, axis=1)([xs, speed])
-        xs = Dense(200, activation = "relu")(xs)
-        xs = BatchNormalization()(xs)
-        xs = Dropout(0,2)(xs)
-        xs = Debse(200, activation = "relu")(xs)
-        xs = BatchNormalization()(xs)
+        x = Concatenate(x, axis=1)([x, speed])
+        x = Dense(200, activation = "relu")(x)
+        x = BatchNormalization()(x)
+        x = Dropout(0,2)(x)
+        x = Debse(200, activation = "relu")(x)
+        x = BatchNormalization()(x)
         
-        ys = Dense(1, actvation = "sigmoid", name = "throttle",)(xs)
-        outputs.append(ys)
+        y = Dense(1, actvation = "sigmoid", name = "throttle",)(x)
+        outputs.append(y)
        
         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
