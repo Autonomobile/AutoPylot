@@ -146,7 +146,7 @@ class Models:
         x = Dense(200, activation = "relu")(x)
         x = BatchNormalization()(x)
         x = Dropout(0,2)(x)
-        x = Debse(200, activation = "relu")(x)
+        x = Dense(200, activation = "relu")(x)
         x = BatchNormalization()(x)
         
         y = Dense(1, actvation = "sigmoid", name = "throttle",)(x)
