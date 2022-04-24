@@ -7,6 +7,7 @@ const Editor = dynamic(() => import("@monaco-editor/react"), { ssr: false });
 
 import Button from "@mui/material/Button";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 
 export default function Settings() {
@@ -39,6 +40,11 @@ export default function Settings() {
 
   function restart() {
     socket.emit("RESTART", car);
+  }
+
+  function stop() {
+    socket.emit("STOP", car);
+    console.log("STOPPING...");
   }
 
   function save() {
@@ -75,6 +81,22 @@ export default function Settings() {
             }}
           >
             Restart
+          </Button>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={stop}
+            startIcon={<PowerSettingsNewIcon />}
+            sx={{
+              marginLeft: "1rem",
+              backgroundColor: "#d32f2f !important",
+              color: "white",
+              "&:hover": {
+                backgroundColor: "#b71c1c !important",
+              },
+            }}
+          >
+            Stop
           </Button>
           <Button
             variant="contained"

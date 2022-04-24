@@ -1,5 +1,6 @@
 import time
 import uuid
+import os
 
 import queue
 import socketio
@@ -45,6 +46,11 @@ def on_set_settings(data):
 @sio.on("RESTART")
 def on_restart():
     restart_car()
+
+
+@sio.on("STOP")
+def on_stop():
+    os._exit(0)
 
 
 def wait_for_connection(host, sleep=1):
