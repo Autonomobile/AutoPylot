@@ -106,7 +106,7 @@ class Transform:
         """Init the transformation function class.
 
         Args:
-            additionnal_funcs (tuple(method, float)): tuple containing the function and the frequency.
+            additionnal_funcs (list(tuple(method, float)), optional): tuple containing the function and the frequency.
         """
         self.functions = [
             (get_function_by_name(name), freq)

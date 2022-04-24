@@ -12,13 +12,22 @@ from . import transform
 
 
 class DataGenerator(Sequence):
-    def __init__(self, paths, inputs=["image"], outputs=["steering"], batch_size=64):
+    def __init__(
+        self,
+        paths,
+        inputs=["image"],
+        outputs=["steering"],
+        batch_size=64,
+        additionnal_funcs=[],
+    ):
         """Init of the class.
 
         Args:
             paths (list): list or list of list of json_paths to train on.
             inputs (list, optional): _description_. Defaults to ["image"].
             outputs (list, optional): _description_. Defaults to ["steering"].
+            batch_size (int, optional): _description_. Defaults to 64.
+            additionnal_funcs (list(tuple(method, float)), optional): tuple containing the function and the frequency.
 
         Raises:
             ValueError: paths should be non-empty
@@ -42,7 +51,7 @@ class DataGenerator(Sequence):
         assert len(outputs) != 0, "there should be at least one output"
         self.outputs = outputs
 
-        self.augm = transform.Transform()
+        self.transformer = transform.Transform(additionnal_funcs)
 
     def __data_generation(self):
         """Prepare a batch of data for training.
@@ -66,7 +75,7 @@ class DataGenerator(Sequence):
         for path in rdm_paths:
             try:
                 image_data = io.load_image_data(path)
-                self.augm(image_data)
+                self.transformer(image_data)
                 for i, inp in enumerate(self.inputs):
                     data = np.array(image_data[inp])
                     X[i].append(data)
