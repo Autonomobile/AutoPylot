@@ -76,7 +76,7 @@ class Functions:
     def blur(image_data):
         image_data["image"] = cv2.blur(image_data["image"], (2, 2))
 
-    def bilater_filter(image_data):
+    def bilateral_filter(image_data):
         image_data["image"] = cv2.bilateralFilter(
             image_data["image"], 9, 75, 75
         )
