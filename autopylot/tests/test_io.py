@@ -40,7 +40,7 @@ def test_load_image_none():
 
 def test_save_image():
     """Testing the saving of an image."""
-    image = np.zeros((2, 2, 3), dtype=np.float32)
+    image = np.zeros((2, 2, 3), dtype=np.uint8)
     save = io.save_image(os.getcwd() + "\\testing_io\\test.png", image)
     assert save is True, "Image not saved."
 
@@ -82,7 +82,7 @@ def test_save_image_data():
     """Testing the saving of both image and data of the image into a .png and .json file."""
     image_data = {
         "test": "this is a test",
-        "image": np.zeros((2, 2, 3), dtype=np.float32),
+        "image": np.zeros((2, 2, 3), dtype=np.uint8),
     }
 
     io.save_image_data(image_data, os.getcwd() + "\\testing_io\\test2.json")
