@@ -100,6 +100,12 @@ class Functions:
     def bgr_to_gray(image_data):
         image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2GRAY)
 
+    def mix_channel(image_data):
+        img = image_data["image"]
+        order = np.split(img, 3, axis=-1)
+        np.random.shuffle(order)
+        image_data["image"] = cv2.merge(order)
+
 
 class Transform:
     def __init__(self, additionnal_funcs=[]):
