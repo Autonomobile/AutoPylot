@@ -78,6 +78,39 @@ class Models:
         # logging.info(f"created test_model with {get_flops(model)} FLOPS")
         return model
 
+    def Max_model():
+        inputs = []
+        outputs = []
+
+        inp = Input(shape=(120, 160, 3), name="image")
+        inputs.append(inp)
+
+        x = Conv2D(4, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(8, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(16, kernel_size=3, strides=2, use_bias=False, activation="relu")(x)
+
+        x = Conv2D(32, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
+        x = Conv2D(48, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
+        x = Conv2D(64, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
+
+        x = Flatten()(x)  # construct vector from the matrix
+        x = Dropout(0.4)(x)
+        x = Dense(100, use_bias=False, activation="relu")(x)
+        x = Dense(50, use_bias=False, activation="relu")(x)
+
+        y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
+        outputs.append(y)
+
+        # Create the model
+        model = Model(inputs=inputs, outputs=outputs)
+
+        # Compile it
+        model.compile(
+            optimizer="adam", loss="mse"
+        )  # can change the optimizer adam by stg else
+
+        return model
+
     def steering_model():
         inputs = []
         outputs = []
@@ -88,10 +121,11 @@ class Models:
         x = Cropping2D(cropping=((40, 0), (0, 0)))(inp)
         x = BatchNormalization()(x)
 
+        x = Conv2D(4, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
         x = Conv2D(8, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
-        x = Conv2D(16, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(16, kernel_size=3, strides=2, use_bias=False, activation="relu")(x)
 
-        x = Conv2D(32, kernel_size=3, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(32, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
         x = Conv2D(48, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
         x = Conv2D(64, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
 
@@ -99,7 +133,6 @@ class Models:
         x = Dropout(0.4)(x)
         x = Dense(100, use_bias=False, activation="relu")(x)
         x = Dense(50, use_bias=False, activation="relu")(x)
-        # x = Dense(32, use_bias=False, activation="relu")(x)
 
         y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y)
