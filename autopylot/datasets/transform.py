@@ -76,6 +76,11 @@ class Functions:
     def blur(image_data):
         image_data["image"] = cv2.blur(image_data["image"], (2, 2))
 
+    def bilater_filter(image_data):
+        image_data["image"] = cv2.bilateralFilter(
+            image_data["image"], 9, 75, 75
+        )
+
     def flip(image_data):
         image_data["image"] = cv2.flip(image_data["image"], 1)
         image_data["steering"] = image_data["steering"] * -1.0
@@ -119,5 +124,6 @@ class Transform:
             try:
                 if np.random.uniform() < freq:
                     func(image_data)
-            except Exception:
+            except Exception as e:
+                print(e)
                 pass

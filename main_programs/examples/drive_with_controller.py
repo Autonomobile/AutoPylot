@@ -21,7 +21,7 @@ model, model_info = utils.load_model(
 prepare_data = preparedata.PrepareData(model_info)
 
 settings.ENABLE_TRANSFORM = False
-transform = transform.Transform()
+transformers = transform.Transform()
 
 # set dataset paths
 if not os.path.exists(settings.COLLECT_PATH):
@@ -51,7 +51,7 @@ def main():
             mem["throttle"] = mem["controller"]["throttle"]
 
         elif mem["state"] == "autonomous":
-            transform(mem)
+            transformers(mem)
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
 
