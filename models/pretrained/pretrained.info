@@ -1,1 +1,1 @@
-{"inputs": [["image", [120, 160, 3]]], "outputs": [["steering", [1]]], "settings": {"dataset_path": "C:\\Users\\maxim\\datasets\\", "epochs": 10, "batch_size": 32, "train_split": 0.9, "shuffle": true, "verbose": 1}}
+{"inputs": [["image", [120, 160, 3]]], "outputs": [["steering", [1]]], "settings": {"dataset_path": "C:\\Users\\maxim\\Desktop\\09-04-22", "epochs": 2, "batch_size": 32, "train_split": 0.9, "shuffle": true, "verbose": 1}}
