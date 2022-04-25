@@ -165,6 +165,13 @@ io.on("connection", (socket) => {
     emitNotification("success", `Restarting ${car}`, true);
   });
 
+  // TODO: add doc + better params name
+  socket.on("STOP", (car_id) => {
+    const car = clients[socket.id].car;
+    socket.to(car).emit("STOP");
+    emitNotification("success", `Stoping ${car}`, true);
+  });
+
 
   // TODO: add doc
   function emitNotification(severity, message, everyone = false) {
