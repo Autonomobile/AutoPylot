@@ -89,7 +89,7 @@ class Models:
         x = BatchNormalization()(x)
 
         x = Conv2D(8, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
-        x = Conv2D(16, kernel_size=3, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(16, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
 
         x = Conv2D(32, kernel_size=3, strides=2, use_bias=False, activation="relu")(x)
         x = Conv2D(48, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
