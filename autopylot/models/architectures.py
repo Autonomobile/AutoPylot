@@ -85,6 +85,9 @@ class Models:
         inp = Input(shape=(120, 160, 3), name="image")
         inputs.append(inp)
 
+        x = Cropping2D(cropping=((40, 0), (0, 0)))(inp)
+        x = BatchNormalization()(x)
+
         x = Conv2D(4, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
         x = Conv2D(8, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
         x = Conv2D(16, kernel_size=3, strides=2, use_bias=False, activation="relu")(x)
@@ -123,7 +126,8 @@ class Models:
 
         x = Conv2D(8, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
         x = Conv2D(16, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
-        x = Conv2D(32, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(24, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(32, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
         x = Conv2D(48, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
 
         x = Flatten()(x)  # construct vector from the matrix
