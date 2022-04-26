@@ -88,6 +88,43 @@ Both of those frameworks are written in python and use packages such as Tensorfl
 
 % Ellerbach
 \subsection{Theory behind Convolutionnal Neural Networks}
+Before going further into the DeepLearning part, let's have a quick reminder of what is an Neural Network and a bit of theory behind all of that. \\
+
+So, what is a Neural Network ? 
+A Neural Network or `NN` or `NeuralNet` for short is a black box. The role of a Neural Network is to approximate functions. This can be accomplished with a combination of layers that can be also seen as functions with N parameters and P outputs. Each layer can communicates with the next ones. In most architectures the Neural Network can be visualized as a sequential list of layers but some are more complex featuring: branches, feedforward and other mystical tricks. \\
+
+This Neural Network by default is only outputing random results, to train it to best approximate our imaginary function, we need one thing: Data ! In our case, we need to predict the next action of our car: steering and throttle from an image: the POV of the car. We can also imagine adding other parameters to our black box like the current speed of the car.
+During the training process, the prediction the model makes along with the expected value are used to correct the weights and inner parameters of every layers. To have a well fitted Neural Network, the more the data we have and the best the quality of that data is, the better ! \\
+
+NeuralNetworks are mainly composed of fully connected layers (or Dense layers), those are composed of a given amount of neurons. They receive one or more input signals, do calculation on them and then communicates its output signals to the next layer.\\
+
+\centerline{\includegraphics[height=8cm]{../../docs/activation-function.png}}
+
+As you can see, the output signal is calculated from the sum of every input multiplied by its weight, the output is then going through an activation function before outputing to the next layers. \\
+
+
+So now, what is a Convolutionnal Neural Network ?
+First, a Convolutionnal Neural Network or `CNN` is a type of Neural Network ! It inherits it's name from the kind of layer it has: Convolution layers. \\
+
+What is a Convolution ? 
+A convolution is an operation that changes a function into something else. It uses kernels or filters to detect features in a signal. In our case, we use two dimensional convolution. The signal is the image composed of pixels (usually their values are between 255-0 or 1-0). The main idea behind having convolutions in a Neural Network is to analyze this signal and encode it into a smaller signal.
+
+\centerline{\includegraphics[height=8cm]{../../docs/convolution.png}}
+
+Here you can see the application of a 3x3 convolution kernel on a 4x4 signal, the resulting of the application of this filter is a new signal of size 2x2. The resulting signal is smaller than the input signal, but why is that ? Simply because the kernel here is only applied on the valid areas of the input signal, so the outside border of the signal is lost. To prevent that, we can add zero values around the input filters so that the output size matches the input size. \\
+
+\centerline{\includegraphics[height=8cm]{../../docs/padding.png}}
+\newpage
+
+Now, as said previously, the main idea of having convolutions is to reduce the size of our image, this can be done by introducing strides to our convolution layers. The amount of movement between applications of the kernel of the input signal is reffered as the stride. On the above illustrations, we had a stride of 1 meaning at each step, the kernel moved by 1 pixel. On the illustration below, a 3x3 kernel is applied to a 5x5 signal with strides set to 2 without padding. This results in a 2x2 output signal.
+
+\centerline{\includegraphics[height=8cm]{../../docs/strides.png}}
+
+Each filter detects simple features from the previous signal but deepest the Convolutionnal Neural Network is, the more complex the detected features are. Here is an example where we are trying to detect the face of a dog in an image: 
+The first convolution layer will detect simple features such as edges on the image, those can correspond to the shape of the dog as well as the shape of other stuff in the image. The second will have in input the already detected edges, from those edges it start could detect sets of edges looking like features coming from a dog: ears, eyes, fur. The third one will from those features detect even more complex features and so on.
+After the convolutionnal layers, we are left with something called the latent space of our image. It is the encoded, simplified form of our image where only the key features are left. from those locally detected features, we can then have a look at the big picture by flattening the 2D signals into a 1D vector to be fed into fully connected layers and then answering the question 'Is there a dog in the image ?''.
+
+\newpage
 
 % Everyone
 \subsection{Model architectures}
