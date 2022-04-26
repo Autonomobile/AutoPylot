@@ -86,6 +86,60 @@ Both of those frameworks are written in python and use packages such as Tensorfl
 % Bobovitch
 \subsection{Telemetry Server}
 
+In our context, we face different problems that may be hard to solve without physically accessing the device. Our code runs on an Rasberry Pi which make difficult the remote control and the debugging process. \\
+
+Moreover, artificial intelligence is a black box. We don't know what's happening during the execution process. That said, once the program has finished to run, logs become available for observation of past events. However, this approach to debugging is not practical and not efficient enough. To better understand the background processes, we decided to use telemetry. It will allow us to collect valuable data in real time. \\
+
+Since we are dealing with an “intelligent” device, we should fully control it at any time. It would be a disaster if the device does not obey us, as it can create a security treat for the environment. As we know, security is always one of the most important point to keep in mind. In the case where the car is moving at full speed towards a child, how could we stop it? The car can damage people, environment or event itself. \\
+
+We came to the point of building a telemetry server in a form of a web application. We benefits from great portability, awesome development process and a powerful UI. It fills all our requirements. The server makes possible for us to communicate with the car in real-time. We can detect any problems before they happen. We can control the car without any limitations. We can remotely stop and restart. We can remotly update settings. And we can remotly view logs and car updates. \\
+
+Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. Firstly, we extended the functionalities of the logger while maintaining a modular philosophy. The logger gained the ability to send logs and images through a WiFi network. Next we were confrontend to next chalenge : How to send a decent amount of informations to multiple clients of different type (web-browsers and raspberry pi hardware) in real-time ? We choose to use “Socket.io”. This a an excelent open source cross-platform library. “Socket.io” enable us to create bidirectional and low-latency communication. \\
+
+\newpage
+
+Here is a simple exemple of a communication between a client and a server in javascript. This simple API, simplifies our development process and make data transmition more compliant. \\ \\
+\centerline{\includegraphics[height=5cm]{../../docs/server-client.png}}
+
+But “Scoket.io” does not stop here. This library is much more powerful. We have the possibility to broadcast a message from the server to all clients : \\ \\
+\centerline{\includegraphics[height=6cm]{../../docs/broadcast-0.png}}
+
+We can even broadcast from a client to other clients: \\ \\
+\centerline{\includegraphics[height=6cm]{../../docs/broadcast-1.png}}
+
+We can even go further by using the concepts of rooms. This means that each client can join a sort of group chart where the server can easily target this group chat: \\ \\
+\centerline{\includegraphics[height=6cm]{../../docs/rooms.png}}
+
+From now, ui-clients|web-clients|people mean a “socket.io” client instance which runs in a web-browser. A car|py-clients is a “socket.io” client instance wich runs on a raspberry pi4. \\
+
+As our main goal is to win races, which implies multiple cars on the track, we have to thinks about a way to manage multiples cars at once. At the same time we wanted every clients of the network would be able to communicate with each other (web-clients with python-clients only). Our design choice was to implement a TV-like mechanism : a web-client can only stream one py-client. And a py-client can send content to an unlimited amount of web-clients, meanwhile a web-clients has the possibility to switch cars at any time. \\
+
+“Socket.io” is just a tool. We developed a high performance server wich is acting as a middleman between clients: \\ \\
+\centerline{\includegraphics[height=8cm]{../../docs/diagram.png}}
+
+The server uses the JavaScript language (Node JS) as it offers great flexibility, it is very efficient for networking and IO tasks thanks to its language design. Nevertheless, it requires great vigilance because the language is not typed. Any bug could lead to performance issues and memory leaks. But it still remains the best choice for us. We made a great test coverage to extract all bugs. \\
+
+\newpage
+
+The server is battery included, which means it comes with an exeptional UI inspired by the familiar material design by Google. To build the UI we used the “Next.js” framework which is server side rendered react with an API endpoint. “Next.js” is a top-level industry react framework used in many compagnies. We love “Next.js” for it’s simplicity and portability. Here is an exemple of the backend structure which focus on the client side perspective: \\ \\
+\centerline{\includegraphics[height=6cm]{../../docs/server-struct.png}}
+
+Here is what we have done : \\ \\
+\centerline{\includegraphics[height=7.5cm]{../../docs/remote-control.png}}
+This is the “Remote Control”. This section help us see that the car actualy see in real time. Nothing to say more expted that it’s very cool. We use this in training to we can actualy see better when we drive. \\
+
+\centerline{\includegraphics[height=7.5cm]{../../docs/server-logs.png}}
+Here are the “Logs”. When someting happen, a new row is inserted. This table support searching. When we have thousands of thousands of logs we can quickly find any message. \\
+
+
+\centerline{\includegraphics[height=7.5cm]{../../docs/notifications.png}}
+Here are the “Notifications”. When something happen, We know it. It might be a new Car available for streaming or maybe the server has an important message to transmit for instance when somebody changed the settings of car.
+
+\centerline{\includegraphics[height=7.5cm]{../../docs/settings.png}}
+And eventually here are the “Settings”. This part is crucial. Here we load the “settings.json” from the car. We can update the car’s behaviour, stop or restart with the help of a simple click.\\
+
+In Conclusion this server is the autopylot’s best friend. It’s very easy to use and to install, it can also be accessed on a phone. Every time we use the car, we use this telemetry server. This entire server was developed by hand by our team. We hope to make it even better in the future.
+
 % Ellerbach
 \subsection{Some theory}
 Before going further into the DeepLearning part, let's have a quick reminder of what is a Neural Network and a bit of theory behind all of that. \\
@@ -189,10 +243,18 @@ I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightar
         \includegraphics[width=0.49\textwidth]{../../docs/model-maxe.png}%
         \label{fig:a}%
         }%
-    \hfill%
     \subfloat[Model MaximeG]{%
         \includegraphics[width=0.49\textwidth]{../../docs/model-maxg.png}%
         \label{fig:b}%
+        }%
+    \hfill %
+    \subfloat[Model AlexandreG]{%
+        \includegraphics[width=0.49\textwidth]{../../docs/model-maxg.png}%
+        \label{fig:b}%
+        }%
+    \subfloat[Model MickaelB]{%
+        \includegraphics[width=0.49\textwidth]{../../docs/model-maxe.png}%
+        \label{fig:a}%
         }%
     \caption{Model Architectures}
 \end{figure}
