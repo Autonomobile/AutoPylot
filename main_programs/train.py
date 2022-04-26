@@ -25,5 +25,5 @@ if __name__ == "__main__":
         train_split=settings.TRAIN_SPLITS,
         verbose=settings.TRAIN_VERBOSE,
         do_save=True,
-        additionnal_funcs=[]
+        additionnal_funcs=[],
     )

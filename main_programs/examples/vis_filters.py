@@ -21,7 +21,6 @@ def image_processing(image_data):
     image_data["image"] = image
 
 
-
 settings = settings.settings
 transformer = transform.Transform(additionnal_funcs=[(image_processing, 1)])
 
@@ -46,7 +45,6 @@ def main(path):
             if key == ord("q"):
                 run = False
                 break
-
 
 
 if __name__ == "__main__":
