@@ -88,7 +88,6 @@ Both of those frameworks are written in python and use packages such as Tensorfl
 We came to the point of building a telemetry server in a form of a web application. We benefit from great portability, an awesome development process, and a powerful UI. It fills all our requirements. The server makes it possible for us to communicate with the car in real-time. We can detect any problems before they happen. We can control the car without any limitations. We can remotely stop and restart. We can remotely update settings. And we can remotely view logs and car updates. \\ 
 
 Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. Firstly, we extended the functionalities of the logger while maintaining a modular philosophy. The logger gained the ability to send logs and images through a Wi-Fi network. Next, we were confronted to a different challenge: How to send a decent amount of information to multiple clients of different types (web-browsers and raspberry pi hardware) in real-time? We choose to use “Socket.io”. This an excellent open source cross-platform library. “Socket.io” enable us to create bidirectional and low-latency communication. \\ 
-\newpage
 
 Here is a simple exemple of a communication between a client and a server in javascript. This simple API, simplifies our development process and make data transmition more compliant. \\ \\
 \centerline{\includegraphics[height=5cm]{../../docs/server-client.png}}
@@ -111,10 +110,11 @@ As our main goal is to win races, which implies multiple cars on the track, we h
 
 The server uses the JavaScript language (Node JS) as it offers great flexibility, it is very efficient for networking and IO tasks thanks to its language design. Nevertheless, it requires great vigilance because the language is not typed. Any bug could lead to performance issues and memory leaks. But it still remains the best choice for us. We made a great test coverage to extract all bugs. \\
 
-\newpage
 
 The server is battery included, which means it comes with an exeptional UI inspired by the familiar material design by Google. To build the UI we used the “Next.js” framework which is server side rendered react with an API endpoint. “Next.js” is a top-level industry react framework used in many compagnies. We love “Next.js” for it’s simplicity and portability. Here is an exemple of the backend structure which focus on the client side perspective: \\ \\
 \centerline{\includegraphics[height=6cm]{../../docs/server-struct.png}}
+
+\newpage
 
 Here is what we have done : \\ \\
 \centerline{\includegraphics[height=7.5cm]{../../docs/remote-control.png}}
@@ -131,6 +131,8 @@ Here are the “Notifications”. When something happen, We know it. It might be
 And eventually here are the “Settings”. This part is crucial. Here we load the “settings.json” from the car. We can update the car’s behaviour, stop or restart with the help of a simple click.\\
 
 In Conclusion this server is the autopylot’s best friend. It’s very easy to use and to install, it can also be accessed on a phone. Every time we use the car, we use this telemetry server. This entire server was developed by hand by our team. We hope to make it even better in the future.
+
+\newpage
 
 % Ellerbach
 \subsection{Some theory}
@@ -165,11 +167,11 @@ Each filter detects simple features from the previous signal but deepest the Con
 The first convolution layer will detect simple features such as edges on the image, those can correspond to the shape of the dog as well as the shape of other stuff in the image. The second will have in input the already detected edges, from those edges it could detect sets of edges looking like features coming from a dog: ears, eyes, fur. The third one will from those features detect even more complex features and so on.
 After the convolutional layers, we are left with something called the latent space of our image. It is the encoded, simplified form of our image where only the key features are left. From those locally detected features, we can then have a look at the big picture by flattening the 2D signals into a 1D vector to be fed into fully connected layers and then answering the question "Is there a dog in the image?" or "Should we go right or left?". \\
 
-\newpage
-
 \subsubsection{Activation functions}
 In some cases, we want our output signal to meet some requirements, for example, what if we only want outputs between -1 and 1 ? To answer this need, we apply some activation functions to the output of each layer. Here are some of the most popular activation functions. \\
 \begin{itemize}
+
+\newpage
 
 \item Rectified Linear unit or "Relu" is the most widely used activation, it cuts off the negative values. It is defined as $ Relu(z) = \max(0, z)$. \\
 \centerline{\includegraphics[height=6cm]{../../docs/relu.png}}
@@ -179,8 +181,6 @@ In some cases, we want our output signal to meet some requirements, for example,
 
 \item Tanh, similarly to Sigmoid maps every values between -1 and 1. It is defined as $ Tanh(z) = \frac{1 - e^{-2z}}{1 + e^{-2z}}$ \\
 \centerline{\includegraphics[height=6cm]{../../docs/tanh.png}}
-
-\newpage
 
 \item Softmax is mainly used for single label classification problems. It is defined as $ Softmax(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K$ \\
 Here is the plot corresponding to the softmax activation for 2 outputs. \\
@@ -220,6 +220,8 @@ When I started to make my model, I thought about: "What could make my model diff
 
 I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightarrow$ BatchNormalization] worked better with unseen testing images, so I did use this combination for every convolution and Dense layers. \\
 
+\newpage
+
 
 \begin{figure}[h]
     \centering
@@ -234,6 +236,8 @@ I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightar
         }%
     \caption{Model Architectures 1/2}
 \end{figure}
+
+\newpage
 
 \begin{figure}[h]
     \subfloat[Model MickaelB]{%
