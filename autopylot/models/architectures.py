@@ -125,14 +125,14 @@ class Models:
         # x = AveragePooling2D(pool_size=2, name="pool3")(x)
 
         # Fourth layer.
-        x = Conv2D(96, 3, strides=2, activation="relu", use_bias=False, name="conv7")(x)
+        x = Conv2D(64, 3, strides=2, activation="relu", use_bias=False, name="conv7")(x)
         # x = AveragePooling2D(pool_size=2, name="pool4")(x)
 
         # FC aand flatten the layer.
         x = Flatten(name="flatten")(x)
         x = Dropout(0.3)(x)
         x = Dense(200, activation="relu", use_bias=False, name="fc1")(x)
-        x = Dense(100, activation="relu", use_bias=False, name="fc2")(x)
+        x = Dense(80, activation="relu", use_bias=False, name="fc2")(x)
 
 
         # Output layer.
@@ -145,7 +145,7 @@ class Models:
 
         x = Dense(100, activation="elu")(x)
         x = Dropout(0.2)(x)
-        x = Dense(30, activation="elu")(x)
+        x = Dense(50, activation="elu")(x)
 
         y = Dense(1, activation="sigmoid", name="throttle")(x)
         outputs.append(y)
