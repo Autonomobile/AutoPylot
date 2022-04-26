@@ -191,7 +191,7 @@ Here is the plot corresponding to the softmax activation for 2 outputs. \\
 % Everyone
 \subsection{Model architectures}
 
-So to summarize a bit what was said, a Convolutional Neural Network is a black box that have at least an image as an input and tries to predict something out of this image. As a common trend, the more convolution layers we have, the better our understanding of the image will be. But we have to be careful of how much we should put because we have to keep in mind the performance aspect of our model. In this section, you will see how every member of the team designed their model. \\
+So to summarize a bit what was said, a Convolutional Neural Network is a black box that have at least an image as an input and tries to predict something out of this image. As a common trend, the more convolution layers we have, the better our understanding of the image will be. But we have to be careful of how much we should put because we have to keep in mind the performance aspect of our model. In this section, you will see how every member of the team designed their model. The detailed architectures will be at the end of the report. \\
 
 \subsubsection{Maxime Gay}
 In order to create my model, I was inspired by the VGG-16 model.
@@ -224,22 +224,22 @@ I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightar
 
 \begin{figure}[h]
     \centering
-    \subfloat[Model MaximeE]{%
-        \includegraphics[height=0.49\textheight]{../../docs/model-maxe.png}%
-        \label{fig:a}%
-        }%
     \subfloat[Model MaximeG]{%
         \includegraphics[height=0.49\textheight]{../../docs/model-maxg.png}%
         \label{fig:b}%
         }%
+    \subfloat[Model MaximeE]{%
+        \includegraphics[height=0.49\textheight]{../../docs/model-maxe.png}%
+        \label{fig:a}%
+        }%
     \hfill %
+    \subfloat[Model MickaelB]{%
+        \includegraphics[height=0.49\textheight]{../../docs/model-micka.png}%
+        \label{fig:a}%
+        }%
     \subfloat[Model AlexandreG]{%
         \includegraphics[height=0.49\textheight]{../../docs/model-sacha.png}%
         \label{fig:b}%
-        }%
-    \subfloat[Model MickaelB]{%
-        \includegraphics[height=0.49\textheight]{../../docs/model-micka.png.png}%
-        \label{fig:a}%
         }%
     \caption{Model Architectures}
 \end{figure}
@@ -251,9 +251,10 @@ Thanks to the datagenerator file, we can load data to train the model. The class
 
 How does it work?  
 
-Firstly, we created X and Y which are lists of lists of numpy array. Then we had to pick randomly some paths according to the batch size. Secondly, thanks to the previous function load_image_data, we can load the data of the image using a path 
+Firstly, we created X and Y which are lists of lists of numpy array. Then we had to pick randomly some paths according to the batch size. Secondly, thanks to the previous function load\_image\_data, we can load the data of the image using a path
 
-Firstly, we just have to add the result that we are looking at to the X or to the Y 
+Firstly, we just have to add the result that we are looking at to the X or to the Y.
+
 % Girold
 \subsection{Training Process}
 
@@ -264,7 +265,7 @@ After loading our data, we need to be able to train on those loaded data. The tr
 This function is the backbone of the training process. It allows us to have a very modular project where everything can be modified from this file only. This allow us to modify our project without deleting a lot of code, making it very modular which was one of our goals from the beginning. For example, we have recently added the telemetry server's restart function, once it was created, we only had to add it to the settings.py and all the other functions would be able to use it.   
 This is also useful to change values in real-time. For example, if we want to train our model on more epochs or that our computer can handle bigger batch sizes then we only must change one value and that is it. This goes for all the functions in our project. 
 
-The second import function is of course the train.py function. At first, this function creates all our useful variables (imported from the settings).  Then if the given model doesn’t exist, we create it, for now, this model hasn’t yet been trained.  Then we need to feed the make sure all the variables are correct so the model can be trained.  To train a model we need data, in our case images. For this we need to make sure those data exist, and that the path to them is correct.  
+The second import function is of course the train.py function. At first, this function creates all our useful variables (imported from the settings). Then if the given model doesn’t exist, we create it, for now, this model hasn’t yet been trained.  Then we need to feed the make sure all the variables are correct so the model can be trained.  To train a model we need data, in our case images. For this we need to make sure those data exist, and that the path to them is correct.  
 We also want to know all the inputs and outputs. This is important as we might want to train not only the steering but also the throttle and speed.  
 Finally, we use one important training library. The .fit library from karas. With fit, we are first feeding the training data(X) and training labels(Y) in our case these X and Y come from DataGenerator. We then use Keras to allow our model to train for a given number of epochs and on a given amount of batch sizes. 
 
