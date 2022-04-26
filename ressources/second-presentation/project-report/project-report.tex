@@ -92,43 +92,43 @@ Before going further into the DeepLearning part, let's have a quick reminder of 
 
 \subsubsection{Neural Network}
 So, what is a Neural Network ? 
-A Neural Network or `NN` or `NeuralNet` for short is a black box. The role of a Neural Network is to approximate functions. This can be accomplished with a combination of layers that can be also seen as functions with N parameters and P outputs. Each layer can communicates with the next ones. In most architectures the Neural Network can be visualized as a sequential list of layers but some are more complex featuring: branches, feedforward and other mystical tricks. \\
+A Neural Network or "NN" or "NeuralNet" for short is a black box. The role of a Neural Network is to approximate functions. This can be accomplished with a combination of layers that can be also seen as functions with N parameters and P outputs. Each layer can communicate with the next ones. In most architectures the Neural Network can be visualized as a sequential list of layers, but some are more complex featuring: branches, feedforward and other mystical tricks. \\
 
-This Neural Network by default is only outputing random results, to train it to best approximate our imaginary function, we need one thing: Data ! In our case, we need to predict the next action of our car: steering and throttle from an image: the POV of the car. We can also imagine adding other parameters to our black box like the current speed of the car.
-During the training process, the prediction (Forward propagation) the model makes along with the expected value are used to correct the weights and inner parameters of every layers (Backward propagation). To have a well fitted Neural Network, the more the data we have and the best the quality of that data is, the better ! \\
+This Neural Network by default is only outputting random results, to train it to best approximate our imaginary function, we need one thing: Data ! In our case, we need to predict the next action of our car: steering and throttle from an image: the POV of the car. We can also imagine adding other parameters to our black box like the current speed of the car.
+During the training process, the prediction (Forward propagation) the model makes along with the expected value are used to correct the weights and inner parameters of every layer (Backward propagation). To have a well-fitted Neural Network, the more the data we have and the best the quality of that data is, the better ! \\
 
-NeuralNetworks are mainly composed of fully connected layers (or Dense layers), those are composed of a given amount of neurons. They receive one or more input signals, do calculation on them and then communicates its output signals to the next layer.\\
+Neural Networks are mainly composed of fully connected layers (or Dense layers), those are composed of a given amount of neurons. They receive one or more input signals, do calculation on them and then communicates its output signals to the next layer.\\
 
 \centerline{\includegraphics[height=8cm]{../../docs/activation-function.png}}
 
-As you can see, the output signal is calculated from the sum of every input multiplied by its weight along with the addition of a bias. The output is then going through an activation function before outputing to the next layers. \\
+As you can see, the output signal is calculated from the sum of every input multiplied by its weight along with the addition of a bias. The output is then going through an activation function before outputting to the next layers. \\
 
-\subsubsection{Convolutionnal Neural Network}
-So now, what is a Convolutionnal Neural Network ?
-First, a Convolutionnal Neural Network or `CNN` is a type of Neural Network ! It inherits it's name from the kind of layer it has: Convolution layers. \\
+\subsubsection{Convolutional Neural Network}
+So now, what is a Convolutional Neural Network ?
+First, a Convolutional Neural Network or "CNN" is a type of Neural Network ! It inherits its name from the kind of layer it has: Convolution layers. \\
 
 What is a Convolution ? 
-A convolution is an operation that changes a function into something else. It uses kernels or filters to detect features in a signal. In our case, we use two dimensional convolution. The signal is the image composed of pixels (usually their values are between 255-0 or 1-0). The main idea behind having convolutions in a Neural Network is to analyze this signal and encode it into a smaller signal. \\
+A convolution is an operation that changes a function into something else. It uses kernels or filters to detect features in a signal. In our case, we use two-dimensional convolution. The signal is the image composed of pixels (usually their values are between 255-0 or 1-0). The main idea behind having convolutions in a Neural Network is to analyze this signal and encode it into a smaller signal. \\
 \centerline{\includegraphics[height=8cm]{../../docs/convolution.png}}
 
 Here you can see the application of a 3x3 convolution kernel on a 4x4 signal, the resulting of the application of this filter is a new signal of size 2x2. The resulting signal is smaller than the input signal, but why is that ? Simply because the kernel here is only applied on the valid areas of the input signal, so the outside border of the signal is lost. To prevent that, we can add zero values around the input filters so that the output size matches the input size. \\
 \centerline{\includegraphics[height=8cm]{../../docs/padding.png}}
 
-Now, as said previously, the main idea of having convolutions is to reduce the size of our image, this can be done by introducing strides to our convolution layers. The amount of movement between applications of the kernel of the input signal is reffered as the stride. On the above illustrations, we had a stride of 1 meaning at each step, the kernel moved by 1 pixel. On the illustration below, a 3x3 kernel is applied to a 5x5 signal with strides set to 2 without padding. This results in a 2x2 output signal. \\
+Now, as said previously, the main idea of having convolutions is to reduce the size of our image, this can be done by introducing strides to our convolution layers. The amount of movement between applications of the kernel of the input signal is referred as the stride. On the above illustrations, we had a stride of 1 meaning at each step, the kernel moved by 1 pixel. On the illustration below, a 3x3 kernel is applied to a 5x5 signal with strides set to 2 without padding. This results in a 2x2 output signal. \\
 \centerline{\includegraphics[height=6cm]{../../docs/strides.png}}
 
-Each filter detects simple features from the previous signal but deepest the Convolutionnal Neural Network is, the more complex the detected features are. Here is an example where we are trying to detect the face of a dog in an image: 
-The first convolution layer will detect simple features such as edges on the image, those can correspond to the shape of the dog as well as the shape of other stuff in the image. The second will have in input the already detected edges, from those edges it start could detect sets of edges looking like features coming from a dog: ears, eyes, fur. The third one will from those features detect even more complex features and so on.
-After the convolutionnal layers, we are left with something called the latent space of our image. It is the encoded, simplified form of our image where only the key features are left. from those locally detected features, we can then have a look at the big picture by flattening the 2D signals into a 1D vector to be fed into fully connected layers and then answering the question ''Is there a dog in the image ?'' or ''Should we go right or left?''. \\
+Each filter detects simple features from the previous signal but deepest the Convolutional Neural Network is, the more complex the detected features are. Here is an example where we are trying to detect the face of a dog in an image: 
+The first convolution layer will detect simple features such as edges on the image, those can correspond to the shape of the dog as well as the shape of other stuff in the image. The second will have in input the already detected edges, from those edges it could detect sets of edges looking like features coming from a dog: ears, eyes, fur. The third one will from those features detect even more complex features and so on.
+After the convolutional layers, we are left with something called the latent space of our image. It is the encoded, simplified form of our image where only the key features are left. From those locally detected features, we can then have a look at the big picture by flattening the 2D signals into a 1D vector to be fed into fully connected layers and then answering the question "Is there a dog in the image ?" or "Should we go right or left?". \\
 
 
 \subsubsection{Activation functions}
-In some cases, we want our output signal to meet some requirements, for example, what if we only want outputs between -1 and 1 ? To answer this need, we apply some activation functions to the output of each layers. Here are some of the most popular activation functions. \\
+In some cases, we want our output signal to meet some requirements, for example, what if we only want outputs between -1 and 1 ? To answer this need, we apply some activation functions to the output of each layer. Here are some of the most popular activation functions. \\
 
-Rectified Linear unit or `Relu` is the most widely used activation, it cuts off the negative values. It is defined as $ Relu(z) = \max(0, z)$. \\
+Rectified Linear unit or "Relu" is the most widely used activation, it cuts off the negative values. It is defined as $ Relu(z) = \max(0, z)$. \\
 \centerline{\includegraphics[height=6cm]{../../docs/relu.png}}
 
-Sigmoid is an other widely used function, it maps every values between 0 and 1. It is defined as $ Sigmoid(z) = \frac{1} {1 + e^{-z}}$ \\
+Sigmoid is another widely used function, it maps every values between 0 and 1. It is defined as $ Sigmoid(z) = \frac{1} {1 + e^{-z}}$ \\
 \centerline{\includegraphics[height=6cm]{../../docs/sigmoid.png}}
 
 Tanh, similarly to Sigmoid maps every values between -1 and 1. It is defined as $ Tanh(z) = \frac{1 - e^{-2z}}{1 + e^{-2z}}$ \\
@@ -142,12 +142,12 @@ Softmax is mainly used for single label classification problems. It is defined a
 % Everyone
 \subsection{Model architectures}
 
-So to summarize a bit what was said, a Convolutionnal Neural Network is a black box that have at least an image as an input and tries to predict something out of this image. As a common trend, the more convolution layers we have, the better our ouderstanding of the image will be. But we have to be carefull of how much we should put because we have to keep in mind the performance aspect of our model. In this section, you will see how every member of the team designed their model. \\
+So to summarize a bit what was said, a Convolutional Neural Network is a black box that have at least an image as an input and tries to predict something out of this image. As a common trend, the more convolution layers we have, the better our understanding of the image will be. But we have to be careful of how much we should put because we have to keep in mind the performance aspect of our model. In this section, you will see how every member of the team designed their model. \\
 
 \subsubsection{Maxime Gay}
 In order to create my model, I was inspired by the VGG-16 model.
 
-This model was proposed by Karen Simonyan and Andrew Zisserman of the Visual Geometry Group Lab of Oxford University in 2014. It won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) the same year. The model achieves 92.7\% accuracy in ImageNet. By the way, ImageNet is a gigantic data base of more than 14 million of images. At this time, it was a sharp evolution regarding the other models because VGG-16 uses kernels of a smaller size.
+This model was proposed by Karen Simonyan and Andrew Zisserman of the Visual Geometry Group Lab of Oxford University in 2014. It won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) the same year. The model achieves 92.7\% accuracy in ImageNet. By the way, ImageNet is a gigantic database of more than 14 million of images. At this time, it was a sharp evolution regarding the other models because VGG-16 uses kernels of a smaller size.
 
 
 Architecture of VGG-16 model :
@@ -160,8 +160,8 @@ The VGG-16 architecture is composed of 13 convolutional layers with a 3x3 Kernel
 Between each group there is a pooling layer with a 2x2 size to reduce the size of the filter during the learning phase. At the end of those convolution and pooling layers, there are three Fully-Connected layers and an activation function softmax to determine the class of the image.
 
 
-The problem of this model is that it is really slow and it is even slower in our case because it has to work with our car which does not have a lot of resources. Therefore, I decided to change the VGG-16 Model a little bit. 
-I starte by removing some convolutional layers.
+The problem of this model is that it is really slow, and it is even slower in our case because it has to work with our car which does not have a lot of resources. Therefore, I decided to change the VGG-16 Model a bit. 
+I started by removing some convolutional layers.
 
 My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy.
 
