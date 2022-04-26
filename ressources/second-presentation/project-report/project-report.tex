@@ -85,17 +85,9 @@ Both of those frameworks are written in python and use packages such as Tensorfl
 
 % Bobovitch
 \subsection{Telemetry Server}
+We came to the point of building a telemetry server in a form of a web application. We benefit from great portability, an awesome development process, and a powerful UI. It fills all our requirements. The server makes it possible for us to communicate with the car in real-time. We can detect any problems before they happen. We can control the car without any limitations. We can remotely stop and restart. We can remotely update settings. And we can remotely view logs and car updates. \\ 
 
-In our context, we face different problems that may be hard to solve without physically accessing the device. Our code runs on an Rasberry Pi which make difficult the remote control and the debugging process. \\
-
-Moreover, artificial intelligence is a black box. We don't know what's happening during the execution process. That said, once the program has finished to run, logs become available for observation of past events. However, this approach to debugging is not practical and not efficient enough. To better understand the background processes, we decided to use telemetry. It will allow us to collect valuable data in real time. \\
-
-Since we are dealing with an “intelligent” device, we should fully control it at any time. It would be a disaster if the device does not obey us, as it can create a security treat for the environment. As we know, security is always one of the most important point to keep in mind. In the case where the car is moving at full speed towards a child, how could we stop it? The car can damage people, environment or event itself. \\
-
-We came to the point of building a telemetry server in a form of a web application. We benefits from great portability, awesome development process and a powerful UI. It fills all our requirements. The server makes possible for us to communicate with the car in real-time. We can detect any problems before they happen. We can control the car without any limitations. We can remotely stop and restart. We can remotly update settings. And we can remotly view logs and car updates. \\
-
-Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. Firstly, we extended the functionalities of the logger while maintaining a modular philosophy. The logger gained the ability to send logs and images through a WiFi network. Next we were confrontend to next chalenge : How to send a decent amount of informations to multiple clients of different type (web-browsers and raspberry pi hardware) in real-time ? We choose to use “Socket.io”. This a an excelent open source cross-platform library. “Socket.io” enable us to create bidirectional and low-latency communication. \\
-
+Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. Firstly, we extended the functionalities of the logger while maintaining a modular philosophy. The logger gained the ability to send logs and images through a Wi-Fi network. Next, we were confronted to a different challenge: How to send a decent amount of information to multiple clients of different types (web-browsers and raspberry pi hardware) in real-time? We choose to use “Socket.io”. This an excellent open source cross-platform library. “Socket.io” enable us to create bidirectional and low-latency communication. \\ 
 \newpage
 
 Here is a simple exemple of a communication between a client and a server in javascript. This simple API, simplifies our development process and make data transmition more compliant. \\ \\
@@ -171,7 +163,7 @@ Now, as said previously, the main idea of having convolutions is to reduce the s
 
 Each filter detects simple features from the previous signal but deepest the Convolutional Neural Network is, the more complex the detected features are. Here is an example where we are trying to detect the face of a dog in an image: 
 The first convolution layer will detect simple features such as edges on the image, those can correspond to the shape of the dog as well as the shape of other stuff in the image. The second will have in input the already detected edges, from those edges it could detect sets of edges looking like features coming from a dog: ears, eyes, fur. The third one will from those features detect even more complex features and so on.
-After the convolutional layers, we are left with something called the latent space of our image. It is the encoded, simplified form of our image where only the key features are left. From those locally detected features, we can then have a look at the big picture by flattening the 2D signals into a 1D vector to be fed into fully connected layers and then answering the question "Is there a dog in the image ?" or "Should we go right or left?". \\
+After the convolutional layers, we are left with something called the latent space of our image. It is the encoded, simplified form of our image where only the key features are left. From those locally detected features, we can then have a look at the big picture by flattening the 2D signals into a 1D vector to be fed into fully connected layers and then answering the question "Is there a dog in the image?" or "Should we go right or left?". \\
 
 \newpage
 
@@ -211,23 +203,11 @@ Architecture of VGG-16 model :
 
 \centerline{\includegraphics[height=8cm]{../../docs/VGG16.png}}
 
+The problem with this model is that it is slow, and it is even slower in our case because it must work with our car which does not have a lot of resources. Therefore, I decided to change the VGG-16 Model a bit.  
 
-The VGG-16 architecture is composed of 13 convolutional layers with a 3x3 Kernel separated in five groups.
+I started by removing some convolutional layers. 
 
-Between each group there is a pooling layer with a 2x2 size to reduce the size of the filter during the learning phase. At the end of those convolution and pooling layers, there are three Fully-Connected layers and an activation function softmax to determine the class of the image.
-
-
-The problem of this model is that it is really slow, and it is even slower in our case because it has to work with our car which does not have a lot of resources. Therefore, I decided to change the VGG-16 Model a bit. 
-I started by removing some convolutional layers.
-
-My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy.
-
-Then with the others layers, I increased progressively the number of kernels and I reduced the kernel size to 3x3. Moreover, I apply a stride of 2 for the first four layers and a stride of 1 for the last two. At the end, I use two Dense layers with an activation function "relu" like the others layers.
-
-
-Furthermore, I tested many different optimizer like SGC, Adadelta, Nadam and Ftrl but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies.
-
-
+My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy. Then with the other layers, I increased progressively the number of kernels and I reduced the kernel size to 3x3. Moreover, I apply a stride of 2 for the first four layers and a stride of 1 for the last two. In the end, I use two Dense layers with an activation function "relu" like the other layers. Finally, I tested many different optimizers like SGC, Adadelta, Nadam and Ftrl but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies. 
 \subsubsection{Mickael Bobovitch}
 \subsubsection{Alexandre Girold}
 For my part, I decided on making a simple model, capable of steering properly. In order to make this model I spend a lot of time doing some research and I realized as did my comrades that as of today there is one clear winner in the architecture of a prediction model based on an image. 
@@ -236,7 +216,7 @@ It is composed of spatial convolution over images (known as Conv2D) followed by 
 In my model, I tried to reduce the number of parameters to try and make it as light as possible. I also tried to incorporate the capacity for the car to adapt its speed, but as of today, I haven’t been successful. I am sure i will find a solution soon.
 
 \subsubsection{Maxime Ellerbach}
-When I started to make my model, I thought about: "What could make my model different from the others ?" When looking at what my teammates did, it is obvious that the main difference in the model is not in the architecture itself of the model but rather in the data that is fed to it. One other observation is that the less parameters we have in the model, the less sensible it is to overfitting, so the main idea was to have a light model that would also have a rather small latent space. \\
+When I started to make my model, I thought about: "What could make my model different from the others?" When looking at what my teammates did, it is obvious that the main difference in the model is not in the architecture itself of the model but rather in the data that is fed to it. One other observation is that the less parameters we have in the model, the less sensible it is to overfitting, so the main idea was to have a light model that would also have a rather small latent space. \\
 
 I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightarrow$ BatchNormalization] worked better with unseen testing images, so I did use this combination for every convolution and Dense layers. \\
 
@@ -265,14 +245,15 @@ I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightar
 \end{figure}
 
 
-
-
-% Ellerbach
-\subsection{Model wrappers}
-
-% Girold & Gay
+% Gay
 \subsection{Load data during training}
+Thanks to the datagenerator file, we can load data to train the model. The class DataGenerator inherits from "Sequence", a tensorflow.keras utils. We give in inputs a list or a list of lists of json paths to train on. To represent those data, we use X to represent the input data and Y the expected outputs. Both are lists of numpy arrays containing the data. Then it returns a tuple containing X and Y.  
 
+How does it work?  
+
+Firstly, we created X and Y which are lists of lists of numpy array. Then we had to pick randomly some paths according to the batch size. Secondly, thanks to the previous function load_image_data, we can load the data of the image using a path 
+
+Firstly, we just have to add the result that we are looking at to the X or to the Y 
 % Girold
 \subsection{Training Process}
 
@@ -380,6 +361,6 @@ Main control loop            & x          &           &              &          
 
 \section {Conclusion}
 To sum up, the Autonomobile team has made huge strides towards its final goal. We worked on generating useable data putting them into output and inputs. We also modified the images making them look different from one another to make the training and the future model not overfit. All of us made our own models and we held a little competition to determine the best, this created enthusiasm and teamwork. Finally, we improved our telemetry server making it smoother than ever and adding more and more functionalities, from simply being able to modify settings to using the server on our phones thanks to a QR code.  
-We are more invested than ever and plan to continue on this project being the S2 as we have planned to make our own tracks for future competitions at Epita. 
+We are more invested than ever and plan to continue this project beyond the S2 as we have planned to make our own tracks for future competitions at Epita. 
 
 \end{document}
