@@ -230,7 +230,12 @@ Furthermore, I tested many different optimizer like SGC, Adadelta, Nadam and Ftr
 
 \subsubsection{Mickael Bobovitch}
 \subsubsection{Alexandre Girold}
-For my part, I decided to 
+For my part, I decided on making a simple model, capable of steering properly. In order to make this model I spend a lot of time doing some research and I realized as did my comrades that as of today there is one clear winner in the architecture of a prediction model based on an image. 
+It is composed of spatial convolution over images (known as Conv2D) followed by a pooling layer, which is important to avoid overfitting, repeating this a given number of times then followed by a fully connected layer. For these two types of layers, we want to use backpropagation to reduce loss. Finally, the output layer uses functions to give out a probability (I.e: Sigmoid or SoftMax).  
+
+\centerline{\includegraphics[height=8cm]{../../docs/model-sacha.png}}
+ 
+In my model, I tried to reduce the number of parameters to try and make it as light as possible. I also tried to incorporate the capacity for the car to adapt its speed, but as of today, I haven’t been successful. I am sure i will find a solution soon.
 
 \subsubsection{Maxime Ellerbach}
 When I started to make my model, I thought about: "What could make my model different from the others ?" When looking at what my teammates did, it is obvious that the main difference in the model is not in the architecture itself of the model but rather in the data that is fed to it. One other observation is that the less parameters we have in the model, the less sensible it is to overfitting, so the main idea was to have a light model that would also have a rather small latent space. \\
