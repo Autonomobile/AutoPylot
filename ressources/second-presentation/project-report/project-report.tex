@@ -124,20 +124,24 @@ After the convolutional layers, we are left with something called the latent spa
 
 \subsubsection{Activation functions}
 In some cases, we want our output signal to meet some requirements, for example, what if we only want outputs between -1 and 1 ? To answer this need, we apply some activation functions to the output of each layer. Here are some of the most popular activation functions. \\
+\begin{itemize}
 
-Rectified Linear unit or "Relu" is the most widely used activation, it cuts off the negative values. It is defined as $ Relu(z) = \max(0, z)$. \\
+\item Rectified Linear unit or "Relu" is the most widely used activation, it cuts off the negative values. It is defined as $ Relu(z) = \max(0, z)$. \\
 \centerline{\includegraphics[height=6cm]{../../docs/relu.png}}
 
-Sigmoid is another widely used function, it maps every values between 0 and 1. It is defined as $ Sigmoid(z) = \frac{1} {1 + e^{-z}}$ \\
+\item Sigmoid is another widely used function, it maps every values between 0 and 1. It is defined as $ Sigmoid(z) = \frac{1} {1 + e^{-z}}$ \\
 \centerline{\includegraphics[height=6cm]{../../docs/sigmoid.png}}
 
-Tanh, similarly to Sigmoid maps every values between -1 and 1. It is defined as $ Tanh(z) = \frac{1 - e^{-2z}}{1 + e^{-2z}}$ \\
+\item Tanh, similarly to Sigmoid maps every values between -1 and 1. It is defined as $ Tanh(z) = \frac{1 - e^{-2z}}{1 + e^{-2z}}$ \\
 \centerline{\includegraphics[height=6cm]{../../docs/tanh.png}}
 
 \newpage
 
-Softmax is mainly used for single label classification problems. It is defined as $ Softmax(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K$ Note that the softmax activation can't be plotted as the activation of the current value depends on the other values.
+\item Softmax is mainly used for single label classification problems. It is defined as $ Softmax(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K$ \\
+Here is the plot corresponding to the softmax activation for 2 outputs. \\
+\centerline{\includegraphics[height=6cm]{../../docs/softmax.png}}
 
+\end{itemize}
 
 % Everyone
 \subsection{Model architectures}
