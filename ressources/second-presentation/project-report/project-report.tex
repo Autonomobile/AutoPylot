@@ -191,7 +191,7 @@ Here is the plot corresponding to the softmax activation for 2 outputs. \\
 % Everyone
 \subsection{Model architectures}
 
-So to summarize a bit what was said, a Convolutional Neural Network is a black box that have at least an image as an input and tries to predict something out of this image. As a common trend, the more convolution layers we have, the better our understanding of the image will be. But we have to be careful of how much we should put because we have to keep in mind the performance aspect of our model. In this section, you will see how every member of the team designed their model. The detailed architectures will be at the end of the report. \\
+So to summarize a bit what was said, a Convolutional Neural Network is a black box that have at least an image as an input and tries to predict something out of this image. As a common trend, the more convolution layers we have, the better our understanding of the image will be. But we have to be careful of how much we should put because we have to keep in mind the performance aspect of our model. In this section, you will see how every member of the team designed their model. The detailed architectures will be at the end of this section. \\
 
 \subsubsection{Maxime Gay}
 In order to create my model, I was inspired by the VGG-16 model.
@@ -221,27 +221,31 @@ When I started to make my model, I thought about: "What could make my model diff
 I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightarrow$ BatchNormalization] worked better with unseen testing images, so I did use this combination for every convolution and Dense layers. \\
 
 
-
 \begin{figure}[h]
     \centering
     \subfloat[Model MaximeG]{%
-        \includegraphics[height=0.49\textheight]{../../docs/model-maxg.png}%
+        \includegraphics[width=0.49\textwidth]{../../docs/model-maxg.png}%
         \label{fig:b}%
         }%
+    \hfill %
     \subfloat[Model MaximeE]{%
-        \includegraphics[height=0.49\textheight]{../../docs/model-maxe.png}%
+        \includegraphics[width=0.49\textwidth]{../../docs/model-maxe.png}%
+        \label{fig:a}%
+        }%
+    \caption{Model Architectures 1/2}
+\end{figure}
+
+\begin{figure}[h]
+    \subfloat[Model MickaelB]{%
+        \includegraphics[width=0.49\textwidth]{../../docs/model-micka.png}%
         \label{fig:a}%
         }%
     \hfill %
-    \subfloat[Model MickaelB]{%
-        \includegraphics[height=0.49\textheight]{../../docs/model-micka.png}%
-        \label{fig:a}%
-        }%
     \subfloat[Model AlexandreG]{%
-        \includegraphics[height=0.49\textheight]{../../docs/model-sacha.png}%
+        \includegraphics[width=0.49\textwidth]{../../docs/model-sacha.png}%
         \label{fig:b}%
         }%
-    \caption{Model Architectures}
+    \caption{Model Architectures 2/2}
 \end{figure}
 
 
