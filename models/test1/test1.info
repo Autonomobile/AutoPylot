@@ -1,1 +1,0 @@
-{"inputs": [["image", [120, 160, 3]], ["speed", [1]]], "outputs": [["steering", [1]], ["throttle", [1]]], "settings": {"dataset_path": "c:\\Users\\sacha\\Desktop\\datasets\\09-04-22", "epochs": 1, "batch_size": 32, "train_split": 0.9, "shuffle": true, "verbose": 1}}
