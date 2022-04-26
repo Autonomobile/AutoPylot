@@ -97,11 +97,9 @@ A Neural Network or "NN" or "NeuralNet" for short is a black box. The role of a 
 This Neural Network by default is only outputting random results, to train it to best approximate our imaginary function, we need one thing: Data ! In our case, we need to predict the next action of our car: steering and throttle from an image: the POV of the car. We can also imagine adding other parameters to our black box like the current speed of the car.
 During the training process, the prediction (Forward propagation) the model makes along with the expected value are used to correct the weights and inner parameters of every layer (Backward propagation). To have a well-fitted Neural Network, the more the data we have and the best the quality of that data is, the better ! \\
 
-Neural Networks are mainly composed of fully connected layers (or Dense layers), those are composed of a given amount of neurons. They receive one or more input signals, do calculation on them and then communicates its output signals to the next layer.\\
+Neural Networks are mainly composed of fully connected layers (or Dense layers), those are composed of a given amount of neurons. They receive one or more input signals, do calculation on them and then communicates its output signals to the next layer. The output signal is calculated from the sum of every input multiplied by its weight along with the addition of a bias. The output is then going through an activation function before outputting to the next layers. \\
 
-\centerline{\includegraphics[height=8cm]{../../docs/activation-function.png}}
-
-As you can see, the output signal is calculated from the sum of every input multiplied by its weight along with the addition of a bias. The output is then going through an activation function before outputting to the next layers. \\
+\centerline{\includegraphics[height=7cm]{../../docs/activation-function.png}}
 
 \subsubsection{Convolutional Neural Network}
 So now, what is a Convolutional Neural Network ?
@@ -121,6 +119,7 @@ Each filter detects simple features from the previous signal but deepest the Con
 The first convolution layer will detect simple features such as edges on the image, those can correspond to the shape of the dog as well as the shape of other stuff in the image. The second will have in input the already detected edges, from those edges it could detect sets of edges looking like features coming from a dog: ears, eyes, fur. The third one will from those features detect even more complex features and so on.
 After the convolutional layers, we are left with something called the latent space of our image. It is the encoded, simplified form of our image where only the key features are left. From those locally detected features, we can then have a look at the big picture by flattening the 2D signals into a 1D vector to be fed into fully connected layers and then answering the question "Is there a dog in the image ?" or "Should we go right or left?". \\
 
+\newpage
 
 \subsubsection{Activation functions}
 In some cases, we want our output signal to meet some requirements, for example, what if we only want outputs between -1 and 1 ? To answer this need, we apply some activation functions to the output of each layer. Here are some of the most popular activation functions. \\
@@ -174,12 +173,31 @@ Then with the others layers, I increased progressively the number of kernels and
 
 Furthermore, I tested many different optimizer like SGC, Adadelta, Nadam and Ftrl but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies.
 
-\centerline{\includegraphics[height=8cm]{../../docs/model maxg.png}}
-
 
 \subsubsection{Mickael Bobovitch}
 \subsubsection{Alexandre Girold}
 \subsubsection{Maxime Ellerbach}
+When I started to make my model, I thought about: "What could make my model different from the others ?" When looking at what my teammates did, it is obvious that the main difference in the model is not in the architecture itself of the model but rather in the data that is fed to it. One other observation is that the less parameters we have in the model, the less sensible it is to overfitting, so the main idea was to have a light model that would also have a rather small latent space. \\
+
+I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightarrow$ BatchNormalization] worked better with unseen testing images, so I did use this combination for every convolution and Dense layers. \\
+
+
+
+\begin{figure}[h]
+    \centering
+    \subfloat[Model MaximeE]{%
+        \includegraphics[width=0.49\textwidth]{../../docs/model-maxe.png}%
+        \label{fig:a}%
+        }%
+    \hfill%
+    \subfloat[Model MaximeG]{%
+        \includegraphics[width=0.49\textwidth]{../../docs/model-maxg.png}%
+        \label{fig:b}%
+        }%
+    \caption{Model Architectures}
+\end{figure}
+
+
 
 
 % Ellerbach
