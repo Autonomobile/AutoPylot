@@ -176,6 +176,8 @@ Furthermore, I tested many different optimizer like SGC, Adadelta, Nadam and Ftr
 
 \subsubsection{Mickael Bobovitch}
 \subsubsection{Alexandre Girold}
+For my part, I decided to 
+
 \subsubsection{Maxime Ellerbach}
 When I started to make my model, I thought about: "What could make my model different from the others ?" When looking at what my teammates did, it is obvious that the main difference in the model is not in the architecture itself of the model but rather in the data that is fed to it. One other observation is that the less parameters we have in the model, the less sensible it is to overfitting, so the main idea was to have a light model that would also have a rather small latent space. \\
 
@@ -209,12 +211,12 @@ I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightar
 % Girold
 \subsection{Training Process}
 
-After loading our data, we need to be able to train on those loaded data. The training process is where everything takes place. Indeed, training the data requires the use of all the previous functions. One of these functions is the settings.py. 
+After loading our data, we need to be able to train on those loaded data. The training process is where everything takes place. Indeed, training the data requires the use of all the previous functions. One of these functions is the settings.py. You can see how the function works with the small example below.
+
+\centerline{\includegraphics[height=4cm]{../../docs/setting-train.png}}
 
 This function is the backbone of the training process. It allows us to have a very modular project where everything can be modified from this file only. This allow us to modify our project without deleting a lot of code, making it very modular which was one of our goals from the beginning. For example, we have recently added the telemetry server's restart function, once it was created, we only had to add it to the settings.py and all the other functions would be able to use it.   
 This is also useful to change values in real-time. For example, if we want to train our model on more epochs or that our computer can handle bigger batch sizes then we only must change one value and that is it. This goes for all the functions in our project. 
-
-\centerline{\includegraphics[height=8cm]{../../docs/restart-settings.png}}
 
 The second import function is of course the train.py function.
 
