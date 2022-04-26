@@ -120,7 +120,7 @@ class Models:
         # x = AveragePooling2D(pool_size=2, name="pool2")(x)
 
         # Third layer.
-        x = Conv2D(32, 3, strides=1, activation="relu", use_bias=False, name="conv4")(x)
+        x = Conv2D(32, 3, strides=2, activation="relu", use_bias=False, name="conv4")(x)
         x = Conv2D(48, 3, strides=2, activation="relu", use_bias=False, name="conv5")(x)
         # x = AveragePooling2D(pool_size=2, name="pool3")(x)
 
@@ -133,25 +133,13 @@ class Models:
         x = Dropout(0.3)(x)
         x = Dense(200, activation="relu", use_bias=False, name="fc1")(x)
         x = Dense(100, activation="relu", use_bias=False, name="fc2")(x)
-        x = Dense(10, activation="relu", use_bias=False, name="fc2")(x)
 
 
         # Output layer.
         y = Dense(1, name="steering", activation="tanh")(x)
         outputs.append(y)
 
-        speed = Input(shape=(1,), name="speed")
-        inputs.append(speed)
-        x = Concatenate(x, axis=1)([x, speed])
-
-        x = Dense(100, activation="elu")(x)
-        x = Dropout(0.2)(x)
-        x = Dense(30, activation="elu")(x)
-
-        y = Dense(1, activation="sigmoid", name="throttle")(x)
-        outputs.append(y)
-
-        # Create the model
+         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -159,3 +147,16 @@ class Models:
 
         print(f"created test_model with {get_flops(model)} FLOPS")
         return model
+"""
+        speed = Input(shape=(1,), name="speed")
+        inputs.append(speed)
+        x = Concatenate(axis=-1)([x, speed])
+
+        x = Dense(100, activation="elu")(x)
+        x = Dropout(0.2)(x)
+        x = Dense(30, activation="elu")(x)
+
+        y = Dense(1, activation="sigmoid", name="throttle")(x)
+        outputs.append(y)
+"""
+       

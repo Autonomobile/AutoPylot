@@ -49,7 +49,7 @@ def main():
             predictions = model.predict(input_data)
             mem.update(predictions)
             mem["steering"] = float(mem["steering"]) * 1.0
-            # mem["throttle"] = 0.3
+            mem["throttle"] = 0.3
 
         elif mem["state"] == "collect":
             io.save_image_data(
