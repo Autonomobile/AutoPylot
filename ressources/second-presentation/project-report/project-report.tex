@@ -91,6 +91,32 @@ Both of those frameworks are written in python and use packages such as Tensorfl
 
 % Everyone
 \subsection{Model architectures}
+In order to create my model, I was inspired by the VGG-16 model.
+
+This model was proposed by Karen Simonyan and Andrew Zisserman of the Visual Geometry Group Lab of Oxford University in 2014. It won the ImageNet Large Scale Visual Recognition Challenge (ILSVRC) the same year. The model achieves 92.7% accuracy in ImageNet. By the way, ImageNet is a gigantic data base of more than 14 million of images. At this time, it was a sharp evolution regarding the other models because VGG-16 uses kernels of a smaller size.
+
+
+Architecture of VGG-16 model :
+
+\centerline{\includegraphics[height=8cm]{../../docs/VGG16.png}}
+
+
+The VGG-16 architecture is composed of 13 convolutional layers with a 3x3 Kernel separated in five groups.
+
+Between each group there is a pooling layer with a 2x2 size to reduce the size of the filter during the learning phase. At the end of those convolution and pooling layers, there are three Fully-Connected layers and an activation function softmax to determine the class of the image.
+
+
+The problem of this model is that it is really slow and it is even slower in our case because it has to work with our car which does not have a lot of resources. Therefore, I decided to change the VGG-16 Model a little bit. 
+I starte by removing some convolutional layers.
+
+My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy.
+
+Then with the others layers, I increased progressively the number of kernels and I reduced the kernerl size to 3x3. Moreover, I apply a stride of 2 for the first four layers and a stride of 1 for the last two. At the end, I use two Dense layers with an activation function "relu" like the others layers.
+
+
+Furthermore, I tested many different optimizer like SGC, Adadelta, Nadam and Ftrl but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies
+
+\centerline{\includegraphics[height=8cm]{../../docs/model maxg.png}}
 
 % Ellerbach
 \subsection{Model wrappers}
