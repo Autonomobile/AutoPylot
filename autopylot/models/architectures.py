@@ -139,15 +139,6 @@ class Models:
         y = Dense(1, name="steering", activation="tanh")(x)
         outputs.append(y)
 
-         # Create the model
-        model = Model(inputs=inputs, outputs=outputs)
-
-        # Compile it
-        model.compile(optimizer="adam", loss="mse")
-
-        print(f"created test_model with {get_flops(model)} FLOPS")
-        return model
-"""
         speed = Input(shape=(1,), name="speed")
         inputs.append(speed)
         x = Concatenate(axis=-1)([x, speed])
@@ -158,5 +149,12 @@ class Models:
 
         y = Dense(1, activation="sigmoid", name="throttle")(x)
         outputs.append(y)
-"""
-       
+
+         # Create the model
+        model = Model(inputs=inputs, outputs=outputs)
+
+        # Compile it
+        model.compile(optimizer="adam", loss="mse")
+
+        print(f"created test_model with {get_flops(model)} FLOPS")
+        return model
