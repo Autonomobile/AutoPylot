@@ -192,7 +192,7 @@ After loading our data, we need to be able to train on those loaded data. The tr
 This function is the backbone of the training process. It allows us to have a very modular project where everything can be modified from this file only. This allow us to modify our project without deleting a lot of code, making it very modular which was one of our goals from the beginning. For example, we have recently added the telemetry server's restart function, once it was created, we only had to add it to the settings.py and all the other functions would be able to use it.   
 This is also useful to change values in real-time. For example, if we want to train our model on more epochs or that our computer can handle bigger batch sizes then we only must change one value and that is it. This goes for all the functions in our project. 
 
-\centerline{\includegraphics[height=8cm]{../../docs/restart settings.png}}
+\centerline{\includegraphics[height=8cm]{../../docs/restart-settings.png}}
 
 The second import function is of course the train.py function.
 
