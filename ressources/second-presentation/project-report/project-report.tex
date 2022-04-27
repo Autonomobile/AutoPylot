@@ -261,9 +261,9 @@ Thanks to the datagenerator file, we can load data to train the model. The class
 
 How does it work?  
 
-Firstly, we created X and Y which are lists of lists of numpy array. Then we had to pick randomly some paths according to the batch size. Secondly, thanks to the previous function load\_image\_data, we can load the data of the image using a path
+Firstly, we created X and Y which are lists of numpy array. Then we had to pick randomly some paths according to the batch size in order to have more realistic data to train on. Secondly, thanks to the previous function load\_image\_data, we can load the data of the image using a json path
 
-Firstly, we just have to add the result that we are looking at to the X or to the Y.
+Thirdly, we just have to add the result that we are looking at to the X or to the Y.
 
 % Girold
 \subsection{Training Process}
