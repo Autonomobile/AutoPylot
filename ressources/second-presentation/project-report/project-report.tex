@@ -81,7 +81,6 @@ Both of those frameworks are written in python and use packages such as Tensorfl
 
 
 \section{Realized tasks}
-% TODO
 
 % Bobovitch
 \subsection{Telemetry Server}
@@ -209,18 +208,21 @@ I started by removing some convolutional layers.
 
 My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy. Then with the other layers, I increased progressively the number of kernels and I reduced the kernel size to 3x3. Moreover, I apply a stride of 2 for the first four layers and a stride of 1 for the last two. In the end, I use two Dense layers with an activation function "relu" like the other layers. Finally, I tested many different optimizers like SGC, Adadelta, Nadam and Ftrl but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies. 
 \subsubsection{Mickael Bobovitch}
+I Tried different implementation. One that worked pretty well for me is a model inspired by Nvidia. I also tried a model based on the AlexNet Architecture. The common point between architecture is their use on 2D convolution. For instance at the top of the stack we have 5 layers of 2D convolution, followed by a Flatten Layer and finally by few Dense Layers. Some architetures used MaxPooling to translate images or change the size of the searched object. This technique is great for searching object that can be anywhere on a picture. But form lane recognition this might be not necessary. I am still experimenting a lot. For the next time i will have a more robust architecture. The only chalenge for me is to find the best values that can produce a great model.
+
 \subsubsection{Alexandre Girold}
 For my part, I decided on making a simple model, capable of steering properly. In order to make this model I spend a lot of time doing some research and I realized as did my comrades that as of today there is one clear winner in the architecture of a prediction model based on an image. 
 It is composed of spatial convolution over images (known as Conv2D) followed by a pooling layer, which is important to avoid overfitting, repeating this a given number of times then followed by a fully connected layer. For these two types of layers, we want to use backpropagation to reduce loss. Finally, the output layer uses functions to give out a probability (I.e: Sigmoid or SoftMax).  
 
 In my model, I tried to reduce the number of parameters to try and make it as light as possible. I also tried to incorporate the capacity for the car to adapt its speed, but as of today, I haven’t been successful. I am sure i will find a solution soon.
 
+\newpage
+
 \subsubsection{Maxime Ellerbach}
 When I started to make my model, I thought about: "What could make my model different from the others?" When looking at what my teammates did, it is obvious that the main difference in the model is not in the architecture itself of the model but rather in the data that is fed to it. One other observation is that the less parameters we have in the model, the less sensible it is to overfitting, so the main idea was to have a light model that would also have a rather small latent space. \\
 
 I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightarrow$ BatchNormalization] worked better with unseen testing images, so I did use this combination for every convolution and Dense layers. \\
 
-\newpage
 
 
 \begin{figure}[h]
@@ -270,17 +272,16 @@ After loading our data, we need to be able to train on those loaded data. The tr
 
 \centerline{\includegraphics[height=4cm]{../../docs/setting-train.png}}
 
-This function is the backbone of the training process. It allows us to have a very modular project where everything can be modified from this file only. This allow us to modify our project without deleting a lot of code, making it very modular which was one of our goals from the beginning. For example, we have recently added the telemetry server's restart function, once it was created, we only had to add it to the settings.py and all the other functions would be able to use it.   
+This function is the backbone of the training process. It allows us to have a very modular project where everything can be modified from this file only. This allows us to modify our project without deleting a lot of code, making it very modular which was one of our goals from the beginning. For example, we have recently added the telemetry server's restart function, once it was created, we only had to add it to the settings.py and all the other functions would be able to use it.   
 This is also useful to change values in real-time. For example, if we want to train our model on more epochs or that our computer can handle bigger batch sizes then we only must change one value and that is it. This goes for all the functions in our project. 
 
-The second import function is of course the train.py function. At first, this function creates all our useful variables (imported from the settings). Then if the given model doesn’t exist, we create it, for now, this model hasn’t yet been trained.  Then we need to feed the make sure all the variables are correct so the model can be trained.  To train a model we need data, in our case images. For this we need to make sure those data exist, and that the path to them is correct.  
+The second import function is of course the train.py function. At first, this function creates all our useful variables (imported from the settings). Then, if the given model doesn’t exist, we create it, for now, this model hasn’t yet been trained.  Then we need to feed the make sure all the variables are correct so that the model can be trained.  To train a model we need data, in our case images. For this we need to make sure those data exist, and that the path to them is correct.  
 We also want to know all the inputs and outputs. This is important as we might want to train not only the steering but also the throttle and speed.  
-Finally, we use one important training library. The .fit library from karas. With fit, we are first feeding the training data(X) and training labels(Y) in our case these X and Y come from DataGenerator. We then use Keras to allow our model to train for a given number of epochs and on a given amount of batch sizes. 
+Finally, we use one important training library. The .fit library from keras. With fit, we are first feeding the training data(X) and training labels(Y) in our case these X and Y come from DataGenerator. We then use Keras to allow our model to train for a given number of epochs and on a given amount of batch sizes. 
 
 % Bobovitch
 \subsection{Data Augmentation}
-
-
+During the learning process we have the possibility to use data augmentation. It’s a technique used to diversify training data and to apply different kind of situations with too much lighs or not enough. The AI has to consider the road without light effects. Data augmentation is used too add noise on training data. It’s very useful because it forces neurons to find betters and more complex features in images. The more features are complex, the less we can experiment overfitting. Which means the AI is more capable to drive in a unknown environment and use complex features to drive better.
 
 \newpage
 
