@@ -1,6 +1,10 @@
 """Train a model using autopylot."""
-from autopylot.models import train, architectures
-from autopylot.utils import settings
+import logging
+
+from autopylot.models import architectures, train
+from autopylot.utils import logger, settings
+
+logger.init(handlers=[logging.FileHandler, logging.StreamHandler])
 
 settings = settings.settings
 
@@ -21,4 +25,5 @@ if __name__ == "__main__":
         train_split=settings.TRAIN_SPLITS,
         verbose=settings.TRAIN_VERBOSE,
         do_save=True,
+        additionnal_funcs=[],
     )

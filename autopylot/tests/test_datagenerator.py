@@ -10,7 +10,7 @@ from ..utils import io
 def test_save_data():
     """Just create a dummy data for the following functions."""
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "speed": 1.4,
         "throttle": 0.6,
         "steering": 0.04,
@@ -47,10 +47,10 @@ def test_call():
     assert isinstance(Xs, list) and isinstance(Ys, list)
 
     assert Xs[0].shape == (64, 120, 160, 3)  # the image input
-    assert Xs[1].shape == (64, 1)  # the speed input
+    assert Xs[1].shape == (64,)  # the speed input
 
-    assert Ys[0].shape == (64, 1)  # the steering output
-    assert Ys[1].shape == (64, 1)  # the throttle output
+    assert Ys[0].shape == (64,)  # the steering output
+    assert Ys[1].shape == (64,)  # the throttle output
 
 
 def test_call_no_image():
@@ -63,11 +63,11 @@ def test_call_no_image():
         batch_size=32,
     )
     Xs, Ys = dataGenerator[0]  # calls the __getitem__ method
-    assert Xs[0].shape == (32, 1)  # the speed input
-    assert Xs[1].shape == (32, 1)  # the throttle input
+    assert Xs[0].shape == (32,)  # the speed input
+    assert Xs[1].shape == (32,)  # the throttle input
 
-    assert Ys[0].shape == (32, 1)  # the steering output
-    assert Ys[1].shape == (32, 1)  # the throttle output
+    assert Ys[0].shape == (32,)  # the steering output
+    assert Ys[1].shape == (32,)  # the throttle output
 
 
 def test_delete_data():

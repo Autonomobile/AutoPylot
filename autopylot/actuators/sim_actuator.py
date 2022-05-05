@@ -19,6 +19,8 @@ class SimActuator:
         self.__steering = 0
         self.__throttle = 0
 
+        self.__memory[self.__speed_key] = 0.0
+
     def apply_steering(self, steering):
         """Change steering.
 
@@ -53,7 +55,7 @@ class SimActuator:
         steering = self.__memory.get(self.__steering_key, 0)
         throttle = self.__memory.get(self.__throttle_key, 0)
         self.apply_steering_throttle(steering, throttle)
-        self.__memory["speed"] = self.__client.speed / 8.0
+        self.__memory[self.__speed_key] = self.__client.speed / 8.0
 
     def get_sensor_last_received(self):
         return self.client.last_received

@@ -88,20 +88,23 @@ def init(
     else:
         level = logging.INFO
 
-    # this is to write in the logs/log file
-    fileHandler = logging.FileHandler(settings.LOGS_PATH, mode="w")
-    fileHandler.setFormatter(formatter)
-    fileHandler.setLevel(level)
-    logger.addHandler(fileHandler)
+    if logging.FileHandler in handlers:
+        # this is to write in the logs/log file
+        fileHandler = logging.FileHandler(settings.LOGS_PATH, mode="w")
+        fileHandler.setFormatter(formatter)
+        fileHandler.setLevel(level)
+        logger.addHandler(fileHandler)
 
-    # this is to display logs in the stdout
-    streamHandler = logging.StreamHandler(sys.stdout)
-    streamHandler.setFormatter(formatter)
-    streamHandler.setLevel(level)
-    logger.addHandler(streamHandler)
+    if logging.StreamHandler in handlers:
+        # this is to display logs in the stdout
+        streamHandler = logging.StreamHandler(sys.stdout)
+        streamHandler.setFormatter(formatter)
+        streamHandler.setLevel(level)
+        logger.addHandler(streamHandler)
 
-    # this is to send records to the server
-    socketIOHandler = SocketIOHandler(host)
-    socketIOHandler.setLevel(level)
-    logger.addHandler(socketIOHandler)
+    if SocketIOHandler in handlers:
+        # this is to send records to the server
+        socketIOHandler = SocketIOHandler(host)
+        socketIOHandler.setLevel(level)
+        logger.addHandler(socketIOHandler)
     return logger
