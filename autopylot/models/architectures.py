@@ -1,7 +1,6 @@
 """This is where we will store our different model architectures."""
 
 import logging
-from pyexpat import model
 
 from keras_flops import get_flops
 from tensorflow.keras import Input, Model
