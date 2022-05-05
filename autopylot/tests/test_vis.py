@@ -7,7 +7,7 @@ from ..utils import vis, display
 
 @pytest.mark.vis
 def test_vis_line_scalar_positive():
-    image = np.zeros((120, 160, 3), np.float32)
+    image = np.zeros((120, 160, 3), np.uint8)
 
     vis_image = vis.vis_line_scalar(image, 0.5)
     assert not np.array_equal(vis_image, image)
@@ -16,7 +16,7 @@ def test_vis_line_scalar_positive():
 
 @pytest.mark.vis
 def test_vis_line_scalar_negative():
-    image = np.zeros((120, 160, 3), np.float32)
+    image = np.zeros((120, 160, 3), np.uint8)
 
     vis_image = vis.vis_line_scalar(image, -0.5)
     assert not np.array_equal(vis_image, image)
@@ -26,7 +26,7 @@ def test_vis_line_scalar_negative():
 @pytest.mark.vis
 def test_vis_steering_positive():
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "steering": 1.0,
     }
 
@@ -38,7 +38,7 @@ def test_vis_steering_positive():
 @pytest.mark.vis
 def test_vis_steering_negative():
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "steering": -1.0,
     }
 
@@ -50,7 +50,7 @@ def test_vis_steering_negative():
 @pytest.mark.vis
 def test_vis_throttle_positive():
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "throttle": 0.5,
     }
 
@@ -62,7 +62,7 @@ def test_vis_throttle_positive():
 @pytest.mark.vis
 def test_vis_throttle_negative():
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "throttle": -0.5,
     }
 
@@ -74,7 +74,7 @@ def test_vis_throttle_negative():
 @pytest.mark.vis
 def test_vis_speed():
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "speed": 13.654321,
     }
 
@@ -86,7 +86,7 @@ def test_vis_speed():
 @pytest.mark.vis
 def test_vis_all():
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "speed": 13.654321,
         "steering": 0.345,
         "throttle": 0.543,
@@ -101,13 +101,13 @@ def test_vis_all():
 def test_vis_compare():
     """Test the compare() vis function."""
     image_data1 = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "speed": 12.34,
         "steering": -0.543,
         "throttle": -0.456,
     }
     image_data2 = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "speed": 13.654321,
         "steering": 0.345,
         "throttle": 0.543,
@@ -122,7 +122,7 @@ def test_vis_compare():
 def test_vis_display():
     """Test some of the functions from vis combined to display."""
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "speed": 12.34,
         "steering": -0.543,
         "throttle": -0.456,

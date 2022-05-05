@@ -59,6 +59,7 @@ class TrainModel:
         shuffle=settings.TRAIN_SHUFFLE,
         verbose=settings.TRAIN_VERBOSE,
         do_save=True,
+        additionnal_funcs=[],
     ):
         """Trains the model on the given dataset.
 
@@ -70,6 +71,7 @@ class TrainModel:
             shuffle (bool, optional): shuffle the dataset. Defaults to settings.TRAIN_SHUFFLE.
             verbose (bool, optional): print verbose messages. Defaults to settings.TRAIN_VERBOSE.
             do_save (bool, optional): save the model. Defaults to True.
+            additionnal_funcs (list(tuple(method, float)), optional): tuple containing the function and the frequency.
 
         Raises:
             ValueError: raised if the train_split is not between 0 and 1.
@@ -98,11 +100,19 @@ class TrainModel:
 
         # Create train and test datagenerators
         train_generator = datagenerator.DataGenerator(
-            paths=train_paths, inputs=inputs, outputs=outputs, batch_size=batch_size
+            paths=train_paths,
+            inputs=inputs,
+            outputs=outputs,
+            batch_size=batch_size,
+            additionnal_funcs=additionnal_funcs,
         )
 
         test_generator = datagenerator.DataGenerator(
-            paths=test_paths, inputs=inputs, outputs=outputs, batch_size=batch_size
+            paths=test_paths,
+            inputs=inputs,
+            outputs=outputs,
+            batch_size=batch_size,
+            additionnal_funcs=additionnal_funcs,
         )
 
         self.model.fit(

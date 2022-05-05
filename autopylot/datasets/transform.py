@@ -76,12 +76,17 @@ class Functions:
     def blur(image_data):
         image_data["image"] = cv2.blur(image_data["image"], (2, 2))
 
+    def bilateral_filter(image_data):
+        image_data["image"] = cv2.bilateralFilter(image_data["image"], 9, 75, 75)
+
     def flip(image_data):
         image_data["image"] = cv2.flip(image_data["image"], 1)
         image_data["steering"] = image_data["steering"] * -1.0
 
     def noise(image_data):
-        image_data["image"] += np.random.uniform(-25, 25, size=settings.IMAGE_SHAPE)
+        image_data["image"] = (
+            image_data["image"] + np.random.randint(-25, 25, size=settings.IMAGE_SHAPE)
+        ).astype(np.uint8)
 
     def shift(image_data):
         x_offset = np.random.randint(-20, 20)
@@ -106,7 +111,7 @@ class Transform:
         """Init the transformation function class.
 
         Args:
-            additionnal_funcs (tuple(method, float)): tuple containing the function and the frequency.
+            additionnal_funcs (list(tuple(method, float)), optional): tuple containing the function and the frequency.
         """
         self.functions = [
             (get_function_by_name(name), freq)
@@ -119,5 +124,6 @@ class Transform:
             try:
                 if np.random.uniform() < freq:
                     func(image_data)
-            except Exception:
+            except Exception as e:
+                print(e)
                 pass

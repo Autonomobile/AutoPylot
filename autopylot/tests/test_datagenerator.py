@@ -10,7 +10,7 @@ from ..utils import io
 def test_save_data():
     """Just create a dummy data for the following functions."""
     image_data = {
-        "image": np.zeros((120, 160, 3), np.float32),
+        "image": np.zeros((120, 160, 3), np.uint8),
         "speed": 1.4,
         "throttle": 0.6,
         "steering": 0.04,

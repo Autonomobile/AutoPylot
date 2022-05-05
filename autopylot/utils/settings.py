@@ -70,6 +70,7 @@ class Settings:
             "shadow": 0.2,
             "blur": 0.2,
             "noise": 0.2,
+            "bilateral_filter": 0.2,
         }
 
         # Paths
