@@ -48,15 +48,17 @@ def main():
             mem["throttle"] = 0.0
 
         elif mem["state"] == "manual":
-            mem["steering"] = mem["controller"]["steering"]
-            mem["throttle"] = mem["controller"]["throttle"]
+            mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
+            mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
 
         elif mem["state"] == "autonomous":
             transformers(mem)
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
 
-            if "zone" in predictions.keys():
+            if "throttle" in predictions.keys():
+                throttle = predictions["throttle"]
+            elif "zone" in predictions.keys():
                 zone_idx = np.argmax(predictions["zone"])
                 if zone_idx == 0:
                     throttle = lookup_zone[0] * predictions["zone"][0]
@@ -71,9 +73,13 @@ def main():
                         if mem["speed"] > min_speed
                         else lookup_zone[1]
                     )
+            else:
+                throttle = settings.DEFAULT_THROTTLE
 
-            mem["steering"] = float(predictions.get("steering", 0.0)) * 1.0
-            mem["throttle"] = float(predictions.get("throttle", 0.2))
+            mem["steering"] = (
+                float(predictions.get("steering", 0.0)) * settings.STEERING_MULT
+            )
+            mem["throttle"] = throttle * settings.THROTTLE_MULT
 
         elif mem["state"] == "collect":
             io.save_image_data(
@@ -83,8 +89,8 @@ def main():
                     settings.JSON_FILE_FORMAT.format(t=time.time()),
                 ),
             )
-            mem["steering"] = mem["controller"]["steering"]
-            mem["throttle"] = mem["controller"]["throttle"]
+            mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
+            mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
 
         actuator.update()
 
