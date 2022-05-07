@@ -4,6 +4,7 @@ import os
 
 import queue
 import socketio
+import psutil
 
 from .utils import encode_image
 from .memory import mem
@@ -14,6 +15,8 @@ stop_thread = False
 
 sio = socketio.Client()
 uuidhex = uuid.uuid4().hex
+
+CPU_USAGE = 0
 
 
 @sio.on("connect")
@@ -113,6 +116,14 @@ def run_threaded(host):
                 to_send = mem.copy()
                 if "image" in to_send.keys():
                     to_send["image"] = encode_image(mem["image"])
+
+                cpu_usage = psutil.cpu_percent()
+                if cpu_usage != 0:
+                    CPU_USAGE = cpu_usage
+                to_send["cpu_usage"] = CPU_USAGE
+
+                to_send["ram_usage"] = psutil.virtual_memory().percent
+
                 send_telemetry(to_send)
                 last_sent = now
             else:

@@ -1,8 +1,0 @@
-NODE_ENV="production" # development or production
-
-HOSTNAME="0.0.0.0"
-PORT=3000
-
-LOG_LEVEL="debug"
-
-DB_PATH="./"
