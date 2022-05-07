@@ -1,6 +1,6 @@
 {
   "name": "telemetry",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "this web server will collect data such as images and logs from python clients",
   "main": "server.js",
   "scripts": {
@@ -45,7 +45,8 @@
     "socket.io": "^4.4.1",
     "socket.io-client": "^4.4.1",
     "tailwindcss": "^3.0.24",
-    "toml": "^3.0.0"
+    "toml": "^3.0.0",
+    "victory": "^36.3.2"
   },
   "devDependencies": {
     "eslint": "8.13.0",

@@ -46,11 +46,11 @@ a {
 }
 
 .primary {
-  background-color: var(--primary-color);
+  background-color: var(--primary-color) !important;
 }
 
 .secondary {
-  background-color: var(--secondary-color);
+  background-color: var(--secondary-color) !important;
 }
 
 .divider {
@@ -75,4 +75,16 @@ a {
 
 .MuiSvgIcon-root {
   color: var(--text);
+}
+
+.VictoryContainer * {
+  /* stroke: var(--text-secondary) !important; */
+}
+
+tspan {
+  fill: var(--text) !important;
+}
+
+line {
+  stroke: var(--text-secondary) !important;
 }
