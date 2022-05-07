@@ -21,7 +21,7 @@ model, model_info = utils.load_model(
 prepare_data = preparedata.PrepareData(model_info)
 
 settings.ENABLE_TRANSFORM = False
-transformers = transform.Transform()
+transform = transform.Transform()
 
 # set dataset paths
 if not os.path.exists(settings.COLLECT_PATH):
@@ -32,12 +32,11 @@ actuator = Actuator()
 camera = Camera()
 controller = Controller()
 
-lookup_zone = [0.6, 0.3, -1.0]
+lookup_zone = [0.3, 0.3, 0.1]
 min_speed = 1.75
 
 
 def main():
-    mem["speed"] = 0.0
     while True:
         camera.update()  # get the last frame from the camera
         controller.update()  # update joystick
@@ -52,40 +51,16 @@ def main():
             mem["throttle"] = mem["controller"]["throttle"]
 
         elif mem["state"] == "autonomous":
-            transformers(mem)
+            transform(mem)
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
 
-            if "zone" in predictions.keys():
-                zone_idx = np.argmax(predictions["zone"])
-                if zone_idx == 0:
-                    throttle = lookup_zone[0] * predictions["zone"][0]
-                elif zone_idx == 1:
-                    throttle = (
-                        lookup_zone[1] * predictions["zone"][1]
-                        + lookup_zone[0] * predictions["zone"][0]
-                    )
-                else:
-                    throttle = (
-                        lookup_zone[2] * predictions["zone"][2]
-                        if mem["speed"] > min_speed
-                        else lookup_zone[1]
-                    )
-
-            mem["steering"] = float(predictions.get("steering", 0.0)) * 1.0
-            mem["throttle"] = float(predictions.get("throttle", 0.2))
+            mem["steering"] = float(predictions["steering"]) * 1.0
+            mem["throttle"] = 0.0
 
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"]
             mem["throttle"] = mem["controller"]["throttle"]
-
-            io.save_image_data(
-                mem,
-                os.path.join(
-                    settings.COLLECT_PATH,
-                    settings.JSON_FILE_FORMAT.format(t=time.time()),
-                ),
-            )
 
         actuator.update()
 

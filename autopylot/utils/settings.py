@@ -71,6 +71,7 @@ class Settings:
             "blur": 0.2,
             "noise": 0.2,
             "bilateral_filter": 0.2,
+            "mix_channel": 0.2,
         }
 
         # Paths
