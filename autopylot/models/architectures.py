@@ -134,7 +134,6 @@ class Models:
         x = Dense(200, activation="relu", use_bias=False, name="fc1")(x)
         x = Dense(80, activation="relu", use_bias=False, name="fc2")(x)
 
-
         # Output layer.
         y = Dense(1, name="steering", activation="tanh")(x)
         outputs.append(y)
@@ -150,7 +149,7 @@ class Models:
         y = Dense(1, activation="sigmoid", name="throttle")(x)
         outputs.append(y)
 
-         # Create the model
+        # Create the model
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -241,7 +240,7 @@ class Models:
         x = Flatten()(x)  # flatten the data
         x = Dropout(0.3)(x)  # dropout to avoid overfitting
         x = Concatenate(axis=-1)([x, speed])
-        
+
         # 5 fully connected layers ========================
         x = Dense(256, use_bias=False, activation="relu")(x)
         x = Dropout(0.2)(x)
@@ -255,7 +254,6 @@ class Models:
         outputs.append(y1)
         y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
         outputs.append(y2)
-        
 
         # create the model
         model = Model(inputs=inputs, outputs=outputs)

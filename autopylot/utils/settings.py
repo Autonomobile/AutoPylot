@@ -26,6 +26,9 @@ class Settings:
         self.ACTUATOR_TYPE = "serial"  # "sim"
         self.CONTROLLER_TYPE = "xbox"  # "keyboard"
         self.JSON_FILE_FORMAT = "{t}.json"
+        self.DEFAULT_THROTTLE = 0.2
+        self.THROTTLE_MULT = 1.0
+        self.STEERING_MULT = 1.0
 
         # Sim settings
         self.SIM_HOST = "127.0.0.1"
