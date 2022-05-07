@@ -37,6 +37,7 @@ min_speed = 1.75
 
 
 def main():
+    mem["speed"] = 0.0
     while True:
         camera.update()  # get the last frame from the camera
         controller.update()  # update joystick
@@ -71,11 +72,8 @@ def main():
                         else lookup_zone[1]
                     )
 
-            else:
-                throttle = 0.2
-
-            mem["steering"] = float(predictions["steering"]) * 1.0
-            mem["throttle"] = throttle
+            mem["steering"] = float(predictions.get("steering", 0.0)) * 1.0
+            mem["throttle"] = float(predictions.get("throttle", 0.2))
 
         elif mem["state"] == "collect":
             io.save_image_data(

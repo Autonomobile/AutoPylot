@@ -1,7 +1,7 @@
 """This is where we will store our different model architectures."""
 
 import logging
-
+import tensorflow as tf
 from keras_flops import get_flops
 from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import (
@@ -14,6 +14,7 @@ from tensorflow.keras.layers import (
     DepthwiseConv2D,
     Dropout,
     Flatten,
+    AveragePooling2D,
     GlobalAveragePooling2D,
     Lambda,
     MaxPooling2D,
@@ -101,7 +102,55 @@ class Models:
         y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y)
 
-        # Create the model
+    def ConvNet():
+        inputs = []
+        outputs = []
+
+        image_inp = Input(shape=(120, 160, 3), name="image")
+        inputs.append(image_inp)
+
+        # First layer.
+        x = BatchNormalization()(image_inp)
+        x = Conv2D(8, 5, strides=2, activation="relu", use_bias=False, name="conv1")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool1")(x)
+
+        # Second layer.
+        x = Conv2D(16, 5, strides=1, activation="relu", use_bias=False, name="conv2")(x)
+        x = Conv2D(24, 3, strides=2, activation="relu", use_bias=False, name="conv3")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool2")(x)
+
+        # Third layer.
+        x = Conv2D(32, 3, strides=2, activation="relu", use_bias=False, name="conv4")(x)
+        x = Conv2D(48, 3, strides=2, activation="relu", use_bias=False, name="conv5")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool3")(x)
+
+        # Fourth layer.
+        x = Conv2D(64, 3, strides=2, activation="relu", use_bias=False, name="conv7")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool4")(x)
+
+        # FC aand flatten the layer.
+        x = Flatten(name="flatten")(x)
+        x = Dropout(0.3)(x)
+        x = Dense(200, activation="relu", use_bias=False, name="fc1")(x)
+        x = Dense(80, activation="relu", use_bias=False, name="fc2")(x)
+
+
+        # Output layer.
+        y = Dense(1, name="steering", activation="tanh")(x)
+        outputs.append(y)
+
+        speed = Input(shape=(1,), name="speed")
+        inputs.append(speed)
+        x = Concatenate(axis=-1)([x, speed])
+
+        x = Dense(100, activation="elu")(x)
+        x = Dropout(0.2)(x)
+        x = Dense(50, activation="elu")(x)
+
+        y = Dense(1, activation="sigmoid", name="throttle")(x)
+        outputs.append(y)
+
+         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
