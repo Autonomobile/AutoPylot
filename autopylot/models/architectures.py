@@ -102,7 +102,7 @@ class Models:
         y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y)
 
-    def ConNet():
+    def ConvNet():
         inputs = []
         outputs = []
 
