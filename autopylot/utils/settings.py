@@ -50,8 +50,7 @@ class Settings:
 
         # Model settings
         self.MODEL_TYPE = "steering_model"
-        self.MODEL_NAME = "pretrained"
-        self.MODEL_SAVE_EVERY = 1
+        self.MODEL_NAME = "exotic"
         self.MODEL_SAVE_SETTINGS = True
 
         # Training settings
@@ -61,7 +60,18 @@ class Settings:
         self.TRAIN_SPLITS = 0.9
         self.TRAIN_SHUFFLE = True
         self.TRAIN_VERBOSE = 1
-        self.TRAIN_AUGM_FREQ = 0.3
+
+        # transform functions
+        self.ENABLE_TRANSFORM = True
+        self.TRANSFORM_FUNCTIONS = {
+            "flip": 0.5,
+            "brightness": 0.2,
+            "shift": 0.2,
+            "shadow": 0.2,
+            "blur": 0.2,
+            "noise": 0.2,
+            "bilateral_filter": 0.2,
+        }
 
         # Paths
         self.ROOT_PATH = os.path.dirname(
@@ -128,6 +138,15 @@ class Settings:
         with open(filepath, "w") as f:
             json.dump(self.__dict__, f, indent=4)
 
+    def update(self, settings: dict):
+        """Update the settings with a dictionary.
+
+        Args:
+            settings (dict): the settings to update.
+        """
+        for key, value in settings.items():
+            self.setattr(key, value)
+
     def __repr__(self):
         return self.__dict__.__repr__()
 
@@ -137,9 +156,8 @@ def restart_car():
     settings.to_json()
     logging.info("Restarting car")
 
-    command = f"{sys.executable} {' '.join(sys.argv)}"
-    os.system(command)
-    sys.exit()
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
 
 
 try:

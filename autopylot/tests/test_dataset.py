@@ -78,12 +78,12 @@ def test_save_dataset():
     """Fill the dataset directory with some data."""
     image_datas = [
         {
-            "image": np.zeros((160, 120, 3), dtype=np.float32),
+            "image": np.zeros((160, 120, 3), dtype=np.uint8),
             "steering": 0.33,
             "throttle": 0.5,
         },
         {
-            "image": np.zeros((160, 120, 3), dtype=np.float32),
+            "image": np.zeros((160, 120, 3), dtype=np.uint8),
             "steering": -0.6,
             "throttle": 0.7,
         },
@@ -166,17 +166,17 @@ def test_save_multiple_dataset():
     """Fill the dataset directory with some data."""
     image_datas = [
         {
-            "image": np.zeros((160, 120, 3), dtype=np.float32),
+            "image": np.zeros((160, 120, 3), dtype=np.uint8),
             "steering": 0.33,
             "throttle": 0.5,
         },
         {
-            "image": np.zeros((160, 120, 3), dtype=np.float32),
+            "image": np.zeros((160, 120, 3), dtype=np.uint8),
             "steering": -0.6,
             "throttle": 0.7,
         },
         {
-            "image": np.zeros((160, 120, 3), dtype=np.float32),
+            "image": np.zeros((160, 120, 3), dtype=np.uint8),
             "steering": 0.1,
             "throttle": 0.1,
         },

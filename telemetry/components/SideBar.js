@@ -1,3 +1,4 @@
+//@ts-check
 import { useRouter } from "next/router";
 import { useAtom } from "jotai";
 import { notificationsAtom } from "../utils/atoms";
@@ -6,12 +7,11 @@ import Link from "next/link";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import LinkIcon from "@mui/icons-material/Link";
 import SettingsIcon from "@mui/icons-material/Settings";
-import BarChartIcon from "@mui/icons-material/BarChart";
 import BookIcon from "@mui/icons-material/Book";
 import LanguageIcon from "@mui/icons-material/Language";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import SettingsRemoteIcon from "@mui/icons-material/SettingsRemote";
 import NotificationsIcon from "@mui/icons-material/Notifications";
+import ArticleIcon from '@mui/icons-material/Article';
 import {
   List,
   ListItem,
@@ -29,18 +29,13 @@ const primary_items = [
   },
   {
     text: "Remote Control",
-    icon: <SettingsRemoteIcon />,
+    icon: <DirectionsCarIcon />,
     href: "/remote-control",
   },
   {
-    text: "Car Settings",
-    icon: <DirectionsCarIcon />,
-    href: "/car-settings",
-  },
-  {
-    text: "Metrics",
-    icon: <BarChartIcon />,
-    href: "/metrics",
+    text: "Logs",
+    icon: <ArticleIcon />,
+    href: "/logs",
   },
   {
     text: "Notifications",
@@ -48,9 +43,9 @@ const primary_items = [
     href: "/notifications",
   },
   {
-    text: "General Settings",
+    text: "Settings",
     icon: <SettingsIcon />,
-    href: "/general-settings",
+    href: "/settings",
   },
 ];
 
@@ -90,6 +85,7 @@ export default function SideBar(props) {
           <Link
             key={index}
             href={item.href}
+            // @ts-ignore
             onClick={(e) => handleClick(e, item.href)}
             passHref
           >
@@ -122,7 +118,7 @@ export default function SideBar(props) {
                     <>{item.icon}</>
                   )}
                 </ListItemIcon>
-                <ListItemText className="blanc-casse" primary={item.text} />
+                <ListItemText className="blanc-casse google-text" primary={item.text} />
               </ListItem>
             </a>
           </Link>

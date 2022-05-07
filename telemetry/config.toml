@@ -1,4 +1,4 @@
-NODE_ENV="development" # or production
+NODE_ENV="production" # development or production
 
 HOSTNAME="0.0.0.0"
 PORT=3000

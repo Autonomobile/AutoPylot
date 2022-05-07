@@ -1,3 +1,4 @@
+//@ts-check
 import { useState, useEffect } from "react";
 import Head from "next/head";
 import { useAtom } from "jotai";
@@ -9,11 +10,12 @@ import DropDown from "../components/DropDown";
 
 export default function App({ children }) {
   const [drawerState, setDrawerState] = useState(false);
+
   const [socket] = useAtom(socketAtom);
+  const [, setNotifications] = useAtom(notificationsAtom);
   const [, setMemory] = useAtom(memoryAtom);
   const [, setLogs] = useAtom(logsAtom);
   const [, setSettings] = useAtom(settingsAtom);
-  const [notifications, setNotifications] = useAtom(notificationsAtom);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -35,22 +37,27 @@ export default function App({ children }) {
 
     socket.on("GET_MEMORY", (data) => {
       setMemory(data);
-      console.log("memory :", data);
+      // console.log("GET_MEMORY", data);
     });
 
     socket.on("GET_LOGS", (data) => {
-      setLogs(data);
-      console.log("logs :", data);
+      data["id"] = data["created"];
+      setLogs(logs => [data, ...logs]);
+      // console.log("GET_LOGS :", data);
     });
 
     socket.on("GET_NOTIFICATIONS", (data) => {
-      console.log("notifications app", data);
-      notifications.push(data);
-      setNotifications(notifications);
+      setNotifications(notifications => [data, ...notifications]);
+      // console.log("GET_NOTIFICATIONS :", data);
     });
 
-    //TODO: add notification listener
-  }, [setLogs, setMemory, setSettings, socket]);
+    socket.on("GET_SETTINGS", (data) => {
+      setSettings(data);
+      console.log("GET_SETTINGS :", data);
+    });
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [socket]);
 
   return (
     <>
@@ -92,7 +99,7 @@ export default function App({ children }) {
           <div className="flex-none w-60 hidden md:block secondary">
             <SideBar />
           </div>
-          <div className="flex flex-col flex-1 secondary">
+          <div className="flex flex-col flex-1 secondary min-w-0">
             <div className="flex-1 overflow-y-auto child-text">{children}</div>
           </div>
         </div>

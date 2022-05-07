@@ -2,6 +2,35 @@
 import json
 import cv2
 import os
+import numpy as np
+
+
+class NumpyEncoder(json.JSONEncoder):
+    """Special json encoder for numpy types"""
+
+    def default(self, obj):
+        if isinstance(
+            obj,
+            (
+                np.int_,
+                np.intc,
+                np.intp,
+                np.int8,
+                np.int16,
+                np.int32,
+                np.int64,
+                np.uint8,
+                np.uint16,
+                np.uint32,
+                np.uint64,
+            ),
+        ):
+            return int(obj)
+        elif isinstance(obj, (np.float_, np.float16, np.float32, np.float64)):
+            return float(obj)
+        elif isinstance(obj, (np.ndarray,)):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
 
 
 def load_image(image_path):
@@ -52,7 +81,7 @@ def save_json(json_path, to_save):
         to_save (dictionnary): is the dictionnary to save.
     """
     with open(os.path.normpath(json_path), "w") as json_file:
-        json.dump(to_save, json_file)
+        json.dump(to_save, json_file, cls=NumpyEncoder)
     return True
 
 

@@ -1,8 +1,8 @@
 // @ts-check
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 
 import { useAtom } from "jotai";
-import { carsAtom, carAtom, socketAtom } from "../utils/atoms";
+import { carsAtom, carAtom, socketAtom, settingsAtom } from "../utils/atoms";
 
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -12,29 +12,38 @@ export default function NativeSelectDemo() {
   const [socket] = useAtom(socketAtom);
   const [cars, setCars] = useAtom(carsAtom);
   const [car, setCar] = useAtom(carAtom);
+  const [settings, setSettings] = useAtom(settingsAtom);
 
   useEffect(() => {
     socket.on("GET_CARS", (data) => {
       setCars(data)
+      console.log("GET_CARS :", data);
     });
     socket.emit("GET_CARS");
-  }, [socket]);
+  }, [setCars, socket]);
+
 
   useEffect(() => {
-    console.log("car", car);
-  }, [car]);
-
-  useEffect(() => {
-    console.log("cars", cars);
-    if (!cars.includes(car)) {
+    if (!cars.includes(car) && car !== "") {
       setCar("");
-
+      setSettings({"please choose a car": ":)"});
+      socket.emit("SET_CAR", "");
+      console.log("SET_CAR :", "");
     }
-  }, [cars]);
+  }, [car, cars, setCar, setSettings, socket]);
 
   function handleChange(event) {
-    setCar(event.target.value);
-    socket.emit("SET_CAR", event.target.value);
+    const id = event.target.value;
+    setCar(id);
+    socket.emit("SET_CAR", id);
+    console.log("SET_CAR :", id);
+
+    if (id !== "") {
+      socket.emit("GET_SETTINGS", id);
+      console.log("GET_SETTINGS");
+    } else {
+      setSettings({"please choose a car": ":)"});
+    }
   }
 
   return (
