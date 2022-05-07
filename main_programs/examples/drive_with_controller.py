@@ -82,6 +82,9 @@ def main():
             mem["throttle"] = throttle * settings.THROTTLE_MULT
 
         elif mem["state"] == "collect":
+            mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
+            mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
+
             io.save_image_data(
                 mem,
                 os.path.join(
@@ -89,8 +92,6 @@ def main():
                     settings.JSON_FILE_FORMAT.format(t=time.time()),
                 ),
             )
-            mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
-            mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
 
         actuator.update()
 
