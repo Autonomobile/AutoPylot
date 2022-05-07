@@ -18,6 +18,7 @@ uuidhex = uuid.uuid4().hex
 
 CPU_USAGE = 0
 
+
 @sio.on("connect")
 def on_connect():
     print("connected")
@@ -116,8 +117,10 @@ def run_threaded(host):
                 if "image" in to_send.keys():
                     to_send["image"] = encode_image(mem["image"])
 
-                cpu_usage =  psutil.cpu_percent()
-                to_send["cpu_usage"] = CPU_USAGE = cpu_usage if cpu_usage != 0 else CPU_USAGE
+                cpu_usage = psutil.cpu_percent()
+                if cpu_usage != 0:
+                    CPU_USAGE = cpu_usage
+                to_send["cpu_usage"] = CPU_USAGE
 
                 to_send["ram_usage"] = psutil.virtual_memory().percent
 
