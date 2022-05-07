@@ -21,6 +21,7 @@ model, model_info = utils.load_model(
     f"{settings.MODEL_NAME}/{settings.MODEL_NAME}.tflite"
 )
 prepare_data = preparedata.PrepareData(model_info)
+settings.ENABLE_TRANSFORM = False
 transformer = transform.Transform()
 
 
@@ -33,7 +34,7 @@ def main(path):
         predictions = model.predict(input_data)
         image_data.update(predictions)
 
-        print(image_data["zone"])
+        # print(image_data["zone"])
 
         vis_image = vis.vis_all(image_data)
         pr.update()
