@@ -162,11 +162,11 @@ class Models:
         inputs = []
         outputs = []
 
-        inp = Input(shape=(120, 160, 3), name="image")
+        inp = Input(shape=(None, None, 3), name="image")
         inputs.append(inp)
 
         x = Cropping2D(cropping=((20, 20), (0, 0)))(inp)
-        x = BatchNormalization()(x)
+        x = Lambda(lambda x: x / 255)(x)
 
         x = Conv2D(12, 5, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
@@ -177,14 +177,15 @@ class Models:
         x = Conv2D(32, 5, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
-        x = Conv2D(48, 3, strides=2, use_bias=False)(x)
+        x = Conv2D(96, 3, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
-        x = Conv2D(64, 3, strides=1, use_bias=False)(x)
+        x = Conv2D(256, 3, strides=1, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
 
-        x = Flatten()(x)
+        x = GlobalAveragePooling2D()(x)
+        # x = Flatten()(x)
         x = Dropout(0.2)(x)
 
         x = Dense(200, use_bias=False)(x)
@@ -196,7 +197,6 @@ class Models:
         x = Dense(100, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
-        x = Dropout(0.1)(x)
 
         y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y1)
