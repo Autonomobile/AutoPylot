@@ -22,7 +22,7 @@ from tensorflow.keras.layers import (
     SeparableConv2D,
 )
 from tensorflow.keras.regularizers import l1_l2
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.optimizers import Adam, SGD
 
 
 def get_model_constructor_by_name(name):
@@ -162,7 +162,7 @@ class Models:
         inputs = []
         outputs = []
 
-        inp = Input(shape=(None, None, 3), name="image")
+        inp = Input(shape=(120, 160, 3), name="image")
         inputs.append(inp)
 
         x = Cropping2D(cropping=((20, 20), (0, 0)))(inp)
@@ -177,16 +177,74 @@ class Models:
         x = Conv2D(32, 5, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
-        x = Conv2D(96, 3, strides=2, use_bias=False)(x)
+        x = Conv2D(48, 3, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
-        x = Conv2D(256, 3, strides=1, use_bias=False)(x)
+        x = Conv2D(64, 3, strides=1, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
 
-        x = GlobalAveragePooling2D()(x)
-        # x = Flatten()(x)
+        x = Flatten()(x)
         x = Dropout(0.2)(x)
+
+        x = Dense(200, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+        x = Dense(100, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+        x = Dense(100, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+        x = Dropout(0.1)(x)
+
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
+        outputs.append(y1)
+
+        y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        outputs.append(y2)
+
+        # Create the model
+        model = Model(inputs=inputs, outputs=outputs)
+
+        # Compile it
+        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 0.75])
+
+        logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
+        return model
+
+    def separable_model():
+        inputs = []
+        outputs = []
+
+        inp = Input(shape=(120, 160, 3), name="image")
+        inputs.append(inp)
+
+        x = Cropping2D(cropping=((20, 20), (0, 0)))(inp)
+        x = Lambda(lambda x: x / 255)(x)
+
+        x = SeparableConv2D(24, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(48, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(96, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(192, 3, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(256, 3, strides=1, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = Flatten()(x)
+        x = Dropout(0.3)(x)
 
         x = Dense(200, use_bias=False)(x)
         x = Activation("relu")(x)
@@ -208,7 +266,7 @@ class Models:
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
-        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 0.75])
+        model.compile(optimizer=SGD(), loss="mse", loss_weights=[1, 0.75])
 
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model

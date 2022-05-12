@@ -113,7 +113,7 @@ class Functions:
         image_data["image"] = cv2.merge(order)
 
     def resize(image_data):
-        factor = 1.0 + image_data["batch-random"]
+        factor = 1.0 + image_data.get("batch-random", np.random.uniform(0.0, 1.0))
         shape = image_data["image"].shape
         image_data["image"] = cv2.resize(
             image_data["image"],
