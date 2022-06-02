@@ -18,7 +18,7 @@
 
 %title
 \title{\underline{Project report - AutoPylot}}
-\date{March 2022}
+\date{June 2022}
 
 
 \author{%
@@ -41,12 +41,12 @@
 \section{Introduction}
 
 \subsection{Project presentation}
-Autonomous vehicles and more specifically self-driving cars have grasp the attention of many people for good or ill. In this spirit, we have decided with the Autonomobile team to create our first ever project, AutoPylot. The name of our team is of course full of meaning in that regard. Autonomobile is a two-word name, the first one a French word for autonomous : "Autonome", the second one a French word for car : "Automobile". These two-word combined literally mean Autonomous car.\\
+Autonomous vehicles and more specifically self-driving cars have grasp the attention of many people for good or ill. In this spirit, we have decided with the Autonomobile team to create our first ever project, AutoPylot. The name of our team is of course full of meaning in that regard. Autonomobile is a two-word name, the first one a French word for autonomous: "Autonome", the second one a French word for car: "Automobile". These two-word combined literally mean Autonomous car.\\
 
-What is AutoPylot's goal ? 
+What is AutoPylot's goal? 
 Drive itself on a track and win races. It may, at first glance seem very simple but not everything is at it seems. Yet we will try to make it as easy to understand as possible, without omitting crucial information. To achieve our goal, we need to solve many other problems. Those problems can be separate into two distinct groups. \\
 
-The first one would be the software part. Indeed, in this project we will need to learn and acquire certain skills, from teamwork to coding in different languages. With those newly acquired skills we will be able to bring machine learning to our car to make it drive itself. This leads use directly to our second part, the more tangible one : hardware. Indeed, as we will progress in our work, we will need to see the results of our work in real life condition. This means implementing our code to a functioning car which will be able to race on a track. \\
+The first one would be the software part. Indeed, in this project we will need to learn and acquire certain skills, from teamwork to coding in different languages. With those newly acquired skills we will be able to bring machine learning to our car to make it drive itself. This leads use directly to our second part, the more tangible one: hardware. Indeed, as we will progress in our work, we will need to see the results of our work in real life condition. This means implementing our code to a functioning car which will be able to race on a track. \\
 
 This project will lead by a team of four young developers, Maxime Ellerbach, Mickael Bobovitch, Maxime Gay and Alexandre Girold. In this project work will be divided equally amongst all of us, sometimes we will have to work together to achieve our very tight time frame. 
 
@@ -54,24 +54,24 @@ This project will lead by a team of four young developers, Maxime Ellerbach, Mic
 
 % Write a small paragraph about yourself, what you like, what you did in the past. Everything is valuable !
 \subsubsection{Maxime Ellerbach}
-I am a curious and learning hungry person, always happy to learn and collaborate with new people ! Programming, robotics and tinkering has always attracted me. Writing code and then seeing the results in real life is something that I find amazing ! I had multiple projects in this field : Lego Mindstorms, a robotic arm, more recently an autonomous car and even a simulator in unity to train even without a circuit at home ! Even if I know quite well the domain of autonomous cars, there is always something new to learn. I look forward working with this team full of hard-working people on such a fun project !
+I am a curious and learning hungry person, always happy to learn and collaborate with new people! Programming, robotics and tinkering have always attracted me. Writing code and then seeing the results in real life is something that I find amazing! I had multiple projects in this field: Lego Mindstorms, a robotic arm, more recently an autonomous car and even a simulator in unity to train even without a circuit at home! Even if I know quite well the domain of autonomous cars, there is always something new to learn. I look forward working with this team full of hard-working people on such a fun project!
 
 \subsubsection{Mickael Bobovitch}
-Roses are red. Violets are blue. Unexpected “Mickael BOBOVITCH“ on line 32. Hello I am a French Student with Russian parents. Lived half of my life in Moscow. Passionate in web dev, servers, and business. Started programming at 13 years old. Created many projects. I like to learn everything, from AI, to UI, from Hardware to Software. Actually I am like OCaml, you need to know me well to appreciate me.
+Roses are red. Violets are blue. Unexpected “Mickael BOBOVITCH“ on line 32. I am a French Student with Russian parents. Lived half of my life in Moscow. Passionate in web development, servers, and business. Started programming at 13 years old. Created many projects. I like to learn everything, from AI, to UI, from Hardware to Software. Actually I am like OCaml, you need to know me well to appreciate me.
 
 \subsubsection{Maxime Gay}
-I am 18 years old,  and I am crazy about investment, finance and especially cryptocurrencies and blockchain. I already worked with a team on different Investment projects and during summer Jobs, but this is the first time that I am working on such a  project. Furthermore, I am a beginner in computer Science and autonomous car. However, I am impatient to learn new skills with this incredible team. 
+I am 19 years old and I am crazy about investment, finance and especially cryptocurrencies and blockchain. I already worked with a team on different Investment projects and during summer Jobs, but this is the first time that I am working on such a  project. Furthermore, I am a beginner in computers Science and autonomous car. However, I am impatient to learn new skills with this incredible team. 
 
 \subsubsection{Alexandre Girold}
-I am already getting old. I am 19 years of age, yet I am full of resources. I am delighted to be able to learn something new. There are many things which I enjoy from programming to geopolitics. I know this project will push me toward a better me and make great friends along the way. 
+I am already getting old. I am 20 years of age, yet I am full of resources. I am delighted to be able to learn something new. There are many things which I enjoy from programming to geopolitics. I know this project will push me toward a better me and make great friends along the way. 
 
 \subsection{State of the art}
 In this section, we will try to see what was previously made in this sector of industry.
-It would not be realistic to compare our 1:10 project to real sized cars such as Tesla's, simply because in a racing environment,
+It would not be realistic to compare our 1:10 project to real sized cars such as Tesla's, simply because in a racing environment
 we don't need to deal with such an amount of safety: pedestrian detection, emergency braking, speed limit detection and other.
-So we will only see miniature autonomous racing framework that we would likely race against.\\
+So we will only see the miniature autonomous racing framework that we would likely race against.\\
 
-The most known is called "DonkeyCar", created by Will Roscoe and Adam Conway in early of 2017. Most of the models trained with DonkeyCar are behavior cloning models, meaning models that tries to replicate the behavior of a driver. This method uses a big amount of images (input) associated to steering angles and throttle (output), it requires the user to drive the car (collect data) prior to training the model: no examples means no training. The lack of training data often leads to the car leaving the track.\\
+The most known is called "DonkeyCar", created by Will Roscoe and Adam Conway in early of 2017. Most of the models trained with DonkeyCar are behavior cloning models, meaning models that tries to replicate the behavior of a driver. This method uses a big amount of image (input) associated to steering angles and throttle (output), it requires the user to drive the car (collect data) prior to training the model: no examples mean no training. The lack of training data often leads to the car leaving the track.\\
 
 One other framework worth looking at is one created by Nvidia called "JetRacer" released in 2019. It uses a different approach from DonkeyCar where the user annotates the images by hand by clicking on where the car should go. The model used is similar to what DonkeyCar uses: a Convolutional Neural Network with one input (the image) and two outputs, one for the steering angle and one for the throttle to apply. \\
 
@@ -81,7 +81,7 @@ Both of those frameworks are written in python and use packages such as Tensorfl
 \section{Objectives}
 
 \subsection{Final Objectives}
-Our main objective is to make our car race against other cars and win the race !
+Our main objective is to make our car race against other cars and win the race!
 This will require multiple intermediate milestones:
 \begin{itemize}
 \item Being able to send scripted controls to the motor and servo.
@@ -90,9 +90,9 @@ This will require multiple intermediate milestones:
 \item Process those data before feeding them to the neural network.
 \item Being able to train a convolutional neural network using those data.
 \item Build a telemetry web application.
-\item Tweak the architecture and the parameters of the chosen model to acheive the best results.
+\item Tweak the architecture and the parameters of the chosen model to achieve the best results.
 \item Test in real life the model.
-\item Race against others !
+\item Race against others!
 \end{itemize}
 Once all of that is done, we will start our optional objectives that will enable better racing and better understanding of the car's environnement.
 
@@ -100,11 +100,11 @@ Once all of that is done, we will start our optional objectives that will enable
 To be able to go faster and increase the reliability of our car's driving, we will need to add some features to our project. \\
 
 One good feature would be to have a model that takes into account the speed of the car. As we all know on a real car, we don't steer the same way when going at 10km/h and going at 90km/h. This input extension could bring more stability to our model.
-To go faster, it would also be great to be able to differenciate turns from straight lines and even braking zone before the turn. \\
+To go faster, it would also be great to be able to differentiate turns from straight lines and even braking zone before the turn. \\
 
 \subsection{Motivations}
-Why this project ? \\
-This project is something that we deeply care about. Being able to work on a self driving car does sound like a dream to of us. Being able to work on this project means we will be able to understand how tomorrow's car will work. Moreover, we will learn valuable skills in Python and in neural networks. 
+Why this project? \\
+This project is something that we deeply care about. Being able to work on a self-driving car does sound like a dream to us. Being able to work on this project means we will be able to understand how tomorrow's car will work. Moreover, we will learn valuable skills in Python and in neural networks. 
 Being able to work on this project is also a way to prove ourselves and that with enough work anything is achievable.
 Our goal is not to make the new tesla model W but it is to be a part of this constant progress in autonomous vehicles. We also want to see how far we can take this project and what we will have achieved by the end of the school year. With this idea in mind, we have set ourself some goals, for example winning a race. This project is not a common one, but that is exactly what pushes us to make it work not matter the cost. We are also proud to be able to represent Epita for the races. 
 It is a great opportunity for us because we will have the chance to meet many people during the races like some people of Renault Digital and some other passionate people.
@@ -119,33 +119,33 @@ On the hardware side, we already have a working car containing:
 \item An Arduino Mini. It is used for the low level, it handles commands sent by the RaspberryPi on the serial port, processes them and send Pulse Width modulation (PWM) signals to both the Electronic Speed Controller (ESC) and servo motor.
 \item An Electronic Speed Controller (or ESC). It is used to drive the motor, it receives  from the arduino a PWM signal (Pulse width modulation).
 \item A Servo motor. Just like the ESC, it receives a PWM signal
-\item A Speed sensor. This sensor will be usefull for our optional objectives that will require a speed feedback. This sensor is read by the arduino, then the data is sent to the RaspberryPi over the serial port.
+\item A Speed sensor. This sensor will be useful for our optional objectives that will require a speed feedback. This sensor is read by the arduino, then the data is sent to the RaspberryPi over the serial port.
 \end{itemize}
 
-As the car is already working on the hardware side, it will save us some precious time. But still, it is really important to understand how the whole car is working and how the different components are interecting.
+As the car is already working on the hardware side, it will save us some precious time. But still, it is really important to understand how the whole car is working and how the different components are interacting.
 Here is a schema of the current hardware setup we will be using:
 \newpage
 
-\rotatebox[origin=c]{-90}{\includegraphics[width=27cm]{../docs/schema.png}}
+\rotatebox[origin=c]{-90}{\includegraphics[width=27cm]{../../docs/schema.png}}
 
 
 \subsection{Software}
 As you understood, our work will be focused more on the software side.
-Our project will be written mostly in Python, with a bit of JS and arduino code.
+Our project will be written mostly in Python, with a bit of Java Script(JS) and arduino code.
 We will divide the project into 3 big parts:
 \begin{itemize}
-\item The backend. This is where most of our efforts will be focused; this part includes every key programs all the way from the data gathering to the model training and testing.
+\item The backend. This is where most of our efforts will be focused; this part includes every key program all the way from the data gathering to the model training and testing.
 
-The first part we will develop is the code responsible for the communication between the RaspberryPi and the Arduino, this code will enable us to drive the motor and servo motor by calling some simple functions. This program will also later be used to fetch the speed of the car transmitted by the arduino to the RaspberryPi.
+The first part we will develop is the code responsible for the communication between the RaspberryPi and the Arduino, this code will enable us to drive the motor and servo motor by calling some simple functions. This program will also later be used to fetch the speed of the car transmitted by the Arduino to the RaspberryPi.
 Then, we will need to find a way to control the car manually, for example using a controller. The values of every axis and buttons on the controller will need to be fetch and then transmitted to the arduino using the code previously created.
 We will then create functions to capture, save and load images and annotations corresponding to the image. The data will be stored in an ordered manner using the date of capture of the images. For this part we will mostly use OpenCV and Numpy.
 Then we will need to create models using Tensorflow, we will firstly create a basic Convolutional model. In order to train it, we will need to write a program to load existing data, feed the right inputs and output to the model. The modularity of this part is crucial as our models will have more and more inputs and outputs.
 To increase the accuracy and generalization of our model, we will need to provide some augmented data to our model. We will create multiple functions to add some random noise, random shadows, lights, and blur to our images. This process known as data augmentation, is really important and will bring more robustness to our models.
-We will then be able to start our optional objectives such as speed control and overtaking !
+We will then be able to start our optional objectives such as speed control!
 
 \item The Telemetry website.
 
-Developing an autonomous car is difficult. The more you know about what’s happening inside, the better results will get. We will use telemetry. It will help us analyze what is happening inside the car at any moment. To collect data, a server will run outside the car on a computer. The car will communicate with the server through a Wi-Fi router. The server is divided in two parts: The first part is a web-app. It will use JavaScript (Node.js) as the main language. The UI will be created using the React.js framework. The server will handle image streaming with UDP from multiple client (autonomous cars). The web-app will display the camera’s views in a canvas. Furthermore, clients will be sending debugging and logs to an Elasticsearch Database because we will work with JSON data. All the logs will be accessible from the web-app, and will be displayed in various form as Time series graph and Scatterplots. The server and the database will run each inside its own docker container. We will use docker-compose to run all containers with one command.
+Developing an autonomous car is difficult. The more you know about what’s happening inside, the better results will get. We will use telemetry. It will help us analyze what is happening inside the car at any moment. To collect data, a server will run outside the car on a computer. The car will communicate with the server through a Wi-Fi router. The server is divided in two parts: The first part is a web-app. It will use JavaScript (Node.js) as the main language. The UI will be created using the React.js framework. The server will handle image streaming with UDP from multiple client (autonomous cars). The web-app will display the camera’s views in a canvas. Furthermore, clients will be sending debugging and logs to an Elasticsearch Database because we will work with JSON data. All the logs will be accessible from the web-app and will be displayed in various forms as Time series graph and Scatterplots. The server and the database will run each inside its own docker container. We will use docker-compose to run all containers with one command.
 
 \item The presentation website. The presentation website will be a Static Generated Site built with Next.js (a React Framework). The Website will introduce a cool design, a presentation of the members and the progress of the project. It will be hosted on GitHub Pages as it is free, reliable and can be managed on the same organization account.
 \end{itemize}
@@ -153,7 +153,7 @@ Developing an autonomous car is difficult. The more you know about what’s happ
 \newpage
 \subsection{Constraints}
 Throughout the project, we will have to keep in mind some constraints.
-Our biggest constraint will be the compute power. We need all of the inference of the model to be executed on the RaspberryPi, this means that we will have to be really carefull of the performance of our code. How fast our main control loop is will determine the reactivity of our car. Our usb camera can capture up to 30 images per seconds, our main control loop should ideally match 30 iterations per seconds. For example, if the car is going at 1 meter per seconds and our control loop is running at 10hz, the distance the car travels between each iteration is 10cm. Now if you are going 5 times faster with the same control loop, you now have 50cm between each decision, this is huge for such a small car ! The part that will likely take the most time will be the inference, we will need to keep track of the ratio between performance and accuracy of our models.
+Our biggest constraint will be the compute power. We need all of the inference of the model to be executed on the RaspberryPi, this means that we will have to be really careful of the performance of our code. How fast our main control loop is will determine the reactivity of our car. Our usb camera can capture up to 30 images per second, our main control loop should ideally match 30 iterations per seconds. For example, if the car is going at 1 meter per second and our control loop is running at 10hz, the distance the car travels between each iteration is 10cm. Now if you are going five times faster with the same control loop, you now have 50cm between each decision, this is huge for such a small car! The part that will likely take the most time will be the inference, we will need to keep track of the ratio between performance and accuracy of our models.
 Regarding the accuracy of our models, we will need sufficient accuracy and generalization to be able to complete multiple laps. If the generalization is not high enough, small changes in the lightning or changes in the background will affect the prediction of our model.
 On the safety part, we have to keep in mind that we are driving a powerful car, a wrong motor command can lead us right into the wall and break the car. Prior to deploy and test our code on a real track, we will need to carefully test our code to avoid such a disaster.
 
