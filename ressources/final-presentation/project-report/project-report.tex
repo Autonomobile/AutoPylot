@@ -161,17 +161,16 @@ On the safety part, we have to keep in mind that we are driving a powerful car, 
 \section{Realized tasks}
 
 \subsection{Project Setup}
-before starting to program, we had to set up a good GitHub repository. First, we created a new GitHub Organization called Autonomobile, this is where all of our repositories are located. We then created the AutoPylot repository. We decided to put everything related to this project in the same repo for simplicity, so we have a repo divided into four main parts:
+Before starting to program, we had to set up a good GitHub repository. First, we created a new GitHub Organization called Autonomobile, this is where all of our repositories are located. We then created the AutoPylot repository. We decided to put everything related to this project in the same repo for simplicity, so we have a repo divided into four main parts:
 \begin{itemize}
 \item The autopylot python module. While creating it, we searched online for best practices regarding python packages. We learned a lot regarding that part ! We put in place a python virtual env (venv) so that every member could easily install every required package: OpenCV, Tensorflow, NumPy and more.
 \item Some main scripts that use autopylot module.
 \item Everything related to the presentation website and telemetry website.
-\item Documentation ! Even if it is not the funniest part of the project, it is still a really important one: keeping track of how to install the project, our dependencies and so on. We also keep in this part every project report and work we had to do for the presentations as we may need them in the future ! It is important to keep track of what is done and what is to be done !
+\item Documentation! Even if it is not the funniest part of the project, it is still a really important one: keeping track of how to install the project, our dependencies and so on. We also keep in this part every project report and work we had to do for the presentations as we may need them in the future! It is important to keep track of what is done and what is to be done!
 \end{itemize}
-We also created a GitHub action to automate the testing of our project ! Every important functions coded is accompanied by its set of tests. This enables us to assert that the code we are currently working on works as expected. With this idea in mind, we added a really important rule: no addition of code on the main branch if it doesn't pass all the tests we wrote. This rule is really important to keep main clean from any major bug ! This rule induces one thing: we need to open branches and do Pull Requests for every feature we add to the project. Moreover, we need the approval of someone else to merge the Pull Request into the main branch. We all forced ourself to respect this as much as we could, the result is that now we are totally used to this process and everyone is aware of what people are working on because they need to review their code.
-On top of that, before committing code, we run a code linter that clean our code, adds and removes whitespace where they should or should not be, rearranges long lines so that they fit into the screen. \\
+We also created a GitHub action to automate the testing of our project! Every important function coded is accompanied by its set of tests. This enables us to assert that the code we are currently working on works as expected. With this idea in mind, we added a really important rule: no addition of code on the main branch if it doesn't pass all the tests we wrote. This rule is really important to keep main clean from any major bug! This rule induces one thing: we need to open branches and do Pull Requests for every feature we add to the project. Moreover, we need the approval of someone else to merge the Pull Request into the main branch. We all forced ourself to respect this as much as we could, the result is that now we are totally used to this process and everyone is aware of what people are working on because they need to review their code.
+On top of that, before committing code, we run a code linter that clean our code, adds and removes whitespace where they should or should not be, rearrange long lines so that they fit into the screen. \\
 All in  all, we are confident to say that we came up with a great set of rules and a great project structure to avoid spending time on solving issues that could arise from a poor project setup.
-
 \newpage
 
 % Ellerbach
@@ -351,39 +350,6 @@ For now, only 25\% of the telemetry sever is finished. We will continuously deve
 \end{figure}
 
 \newpage
-
-% Girold
-\subsection{Creation of the logo}
-\centerline{\includegraphics[height=8cm]{../../logos/logo-transparent-black.png}}
-
-As we were working on our project, we decided it needed a visual identity that could be easily remembered yet have meaning behind it. With this idea in mind, we brainstormed all together and came up with something new, something we believe is a good compromise of information style and personal touch. After a lot of work, we have come up with the logo printed above. Of course, by now our visual identity has a different version, each of them answering to a problem we have faced or will face. We have used a variate of tools from simple google research to an extensive use of PhotoShop.\\
-
-But what is the meaning of this peace of craftsmanship?\\
-
-It has a couple of meanings, the first one being the red circle which in our vision represents a track, an unfinished as there is always room for improvement in any project. The second one is more subtle. The second one is the four dots on the top of the circle. These four dots each represent an autonomous vehicle racing on the track. Why four? Because we are a team of four young and hardworking developers. Finally, the most obvious one is the name of our project in the middle of the circle. 
-
-% Girold
-\subsection{Realization of t-shirt}
-\centerline{\includegraphics[height=8cm]{../../t-shirts/white_t-shirt.png}}
-Yes, we have decided to make t-shirts, why because we want to show how much we are devoted to this project. We honestly want it to be a success and a way to learn essential tools for future projects.\\ 
-
-The t-shirt took a bit of work as we spend a couple of hours deciding on the fabric’s quality and what to put on it. Thankfully we already had a visual design for the front, yes, I am talking about the logo Autopylot.  On the back we have decided the put the name of our team “Autonomobile”, but if a particular form which resembles a wheel. \\ 
-
-To make our purchase we have used a site with a good reputation and pretty good quality products. The name of the website and company is Printful.  We are quite happy with the result and are proud to wear these t-shirts on for any occasion we will have to promote our project. 
-
-\newpage
-
-% Bobovitch
-\subsection{Website}
-As seen before we already developed a web app for our telemetry server. Also, in parallel we developed a static showcase website (available at \href{https://autonomobile.github.io/}{presentation website}). \\
-
-This site is purely static. The mission is to keep it the most professional and simple possible. It is still under construction. We eventually add new content and sections as our progression follows . Our site aims to reflect the efforts and motivation of our team. To deploy the site, We used the excellent quality service offered by Github Pages. \\
-
-We have created our own organization on GitHub, as it enable us to publish the project under our team’s name. Hosting our site in the same place as our code repository allows us to offer a greater visibility to people. Moreover, for the development, it is even easier to manage because all resources are in the same place. \\
-
-In both cases, We used the Next.js framework, a React framework. It allows the creation of web applications and static websites. In terms of stylling, we used UI libraries such as Tailwind CSS and Material UI to increase productivity and produce content that meets the high standards of the web in 2022. With Next.js the backend and the frontend part are merged together which help the development process. \\
-
-In this project we aim to learn the best practice regardless of the technology used. As learning remains our main goal.
 
 
 % Bobovitch
@@ -586,6 +552,39 @@ Finally, we use one important training library. The .fit library from keras. Wit
 % Bobovitch
 \subsection{Data Augmentation}
 During the learning process we have the possibility to use data augmentation. It’s a technique used to diversify training data and to apply different kind of situations with too much lighs or not enough. The AI has to consider the road without light effects. Data augmentation is used too add noise on training data. It’s very useful because it forces neurons to find betters and more complex features in images. The more features are complex, the less we can experiment overfitting. Which means the AI is more capable to drive in a unknown environment and use complex features to drive better.
+\newpage
+
+% Bobovitch
+\subsection{Website}
+As seen before we already developed a web app for our telemetry server. Also, in parallel we developed a static showcase website (available at \href{https://autonomobile.github.io/}{presentation website}). \\
+
+This site is purely static. The mission is to keep it the most professional and simple possible. It is still under construction. We eventually add new content and sections as our progression follows . Our site aims to reflect the efforts and motivation of our team. To deploy the site, We used the excellent quality service offered by Github Pages. \\
+
+We have created our own organization on GitHub, as it enable us to publish the project under our team’s name. Hosting our site in the same place as our code repository allows us to offer a greater visibility to people. Moreover, for the development, it is even easier to manage because all resources are in the same place. \\
+
+In both cases, We used the Next.js framework, a React framework. It allows the creation of web applications and static websites. In terms of stylling, we used UI libraries such as Tailwind CSS and Material UI to increase productivity and produce content that meets the high standards of the web in 2022. With Next.js the backend and the frontend part are merged together which help the development process. \\
+
+In this project we aim to learn the best practice regardless of the technology used. As learning remains our main goal.
+
+
+% Girold
+\subsection{Creation of the logo}
+\centerline{\includegraphics[height=8cm]{../../logos/logo-transparent-black.png}}
+
+As we were working on our project, we decided it needed a visual identity that could be easily remembered yet have meaning behind it. With this idea in mind, we brainstormed all together and came up with something new, something we believe is a good compromise of information style and personal touch. After a lot of work, we have come up with the logo printed above. Of course, by now our visual identity has a different version, each of them answering to a problem we have faced or will face. We have used a variate of tools from simple google research to an extensive use of PhotoShop.\\
+
+But what is the meaning of this peace of craftsmanship?\\
+
+It has a couple of meanings, the first one being the red circle which in our vision represents a track, an unfinished as there is always room for improvement in any project. The second one is more subtle. The second one is the four dots on the top of the circle. These four dots each represent an autonomous vehicle racing on the track. Why four? Because we are a team of four young and hardworking developers. Finally, the most obvious one is the name of our project in the middle of the circle. 
+
+% Girold
+\subsection{Realization of t-shirt}
+\centerline{\includegraphics[height=8cm]{../../t-shirts/white_t-shirt.png}}
+Yes, we have decided to make t-shirts, why because we want to show how much we are devoted to this project. We honestly want it to be a success and a way to learn essential tools for future projects.\\ 
+
+The t-shirt took a bit of work as we spend a couple of hours deciding on the fabric’s quality and what to put on it. Thankfully we already had a visual design for the front, yes, I am talking about the logo Autopylot.  On the back we have decided the put the name of our team “Autonomobile”, but if a particular form which resembles a wheel. \\ 
+
+To make our purchase we have used a site with a good reputation and pretty good quality products. The name of the website and company is Printful.  We are quite happy with the result and are proud to wear these t-shirts on for any occasion we will have to promote our project. 
 
 \newpage
 
