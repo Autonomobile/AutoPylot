@@ -182,33 +182,33 @@ All in  all, we are confident to say that we came up with a great set of rules a
     \label{fig:tinkercad}
 \end{figure}
 
-This task is essential to the success of this project, this is the lowest code level we will deal with. The Arduino code is the code that drives our motor and servomotor, without this part nothing works ! Any issue coming from this part of the code would mean a crash into a wall. To ensure that this part was working as expected, we run a lot of testing with the real car, trying different scenario to see what to expect for example if we lost the connection between the Arduino and Raspberry Pi or if it didn't receive orders for a given amount of time. As all the team could not have direct access to the car, we did a virtual clone of the car using TinkerCad, simulating and live debugging our code before feeding it to our real car !\\
+This task is essential to the success of this project. This is the lowest code level we will deal with. The Arduino code is the code that drives our motor and servomotor, without this part nothing works! Any issue coming from this part of the code would mean a crash into a wall. To ensure that this part was working as expected, we run a lot of testing with the real car, trying different scenario to see what to expect for example if we lost the connection between the Arduino and Raspberry Pi or if it did not receive orders for a given amount of time. As all the team could not have direct access to the car, we did a virtual clone of the car using TinkerCad, simulating and live debugging our code before feeding it to our real car!\\
 You can see on the figure ~\ref{fig:tinkercad} the TinkerCad simplified version of the car.
 
 
 
-You can see here two Arduinos, but on the car we only have one, why is that ? TinkerCad didn't have a Raspberry Pi, so we added another Arduino to simulate the serial connection between the Raspberry Pi and the Arduino. The Arduino on the top sends steering and throttle information (as the Raspberry Pi would do) to the other Arduino that processes this information received on the serial port and then controls both the servomotor and motor. They are both running on a 9V battery here but in real life on a 7.2V battery. We then read the signal sent by the sensored motor, using an interrupt pin. The rpm of the motor is then deduced from this signal and then sent back to the Raspberry Pi.
-This virtual simplified car really helped us in the process of developing the core of our car !
+You can see here two Arduinos, but on the car we only have one, why is that? TinkerCad did not have a Raspberry Pi, so we added another Arduino to simulate the serial connection between the Raspberry Pi and the Arduino. The Arduino on the top sends steering and throttle information (as the Raspberry Pi would do) to the other Arduino that processes this information received on the serial port and then controls both the servomotor and motor. They are both running on a 9V battery here but in real life on a 7.2V battery. We then read the signal sent by the sensored motor, using an interrupt pin. The rpm of the motor is then deduced from this signal and then sent back to the Raspberry Pi.
+This virtual simplified car really helped us in the process of developing the core of our car!
 
-When the Arduino part was finished, we could start the python part, that consisted in sending the right bytes to the serial port connected to the Arduino, it was hard to debug when there were issues on the one hand, but really satisfying when it did work ! We are now able to send steering and throttle to the Arduino making the car controllable using python !
+When the Arduino part was finished, we could start the python part, that consisted in sending the right bytes to the serial port connected to the Arduino, it was hard to debug when there were issues on the one hand, but really satisfying when it did work! We are now able to send steering and throttle to the Arduino making the car controllable using python!
 
 % Ellerbach
 \subsection{Camera}
-The next step was to build a class to fetch images from our webcam, thankfully, the python module OpenCV has already some functions to do exactly that ! \\
+The next step was to build a class to fetch images from our webcam, thankfully, the python module OpenCV has already some functions to do exactly that! \\
 We only needed to add a wrapper around all of that to match our needs. We are now able to fetch images from our camera into a NumPy array that we can manipulate. On top of that, we did create a `dummy` version of this camera class in case we did not have access to a camera to run some tests, this class return a black image when we grab a new image form it. We use this class in some of our automated tests.
 
 % Girold
 \subsection{Load and save data}
 In this section, we will talk about how we can load and save data, data is defined as an image.png or the same image as a JSON file. We want to have both types of data because the JSON files are easy to manipulate and the png images will be used to display the images captured by the car's camera.\\
 
-Let’s dive deeper into how we managed to make it work. Firstly, we will need to make use of different modules and packages. For this part, we will use 3 modules: Json, cv2, and os. A more detail explanation of those modules can be found in the next section.\\ 
+Let’s dive deeper into how we managed to make it work. Firstly, we will need to make use of different modules and packages. For this part, we will use three modules: Json, cv2, and os. A more detail explanation of those modules can be found in the next section.\\ 
 
  
 Let’s go throw the different functions: \\ 
 
 Firstly, we have the load functions. There are present to make it easier for us to use images for future functions. The first of these functions load’s an image (.png) from a given path and returns it as a NumPy array (multidimensional array object) which is amazingly fast for computing a large amount of data, exactly what will we do in the future.\\ 
 
-Secondly, we have the function save, these are simple but are quite important. Indeed, the first save function simply saves an image given as a NumPy array to a file. The second one saves a JSON file into dictionaries of the content of a JSON file. 
+Secondly, we have the function save. These are simple but are quite important. Indeed, the first save function simply saves an image given as a NumPy array to a file. The second one saves a JSON file into dictionaries of the content of a JSON file. 
 
 One important function which will be used later is the save image data. 
 
@@ -216,17 +216,17 @@ The goal of this function is to save an image as a NumPy array into two files, o
 
 As for all the functions we will make, we will want to make sure they are working correctly and the way we intended them to. To do so, we must make test functions. Writing tests is essential to be able to maintain clean and usable code. It certainly is necessary for preventing problems with your code later. It will also help when adding new functionality or refactoring your code, making sure you haven’t broken anything you didn’t intend to. This is done through the use of assert and yield which have different properties which we will not discuss here as they aren’t the main subject of our project.\\ 
 
-In this case, we will make use of 4 different modules: os, shutil, NumPy, and test. To successfully conduct the tests, we need to create a temporary directory, we will inside this directory then remove it at the end.  
+In this case, we will make use of four different modules: os, shutil, NumPy, and test. To successfully conduct the tests, we need to create a temporary directory, we will inside this directory then remove it at the end.  
 
 The test to the load and save function have 10 function which tests each function on specific outcomes. We want to be sure that our functions do save the images and JSON files into the correct directory.  
 
 % Gay
 \subsection{Data set}
-Previously, we created functions to load and save datas, those functions handle JSON files and images. \\ 
+Previously, we created functions to load and save data, those functions handle JSON files and images. \\ 
 Now we have to deal with data set but first, what is a data set? \\  
 A data set is a folder which contains JSON files and images. Each file will have in its name the date followed by .png, the JSON should have the same name, but it ends with .json instead of .png. In order to have the date, we have to use the time method time() which returns the time as a floating-point number expressed in seconds since the epoch, in UTC.\\ 
 Why are datasets so important? \\  
-The goal of these parts is to manipulate data set. We take the information that the camera is giving to us, and we can load, save and sort those datas in a cleaner way so that our training model and our Artificial intelligence model can use it.\\ 
+The goal of these parts is to manipulate data set. We take the information that the camera is giving to us, and we can load, save and sort those data in a cleaner way so that our training model and our Artificial intelligence model can use it.\\ 
 We started by creating two files, the dataset.py file for the main functions and the test dataset.py in order to provide test functions to see if our code is working.\\ 
 Firstly, for the dataset.py file, we had to import two modules. \\ 
 The first one is the glob module which finds all the path-names matching a specified pattern according to the rules used by the Unix shell.\\
@@ -259,7 +259,7 @@ To finish, to get a cleaner workspace, we delete all our folders created for tho
 % Ellerbach
 \subsection{Data visualization}
 In order to properly visualize our fetched data, we created some utils functions to do so.
-The figures ~\ref{fig:a} shows a left turn and ~\ref{fig:b} a straight line. \\ But How does that work ? \\ Every saved images have labels : steering, throttle and speed, once we load them using our previously developed functions, we are left with a dictionary containing the image in a NumPy array, and floating points values steering, throttle and speed. We then draw onto the image some lines and text using OpenCV's functions. We draw a line in the middle using our steering float, the line on the right represents the throttle, and finally on the left, the speed ! We designed those functions to be as modular as possible, if we ever need to add a new data to visualize, we just need to add a single line ! You can imagine layering outputs of different models to determine which one is better. We can also imagine in a near future that our model would predict positions with confidence metrics, we could totally represent those using those visualization functions. In short, they will be essential to debug what is going on and provide key information to our eyes.
+The figures ~\ref{fig:a} shows a left turn and ~\ref{fig:b} a straight line. \\ But How does that work ? \\ Each saved images have labels: steering, throttle and speed, once we load them using our previously developed functions, we are left with a dictionary containing the image in a NumPy array, and floating points values steering, throttle and speed. We then draw onto the image some lines and text using OpenCV's functions. We draw a line in the middle using our steering float, the line on the right represents the throttle, and finally on the left, the speed! We designed those functions to be as modular as possible, if we ever need to add a new data to visualize, we just need to add a single line! You can imagine layering outputs of different models to determine which one is better. We can also imagine in a near future that our model would predict positions with confidence metrics, we could totally represent those using those visualization functions. In short, they will be essential to debug what is going on and provide key information to our eyes.
 
 \begin{figure}[h]
     \centering
@@ -295,9 +295,9 @@ Now we will mainly focus on the driving part and the neural network.
 \subsection{Logging}
 While executing for the first time our driving script on the car, we thought that our current way of logging and keeping track of events could be drastically improved. To answer this need, we came up with an idea: have the logs sent to the telemetry server. This could enable us to directly have access to what is going on in the car in real-time! On top of that, we would also have the logs stored locally in a file on the Raspberry Pi and printed on the standard output. \\  
 
-So we began searching for a nice way to do this easily without having to change our project's structure. The idea is to be able to send both logs and telemetry with the same process, but the telemetry should not be saved to file and only sent to the server. We found the python module `logging`, that comes with python without further need of installation. Logging enables flexible event logging for both modules and main scripts. After trying up some example scripts, we decided to go with this module ! In a first time, we added and set up the file handler and stream handler that respectively logs to a file and to a stream (in our case the standard output), those two handlers listens only for logs and not telemetry. Then, we had to develop a handler that would fit our needs to send both logs and telemetry to the telemetry server, we found a socket handler that somewhat fitted some of our needs, but not all. So we started a custom handler with having in mind this socket handler example. \\
+So we began searching for a nice way to do this easily without having to change our project's structure. The idea is to be able to send both logs and telemetry with the same process, but the telemetry should not be saved to file and only sent to the server. We found the python module `logging`, that comes with python without further need of installation. Logging enables flexible event logging for both modules and main scripts. After trying up some example scripts, we decided to go with this module! In a first time, we added and set up the file handler and stream handler that respectively logs to a file and to a stream (in our case the standard output), those two handlers listens only for logs and not telemetry. Then, we had to develop a handler that would fit our needs to send both logs and telemetry to the telemetry server, we found a socket handler that somewhat fitted some of our needs, but not all. So we started a custom handler with having in mind this socket handler example. \\
 
-This handler development is parallel to the server's development, this requires an efficient communication between the team developing the logging (client) and the one developing the server. This part will be executed on the Raspberry Pi, so it has to be light to avoid overloading the CPU, also we have to keep in mind that the network might be limited so in a case of a telemetry log (sending an image), the image has to be compressed in real-time, again while finding a performance balance.
+This handler development is parallel to the server's development. This requires an efficient communication between the team developing the logging (client) and the one developing the server. This part will be executed on the Raspberry Pi, so it has to be light to avoid overloading the CPU, also we have to keep in mind that the network might be limited so in a case of a telemetry log (sending an image), the image has to be compressed in real-time, again while finding a performance balance.
 We came up with a prototype of the python client with a simple python server, but have not completely finished the telemetry server. When the handler is called with a new log to send, it is being added to a queue of logs and telemetry messages, those are being sent by a thread so that we do not wait for the item to be sent to continue in the program. \\
 To conclude, this part will be of great help for debugging and will be allowing us to go back in time after a run and take a look back at the main events we had, crashes and more. We aim to have this part finished and functional by the next presentation.
 
@@ -408,32 +408,32 @@ In Conclusion this server is the autopylot’s best friend. It’s very easy to 
 Before going further into the DeepLearning part, let's have a quick reminder of what is a Neural Network and a bit of theory behind all of that. \\
 
 \subsubsection{Neural Network}
-So, what is a Neural Network ? 
+So, what is a Neural Network? 
 A Neural Network or "NN" or "NeuralNet" for short is a black box. The role of a Neural Network is to approximate functions. This can be accomplished with a combination of layers that can be also seen as functions with N parameters and P outputs. Each layer can communicate with the next ones. In most architectures the Neural Network can be visualized as a sequential list of layers, but some are more complex featuring: branches, feedforward and other mystical tricks. \\
 
-This Neural Network by default is only outputting random results, to train it to best approximate our imaginary function, we need one thing: Data ! In our case, we need to predict the next action of our car: steering and throttle from an image: the POV of the car. We can also imagine adding other parameters to our black box like the current speed of the car.
-During the training process, the prediction (Forward propagation) the model makes along with the expected value are used to correct the weights and inner parameters of every layer (Backward propagation). To have a well-fitted Neural Network, the more the data we have and the best the quality of that data is, the better ! \\
+This Neural Network by default is only outputting random results, to train it to best approximate our imaginary function, we need one thing: Data! In our case, we need to predict the next action of our car: steering and throttle from an image: the POV of the car. We can also imagine adding other parameters to our black box like the current speed of the car.
+During the training process, the prediction (Forward propagation) the model makes along with the expected value are used to correct the weights and inner parameters of every layer (Backward propagation). To have a well-fitted Neural Network, the more the data we have and the best the quality of that data is, the better! \\
 
 Neural Networks are mainly composed of fully connected layers (or Dense layers), those are composed of a given amount of neurons. They receive one or more input signals, do calculation on them and then communicates its output signals to the next layer. The output signal is calculated from the sum of every input multiplied by its weight along with the addition of a bias. The output is then going through an activation function before outputting to the next layers. \\
 
 \centerline{\includegraphics[height=7cm]{../../docs/activation-function.png}}
 
 \subsubsection{Convolutional Neural Network}
-So now, what is a Convolutional Neural Network ?
-First, a Convolutional Neural Network or "CNN" is a type of Neural Network ! It inherits its name from the kind of layer it has: Convolution layers. \\
+So now, what is a Convolutional Neural Network?
+First, a Convolutional Neural Network or "CNN" is a type of Neural Network! It inherits its name from the kind of layer it has: Convolution layers. \\
 
-What is a Convolution ? 
-A convolution is an operation that changes a function into something else. It uses kernels or filters to detect features in a signal. In our case, we use two-dimensional convolution. The signal is the image composed of pixels (usually their values are between 255-0 or 1-0). The main idea behind having convolutions in a Neural Network is to analyze this signal and encode it into a smaller signal. \\
+What is a Convolution? 
+A convolution is an operation that changes a function into something else. It uses kernels or filters to detect features in a signal. In our case, we use two-dimensional convolution. The signal is the image composed of pixels (usually, their values are between 255-0 or 1-0). The main idea behind having convolutions in a Neural Network is to analyze this signal and encode it into a smaller signal. \\
 \centerline{\includegraphics[height=8cm]{../../docs/convolution.png}}
 
-Here you can see the application of a 3x3 convolution kernel on a 4x4 signal, the resulting of the application of this filter is a new signal of size 2x2. The resulting signal is smaller than the input signal, but why is that ? Simply because the kernel here is only applied on the valid areas of the input signal, so the outside border of the signal is lost. To prevent that, we can add zero values around the input filters so that the output size matches the input size. \\
+Here you can see the application of a 3x3 convolution kernel on a 4x4 signal, the resulting of the application of this filter is a new signal of size 2x2. The resulting signal is smaller than the input signal, but why is that? Simply because the kernel here is only applied on the valid areas of the input signal, so the outside border of the signal is lost. To prevent that, we can add zero values around the input filters so that the output size matches the input size. \\
 \centerline{\includegraphics[height=8cm]{../../docs/padding.png}}
 
 Now, as said previously, the main idea of having convolutions is to reduce the size of our image, this can be done by introducing strides to our convolution layers. The amount of movement between applications of the kernel of the input signal is referred as the stride. On the above illustrations, we had a stride of 1 meaning at each step, the kernel moved by 1 pixel. On the illustration below, a 3x3 kernel is applied to a 5x5 signal with strides set to 2 without padding. This results in a 2x2 output signal. \\
 \centerline{\includegraphics[height=6cm]{../../docs/strides.png}}
 
 Each filter detects simple features from the previous signal but deepest the Convolutional Neural Network is, the more complex the detected features are. Here is an example where we are trying to detect the face of a dog in an image: 
-The first convolution layer will detect simple features such as edges on the image, those can correspond to the shape of the dog as well as the shape of other stuff in the image. The second will have in input the already detected edges, from those edges it could detect sets of edges looking like features coming from a dog: ears, eyes, fur. The third one will from those features detect even more complex features and so on.
+The first convolution layer will detect simple features such as edges on the image. Those can correspond to the shape of the dog as well as the shape of other stuff in the image. The second will have in input the already detected edges, from those edges it could detect sets of edges looking like features coming from a dog: ears, eyes, fur. The third one will from those features detect even more complex features and so on.
 After the convolutional layers, we are left with something called the latent space of our image. It is the encoded, simplified form of our image where only the key features are left. From those locally detected features, we can then have a look at the big picture by flattening the 2D signals into a 1D vector to be fed into fully connected layers and then answering the question "Is there a dog in the image?" or "Should we go right or left?". \\
 
 \subsubsection{Activation functions}
@@ -445,10 +445,10 @@ In some cases, we want our output signal to meet some requirements, for example,
 \item Rectified Linear unit or "Relu" is the most widely used activation, it cuts off the negative values. It is defined as $ Relu(z) = \max(0, z)$. \\
 \centerline{\includegraphics[height=6cm]{../../docs/relu.png}}
 
-\item Sigmoid is another widely used function, it maps every values between 0 and 1. It is defined as $ Sigmoid(z) = \frac{1} {1 + e^{-z}}$ \\
+\item Sigmoid is another widely used function. It maps every values between 0 and 1. It is defined as $ Sigmoid(z) = \frac{1} {1 + e^{-z}}$ \\
 \centerline{\includegraphics[height=6cm]{../../docs/sigmoid.png}}
 
-\item Tanh, similarly to Sigmoid maps every values between -1 and 1. It is defined as $ Tanh(z) = \frac{1 - e^{-2z}}{1 + e^{-2z}}$ \\
+\item Tanh, similarly to Sigmoid maps every value between -1 and 1. It is defined as $ Tanh(z) = \frac{1 - e^{-2z}}{1 + e^{-2z}}$ \\
 \centerline{\includegraphics[height=6cm]{../../docs/tanh.png}}
 
 \item Softmax is mainly used for single label classification problems. It is defined as $ Softmax(z_i) = \frac{e^{z_{i}}}{\sum_{j=1}^K e^{z_{j}}} \ \ \ for\ i=1,2,\dots,K$ \\
@@ -476,15 +476,16 @@ The problem with this model is that it is slow, and it is even slower in our cas
 
 I started by removing some convolutional layers. 
 
-My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy. Then with the other layers, I increased progressively the number of kernels and I reduced the kernel size to 3x3. Moreover, I apply a stride of 2 for the first four layers and a stride of 1 for the last two. In the end, I use two Dense layers with an activation function "relu" like the other layers. Finally, I tested many different optimizers like SGC, Adadelta, Nadam and Ftrl but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies. 
+My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy. Then with the other layers, I progressively increased the number of kernels and I reduced the kernel size to 3x3. Moreover, I apply a stride of 2 for the first four layers and a stride of 1 for the last two. In the end, I use two Dense layers with an activation function "relu" like the other layers. Finally, I tested many different optimizers like SGC, Adadelta, Nadam and Ftrl but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies. 
+
 \subsubsection{Mickael Bobovitch}
-I Tried different implementation. One that worked pretty well for me is a model inspired by Nvidia. I also tried a model based on the AlexNet Architecture. The common point between architecture is their use on 2D convolution. For instance at the top of the stack we have 5 layers of 2D convolution, followed by a Flatten Layer and finally by few Dense Layers. Some architetures used MaxPooling to translate images or change the size of the searched object. This technique is great for searching object that can be anywhere on a picture. But form lane recognition this might be not necessary. I am still experimenting a lot. For the next time i will have a more robust architecture. The only chalenge for me is to find the best values that can produce a great model.
+I Tried different implementation. One that worked pretty well for me is a model inspired by Nvidia. I also tried a model based on the AlexNet Architecture. The common point between architecture is their use on 2D convolution. For instance at the top of the stack, we have 5 layers of 2D convolution, followed by a Flatten Layer and finally by few Dense Layers. Some architetures used MaxPooling to translate images or change the size of the searched object. This technique is great for searching object that can be anywhere on a picture. But form lane recognition this might be not necessary. I am still experimenting a lot. For the next time i will have a more robust architecture. The only challenge for me is to find the best values that can produce a great model.
 
 \subsubsection{Alexandre Girold}
-For my part, I decided on making a simple model, capable of steering properly. In order to make this model I spend a lot of time doing some research and I realized as did my comrades that as of today there is one clear winner in the architecture of a prediction model based on an image. 
+For my part, I decided on making a simple model, capable of steering properly. In order to make this model I spend a lot of time doing some research, and I realized as did my comrades that as of today there is one clear winner in the architecture of a prediction model based on an image. 
 It is composed of spatial convolution over images (known as Conv2D) followed by a pooling layer, which is important to avoid overfitting, repeating this a given number of times then followed by a fully connected layer. For these two types of layers, we want to use backpropagation to reduce loss. Finally, the output layer uses functions to give out a probability (I.e: Sigmoid or SoftMax).  
 
-In my model, I tried to reduce the number of parameters to try and make it as light as possible. I also tried to incorporate the capacity for the car to adapt its speed, but as of today, I haven’t been successful. I am sure i will find a solution soon.
+In my model, I tried to reduce the number of parameters to try and make it as light as possible. I also tried to incorporate the capacity for the car to adapt its speed, but as of today, I haven’t been successful. I am sure I will find a solution soon.
 
 \newpage
 
@@ -545,24 +546,24 @@ After loading our data, we need to be able to train on those loaded data. The tr
 This function is the backbone of the training process. It allows us to have a very modular project where everything can be modified from this file only. This allows us to modify our project without deleting a lot of code, making it very modular which was one of our goals from the beginning. For example, we have recently added the telemetry server's restart function, once it was created, we only had to add it to the settings.py and all the other functions would be able to use it.   
 This is also useful to change values in real-time. For example, if we want to train our model on more epochs or that our computer can handle bigger batch sizes then we only must change one value and that is it. This goes for all the functions in our project. 
 
-The second import function is of course the train.py function. At first, this function creates all our useful variables (imported from the settings). Then, if the given model doesn’t exist, we create it, for now, this model hasn’t yet been trained.  Then we need to feed the make sure all the variables are correct so that the model can be trained.  To train a model we need data, in our case images. For this we need to make sure those data exist, and that the path to them is correct.  
+The second import function is of course the train.py function. At first, this function creates all our useful variables (imported from the settings). Then, if the given model does not exist, we create it. For now, this model has not yet been trained.  Then we need to feed the make sure all the variables are correct so that the model can be trained.  To train a model, we need data, in our case images. For this we need to make sure those data exist, and that the path to them is correct.  
 We also want to know all the inputs and outputs. This is important as we might want to train not only the steering but also the throttle and speed.  
 Finally, we use one important training library. The .fit library from keras. With fit, we are first feeding the training data(X) and training labels(Y) in our case these X and Y come from DataGenerator. We then use Keras to allow our model to train for a given number of epochs and on a given amount of batch sizes. 
 
 % Bobovitch
 \subsection{Data Augmentation}
-During the learning process we have the possibility to use data augmentation. It’s a technique used to diversify training data and to apply different kind of situations with too much lighs or not enough. The AI has to consider the road without light effects. Data augmentation is used too add noise on training data. It’s very useful because it forces neurons to find betters and more complex features in images. The more features are complex, the less we can experiment overfitting. Which means the AI is more capable to drive in a unknown environment and use complex features to drive better.
+During the learning process we have the possibility to use data augmentation. It’s a technique used to diversify training data and to apply different kind of situations with too much light or not enough. The AI has to consider the road without light effects. Data augmentation is used too add noise on training data. It’s very useful because it forces neurons to find betters and more complex features in images. The more features are complex, the less we can experiment overfitting. Which means the AI is more capable to drive in an unknown environment and use complex features to drive better.
 \newpage
 
 % Bobovitch
 \subsection{Website}
 As seen before we already developed a web app for our telemetry server. Also, in parallel we developed a static showcase website (available at \href{https://autonomobile.github.io/}{presentation website}). \\
 
-This site is purely static. The mission is to keep it the most professional and simple possible. It is still under construction. We eventually add new content and sections as our progression follows . Our site aims to reflect the efforts and motivation of our team. To deploy the site, We used the excellent quality service offered by Github Pages. \\
+This site is purely static. The mission is to keep it the most professional and simple possible. It is still under construction. We eventually add new content and sections as our progression follows. Our site aims to reflect the efforts and motivation of our team. To deploy the site, We used the excellent quality service offered by Github Pages. \\
 
 We have created our own organization on GitHub, as it enable us to publish the project under our team’s name. Hosting our site in the same place as our code repository allows us to offer a greater visibility to people. Moreover, for the development, it is even easier to manage because all resources are in the same place. \\
 
-In both cases, We used the Next.js framework, a React framework. It allows the creation of web applications and static websites. In terms of stylling, we used UI libraries such as Tailwind CSS and Material UI to increase productivity and produce content that meets the high standards of the web in 2022. With Next.js the backend and the frontend part are merged together which help the development process. \\
+In both cases, We used the Next.js framework, a React framework. It allows the creation of web applications and static websites. In terms of stylling, we used UI libraries such as Tailwind CSS and Material UI to increase productivity and produce content that met the high standards of the web in 2022. With Next.js the backend and the frontend part are merged together which help the development process. \\
 
 In this project we aim to learn the best practice regardless of the technology used. As learning remains our main goal.
 
@@ -571,7 +572,7 @@ In this project we aim to learn the best practice regardless of the technology u
 \subsection{Creation of the logo}
 \centerline{\includegraphics[height=8cm]{../../logos/logo-transparent-black.png}}
 
-As we were working on our project, we decided it needed a visual identity that could be easily remembered yet have meaning behind it. With this idea in mind, we brainstormed all together and came up with something new, something we believe is a good compromise of information style and personal touch. After a lot of work, we have come up with the logo printed above. Of course, by now our visual identity has a different version, each of them answering to a problem we have faced or will face. We have used a variate of tools from simple google research to an extensive use of PhotoShop.\\
+As we were working on our project, we decided it needed a visual identity that could be easily remembered yet have meaning behind it. With this idea in mind, we brainstormed all together and came up with something new, something we believe is a good compromise of information style and personal touch. After a lot of work, we have come up with the logo printed above. Of course, by now, our visual identity has a different version, each of them answering to a problem we have faced or will face. We have used a variate of tools from simple google research to an extensive use of PhotoShop.\\
 
 But what is the meaning of this peace of craftsmanship?\\
 
@@ -673,7 +674,8 @@ Main control loop            & x          &           &              &          
 \end{tabular}
 
 \section {Conclusion}
-To sum up, the Autonomobile team has made huge strides towards its final goal. We worked on generating useable data putting them into output and inputs. We also modified the images making them look different from one another to make the training and the future model not overfit. All of us made our own models and we held a little competition to determine the best, this created enthusiasm and teamwork. Finally, we improved our telemetry server making it smoother than ever and adding more and more functionalities, from simply being able to modify settings to using the server on our phones thanks to a QR code.  
-We are more invested than ever and plan to continue this project beyond the S2 as we have planned to make our own tracks for future competitions at Epita. 
+The team improved the control of the car with controller. Furthermore, 
+To ensure the success of the project, Autonomobile team divided the project in different parts. We first improved the control of the car with controller and we worked on the data processing part. Allowing us to load and save images and metadata. Secondly, we worked on generating useable data putting them into output and inputs. Moreover, we modified the images making them look different from one another to make the training and the future model not overfit. Thirdly, we all of us made our own models and we held a little competition to determine the best. This created enthusiasm and teamwork. Finally, we have made a presentation website with useful informations and we also made a Telemetry Server with witch we can modify settings, see a lot of important informations and use the server on our phones thanks to a QR code. We are more invested than ever. We are even invited at the Vivatech in Paris to race against other participants and we plan to continue this project beyond S2 as we have planned to make our own tracks for future competitions at Epita.
 
 \end{document}
+
