@@ -266,7 +266,7 @@ class Models:
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
-        model.compile(optimizer=SGD(), loss="mse", loss_weights=[1, 0.75])
+        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 0.75])
 
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model

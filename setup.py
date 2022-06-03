@@ -12,6 +12,7 @@ setup(
         "opencv-python >= 4.1.1",
         "tensorflow >= 2.3.0, <2.4",
         "numpy >= 1.17",
+        "matplotlib",
         "glob2",
         "pyserial",
         "python-socketio[client]",
