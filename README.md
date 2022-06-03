@@ -34,7 +34,6 @@ The Autonomobile Team.
 
 ## How to setup the software
 
-### Python
 It is recommended to have python 3.6.X installed, as this is the python version installed on the car.
 
 To avoid any packages conflicts with your existing python installation, we will use virtualenv
