@@ -1,7 +1,7 @@
 """This is where we will store our different model architectures."""
 
 import logging
-
+import tensorflow as tf
 from keras_flops import get_flops
 from tensorflow.keras import Input, Model
 from tensorflow.keras.layers import (
@@ -14,6 +14,7 @@ from tensorflow.keras.layers import (
     DepthwiseConv2D,
     Dropout,
     Flatten,
+    AveragePooling2D,
     GlobalAveragePooling2D,
     Lambda,
     MaxPooling2D,
@@ -101,6 +102,53 @@ class Models:
         y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
         outputs.append(y)
 
+    def ConvNet():
+        inputs = []
+        outputs = []
+
+        image_inp = Input(shape=(120, 160, 3), name="image")
+        inputs.append(image_inp)
+
+        # First layer.
+        x = BatchNormalization()(image_inp)
+        x = Conv2D(8, 5, strides=2, activation="relu", use_bias=False, name="conv1")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool1")(x)
+
+        # Second layer.
+        x = Conv2D(16, 5, strides=1, activation="relu", use_bias=False, name="conv2")(x)
+        x = Conv2D(24, 3, strides=2, activation="relu", use_bias=False, name="conv3")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool2")(x)
+
+        # Third layer.
+        x = Conv2D(32, 3, strides=2, activation="relu", use_bias=False, name="conv4")(x)
+        x = Conv2D(48, 3, strides=2, activation="relu", use_bias=False, name="conv5")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool3")(x)
+
+        # Fourth layer.
+        x = Conv2D(64, 3, strides=2, activation="relu", use_bias=False, name="conv7")(x)
+        # x = AveragePooling2D(pool_size=2, name="pool4")(x)
+
+        # FC aand flatten the layer.
+        x = Flatten(name="flatten")(x)
+        x = Dropout(0.3)(x)
+        x = Dense(200, activation="relu", use_bias=False, name="fc1")(x)
+        x = Dense(80, activation="relu", use_bias=False, name="fc2")(x)
+
+        # Output layer.
+        y = Dense(1, name="steering", activation="tanh")(x)
+        outputs.append(y)
+
+        speed = Input(shape=(1,), name="speed")
+        inputs.append(speed)
+        x = Concatenate(axis=-1)([x, speed])
+
+        x = Dense(100, activation="elu")(x)
+        x = Dropout(0.2)(x)
+        x = Dense(50, activation="elu")(x)
+
+        y = Dense(1, activation="sigmoid", name="throttle")(x)
+        outputs.append(y)
+
         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
 
@@ -122,24 +170,32 @@ class Models:
 
         x = Conv2D(12, 5, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
+        x = BatchNormalization()(x)
         x = Conv2D(24, 5, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
+        x = BatchNormalization()(x)
         x = Conv2D(32, 5, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
+        x = BatchNormalization()(x)
         x = Conv2D(48, 3, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
+        x = BatchNormalization()(x)
         x = Conv2D(64, 3, strides=1, use_bias=False)(x)
         x = Activation("relu")(x)
+        x = BatchNormalization()(x)
 
         x = Flatten()(x)
         x = Dropout(0.2)(x)
 
         x = Dense(200, use_bias=False)(x)
         x = Activation("relu")(x)
+        x = BatchNormalization()(x)
         x = Dense(100, use_bias=False)(x)
         x = Activation("relu")(x)
+        x = BatchNormalization()(x)
         x = Dense(100, use_bias=False)(x)
         x = Activation("relu")(x)
+        x = BatchNormalization()(x)
         x = Dropout(0.1)(x)
 
         y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
@@ -194,11 +250,11 @@ class Models:
         return model
 
     def mickaNet():
-        # 1 preparing the model ========================
+        # 1) preparing the model ========================
         inputs = []
         outputs = []
 
-        # 2 input layer ========================
+        # 2) input layer ========================
         image = Input(shape=(120, 160, 3), name="image")
         speed = Input(shape=(1,), name="speed")
 
@@ -207,34 +263,36 @@ class Models:
 
         # 3 convolutional layers ========================
         x = BatchNormalization()(image)  # normalize data
-        x = Conv2D(3, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
-        x = Conv2D(6, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
         x = Conv2D(12, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
-        x = Conv2D(24, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
-        x = Conv2D(48, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
+        x = Conv2D(24, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = Conv2D(48, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
+        x = MaxPooling2D(pool_size=2, strides=2)(x)
+
         x = Conv2D(64, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
-        x = Conv2D(72, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
         x = Conv2D(96, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
+        x = MaxPooling2D(pool_size=2, strides=2)(x)
 
         # 4 flatten layer ========================
         x = Flatten()(x)  # flatten the data
-        x = Dropout(0.2)(x)  # dropout to avoid overfitting
+        x = Dropout(0.3)(x)  # dropout to avoid overfitting
+        x = Concatenate(axis=-1)([x, speed])
 
         # 5 fully connected layers ========================
-        x = Concatenate(axis=-1)([x, speed])  # put inputs together
-        x = Dense(100, use_bias=False, activation="relu")(x)  # layer with 100 neurons
-        x = Dropout(0.1)(x)  # dropout to avoid overfitting
-        x = Dense(100, use_bias=False, activation="relu")(x)
-        x = Dropout(0.1)(x)
+        x = Dense(256, use_bias=False, activation="relu")(x)
+        x = Dropout(0.2)(x)
+        x = Dense(256, use_bias=False, activation="relu")(x)
+        x = Dropout(0.2)(x)
+        x = Dense(256, use_bias=False, activation="relu")(x)
+        x = Dropout(0.2)(x)
 
         # 6 output layer ========================
-        y = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
-        outputs.append(y)
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
+        outputs.append(y1)
+        y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        outputs.append(y2)
 
         # create the model
         model = Model(inputs=inputs, outputs=outputs)
-
-        # compile the model
-        model.compile(optimizer="adam", loss="mse")
+        model.compile(optimizer="adam", loss="mse", loss_weights=[1, 0.75])
 
         return model
