@@ -80,25 +80,6 @@ useful tools:
 - setup the test extension of VS-Code : https://code.visualstudio.com/docs/python/testing
 - use a docstring generator for example the VS-Code extension "Python Docstring Generator"
 
-### Telemetry Server
-
-- make sure to have NodeJS and NPM installed
-- Open the telemetry/ folder in another VS-Code window
-
-#### Installation
-```bash
-npm i
-```
-
-#### Start dev build
-```bash
-npm run dev
-```
-#### Start Production build
-```bash
-npm run build
-npm run start
-```
 ## Collect, Train and Deploy your model
 Here is the three main steps in the making of a model
 
