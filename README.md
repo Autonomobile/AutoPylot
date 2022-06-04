@@ -20,12 +20,12 @@ This will require multiple intermediate milestones:
  - [x] Process those data before feeding them to the neural network.
  - [x] Being able to train a convolutional neural network using those data.
  - [x] Build a telemetry web application.
- - [ ] Tweak the architecture and the parameters of the chosen model to achieve the best results.
- - [ ] Test in real life the model.
- - [ ] Race against others !
+ - [x] Tweak the architecture and the parameters of the chosen model to achieve the best results.
+ - [x] Test in real life the model.
+ - [x] Race against others !
  - [ ] WIN !
 
-For more detailed information please read the [project specifications](https://github.com/Autonomobile/AutoPylot/blob/main/project-specifications/project-specifications.pdf) 
+For more detailed information please read the [project specifications](ressources/project-specifications/project-specifications.pdf) 
 
 Enjoy,
 
