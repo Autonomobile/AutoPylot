@@ -32,7 +32,7 @@ actuator = Actuator()
 camera = Camera()
 controller = Controller()
 
-lookup_zone = [0.6, 0.3, -1.0]
+lookup_zone = [0.39, 0.32, 0.32]
 min_speed = 1.75
 
 
