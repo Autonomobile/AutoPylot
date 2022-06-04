@@ -36,3 +36,87 @@
     }
 
 \maketitle
+
+\centerline{\includegraphics[height=10cm]{../../logos/logo-transparent-black.png}}
+\newpage
+
+\tableofcontents
+\newpage
+\section{How to setup the software}
+
+It is recommended to have python 3.6.X installed, as this is the python version installed on the car.
+To avoid any packages conflicts with your existing python installation, we will use virtualenv install virtualenv using:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        pip install virtualenv
+    }%
+}\\
+
+Clone the repo, and install the package and it's dependencies:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        git clone https://github.com/Autonomobile/AutoPylot.git\\
+cd AutoPylot
+    }%
+}\\
+
+Then, create a virtual env (you need to specify the path to your python3.6):\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        virtualenv --python your path to python.exe venv
+    }%
+}\\
+
+Then, every time you will be working on the project, you will need to activate this environment, to do so:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+       \path{\venv\Scripts\activate}.
+    }%
+}\\
+
+Now, to install autopylot and its requirements (including dev requirements):\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        pip install -e .[dev]
+    }%
+}\\
+
+For the code formatting, we will use something called "pre-commit", that enables us to automate stuff as linting before committing. If the code is not well linted, it will throw an error before committing and will lint it, you will only have to commit again to apply the changes the linter did ! Here is how to setup pre-commit:\\
+
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        pip install -e .[dev]
+    }%
+}\\
+
+You are now all setup to work on the project ! Don't forget to keep the setup.py and requirements.txt up to date.\\
+
+To exit the virtualenv:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+       deactivate
+    }%
+}\\
+
+Useful tools:
+\\\\
+Setup a python linter (we use flake8) : https://code.visualstudio.com/docs/python/linting
+setup the test extension of VS-Code : https://code.visualstudio.com/docs/python/testing
+use a docstring generator for example the VS-Code extension "Python Docstring Generator"
+
+
+
+
+
+
+
+\end{document}
+
+\maketitle
