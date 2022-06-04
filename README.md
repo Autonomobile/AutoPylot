@@ -23,7 +23,7 @@ This will require multiple intermediate milestones:
  - [x] Tweak the architecture and the parameters of the chosen model to achieve the best results.
  - [x] Test in real life the model.
  - [x] Race against others !
- - [ ] WIN !
+ - [x] WIN !
 
 For more detailed information please read the [project specifications](ressources/project-specifications/project-specifications.pdf) 
 
