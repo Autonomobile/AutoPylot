@@ -204,10 +204,16 @@ class TFLiteModel:
             logging.info("failed to import tflite_runtime.interpreter, using tf.lite")
             import tensorflow.lite as tflite
         self.interpreter = tflite.Interpreter(model_path=model_path, *args, **kwargs)
-        self.interpreter.allocate_tensors()
 
         self.input_details = self.interpreter.get_input_details()
         self.output_details = self.interpreter.get_output_details()
+
+        self.interpreter.resize_tensor_input(
+            self.input_details[0]["index"],
+            [1] + settings.IMAGE_SHAPE,
+            strict=True,
+        )
+        self.interpreter.allocate_tensors()
 
         # load model info
         self.outputs = load_model_info(model_path)["outputs"]
