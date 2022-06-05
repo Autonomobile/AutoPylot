@@ -103,6 +103,9 @@ To be able to go faster and increase the reliability of our car's driving, we wi
 One good feature would be to have a model that takes into account the speed of the car. As we all know on a real car, we don't steer the same way when going at 10km/h and going at 90km/h. This input extension could bring more stability to our model.
 To go faster, it would also be great to be able to differentiate turns from straight lines and even braking zone before the turn. \\
 
+One of the challenges racing implies is overtaking. Overtaking is a very complex manoeuver. First we obviously need to be faster than the car ahead, we could assure that by detecting the successive positions of the car ahead on the image. If the car is getting closer, it's Y coordinate will come closer to the bottom of our image. Also, we cannot overtake if we have no room for that, that means we have to detect a gap on the left or the right of the car before initiating the overtake. Once we decided on what part of track we will overtake, we still need to get ahead of the opponent's car. We could acheive that by forcing the model to drive on the left or right part of the track for a given amount of time.
+\newpage
+
 \subsection{Motivations}
 Why this project? \\
 This project is something that we deeply care about. Being able to work on a self-driving car does sound like a dream to us. Being able to work on this project means we will be able to understand how tomorrow's car will work. Moreover, we will learn valuable skills in Python and in neural networks. 
@@ -173,6 +176,8 @@ We also created a GitHub action to automate the testing of our project! Every im
 On top of that, before committing code, we run a code linter that clean our code, adds and removes whitespace where they should or should not be, rearrange long lines so that they fit into the screen. \\
 All in  all, we are confident to say that we came up with a great set of rules and a great project structure to avoid spending time on solving issues that could arise from a poor project setup.
 
+\newpage
+
 % Ellerbach
 \subsection{Arduino and car control}
 
@@ -197,6 +202,8 @@ When the Arduino part was finished, we could start the python part, that consist
 The next step was to build a class to fetch images from our webcam, thankfully, the python module OpenCV has already some functions to do exactly that! \\
 We only needed to add a wrapper around all of that to match our needs. We are now able to fetch images from our camera into a NumPy array that we can manipulate. On top of that, we did create a `dummy` version of this camera class in case we did not have access to a camera to run some tests, this class return a black image when we grab a new image form it. We use this class in some of our automated tests.
 
+\newpage 
+
 % Girold
 \subsection{Load and save data}
 In this section, we will talk about how we can load and save data, data is defined as an image.png or the same image as a JSON file. We want to have both types of data because the JSON files are easy to manipulate and the png images will be used to display the images captured by the car's camera.\\
@@ -219,6 +226,8 @@ As for all the functions we will make, we will want to make sure they are workin
 In this case, we will make use of four different modules: os, shutil, NumPy, and test. To successfully conduct the tests, we need to create a temporary directory, we will inside this directory then remove it at the end.  
 
 The test to the load and save function have 10 function which tests each function on specific outcomes. We want to be sure that our functions do save the images and JSON files into the correct directory.  
+
+\newpage 
 
 % Gay
 \subsection{Data set}
@@ -255,6 +264,8 @@ We have types of function load multiple dataset, with have a flat version and a 
 The difference is that for the flat version, datas are in the same folder and for the not flat version, datas are in different files. Our test is successful as we can collect our files independently of their folder. \\ 
 We made the same test for the function test load multiple dataset generator not flat and for test load multiple dataset generator flat. \\ 
 To finish, to get a cleaner workspace, we delete all our folders created for those tests. \\ 
+
+\newpage
 
 % Ellerbach
 \subsection{Data visualization}
@@ -313,93 +324,81 @@ To conclude, this part will be of great help for debugging and will be allowing 
 \subsection{Telemetry}
 Why use telemetry? \\
 
-In our context, we face different problems that may be hard to solve without accessing the device. Our code runs on an Rasberry Pi which make difficult the debugging. \\
+In our context, we face different problems that may be hard to solve without accessing the device. Our code runs on an Rasberry Pi which make difficult the debugging.\\
 
-Moreover, artificial intelligence is a black box. We don't know what's happening during the execution process. That said, once the program has finished, you can observe the past events thanks to the logs. However, this approach to debugging is not practical and not efficient enough for our use case. To better understand the background processes, we decided to use telemetry. It will allow us to collect valuable data in real time. \\
+Moreover, artificial intelligence is a black box. We don't know what's happening during the execution process. That said, once the program has finished, you can observe the past events thanks to the logs. However, this approach to debugging is not practical and not efficient enough for our use case. To better understand the background processes, we decided to use telemetry. It will allow us to collect valuable data in real time.\\ 
 
-Since we are dealing with an “intelligent” device, we should fully control it at any moment. It would be a disaster if the device does not obey us, as it can create a security treat for the environment. As we know, security is always one of the most important point to keep in mind. In the case where the car is moving at full speed towards a child, how could we stop it? \\
+Since we are dealing with an “intelligent” device, we should fully control it at any moment. It would be a disaster if the device does not obey us, as it can create a security treat for the environment. As we know, security is always one of the most important point to keep in mind. In the case where the car is moving at full speed towards a child, how could we stop it?\\
 
-We came to the point of building a telemetry server combined with a remote controller. It will fill all our requirements. The server will permit us to communicate with the car in real-time, so we can detect any problems before they happen. In addition, the telemetry server will be able to exchange any type of data with the car. For instance, the view of the camera with or without the OpenCV filters. We will be able can to launch a remote debugging session and remote-control steering and throttle. We could also activate certain parameters of the car if desired. \\
+We came to the point of building a telemetry server combined with a remote controller. It will fill all our requirements. Especially it will offer us a great balance between security, ease of use and functionality.\\
 
-The number of cars is not limited to one: we assume that we can control several cars and that each car can share their data with multsiple users through an authentication system if they want to. We use many-to-many approach. \\
-
-Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. At first, we extended the functionalities of the logger while maintaining a modular philosophy. \\
-
-The logger gained the ability to send logs and images through a network. Then we built a server to save and retransmit the data. The server is acting as a middleman. We discovered the socket.io project which allows us to create Full-Duplex Bidirectional and low-latency communication for every platform. \\
-
-We created a 2 in 1 server which combine a socket.io + an HTTP server to permit the simplest possible deployment. We used the JavaScript language (Node JS) to code the servers as it offers great flexibility, it is very efficient for networking and IO tasks thanks to its event management. As JavaScript is used for front-end and backend, the choice was natural. Nevertheless, it requires great vigilance because the language is not typed. Any bug could lead to performance issues and memory leaks. But it still remains the best choice for a socket.io server. \\
-
-Socket.io, it is an open-source cross-platform library that allows event-based messaging. Each client has a non-blocking function waiting for an event. Thanks to this feature, it is very accessible for us to create communication between servers and clients. In addition, socket.io has a great feature called “rooms”, which provides an easy way to manage clients-to-clients communication. Multiple clients can receive messages from other clients. We can therefore very easily target messages to different recipients and identify them. \\
-
-This opens the doors to many possibilities of communications between different types of clients. Speaking of clients, we have planned for the moment 2 types of clients: UI-Clients and PY-Clients. UI-Clients are just real users that interact with the web page created by the HTTP server. The PY-Clients are autonomous cars that run a python client instance inside a Rasberry Pi. The PY-Clients will generally be the transmitters, as they will send images and logs to the clients through the server. The UI-Clients will only consume the information. However, each UI-Client will be able to send commands to the PY-Client for various reasons. \\
-
-For now, only 25\% of the telemetry sever is finished. We will continuously develop and add expected features. You can see below the server diagram on figure ~\ref{fig:diagram} and a prototype of the telemetry server dashboard on figure ~\ref{fig:telemetry}.
-
-
-\begin{figure}[b!]
-    \includegraphics[width=\textwidth]{../../docs/diagram.png}
-    \caption{Server diagram}
-    \label{fig:diagram}
-\end{figure}
-
-\begin{figure}[b!]
-    \centering
-    \includegraphics[height=.8\textwidth, angle=90]{../../docs/telemetry.png}
-    \caption{Telemetry server dashboard prototype}
-    \label{fig:telemetry}
-\end{figure}
+\includegraphics[width=\textwidth]{../../docs/diagram2.png}
 
 \newpage
 
+We will benefit from great portability, an awesome development process, and a powerful UI. The server makes it possible for us to communicate with the car in real-time. We can detect any problems before they happen. We can control the car without any limitations. We can remotely stop and restart. We can remotely update settings. And we can remotely view logs and car updates.\\ 
+Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. Firstly, we extended the functionalities of the logger while maintaining a modular philosophy. The logger gained the ability to send logs and images through a Wi-Fi network. Next, we were confronted to a different challenge: How to send a decent amount of information to multiple clients of different types (web-browsers and raspberry pi hardware) in real-time?  We choose to use Socket.io . This an excellent open source cross-platform library. Socket.io enable us to create bidirectional and low-latency communication. 
 
-% Bobovitch
-\subsection{Telemetry Server}
-We came to the point of building a telemetry server in a form of a web application. We benefit from great portability, an awesome development process, and a powerful UI. It fills all our requirements. The server makes it possible for us to communicate with the car in real-time. We can detect any problems before they happen. We can control the car without any limitations. We can remotely stop and restart. We can remotely update settings. And we can remotely view logs and car updates. \\ 
+Here is a simple exemple of a communication between a client and a server in javascript. This simple API, simplifies our development process and make data transmition more compliant.\\
 
-Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. Firstly, we extended the functionalities of the logger while maintaining a modular philosophy. The logger gained the ability to send logs and images through a Wi-Fi network. Next, we were confronted to a different challenge: How to send a decent amount of information to multiple clients of different types (web-browsers and raspberry pi hardware) in real-time? We choose to use “Socket.io”. This an excellent open source cross-platform library. “Socket.io” enable us to create bidirectional and low-latency communication. \\ 
-
-Here is a simple exemple of a communication between a client and a server in javascript. This simple API, simplifies our development process and make data transmition more compliant. \\ \\
 \centerline{\includegraphics[height=5cm]{../../docs/server-client.png}}
 
-But “Scoket.io” does not stop here. This library is much more powerful. We have the possibility to broadcast a message from the server to all clients : \\ \\
+But “[Scoket.io](http://scoket.io/)” does not stop here. This library is much more powerful. We have the possibility to broadcast a message from the server to all clients:\\ 
+
 \centerline{\includegraphics[height=6cm]{../../docs/broadcast-0.png}}
 
-We can even broadcast from a client to other clients: \\ \\
+We can even broadcast from a client to other clients:\\
+
 \centerline{\includegraphics[height=6cm]{../../docs/broadcast-1.png}}
 
-We can even go further by using the concepts of rooms. This means that each client can join a sort of group chart where the server can easily target this group chat: \\ \\
+We can even go further by using the concepts of rooms. This means that each client can join a sort of group chart where the server can easily target this group chat:\\
+
+
 \centerline{\includegraphics[height=6cm]{../../docs/rooms.png}}
 
-From now, ui-clients|web-clients|people mean a “socket.io” client instance which runs in a web-browser. A car|py-clients is a “socket.io” client instance wich runs on a raspberry pi4. \\
+From now, ui-clients|web-clients|people mean a socket.io client instance which runs in a web-browser. A car|py-clients is a socket.io client instance wich runs on a raspberry pi4.\\ 
+As our main goal is to win races, which implies multiple cars on the track, we have to thinks about a way to manage multiples cars at once. At the same time we wanted every clients of the network would be able to communicate with each other (web-clients with python-clients only). Our design choice was to implement a TV-like mechanism : a web-client can only stream one py-client. And a py-client can send content to an unlimited amount of web-clients, meanwhile a web-clients has the possibility to switch cars at any time.\\ 
 
-As our main goal is to win races, which implies multiple cars on the track, we have to thinks about a way to manage multiples cars at once. At the same time we wanted every clients of the network would be able to communicate with each other (web-clients with python-clients only). Our design choice was to implement a TV-like mechanism : a web-client can only stream one py-client. And a py-client can send content to an unlimited amount of web-clients, meanwhile a web-clients has the possibility to switch cars at any time. \\
+\newpage 
 
-“Socket.io” is just a tool. We developed a high performance server wich is acting as a middleman between clients: \\ \\
-\centerline{\includegraphics[height=8cm]{../../docs/diagram.png}}
+Socket.io is just a tool. We developed a high performance server wich is acting as a middleman between clients:\\
 
-The server uses the JavaScript language (Node JS) as it offers great flexibility, it is very efficient for networking and IO tasks thanks to its language design. Nevertheless, it requires great vigilance because the language is not typed. Any bug could lead to performance issues and memory leaks. But it still remains the best choice for us. We made a great test coverage to extract all bugs. \\
+\includegraphics[width=\textwidth]{../../docs/diagram.png}
 
+The server uses the JavaScript language (Node JS) as it offers great flexibility, it is very efficient for networking and IO tasks thanks to its language design. Nevertheless, it requires great vigilance because the language is not typed. Any bug could lead to performance issues and memory leaks. But it still remains the best choice for us. We made a great test coverage to extract all bugs.\\ 
 
-The server is battery included, which means it comes with an exeptional UI inspired by the familiar material design by Google. To build the UI we used the “Next.js” framework which is server side rendered react with an API endpoint. “Next.js” is a top-level industry react framework used in many compagnies. We love “Next.js” for it’s simplicity and portability. Here is an exemple of the backend structure which focus on the client side perspective: \\ \\
-\centerline{\includegraphics[height=6cm]{../../docs/server-struct.png}}
+The server is battery included, which means it comes with an exeptional UI inspired by the familiar material design by Google. The web-app is intuitive and feel right at hime. To build the UI we used the “Next.js” framework which is server side rendered react with an API endpoint. “Next.js” is a top-level industry react framework used in many compagnies.\\
 
+\newpage  
+Here was the first prototype:\\ 
+
+\includegraphics[width=\textwidth]{../../docs/telemetry.png}
 \newpage
 
-Here is what we have done : \\ \\
-\centerline{\includegraphics[height=7.5cm]{../../docs/remote-control.png}}
-This is the “Remote Control”. This section help us see that the car actualy see in real time. Nothing to say more expted that it’s very cool. We use this in training to we can actualy see better when we drive. \\
+Here is what we have done:\\
 
-\centerline{\includegraphics[height=7.5cm]{../../docs/server-logs.png}}
-Here are the “Logs”. When someting happen, a new row is inserted. This table support searching. When we have thousands of thousands of logs we can quickly find any message. \\
+\includegraphics[width=\textwidth]{../../docs/Telem1.png}\\
 
+This is the “Main Dashboard”. This sction contains many information about the car. For instance by looking at the steering chart, we observed that in straight lines our car behaves very calm and predictive. And during a turn we have smooth curves which indicate us that we are on the good path. We also have the trottle and speed charts and even the CPU and RAM indicator. This very nice to have it because we working with embedded systems and ressourses are limited.\\ \\
 
-\centerline{\includegraphics[height=7.5cm]{../../docs/notifications.png}}
-Here are the “Notifications”. When something happen, We know it. It might be a new Car available for streaming or maybe the server has an important message to transmit for instance when somebody changed the settings of car.
+\includegraphics[width=\textwidth]{../../docs/Telem2.png}\\
 
-\centerline{\includegraphics[height=7.5cm]{../../docs/settings.png}}
-And eventually here are the “Settings”. This part is crucial. Here we load the “settings.json” from the car. We can update the car’s behaviour, stop or restart with the help of a simple click.\\
+This is the “Remote Control”. This section help us see that the car actualy see in real time. Nothing to say more expted that it’s very cool. We use this in training to we can actualy see better when we drive. When the car is in autonomous mode we have a nice FPV which help us understand where the car is making it’s decision.\\
 
-In Conclusion this server is the autopylot’s best friend. It’s very easy to use and to install, it can also be accessed on a phone. Every time we use the car, we use this telemetry server. This entire server was developed by hand by our team. We hope to make it even better in the future.
+\includegraphics[width=\textwidth]{../../docs/Telem3.png}\\
+
+Here are the “Logs”. When someting happen, a new row is inserted. This table support searching. When we have thousands of thousands of logs we can quickly find any message.\\
+
+\includegraphics[width=\textwidth]{../../docs/Telem4.png}\\
+
+Here are the “Notifications”. When something happen, We know it. It might be a new Car available for streaming or maybe the server has an important message to transmit for instance when somebody changed the settings of car.\\
+
+\includegraphics[width=\textwidth]{../../docs/Telem5.png}\\
+
+And eventually here are the “Settings”. This part is crucial. Here we load the “settings.json” from the car. We can update the car’s behaviour, stop or restart with the help of a simple click. This is much better than ssh where we need to stop and start the python script or open vim to changw settings. This features prevent fastidious and repetitive task and provide an excellent testing workflow.\\
+
+In Conclusion this server is the autopylot’s best friend. It’s very easy to use and to install, it can also be accessed on a phone. Every time we use the car, we use this telemetry server. This entire server was developed by hand by our team. We hope to make it even better in the future.\\
+
 
 \newpage
 
@@ -418,6 +417,8 @@ Neural Networks are mainly composed of fully connected layers (or Dense layers),
 
 \centerline{\includegraphics[height=7cm]{../../docs/activation-function.png}}
 
+\newpage
+
 \subsubsection{Convolutional Neural Network}
 So now, what is a Convolutional Neural Network?
 First, a Convolutional Neural Network or "CNN" is a type of Neural Network! It inherits its name from the kind of layer it has: Convolution layers. \\
@@ -428,6 +429,8 @@ A convolution is an operation that changes a function into something else. It us
 
 Here you can see the application of a 3x3 convolution kernel on a 4x4 signal, the resulting of the application of this filter is a new signal of size 2x2. The resulting signal is smaller than the input signal, but why is that? Simply because the kernel here is only applied on the valid areas of the input signal, so the outside border of the signal is lost. To prevent that, we can add zero values around the input filters so that the output size matches the input size. \\
 \centerline{\includegraphics[height=8cm]{../../docs/padding.png}}
+
+\newpage
 
 Now, as said previously, the main idea of having convolutions is to reduce the size of our image, this can be done by introducing strides to our convolution layers. The amount of movement between applications of the kernel of the input signal is referred as the stride. On the above illustrations, we had a stride of 1 meaning at each step, the kernel moved by 1 pixel. On the illustration below, a 3x3 kernel is applied to a 5x5 signal with strides set to 2 without padding. This results in a 2x2 output signal. \\
 \centerline{\includegraphics[height=6cm]{../../docs/strides.png}}
@@ -536,12 +539,14 @@ Firstly, we created X and Y which are lists of numpy array. Then we had to pick 
 
 Thirdly, we just have to add the result that we are looking at to the X or to the Y.
 
+\newpage 
+
 % Girold
 \subsection{Training Process}
 
-After loading our data, we need to be able to train on those loaded data. The training process is where everything takes place. Indeed, training the data requires the use of all the previous functions. One of these functions is the settings.py. You can see how the function works with the small example below.
+After loading our data, we need to be able to train on those loaded data. The training process is where everything takes place. Indeed, training the data requires the use of all the previous functions. One of these functions is the settings.py. You can see how the function works with the small example below.\\
 
-\centerline{\includegraphics[height=4cm]{../../docs/setting-train.png}}
+\centerline{\includegraphics[height=4cm]{../../docs/setting-train.png}} 
 
 This function is the backbone of the training process. It allows us to have a very modular project where everything can be modified from this file only. This allows us to modify our project without deleting a lot of code, making it very modular which was one of our goals from the beginning. For example, we have recently added the telemetry server's restart function, once it was created, we only had to add it to the settings.py and all the other functions would be able to use it.   
 This is also useful to change values in real-time. For example, if we want to train our model on more epochs or that our computer can handle bigger batch sizes then we only must change one value and that is it. This goes for all the functions in our project. 
