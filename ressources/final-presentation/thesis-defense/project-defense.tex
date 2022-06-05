@@ -11,6 +11,8 @@
 \title{\underline{Project defense}}
 
 \begin{document}
+\title{\underline{Project defence - AutoPylot}}
+\date{}
 \maketitle
 Members : Alexandre Girold, Mickael Bobovitch, Maxime Ellerbach, Maxime Gay.
 \section{Introduction}
@@ -27,23 +29,27 @@ Common &
   Maxime.G &
   Maxime.E &
   Mickael \\ \hline
-\begin{tabular}[c]{@{}c@{}}T-shirt\\ Modularity \\ Organisation\end{tabular} &
-  \begin{tabular}[c]{@{}c@{}}Datagenerator \\ Neural network \end{tabular} &
-  \begin{tabular}[c]{@{}c@{}}Datagenerator \\ Neural network \end{tabular} &
-  \begin{tabular}[c]{@{}c@{}}Model training \\ Neural network \end{tabular} &
-  \begin{tabular}[c]{@{}c@{}}Website\\ Telemetry server \\ Neural network\end{tabular} \\ \hline
+\begin{tabular}[c]{@{}c@{}}T-shirt\\ Modularity\\ Organisation\\ Neural network \end{tabular} &
+  \begin{tabular}[c]{@{}c@{}}Load \& Save Data\\ Data set\\ Datagenerator\end{tabular} &
+  \begin{tabular}[c]{@{}c@{}}Load \& Save Data\\ Data set\\Datagenerator \end{tabular} &
+  \begin{tabular}[c]{@{}c@{}}Arduino\\ Car Control \& Camera\\ Data Vis\\ Model training\\ Simulator \end{tabular} &
+  \begin{tabular}[c]{@{}c@{}}Website\\ Basic Car Loop\\ Telemetry server\\ Simulator\end{tabular} \\ \hline
 \end{tabular}
 
 \section {Description of the realization of the tasks}
 
 \begin{itemize}
 
-\item Modularity of the project % Girold
-\item Data handling: Datagenerator. % Girold and Gay
-\item Training a model: neural network. % Ellerbach
-\item Data augmentation. % Gay
-\item Telemetry server. % Bobovitch 
-\item Presentation website: Showcase our project. % Bobovitch
+\item Presentation Website: Showcase our project. % Bobovitch
+\item Arduino and car control: Drive the car using code. % Ellerbach
+\item Data handling and visualization: Load, save and visualize data. % Girold and Gay
+\item Logging and Telemetry server: Log events and send telemetry to an external server. % Ellerbach and Bobovitch
+\item Basic car loop: Put everything together to drive the car with a controller. % Bobovitch
+\item Modularity of the project. % Girold
+\item Datagenerator: Data handling. % Girold and Gay
+\item Neural network: Training a model. % Ellerbach
+\item Data augmentation: To avoid overfit % Gay
+\item Simulator: gathering data with an online simulator % Ellerbach
 
 \end{itemize}
 
@@ -51,10 +57,9 @@ Common &
 
 \begin{itemize}
 \item Recap of what we have said.
-\item Done : We made a telemetry server to have real time data of the car as the video and notifications. We also have a working model.
+\item Done : We improved our training model and the telemetry server. We also created a simulator to train our model. 
 
-\item To do : Improve the AI part. We would like to have a dynamic management of the speed. For the telemetry server we would like to add some charts corresponding to the throttle and the steering. \\
-And of course we have to win some races.
+\item To do : We have to win the Vivatech race.
 
 \end{itemize}
 
