@@ -144,13 +144,13 @@ Start the script with the following command (don't need to cd if you are in the 
 To drive depending on the controller type you use:\\
 
 "xbox": steering: left joystick, throttle: left and right triggers\\
-"keyboard": steering: "q" and "d" keys, throttle: "z" and "s" keys.\\
+    "keyboard": steering: "q" and "d" keys, throttle: "z" and "s" keys.\\
 
 
 To record data depending on the controller type you use:\\
 
 "xbox": hold button "a"\\
-"keyboard": hold key "r"\\
+    "keyboard": hold key "r"\\
 You should see the collected data your "~/collect" folder. If unsure about the location of the folder, check the "COLLECT\textunderscore PATH" settings in the settings.json\\
 
 Note: by default a model will be loaded, if you don't touch anything, you will enter "autonomous" mode using the predictions from this default model.\\
@@ -160,10 +160,10 @@ Note: by default a model will be loaded, if you don't touch anything, you will e
 there are plenty settings for the training script:\\
 "MODEL\textunderscore TYPE": you need to set the type of the model you want to build. For example, if you made a new method to create a model in architectures.py in the Models class called "steering\textunderscore model". You can set the "model\textunderscore type" field to steering\textunderscore model and when training your model, it will be created using this function.\\
 "MODEL\textunderscore NAME": the name of the model you want to train, the model will be saved under this name. If you wish to retrain it later, make sure to use the same name (if you wish you can copy a model, change its name and then train it again to avoid loosing the previously trained one).\\
-"TRAIN\textunderscore LOAD_MODEL": whether you want to load the model or create one from scratch.\\
-"TRAIN\textunderscore BATCH_SIZE": How much data you want in one batch.\\
+"TRAIN\textunderscore LOAD\textunderscore MODEL": whether you want to load the model or create one from scratch.\\
+"TRAIN\textunderscore BATCH\textunderscore SIZE": How much data you want in one batch.\\
 "TRAIN\textunderscore EPOCHS": How many times you want to train the model on the dataset before saving it.\\
-"TRAIN\textunderscore SPLITS": Proportion of data in the training set and testing set. If set to 0.9, this will result in having 90% of the data going to the training set and 10% going to the testing set.\\
+"TRAIN\textunderscore SPLITS": Proportion of data in the training set and testing set. If set to 0.9, this will result in having 90 percent of the data going to the training set and 10 percent going to the testing set.\\
 "TRAIN\textunderscore AUGM\textunderscore FREQ": How frequent we want data to be augmented using data augmentation functions.\\
 
 
