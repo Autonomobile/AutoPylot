@@ -1,3 +1,4 @@
+
 \documentclass[12pt]{article}
 
 % Language setting
@@ -145,7 +146,7 @@ We will then be able to start our optional objectives such as speed control!
 
 \item The Telemetry website.
 
-Developing an autonomous car is difficult. The more you know about what’s happening inside, the better results will get. We will use telemetry. It will help us analyze what is happening inside the car at any moment. To collect data, a server will run outside the car on a computer. The car will communicate with the server through a Wi-Fi router. The server is divided in two parts: The first part is a web-app. It will use JavaScript (Node.js) as the main language. The UI will be created using the React.js framework. The server will handle image streaming with UDP from multiple client (autonomous cars). The web-app will display the camera’s views in a canvas. Furthermore, clients will be sending debugging and logs to an Elasticsearch Database because we will work with JSON data. All the logs will be accessible from the web-app and will be displayed in various forms as Time series graph and Scatterplots. The server and the database will run each inside its own docker container. We will use docker-compose to run all containers with one command.
+Developing an autonomous car is difficult. The more you know about what’s happening inside, the better results will get. We will use telemetry. It will help us analyze what is happening inside the car at any moment. To collect data, a server will run outside the car on a computer. The car will communicate with the server through a Wi-Fi router. The server is divided in two parts: The first part is a web-app. It will use JavaScript (Node.js) as the main language. The UI will be created using the React.js framework. The server will handle image streaming with UDP from multiple client (autonomous cars). The web-app will display the camera’s views in a canvas. All the logs will be accessible from the web-app and will be displayed in various forms as Time series graph and Scatterplots. The server and the database will run each inside its own docker container. We will use docker-compose to run all containers with one command.
 
 \item The presentation website. The presentation website will be a Static Generated Site built with Next.js (a React Framework). The Website will introduce a cool design, a presentation of the members and the progress of the project. It will be hosted on GitHub Pages as it is free, reliable and can be managed on the same organization account.
 \end{itemize}
@@ -157,7 +158,7 @@ Our biggest constraint will be the compute power. We need all of the inference o
 Regarding the accuracy of our models, we will need sufficient accuracy and generalization to be able to complete multiple laps. If the generalization is not high enough, small changes in the lightning or changes in the background will affect the prediction of our model.
 On the safety part, we have to keep in mind that we are driving a powerful car, a wrong motor command can lead us right into the wall and break the car. Prior to deploy and test our code on a real track, we will need to carefully test our code to avoid such a disaster.
 
-
+\newpage
 \section{Realized tasks}
 
 \subsection{Project Setup}
@@ -171,7 +172,6 @@ Before starting to program, we had to set up a good GitHub repository. First, we
 We also created a GitHub action to automate the testing of our project! Every important function coded is accompanied by its set of tests. This enables us to assert that the code we are currently working on works as expected. With this idea in mind, we added a really important rule: no addition of code on the main branch if it doesn't pass all the tests we wrote. This rule is really important to keep main clean from any major bug! This rule induces one thing: we need to open branches and do Pull Requests for every feature we add to the project. Moreover, we need the approval of someone else to merge the Pull Request into the main branch. We all forced ourself to respect this as much as we could, the result is that now we are totally used to this process and everyone is aware of what people are working on because they need to review their code.
 On top of that, before committing code, we run a code linter that clean our code, adds and removes whitespace where they should or should not be, rearrange long lines so that they fit into the screen. \\
 All in  all, we are confident to say that we came up with a great set of rules and a great project structure to avoid spending time on solving issues that could arise from a poor project setup.
-\newpage
 
 % Ellerbach
 \subsection{Arduino and car control}
@@ -552,12 +552,73 @@ Finally, we use one important training library. The .fit library from keras. Wit
 
 % Bobovitch
 \subsection{Data Augmentation}
-During the learning process we have the possibility to use data augmentation. It’s a technique used to diversify training data and to apply different kind of situations with too much light or not enough. The AI has to consider the road without light effects. Data augmentation is used too add noise on training data. It’s very useful because it forces neurons to find betters and more complex features in images. The more features are complex, the less we can experiment overfitting. Which means the AI is more capable to drive in an unknown environment and use complex features to drive better.
+During the learning process we have the possibility to use data augmentation. It’s a technique used to diversify training data and to apply different kind of situations with too much light or not enough. The AI has to consider the road without light effects. Data augmentation is used too add noise on training data. It’s very useful because it forces neurons to find better and more complex features in images. The more features are complex, the less we can experiment overfitting. Which means the AI is more capable to drive in an unknown environment and use complex features to drive better.
 \newpage
+
+% Ellerbach
+\subsection{Creating some labels}
+One of our goal was to handle the throttle using our model to be able to go faster in the straights and slower in the corners. Our first approach was to treat the throttle output just like the steering output by trying to train the model usin gour own throttle inputs. This method did work to some extent. One of the limitation is that our model learns from us, meaning that if we do not respect a precise value in the straights and in the corners, the model would just try to predict an in between values not finding a true correlation between the image and the targetted throttle. \\
+
+So we tried something different: creating our own labels. Theoretically, after collecting a dataset while driving on the center of the track, only by looking at the steering values, we could determine whether we are in a turn, before a turn, or in a straight. This is exactly what we did. We did collect a buch of data by driving multiple laps. Then, we loaded those sorted data and had a look at the mean steering values, it was clear that we could generate some labels from this. So we did continue on this idea, we created a script to analyze those data and determine in which `zone` our car was in. Then we saved those created informations into the corresponding json files
+
+% Ellerbach
+\subsection{Simulator}
+Now that we have a trained model, how can we test it ? During the race ! The issue is that every race is separated by a long month of waiting. To avoid waiting so long to test our model, we used a simulator ! \\
+The simulator we used is an open source simulator called DonkeySim \\(\href{https://github.com/tawnkramer/sdsandbox/}{https://github.com/tawnkramer/sdsandbox/}) It had been developped using unity. \\ \\
+
+How does it work ?
+When a client connects to the simulator, a new car is created, you can choose from a variety of tracks the one you want. You can even create your own tracks ! Then, the server (the simulator) sends telemetry packets to each client (car) connected. Those packets contain data such as an image (simulating a webcam put on the car), some speed data or even odometry data. We can directly feed those data into our previously trained model. The model predicts a steering and throttle value that is being then sent back to the server to apply them on the car. \\
+
+The incorporation of the simulator in our project was made easy by the modularity of it. We only needed to developp the client side: handling the packets, processing the telemetry data, and so on. Basically, the code used to run the real car or a car in the sim is the same, only the source of the data differs. This helped us a lot in the process of developping performant and accurate models prior to deploy them on the real car.
+
+We even recreated the track we are used to race at, this is what the track looks like: \\
+\newpage
+\centerline{\includegraphics[width=15cm]{../../docs/simulator.png}}
+compared to real life: \\
+\centerline{\includegraphics[width=15cm]{../../docs/track-irl.png}}
+
+We created this track using photos took during the races, we took a photo of every wall and a photo of the carpet patterns. Then, we designed the yellow cones we have in real life and imported them into the scene along with the other textures. Then, using the measurements of the track combined with the carpet patterns, we created the floor textures.
+
+Here are the measurements of the track: \\
+\centerline{\includegraphics[width=15cm]{../../docs/track-measurements.png}} 
+
+Then, with this scene that looked just like our race environnement, we added all the components required by the simulator to make the client connect and so on. We were then left with a fully working track ! Once our track was finished, we committed a pull request to the simulator's repository and this track made its way into an official simulator release !
+
+% Ellerbach
+\subsection{Data Generation}
+At first, we did use the simulator to gather data, simply by driving around in the simulator just like we would in the real life with the car. By mixing both data collected from the simulator and from our real car, we observed that we acheived better performance, our model did understand better the track. And we wanted to take it a step further and set a goal to automate the gathering of our data.
+
+So we headed to this goal ! The first step was to create a new unity project where we would import our previously created track. Then we asked ourselves, what do we need in order to create data ? A camera, a moving car and a way to tell where the car should go and then save those data.
+\subsubsection{Generating images}
+For the camera, we used a basic camera from unity where we applied some shaders to modify the field of view of the camera. This is important as the closest the camera looks compared to our real camera, the better our model will be. 
+We then measured the position of the camera on our real car as well as the angle to determine where we should put this camera in our data generation tool. \\
+
+\centerline{\includegraphics[width=15cm]{../../docs/camera.png}} 
+\centerline{\includegraphics[width=15cm]{../../docs/car-sim.png}} 
+Here, the camera won't be seing the car itself, so this design is only indicative for us, a camera object alone would have done the job fine.
+
+\begin{figure}[h]
+    \centering
+    \subfloat[Real life]{%
+        \includegraphics[width=0.49\textwidth]{../../docs/real-camera.png}%
+        \label{fig:b}%
+        }%
+    \hfill %
+    \subfloat[Data generation tool]{%
+        \includegraphics[width=0.49\textwidth]{../../docs/sim-camera.png}%
+        \label{fig:a}%
+        }%
+    \caption{Camera point of view}
+\end{figure}
+You can see here that the image we are generating is really close to an image that we could get in the real life. You can also note that in the real life we can see a part of the car, whereas in the generated image we do not, that is not a major issue as our model do crops the top and bottom of the image. 
+
+\subsubsection{Generating labels}
+Now that we can generate images, we need now a way to generate labels: steering and zones labels. In order to generate them, we will need three splines, one for the ideal trajectory, one for the car trajectory and one for the center of the road. For simplicity, we will consider for the moment the ideal trajectory as being the same as the center of the road. The car trajectory spline is randomized at runtime using the center of the road. This way, by randomizing where the car is located, we can truly generate data that we would not have generated in real life. Indeed, when driving the car on the real circuit, we do not explore cases where the car is off trajectory, and our driving is never perfect, whereas the data generation tool would be able to generate perfect labels for any kind of situation.
+
 
 % Bobovitch
 \subsection{Website}
-As seen before we already developed a web app for our telemetry server. Also, in parallel we developed a static showcase website (available at \href{https://autonomobile.github.io/}{presentation website}). \\
+As seen before we already developed a web app for our telemetry server. Also, in parallel we developed a static showcase website (available at \href{https://autonomobile.github.io/}{https://autonomobile.github.io/}). \\
 
 This site is purely static. The mission is to keep it the most professional and simple possible. It is still under construction. We eventually add new content and sections as our progression follows. Our site aims to reflect the efforts and motivation of our team. To deploy the site, We used the excellent quality service offered by Github Pages. \\
 
@@ -592,7 +653,7 @@ To make our purchase we have used a site with a good reputation and pretty good 
 % sout : 7 / 03 & 25 / 04 & 06 / 06
 \section {Planning}
 \subsubsection {What is next ?}
-The objectives we set ourselves for this presentation were acheived. Our final objective will be to win the race at the Vivatch.
+The objectives we set ourselves for this presentation were acheived. Our final objective will be to win the race at the Vivatech.
 
 \subsubsection {Races}
 
