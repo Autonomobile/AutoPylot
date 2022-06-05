@@ -12,22 +12,12 @@
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{subfig}
-
-\usepackage{xcolor}
-\usepackage{listings}
-\usepackage{caption}
-\DeclareCaptionFont{white}{\color{white}}
-\DeclareCaptionFormat{listing}{%
-  \parbox{\textwidth}{\colorbox{gray}{\parbox{\textwidth}{#1#2#3}}\vskip-4pt}}
-\captionsetup[lstlisting]{format=listing,labelfont=white,textfont=white}
-\lstset{frame=lrb,xleftmargin=\fboxsep,xrightmargin=-\fboxsep}
-
 \usepackage[colorlinks=true, allcolors=black]{hyperref}
 
 \begin{document}
 
 %title
-\title{\underline{README}}
+\title{\underline{Readme  - AutoPylot}}
 \date{June 2022}
 
 
@@ -58,7 +48,7 @@ Clone the repo, and install the package and it's dependencies:\\
 \noindent\fbox{%
     \parbox{\textwidth}{%
         git clone https://github.com/Autonomobile/AutoPylot.git\\
-cd AutoPylot
+        cd AutoPylot
     }%
 }\\
 
@@ -139,7 +129,7 @@ Here is the three main steps in the making of a model\\
 \subsection{Collect}
 First you need to collect some data.\\
 
-You will need to select in the "settings.json" the "CAMERA_TYPE", "ACTUATOR_TYPE" and "CONTROLLER_TYPE". By default they are set for the car configuration eg "webcam", "serial" and "xbox" respectively, if you are collecting data on a PC, I suggest you using "sim", "sim" and "keyboard". This will use data coming from the simulator, inputs from the keyboard and output them (actuate) in the simulator.
+You will need to select in the "settings.json" the "CAMERA\textunderscore TYPE", "ACTUATOR\textunderscore TYPE" and "CONTROLLER\textunderscore TYPE". By default they are set for the car configuration eg "webcam", "serial" and "xbox" respectively, if you are collecting data on a PC, I suggest you using "sim", "sim" and "keyboard". This will use data coming from the simulator, inputs from the keyboard and output them (actuate) in the simulator.
 
 
 Start the script with the following command (don't need to cd if you are in the right directory):\\
@@ -147,7 +137,7 @@ Start the script with the following command (don't need to cd if you are in the 
 \noindent\fbox{%
     \parbox{\textwidth}{%
     cd main_programs/examples \\
-    python3 drive_with_controller.py
+    python3 drive\textunderscore with\textunderscore controller.py
     }%
 }\\
 
@@ -161,26 +151,26 @@ To record data depending on the controller type you use:\\
 
 "xbox": hold button "a"\\
 "keyboard": hold key "r"\\
-You should see the collected data your "~/collect" folder. If unsure about the location of the folder, check the "COLLECT_PATH" settings in the settings.json\\
+You should see the collected data your "~/collect" folder. If unsure about the location of the folder, check the "COLLECT\textunderscore PATH" settings in the settings.json\\
 
 Note: by default a model will be loaded, if you don't touch anything, you will enter "autonomous" mode using the predictions from this default model.\\
 
 
 \subsection{Training}
 there are plenty settings for the training script:\\
-"MODEL_TYPE": you need to set the type of the model you want to build. For example, if you made a new method to create a model in architectures.py in the Models class called "steering_model". You can set the "model_type" field to steering_model and when training your model, it will be created using this function.\\
-"MODEL_NAME": the name of the model you want to train, the model will be saved under this name. If you wish to retrain it later, make sure to use the same name (if you wish you can copy a model, change its name and then train it again to avoid loosing the previously trained one).\\
-"TRAIN_LOAD_MODEL": whether you want to load the model or create one from scratch.\\
-"TRAIN_BATCH_SIZE": How much data you want in one batch.\\
-"TRAIN_EPOCHS": How many times you want to train the model on the dataset before saving it.\\
-"TRAIN_SPLITS": Proportion of data in the training set and testing set. If set to 0.9, this will result in having 90% of the data going to the training set and 10% going to the testing set.\\
-"TRAIN_AUGM_FREQ": How frequent we want data to be augmented using data augmentation functions.\\
+"MODEL\textunderscore TYPE": you need to set the type of the model you want to build. For example, if you made a new method to create a model in architectures.py in the Models class called "steering\textunderscore model". You can set the "model\textunderscore type" field to steering\textunderscore model and when training your model, it will be created using this function.\\
+"MODEL\textunderscore NAME": the name of the model you want to train, the model will be saved under this name. If you wish to retrain it later, make sure to use the same name (if you wish you can copy a model, change its name and then train it again to avoid loosing the previously trained one).\\
+"TRAIN\textunderscore LOAD_MODEL": whether you want to load the model or create one from scratch.\\
+"TRAIN\textunderscore BATCH_SIZE": How much data you want in one batch.\\
+"TRAIN\textunderscore EPOCHS": How many times you want to train the model on the dataset before saving it.\\
+"TRAIN\textunderscore SPLITS": Proportion of data in the training set and testing set. If set to 0.9, this will result in having 90% of the data going to the training set and 10% going to the testing set.\\
+"TRAIN\textunderscore AUGM\textunderscore FREQ": How frequent we want data to be augmented using data augmentation functions.\\
 
 
 you can now start this training script with:\\
 \noindent\fbox{%
     \parbox{\textwidth}{%
-    cd main_programs/\\
+    cd main\textunderscore programs/\\
     python3 train.py
     }%
 }\\
@@ -188,12 +178,12 @@ you can now start this training script with:\\
 Once finished, your new model should be saved in the "models" folder at the root of your project.\\
 
 \subsection{Deploy}
-You will need to change in the settings.json the "MODEL_NAME" field to the name of the model you just trained. then same as for the "collect" part, start the drive_with_controller.py script and enjoy! \\
+You will need to change in the settings.json the "MODEL\textunderscore NAME" field to the name of the model you just trained. then same as for the "collect" part, start the drive\textunderscore with\textunderscore controller.py script and enjoy! \\
 
 \noindent\fbox{%
     \parbox{\textwidth}{%
-    cd main_programs/examples
-    python3 drive_with_controller.py
+    cd main\textunderscore programs/examples
+    python3 drive\textunderscore with\textunderscore controller.py
     }%
 }\\
 
