@@ -556,12 +556,6 @@ During the learning process we have the possibility to use data augmentation. It
 \newpage
 
 % Ellerbach
-\subsection{Creating some labels}
-One of our goal was to handle the throttle using our model to be able to go faster in the straights and slower in the corners. Our first approach was to treat the throttle output just like the steering output by trying to train the model usin gour own throttle inputs. This method did work to some extent. One of the limitation is that our model learns from us, meaning that if we do not respect a precise value in the straights and in the corners, the model would just try to predict an in between values not finding a true correlation between the image and the targetted throttle. \\
-
-So we tried something different: creating our own labels. Theoretically, after collecting a dataset while driving on the center of the track, only by looking at the steering values, we could determine whether we are in a turn, before a turn, or in a straight. This is exactly what we did. We did collect a buch of data by driving multiple laps. Then, we loaded those sorted data and had a look at the mean steering values, it was clear that we could generate some labels from this. So we did continue on this idea, we created a script to analyze those data and determine in which `zone` our car was in. Then we saved those created informations into the corresponding json files
-
-% Ellerbach
 \subsection{Simulator}
 Now that we have a trained model, how can we test it ? During the race ! The issue is that every race is separated by a long month of waiting. To avoid waiting so long to test our model, we used a simulator ! \\
 The simulator we used is an open source simulator called DonkeySim \\(\href{https://github.com/tawnkramer/sdsandbox/}{https://github.com/tawnkramer/sdsandbox/}) It had been developped using unity. \\ \\
@@ -582,10 +576,18 @@ We created this track using photos took during the races, we took a photo of eve
 Here are the measurements of the track: \\
 \centerline{\includegraphics[width=15cm]{../../docs/track-measurements.png}} 
 
-Then, with this scene that looked just like our race environnement, we added all the components required by the simulator to make the client connect and so on. We were then left with a fully working track ! Once our track was finished, we committed a pull request to the simulator's repository and this track made its way into an official simulator release !
+Then, with this scene that looked just like our race environnement, we added all the components required by the simulator to make the client connect and so on. We were then left with a fully working track ! Once our track was finished, we committed a pull request to the simulator's repository and this track made its way into an official simulator release ! We now can train and test our models without having to fire up the real car. We mainly use it to debug our codes and imporve our model architectures.
 
 % Ellerbach
-\subsection{Data Generation}
+\subsection{Creating some labels}
+One of our goal was to handle the throttle using our model to be able to go faster in the straights and slower in the corners. Our first approach was to treat the throttle output just like the steering output by trying to train the model usin gour own throttle inputs. This method did work to some extent. One of the limitation is that our model learns from us, meaning that if we do not respect a precise value in the straights and in the corners, the model would just try to predict an in between values not finding a true correlation between the image and the targetted throttle. \\
+
+So we tried something different: creating our own labels. Theoretically, after collecting a dataset while driving on the center of the track, only by looking at the steering values, we could determine whether we are in a turn, before a turn, or in a straight. This is exactly what we did. We did collect a buch of data by driving multiple laps. Then, we loaded those sorted data and had a look at the mean steering values, it was clear that we could generate some labels from this. So we did continue on this idea, we created a script to analyze those data and determine in which `zone` our car was in. Then we saved those created informations into the corresponding json files. \\
+
+Then, we were required in order to use those new labels to add a new output to our model. This way, we would have as inputs: an image, and as outputs: a steering and 3 neurons corresponding to the following: [are we in a straight, are we in a braking zone, are we in a corner]. The advantage of detecting those zones is that it is really easy to add throttle coefficients to each zones, and those coefficients could be tweaked to offer the best performances. 
+
+% Ellerbach
+\subsection{Data Generation tool}
 At first, we did use the simulator to gather data, simply by driving around in the simulator just like we would in the real life with the car. By mixing both data collected from the simulator and from our real car, we observed that we acheived better performance, our model did understand better the track. And we wanted to take it a step further and set a goal to automate the gathering of our data.
 
 So we headed to this goal ! The first step was to create a new unity project where we would import our previously created track. Then we asked ourselves, what do we need in order to create data ? A camera, a moving car and a way to tell where the car should go and then save those data.
