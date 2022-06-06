@@ -371,27 +371,21 @@ The server is battery included, which means it comes with an exeptional UI inspi
 
 \newpage  
 Here was the first prototype:\\ 
-
 \includegraphics[width=\textwidth]{../../docs/telemetry.png}
 
 Here is what we have done:\\
-
 \includegraphics[width=\textwidth]{../../docs/Telem1.png}\\
 
-This is the “Main Dashboard”. This section contains many information about the car. For instance by looking at the steering chart, we observed that in straight lines our car behaves very calm and predictive. And during a turn we have smooth curves which indicate us that we are on the good path. We also have the trottle and speed charts and even the CPU and RAM indicator. This very nice to have it because we are working with embedded systems and ressourses are limited.\\ \\
-
+This is the “Main Dashboard”. This section contains many information about the car. For instance by looking at the steering chart, we observed that in straight lines our car behaves very calm and predictive. And during a turn we have smooth curves which indicate us that we are on the good path. We also have the trottle and speed charts and even the CPU and RAM indicator. This very nice to have it because we are working with embedded systems and ressourses are limited.\\
 \includegraphics[width=\textwidth]{../../docs/Telem2.png}\\
 
 This is the “Remote Control”. This section help us see that the car actualy see in real time. Nothing to say more expted that it’s very cool. We use this in training to we can actualy see better when we drive. When the car is in autonomous mode we have a nice FPV which help us understand where the car is making it’s decision.\\
-
 \includegraphics[width=\textwidth]{../../docs/Telem3.png}\\
 
 Here are the “Logs”. When someting happen, a new row is inserted. This table support searching. When we have thousands of thousands of logs we can quickly find any message.\\
-
 \includegraphics[width=\textwidth]{../../docs/Telem4.png}\\
 
 Here are the “Notifications”. When something happen, We know it. It might be a new Car available for streaming or maybe the server has an important message to transmit for instance when somebody changed the settings of car.\\
-
 \includegraphics[width=\textwidth]{../../docs/Telem5.png}\\
 
 And eventually here are the “Settings”. This part is crucial. Here we load the “settings.json” from the car. We can update the car’s behaviour, stop or restart with the help of a simple click. This is much better than ssh where we need to stop and start the python script or open vim to changw settings. This features prevent fastidious and repetitive task and provide an excellent testing workflow.\\
