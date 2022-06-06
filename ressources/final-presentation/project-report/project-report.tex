@@ -371,28 +371,21 @@ The server is battery included, which means it comes with an exeptional UI inspi
 
 \newpage  
 Here was the first prototype:\\ 
-
 \includegraphics[width=\textwidth]{../../docs/telemetry.png}
-\newpage
 
 Here is what we have done:\\
-
 \includegraphics[width=\textwidth]{../../docs/Telem1.png}\\
 
-This is the “Main Dashboard”. This sction contains many information about the car. For instance by looking at the steering chart, we observed that in straight lines our car behaves very calm and predictive. And during a turn we have smooth curves which indicate us that we are on the good path. We also have the trottle and speed charts and even the CPU and RAM indicator. This very nice to have it because we working with embedded systems and ressourses are limited.\\ \\
-
+This is the “Main Dashboard”. This section contains many information about the car. For instance by looking at the steering chart, we observed that in straight lines our car behaves very calm and predictive. And during a turn we have smooth curves which indicate us that we are on the good path. We also have the trottle and speed charts and even the CPU and RAM indicator. This very nice to have it because we are working with embedded systems and ressourses are limited.\\
 \includegraphics[width=\textwidth]{../../docs/Telem2.png}\\
 
 This is the “Remote Control”. This section help us see that the car actualy see in real time. Nothing to say more expted that it’s very cool. We use this in training to we can actualy see better when we drive. When the car is in autonomous mode we have a nice FPV which help us understand where the car is making it’s decision.\\
-
 \includegraphics[width=\textwidth]{../../docs/Telem3.png}\\
 
 Here are the “Logs”. When someting happen, a new row is inserted. This table support searching. When we have thousands of thousands of logs we can quickly find any message.\\
-
 \includegraphics[width=\textwidth]{../../docs/Telem4.png}\\
 
 Here are the “Notifications”. When something happen, We know it. It might be a new Car available for streaming or maybe the server has an important message to transmit for instance when somebody changed the settings of car.\\
-
 \includegraphics[width=\textwidth]{../../docs/Telem5.png}\\
 
 And eventually here are the “Settings”. This part is crucial. Here we load the “settings.json” from the car. We can update the car’s behaviour, stop or restart with the help of a simple click. This is much better than ssh where we need to stop and start the python script or open vim to changw settings. This features prevent fastidious and repetitive task and provide an excellent testing workflow.\\
@@ -622,6 +615,55 @@ You can see here that the image we are generating is really close to an image th
 \subsubsection{Generating labels}
 Now that we can generate images, we need now a way to generate labels: steering and zones labels. In order to generate them, we will need three splines, one for the ideal trajectory, one for the car trajectory and one for the center of the road. For simplicity, we will consider for the moment the ideal trajectory as being the same as the center of the road. The car trajectory spline is randomized at runtime using the center of the road. This way, by randomizing where the car is located, we can truly generate data that we would not have generated in real life. Indeed, when driving the car on the real circuit, we do not explore cases where the car is off trajectory, and our driving is never perfect, whereas the data generation tool would be able to generate perfect labels for any kind of situation.
 
+Here is the top down view of both center line spline and the randomized car trajectory spline: \\ 
+\centerline{\includegraphics[width=15cm]{../../docs/splines.png}} 
+
+You can distinguish the car on the top of the image along with a red point, this point represents the target point of the car. This point is used to process the steering label. We found a basic policy comparing our orientation and the target orientation along with our lateral position and target lateral position. \\
+
+We can visualize this calculated steering using gizmos: \\ 
+\centerline{\includegraphics[width=15cm]{../../docs/sim-steering.png}} 
+
+\newpage
+Here the red line represents the steering angle. In this particular example, the calculated steering angle is +17,25 degrees and our maximum steering angle is 25 degrees, so the car is turning quite sharply to the right which is coherent with the fact that the car position and angle are quite off. \\
+
+But what about the new `zones` label we previously talked about ? \\
+
+Having at our disposition a spline located at the center of the road, we can establish a map of mean angles by taking small segments on the spline and processing their angle difference, from this map we can process a mean and apply a threshold.
+Here is a visualization of those mean angles: \\
+\centerline{\includegraphics[width=15cm]{../../docs/sim-zones.png}} 
+
+The bigger the blue point is, the bigger the mean is. Using this map, we can go even further, and apply directly our previously developped algorithm for the zones labels. And that's it ! We have our new labels.
+
+\subsubsection{Generating random speeds}
+Speed also affects how we drive, so not generating those informations would be a huge mistake as one of the parameters that makes our car fail in real life is the speed. The car struggles when it goes too fast or too slow compared to the speed it was trained at. We can fix that by randomizing the speed in our data generation tool. As you may have noticed, we already use the X and Z axis of our spline, but one axis is left unused: the Y axis (the height). We will use this axis to store our random speeds.
+
+Here is a side view of the car trajectory spline with the height representing the speed of the car: \\
+\centerline{\includegraphics[width=15cm]{../../docs/sim-speed.png}} 
+
+But how will the speed of the car affect the other previously generated labels ? \\
+
+For the steering, the red target point is in fact placed at a given distance in from the car's position, we previously considered the speed as constant, so we can easily now express this distance as a function of the speed. So as the speed varies, the distance to the red target point also varies. A higher speed mean a larger distance to the target point. We can see this as: the faster you go, the further you need to look ahead.
+
+For the zones labels, the speed doens't impact the location of the car so it won't affect those labels. But still it is important to mention that we do use the speed of the car to ensure a minimum speed threshold when in a corner or in a braking zone. The ideal scenario is that we do reach the minimum speed in the braking zone, just before the corner.
+
+
+\subsubsection{Randomizing the environment}
+It is really important for our model to explore different environment to avoid overfitting. If it is presented always the exact same track in the same conditions, it will learn to steer using features that are not linked to the track layout, such as where the chairs are located or even what does the windows look like. We obviouslyt do not want that !
+To avoid this behaviour, we randomized this scene. every N seconds, we changed the lightnings, and the objects in the scene. We did create a range of probable lights ranging from blueish to yellowish light. For the props, we did place randomly around the track some chairs and tables. It is quite easy to do this because we do have access to the road center spline from which we can deduce the exact location of the track and thus not place any props on the track. \\
+
+We are now ready to fully use our new tool to generate data !
+We can generate up to 200 images per seconds, which is 6 times faster than our regular data gathering speeds.
+Here is a sample of a folder of generated data created in a few seconds: \\
+\centerline{\includegraphics[width=15cm]{../../docs/sim-folder.png}} 
+
+% Ellerbach
+\subsection{Overtaking}
+Our last optionnal objective was to be able to overtake a car properly. Unfurtunetly, we didn't have the time to do this one. When looking back at what we said we would do, we exceeded our objectives and did extra work on working with unity by creating a digital clone of the track and a data generation tool from scratch. Those turned out to be more useful compared to the overtaking algorithm as the races we do stop once our car catches up with the car ahead.
+
+But we still have this goal in mind and we will try to accomplish it ! To make it work, we have in fact a lot of things already done. We have implemented a data generation tool which we could use to put a 3D object (a car) in front of the camera. We will then need tomodify the functions used to generate the steering values, add a bit of randomization in between, and here we have it !
+An other approach would be to add randomly images of cars directly during our training using our data augmentation pipeline. Again, we pretty much did all the work, we only need to had a few functions to take care of this.
+
+\newpage
 
 % Bobovitch
 \subsection{Website}
@@ -642,7 +684,7 @@ In this project we aim to learn the best practice regardless of the technology u
 
 As we were working on our project, we decided it needed a visual identity that could be easily remembered yet have meaning behind it. With this idea in mind, we brainstormed all together and came up with something new, something we believe is a good compromise of information style and personal touch. After a lot of work, we have come up with the logo printed above. Of course, by now, our visual identity has a different version, each of them answering to a problem we have faced or will face. We have used a variate of tools from simple google research to an extensive use of PhotoShop.\\
 
-But what is the meaning of this peace of craftsmanship?\\
+But what is the meaning of this piece of craftsmanship?\\
 
 It has a couple of meanings, the first one being the red circle which in our vision represents a track, an unfinished as there is always room for improvement in any project. The second one is more subtle. The second one is the four dots on the top of the circle. These four dots each represent an autonomous vehicle racing on the track. Why four? Because we are a team of four young and hardworking developers. Finally, the most obvious one is the name of our project in the middle of the circle. 
 
