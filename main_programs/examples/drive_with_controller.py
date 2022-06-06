@@ -32,11 +32,12 @@ actuator = Actuator()
 camera = Camera()
 controller = Controller()
 
-lookup_zone = [0.6, 0.3, -1.0]
+lookup_zone = [0.39, 0.32, 0.32]
 min_speed = 1.75
 
 
 def main():
+    mem["speed"] = 0.0
     while True:
         camera.update()  # get the last frame from the camera
         controller.update()  # update joystick
@@ -47,15 +48,17 @@ def main():
             mem["throttle"] = 0.0
 
         elif mem["state"] == "manual":
-            mem["steering"] = mem["controller"]["steering"]
-            mem["throttle"] = mem["controller"]["throttle"]
+            mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
+            mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
 
         elif mem["state"] == "autonomous":
             transformers(mem)
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
 
-            if "zone" in predictions.keys():
+            if "throttle" in predictions.keys():
+                throttle = predictions["throttle"]
+            elif "zone" in predictions.keys():
                 zone_idx = np.argmax(predictions["zone"])
                 if zone_idx == 0:
                     throttle = lookup_zone[0] * predictions["zone"][0]
@@ -70,14 +73,18 @@ def main():
                         if mem["speed"] > min_speed
                         else lookup_zone[1]
                     )
-
             else:
-                throttle = 0.2
+                throttle = settings.DEFAULT_THROTTLE
 
-            mem["steering"] = float(predictions["steering"]) * 1.0
-            mem["throttle"] = throttle
+            mem["steering"] = (
+                float(predictions.get("steering", 0.0)) * settings.STEERING_MULT
+            )
+            mem["throttle"] = throttle * settings.THROTTLE_MULT
 
         elif mem["state"] == "collect":
+            mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
+            mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
+
             io.save_image_data(
                 mem,
                 os.path.join(
@@ -85,8 +92,6 @@ def main():
                     settings.JSON_FILE_FORMAT.format(t=time.time()),
                 ),
             )
-            mem["steering"] = mem["controller"]["steering"]
-            mem["throttle"] = mem["controller"]["throttle"]
 
         actuator.update()
 

@@ -70,18 +70,21 @@ class DataGenerator(Sequence):
         """
         X = [[] for _ in range(len(self.inputs))]
         Y = [[] for _ in range(len(self.outputs))]
+        rand = np.random.uniform(0.0, 1.0)
 
         rdm_paths = np.random.choice(self.paths, size=self.batch_size)
         for path in rdm_paths:
             try:
                 image_data = io.load_image_data(path)
+                image_data["batch-random"] = rand
                 self.transformer(image_data)
+
                 for i, inp in enumerate(self.inputs):
-                    data = np.array(image_data[inp])
+                    data = np.asarray(image_data[inp])
                     X[i].append(data)
 
                 for i, out in enumerate(self.outputs):
-                    data = np.array(image_data[out])
+                    data = np.asarray(image_data[out])
                     Y[i].append(data)
             except Exception:
                 logging.debug(f"Error processing {path}")

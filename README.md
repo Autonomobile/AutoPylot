@@ -20,12 +20,12 @@ This will require multiple intermediate milestones:
  - [x] Process those data before feeding them to the neural network.
  - [x] Being able to train a convolutional neural network using those data.
  - [x] Build a telemetry web application.
- - [ ] Tweak the architecture and the parameters of the chosen model to achieve the best results.
- - [ ] Test in real life the model.
- - [ ] Race against others !
- - [ ] WIN !
+ - [x] Tweak the architecture and the parameters of the chosen model to achieve the best results.
+ - [x] Test in real life the model.
+ - [x] Race against others !
+ - [x] WIN !
 
-For more detailed information please read the [project specifications](https://github.com/Autonomobile/AutoPylot/blob/main/project-specifications/project-specifications.pdf) 
+For more detailed information please read the [project specifications](ressources/project-specifications/project-specifications.pdf) 
 
 Enjoy,
 
@@ -34,7 +34,6 @@ The Autonomobile Team.
 
 ## How to setup the software
 
-### Python
 It is recommended to have python 3.6.X installed, as this is the python version installed on the car.
 
 To avoid any packages conflicts with your existing python installation, we will use virtualenv
@@ -80,25 +79,6 @@ useful tools:
 - setup the test extension of VS-Code : https://code.visualstudio.com/docs/python/testing
 - use a docstring generator for example the VS-Code extension "Python Docstring Generator"
 
-### Telemetry Server
-
-- make sure to have NodeJS and NPM installed
-- Open the telemetry/ folder in another VS-Code window
-
-#### Installation
-```bash
-npm i
-```
-
-#### Start dev build
-```bash
-npm run dev
-```
-#### Start Production build
-```bash
-npm run build
-npm run start
-```
 ## Collect, Train and Deploy your model
 Here is the three main steps in the making of a model
 

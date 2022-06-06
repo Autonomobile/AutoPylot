@@ -21,25 +21,28 @@ model, model_info = utils.load_model(
     f"{settings.MODEL_NAME}/{settings.MODEL_NAME}.tflite"
 )
 prepare_data = preparedata.PrepareData(model_info)
+settings.ENABLE_TRANSFORM = False
 transformer = transform.Transform()
 
 
 def main(path):
     for path in dataset.sort_paths(dataset.get_every_json_paths(path)):
         image_data = io.load_image_data(path)
+        vis_image = vis.vis_all(image_data)
         transformer(image_data)
 
         input_data = prepare_data(image_data)
+
         predictions = model.predict(input_data)
         image_data.update(predictions)
 
-        print(image_data["zone"])
+        # print(image_data["zone"])
 
-        vis_image = vis.vis_all(image_data)
+        vis_pred = vis.vis_all(image_data)
         pr.update()
 
-        vis.cv2.imshow("augm", image_data["image"])
         vis.cv2.imshow("vis_image", vis_image)
+        vis.cv2.imshow("vis_pred", vis_pred)
         vis.cv2.waitKey(0)
 
 

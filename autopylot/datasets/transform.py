@@ -38,18 +38,19 @@ class Functions:
         image_data["image"] = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
     def shadow(image_data):
-        top_y = settings.IMAGE_SHAPE[1] * np.random.uniform()
-        top_x = settings.IMAGE_SHAPE[0] * np.random.uniform()
-        bot_x = settings.IMAGE_SHAPE[0] * np.random.uniform()
-        bot_y = settings.IMAGE_SHAPE[1] * np.random.uniform()
+        shape = image_data["image"].shape
+        top_y = shape[1] * np.random.uniform()
+        top_x = shape[0] * np.random.uniform()
+        bot_x = shape[0] * np.random.uniform()
+        bot_y = shape[1] * np.random.uniform()
 
         image_hls = np.array(
             cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2HLS), dtype=np.uint16
         )
         shadow_mask = 0 * image_hls[:, :, 1]
 
-        X_m = np.mgrid[0 : settings.IMAGE_SHAPE[0], 0 : settings.IMAGE_SHAPE[1]][0]
-        Y_m = np.mgrid[0 : settings.IMAGE_SHAPE[0], 0 : settings.IMAGE_SHAPE[1]][1]
+        X_m = np.mgrid[0 : shape[0], 0 : shape[1]][0]
+        Y_m = np.mgrid[0 : shape[0], 0 : shape[1]][1]
 
         shadow_mask[
             ((X_m - top_x) * (bot_y - top_y) - (bot_x - top_x) * (Y_m - top_y) >= 0)
@@ -104,6 +105,20 @@ class Functions:
 
     def bgr_to_gray(image_data):
         image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2GRAY)
+
+    def mix_channel(image_data):
+        img = image_data["image"]
+        order = np.split(img, 3, axis=-1)
+        np.random.shuffle(order)
+        image_data["image"] = cv2.merge(order)
+
+    def resize(image_data):
+        factor = 1.0 + image_data.get("batch-random", np.random.uniform(0.0, 1.0))
+        shape = image_data["image"].shape
+        image_data["image"] = cv2.resize(
+            image_data["image"],
+            (int(shape[1] * factor), int(shape[0] * factor)),
+        )
 
 
 class Transform:
