@@ -87,7 +87,7 @@ This will require multiple intermediate milestones:
 \begin{itemize}
 \item Being able to send scripted controls to the motor and servo.
 \item Being able to drive the car manually using a controller.
-\item Develop a way to gather images and annotations and store them in a stuctured way, for example sorted by date.
+\item Develop a way to gather images and annotations and store them in a structured way, for example sorted by date.
 \item Process those data before feeding them to the neural network.
 \item Being able to train a convolutional neural network using those data.
 \item Build a telemetry web application.
@@ -95,7 +95,7 @@ This will require multiple intermediate milestones:
 \item Test in real life the model.
 \item Race against others!
 \end{itemize}
-Once all of that is done, we will start our optional objectives that will enable better racing and better understanding of the car's environnement.
+Once all of that is done, we will start our optional objectives that will enable better racing and better understanding of the car's environment.
 
 \subsection{Optional Objectives}
 To be able to go faster and increase the reliability of our car's driving, we will need to add some features to our project. \\
@@ -103,14 +103,14 @@ To be able to go faster and increase the reliability of our car's driving, we wi
 One good feature would be to have a model that takes into account the speed of the car. As we all know on a real car, we don't steer the same way when going at 10km/h and going at 90km/h. This input extension could bring more stability to our model.
 To go faster, it would also be great to be able to differentiate turns from straight lines and even braking zone before the turn. \\
 
-One of the challenges racing implies is overtaking. Overtaking is a very complex manoeuver. First we obviously need to be faster than the car ahead, we could assure that by detecting the successive positions of the car ahead on the image. If the car is getting closer, it's Y coordinate will come closer to the bottom of our image. Also, we cannot overtake if we have no room for that, that means we have to detect a gap on the left or the right of the car before initiating the overtake. Once we decided on what part of track we will overtake, we still need to get ahead of the opponent's car. We could acheive that by forcing the model to drive on the left or right part of the track for a given amount of time.
+One of the challenges racing implies is overtaking. Overtaking is a very complex maneuver. First we obviously need to be faster than the car ahead, we could assure that by detecting the successive positions of the car ahead on the image. If the car is getting closer, it's Y coordinate will come closer to the bottom of our image. Also, we cannot overtake if we have no room for that, that means we have to detect a gap on the left or the right of the car before initiating the overtake. Once we decided on what part of track we will overtake, we still need to get ahead of the opponent's car. We could achieve that by forcing the model to drive on the left or right part of the track for a given amount of time.
 \newpage
 
 \subsection{Motivations}
 Why this project? \\
 This project is something that we deeply care about. Being able to work on a self-driving car does sound like a dream to us. Being able to work on this project means we will be able to understand how tomorrow's car will work. Moreover, we will learn valuable skills in Python and in neural networks. 
 Being able to work on this project is also a way to prove ourselves and that with enough work anything is achievable.
-Our goal is not to make the new tesla model W but it is to be a part of this constant progress in autonomous vehicles. We also want to see how far we can take this project and what we will have achieved by the end of the school year. With this idea in mind, we have set ourself some goals, for example winning a race. This project is not a common one, but that is exactly what pushes us to make it work not matter the cost. We are also proud to be able to represent Epita for the races. 
+Our goal is not to make the new tesla model W but it is to be a part of this constant progress in autonomous vehicles. We also want to see how far we can take this project and what we will have achieved by the end of the school year. With this idea in mind, we have set multiple goals we want to achieve. For example winning a race. This project is not a common one, but that is exactly what pushes us to make it work not matter the cost. We are also proud to be able to represent Epita for the races. 
 It is a great opportunity for us because we will have the chance to meet many people during the races like some people of Renault Digital and some other passionate people.
 
 \section{Technical Specifications}
@@ -135,13 +135,13 @@ Here is a schema of the current hardware setup we will be using:
 
 \subsection{Software}
 As you understood, our work will be focused more on the software side.
-Our project will be written mostly in Python, with a bit of Java Script(JS) and arduino code.
+Our project will be written mostly in Python, with a bit of JavaScript(JS) and arduino code.
 We will divide the project into 3 big parts:
 \begin{itemize}
 \item The backend. This is where most of our efforts will be focused; this part includes every key program all the way from the data gathering to the model training and testing.
 
 The first part we will develop is the code responsible for the communication between the RaspberryPi and the Arduino, this code will enable us to drive the motor and servo motor by calling some simple functions. This program will also later be used to fetch the speed of the car transmitted by the Arduino to the RaspberryPi.
-Then, we will need to find a way to control the car manually, for example using a controller. The values of every axis and buttons on the controller will need to be fetch and then transmitted to the arduino using the code previously created.
+Then, we will need to find a way to control the car manually, for example using a controller. The values of every axis and buttons on the controller will need to be fetched and then transmitted to the arduino using the code previously created.
 We will then create functions to capture, save and load images and annotations corresponding to the image. The data will be stored in an ordered manner using the date of capture of the images. For this part we will mostly use OpenCV and Numpy.
 Then we will need to create models using Tensorflow, we will firstly create a basic Convolutional model. In order to train it, we will need to write a program to load existing data, feed the right inputs and output to the model. The modularity of this part is crucial as our models will have more and more inputs and outputs.
 To increase the accuracy and generalization of our model, we will need to provide some augmented data to our model. We will create multiple functions to add some random noise, random shadows, lights, and blur to our images. This process known as data augmentation, is really important and will bring more robustness to our models.
@@ -157,7 +157,7 @@ Developing an autonomous car is difficult. The more you know about what’s happ
 \newpage
 \subsection{Constraints}
 Throughout the project, we will have to keep in mind some constraints.
-Our biggest constraint will be the compute power. We need all of the inference of the model to be executed on the RaspberryPi, this means that we will have to be really careful of the performance of our code. How fast our main control loop is will determine the reactivity of our car. Our usb camera can capture up to 30 images per second, our main control loop should ideally match 30 iterations per seconds. For example, if the car is going at 1 meter per second and our control loop is running at 10hz, the distance the car travels between each iteration is 10cm. Now if you are going five times faster with the same control loop, you now have 50cm between each decision, this is huge for such a small car! The part that will likely take the most time will be the inference, we will need to keep track of the ratio between performance and accuracy of our models.
+Our biggest constraint will be the computer's power. We need all of the inference of the model to be executed on the RaspberryPi, this means that we will have to be really careful of the performance of our code. How fast our main control loop is will determine the reactivity of our car. Our usb camera can capture up to 30 images per second, our main control loop should ideally match 30 iterations per seconds. For example, if the car is going at 1 meter per second and our control loop is running at 10hz, the distance the car travels between each iteration is 10cm. Now if you are going five times faster with the same control loop, you now have 50cm between each decision, this is huge for such a small car! The part that will likely take the most time will be the inference, we will need to keep track of the ratio between performance and accuracy of our models.
 Regarding the accuracy of our models, we will need sufficient accuracy and generalization to be able to complete multiple laps. If the generalization is not high enough, small changes in the lightning or changes in the background will affect the prediction of our model.
 On the safety part, we have to keep in mind that we are driving a powerful car, a wrong motor command can lead us right into the wall and break the car. Prior to deploy and test our code on a real track, we will need to carefully test our code to avoid such a disaster.
 
@@ -192,7 +192,7 @@ You can see on the figure ~\ref{fig:tinkercad} the TinkerCad simplified version 
 
 
 
-You can see here two Arduinos, but on the car we only have one, why is that? TinkerCad did not have a Raspberry Pi, so we added another Arduino to simulate the serial connection between the Raspberry Pi and the Arduino. The Arduino on the top sends steering and throttle information (as the Raspberry Pi would do) to the other Arduino that processes this information received on the serial port and then controls both the servomotor and motor. They are both running on a 9V battery here but in real life on a 7.2V battery. We then read the signal sent by the sensored motor, using an interrupt pin. The rpm of the motor is then deduced from this signal and then sent back to the Raspberry Pi.
+You can see here two Arduinos, but on the car we only have one, why is that? TinkerCad did not have a Raspberry Pi, so we added another Arduino to simulate the serial connection between the Raspberry Pi and the Arduino. The Arduino on the top sends steering and throttle information (as the Raspberry Pi would do) to the other Arduino that processes this information received on the serial port and then controls both the servomotor and motor. They are both running on a 9V battery here but in real life on a 7.2V battery. We then read the signal sent by the motor, using an interrupt pin. The rpm of the motor is then deduced from this signal and then sent back to the Raspberry Pi.
 This virtual simplified car really helped us in the process of developing the core of our car!
 
 When the Arduino part was finished, we could start the python part, that consisted in sending the right bytes to the serial port connected to the Arduino, it was hard to debug when there were issues on the one hand, but really satisfying when it did work! We are now able to send steering and throttle to the Arduino making the car controllable using python!
@@ -243,12 +243,12 @@ The second one is the os module. It provides functions for interacting with the 
 Secondly for the test file in addition to the module glob and OS, we used the sys module. It provides access to some variables used or maintained by the interpreter and to functions that interact strongly with the interpreter. 
 We also used the shutil module which offers a number of high-level operations on files and collections of files. In particular, functions are provided which support file copying and removal. Furthermore, we used the NumPy module to deal with matrices.\\ 
 The dataset file is composed of ten functions:\\  
-The first is the load dataset function which load JSON and PNG file from a folder, the function takes the path of a directory which contains JSON and PNG and it returns a list of dictionary containing the image and the JSON file.\\ 
-The second function is the load multiple dataset, it is similar to the load dataset function but deals with multiple images and JSON files and it returns a list of lists of dictionaries.  We also had a second argument named flat, if flat is equal to false, it means that we have to deal with a list of lists, otherwise we have to deal with a simple list.\\ 
+The first is the load dataset function which load JSON and PNG file from a folder, the function takes the path of a directory which contains JSON and PNG and, it returns a list of dictionary containing the image and the JSON file.\\ 
+The second function is the load multiple dataset, it is similar to the load dataset function but deals with multiple images and JSON files and, it returns a list of lists of dictionaries.  We also had a second argument named flat, if flat is equal to false, it means that we have to deal with a list of lists, otherwise we have to deal with a simple list.\\ 
 The third one is the load dataset generator function, it iterates image data, generators do not store all the values in memory, they generate the values on the fly.\\ 
 The fourth one is the load multiple dataset generator. It is similar to the load dataset generator, but it deals with several images and JSON files.\\ 
-Then the load sorted dataset function sorts the loaded data and returns a list of dictionary containing sorted data. Thanks to the function time.time() we have a chronological view of our elements, and we have to sort them. We had to use 2 subfunctions, the first is sort paths which sort all our elements thanks to the sorted function and the second subfunction is the get time stamp. The function split the name of an element in order to have only the part containing the date without the .json or .png and then it converts it into a float.\\ 
-The load multiple sorted dataset is similar to the load sorted dataset function but it deals with multiple dataset and returns a list of lists of dictionaries.\\ 
+Then the load sorted dataset function sorts the loaded data and returns a list of dictionary containing sorted data. Thanks to the function time.time() we have a chronological view of our elements, and we have to sort them. We had to use 2 subfunctions, the first is sort paths which sort all our elements thanks to the sorted function and the second subfunction is the get time stamp. The function split the name of an element in order to have only the part containing the date without the .json or .png, and then it converts it into a float.\\ 
+The load multiple sorted dataset is similar to the load sorted dataset function but, it deals with multiple dataset and returns a list of lists of dictionaries.\\ 
 The two last functions are the load sorted dataset generator and the load multiple sorted dataset generator.\\ 
 It iterates sorted image data and do not store the values in the memory.\\ 
 The test dataset file is composed of twenty-one functions.\\ 
@@ -290,7 +290,7 @@ The figures ~\ref{fig:a} shows a left turn and ~\ref{fig:b} a straight line. \\ 
 
 % Bobovitch
 \subsection{Basic car loop}
-This is a mandatory part. It contains the main function to run. The Main Control Loop will call various processing functions. We successfully achieved fetching of images from the camera, fetching commands from the controller and we successfully updated the general car memory state so now we are able to send multiple signals and commands to the hardware driver. \\
+This is a mandatory part. It contains the main function to run. The Main Control Loop will call various processing functions. We successfully achieved fetching of images from the camera, fetching commands from the controller, and we successfully updated the general car memory state, so now we are able to send multiple signals and commands to the hardware driver. \\
 
 We made real life testing that confirmed our progression. We plan next to maintain our modular philosophy to easily add or remove features. This part seems easy to implement but remains one of the most important. We have to be sure that each component and modules are working perfectly to avoid performance issues. \\
 
@@ -324,7 +324,7 @@ To conclude, this part will be of great help for debugging and will be allowing 
 \subsection{Telemetry}
 Why use telemetry? \\
 
-In our context, we face different problems that may be hard to solve without accessing the device. Our code runs on an Rasberry Pi which make difficult the debugging.\\
+In our context, we face different problems that may be hard to solve without accessing the device. Our code runs on a Rasberry Pi which make difficult the debugging.\\
 
 Moreover, artificial intelligence is a black box. We don't know what's happening during the execution process. That said, once the program has finished, you can observe the past events thanks to the logs. However, this approach to debugging is not practical and not efficient enough for our use case. To better understand the background processes, we decided to use telemetry. It will allow us to collect valuable data in real time.\\ 
 
@@ -339,7 +339,7 @@ We came to the point of building a telemetry server combined with a remote contr
 We will benefit from great portability, an awesome development process, and a powerful UI. The server makes it possible for us to communicate with the car in real-time. We can detect any problems before they happen. We can control the car without any limitations. We can remotely stop and restart. We can remotely update settings. And we can remotely view logs and car updates.\\ 
 Now let's see how we implemented this. As seen previously, we have already set up a logger which records the information continuously. Firstly, we extended the functionalities of the logger while maintaining a modular philosophy. The logger gained the ability to send logs and images through a Wi-Fi network. Next, we were confronted to a different challenge: How to send a decent amount of information to multiple clients of different types (web-browsers and raspberry pi hardware) in real-time?  We choose to use Socket.io . This an excellent open source cross-platform library. Socket.io enable us to create bidirectional and low-latency communication. 
 
-Here is a simple exemple of a communication between a client and a server in javascript. This simple API, simplifies our development process and make data transmition more compliant.\\
+Here is a simple exemple of a communication between a client and a server in javascript. This simple API, simplifies our development process and make data transmission more compliant.\\
 
 \centerline{\includegraphics[height=5cm]{../../docs/server-client.png}}
 
@@ -356,18 +356,18 @@ We can even go further by using the concepts of rooms. This means that each clie
 
 \centerline{\includegraphics[height=6cm]{../../docs/rooms.png}}
 
-From now, ui-clients|web-clients|people mean a socket.io client instance which runs in a web-browser. A car|py-clients is a socket.io client instance wich runs on a raspberry pi4.\\ 
-As our main goal is to win races, which implies multiple cars on the track, we have to thinks about a way to manage multiples cars at once. At the same time we wanted every clients of the network would be able to communicate with each other (web-clients with python-clients only). Our design choice was to implement a TV-like mechanism : a web-client can only stream one py-client. And a py-client can send content to an unlimited amount of web-clients, meanwhile a web-clients has the possibility to switch cars at any time.\\ 
+From now, ui-clients|web-clients|people mean a socket.io client instance which runs in a web-browser. A car|py-clients is a socket.io client instance which runs on a raspberry pi4.\\ 
+As our main goal is to win races, which implies multiple cars on the track, we have to think about a way to manage multiples cars at once. At the same time we wanted every client of the network would be able to communicate with each other (web-clients with python-clients only). Our design choice was to implement a TV-like mechanism : a web-client can only stream one py-client. And a py-client can send content to an unlimited amount of web-clients, meanwhile a web-clients has the possibility to switch cars at any time.\\ 
 
 \newpage 
 
-Socket.io is just a tool. We developed a high performance server wich is acting as a middleman between clients:\\
+Socket.io is just a tool. We developed a high performance server which is acting as a middleman between clients:\\
 
 \includegraphics[width=\textwidth]{../../docs/diagram.png}
 
 The server uses the JavaScript language (Node JS) as it offers great flexibility, it is very efficient for networking and IO tasks thanks to its language design. Nevertheless, it requires great vigilance because the language is not typed. Any bug could lead to performance issues and memory leaks. But it still remains the best choice for us. We made a great test coverage to extract all bugs.\\ 
 
-The server is battery included, which means it comes with an exeptional UI inspired by the familiar material design by Google. The web-app is intuitive and feel right at hime. To build the UI we used the “Next.js” framework which is server side rendered react with an API endpoint. “Next.js” is a top-level industry react framework used in many compagnies.\\
+The server is battery included, which means it comes with an exceptional UI inspired by the familiar material design by Google. The web-app is intuitive and feel right at him. To build the UI we used the “Next.js” framework which is server side rendered react with an API endpoint. “Next.js” is a top-level industry react framework used in many companies.\\
 
 \newpage  
 Here was the first prototype:\\ 
@@ -376,19 +376,19 @@ Here was the first prototype:\\
 Here is what we have done:\\
 \includegraphics[width=\textwidth]{../../docs/Telem1.png}\\
 
-This is the “Main Dashboard”. This section contains many information about the car. For instance by looking at the steering chart, we observed that in straight lines our car behaves very calm and predictive. And during a turn we have smooth curves which indicate us that we are on the good path. We also have the trottle and speed charts and even the CPU and RAM indicator. This very nice to have it because we are working with embedded systems and ressourses are limited.\\
+This is the “Main Dashboard”. This section contains lots of information about the car. For instance by looking at the steering chart, we observed that in straight lines our car behaves very calm and predictive. And during a turn we have smooth curves which indicate us that we are on the good path. We also have the throttle and speed charts and even the CPU and RAM indicator. This very nice to have it because we are working with embedded systems and ressources are limited.\\
 \includegraphics[width=\textwidth]{../../docs/Telem2.png}\\
 
-This is the “Remote Control”. This section help us see that the car actualy see in real time. Nothing to say more expted that it’s very cool. We use this in training to we can actualy see better when we drive. When the car is in autonomous mode we have a nice FPV which help us understand where the car is making it’s decision.\\
+This is the “Remote Control”. This section help us see that the car actually see in real time. Nothing to say more expected that it’s very cool. We use this in training to we can actually see better when we drive. When the car is in autonomous mode we have a nice FPV which help us understand where the car is making its decision.\\
 \includegraphics[width=\textwidth]{../../docs/Telem3.png}\\
 
-Here are the “Logs”. When someting happen, a new row is inserted. This table support searching. When we have thousands of thousands of logs we can quickly find any message.\\
+Here are the “Logs”. When something happen, a new row is inserted. This table support searching. When we have thousands and thousands of logs we can quickly find any message.\\
 \includegraphics[width=\textwidth]{../../docs/Telem4.png}\\
 
 Here are the “Notifications”. When something happen, We know it. It might be a new Car available for streaming or maybe the server has an important message to transmit for instance when somebody changed the settings of car.\\
 \includegraphics[width=\textwidth]{../../docs/Telem5.png}\\
 
-And eventually here are the “Settings”. This part is crucial. Here we load the “settings.json” from the car. We can update the car’s behaviour, stop or restart with the help of a simple click. This is much better than ssh where we need to stop and start the python script or open vim to changw settings. This features prevent fastidious and repetitive task and provide an excellent testing workflow.\\
+And eventually here are the “Settings”. This part is crucial. Here we load the “settings.json” from the car. We can update the car’s behaviour, stop or restart with the help of a simple click. This is much better than ssh where we need to stop and start the python script or open vim to change settings. These features prevent fastidious and repetitive task and provide an excellent testing workflow.\\
 
 In Conclusion this server is the autopylot’s best friend. It’s very easy to use and to install, it can also be accessed on a phone. Every time we use the car, we use this telemetry server. This entire server was developed by hand by our team. We hope to make it even better in the future.\\
 
@@ -441,7 +441,7 @@ In some cases, we want our output signal to meet some requirements, for example,
 \item Rectified Linear unit or "Relu" is the most widely used activation, it cuts off the negative values. It is defined as $ Relu(z) = \max(0, z)$. \\
 \centerline{\includegraphics[height=6cm]{../../docs/relu.png}}
 
-\item Sigmoid is another widely used function. It maps every values between 0 and 1. It is defined as $ Sigmoid(z) = \frac{1} {1 + e^{-z}}$ \\
+\item Sigmoid is another widely used function. It maps every value between 0 and 1. It is defined as $ Sigmoid(z) = \frac{1} {1 + e^{-z}}$ \\
 \centerline{\includegraphics[height=6cm]{../../docs/sigmoid.png}}
 
 \item Tanh, similarly to Sigmoid maps every value between -1 and 1. It is defined as $ Tanh(z) = \frac{1 - e^{-2z}}{1 + e^{-2z}}$ \\
@@ -472,7 +472,7 @@ The problem with this model is that it is slow, and it is even slower in our cas
 
 I started by removing some convolutional layers. 
 
-My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy. Then with the other layers, I progressively increased the number of kernels and I reduced the kernel size to 3x3. Moreover, I apply a stride of 2 for the first four layers and a stride of 1 for the last two. In the end, I use two Dense layers with an activation function "relu" like the other layers. Finally, I tested many different optimizers like SGC, Adadelta, Nadam and Ftrl but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies. 
+My first convolutional layer has a kernel of 5x5 and not 3x3 to have a filter with a bigger size at the beginning. Furthermore, I start with only four kernels on this first layer to reduce the cost of energy. Then with the other layers, I progressively increased the number of kernels and I reduced the kernel size to 3x3. Moreover, I apply a stride of 2 for the first four layers and a stride of 1 for the last two. In the end, I use two Dense layers with an activation function "relu" like the other layers. Finally, I tested many different optimizers like SGC, Adadelta, Nadam and Ftrl, but I decided to use the Adam Optimizer because it gave me the best result. The Adam optimizer involves a combination of two gradient descent methodologies. 
 
 \subsubsection{Mickael Bobovitch}
 I Tried different implementation. One that worked pretty well for me is a model inspired by Nvidia. I also tried a model based on the AlexNet Architecture. The common point between architecture is their use on 2D convolution. For instance at the top of the stack, we have 5 layers of 2D convolution, followed by a Flatten Layer and finally by few Dense Layers. Some architetures used MaxPooling to translate images or change the size of the searched object. This technique is great for searching object that can be anywhere on a picture. But form lane recognition this might be not necessary. I am still experimenting a lot. For the next time i will have a more robust architecture. The only challenge for me is to find the best values that can produce a great model.
@@ -486,7 +486,7 @@ In my model, I tried to reduce the number of parameters to try and make it as li
 \newpage
 
 \subsubsection{Maxime Ellerbach}
-When I started to make my model, I thought about: "What could make my model different from the others?" When looking at what my teammates did, it is obvious that the main difference in the model is not in the architecture itself of the model but rather in the data that is fed to it. One other observation is that the less parameters we have in the model, the less sensible it is to overfitting, so the main idea was to have a light model that would also have a rather small latent space. \\
+When I started to make my model, I thought about: "What could make my model different from the others?" When looking at what my teammates did, it is obvious that the main difference in the model is not in the architecture itself of the model but rather in the data that is fed to it. One other observation is that the fewer parameters we have in the model, the less sensible it is too overfitting, so the main idea was to have a light model that would also have a rather small latent space. \\
 
 I did see that the combination of [Layer $\rightarrow$ Relu Activation $\rightarrow$ BatchNormalization] worked better with unseen testing images, so I did use this combination for every convolution and Dense layers. \\
 
@@ -550,18 +550,18 @@ Finally, we use one important training library. The .fit library from keras. Wit
 
 % Bobovitch
 \subsection{Data Augmentation}
-During the learning process we have the possibility to use data augmentation. It’s a technique used to diversify training data and to apply different kind of situations with too much light or not enough. The AI has to consider the road without light effects. Data augmentation is used too add noise on training data. It’s very useful because it forces neurons to find better and more complex features in images. The more features are complex, the less we can experiment overfitting. Which means the AI is more capable to drive in an unknown environment and use complex features to drive better.
+During the learning process we have the possibility to use data augmentation. It’s a technique used to diversify training data and to apply different kind of situations with too much light or not enough. The AI has to consider the road without light effects. Data augmentation is used to add noise on training data. It’s very useful because it forces neurons to find better and more complex features in images. The more features are complex, the less we can experiment overfitting. Which means the AI is more capable to drive in an unknown environment and use complex features to drive better.
 \newpage
 
 % Ellerbach
 \subsection{Simulator}
 Now that we have a trained model, how can we test it ? During the race ! The issue is that every race is separated by a long month of waiting. To avoid waiting so long to test our model, we used a simulator ! \\
-The simulator we used is an open source simulator called DonkeySim \\(\href{https://github.com/tawnkramer/sdsandbox/}{https://github.com/tawnkramer/sdsandbox/}) It had been developped using unity. \\ \\
+The simulator we used is an open source simulator called DonkeySim \\(\href{https://github.com/tawnkramer/sdsandbox/}{https://github.com/tawnkramer/sdsandbox/}) It had been developed using unity. \\ \\
 
 How does it work ?
 When a client connects to the simulator, a new car is created, you can choose from a variety of tracks the one you want. You can even create your own tracks ! Then, the server (the simulator) sends telemetry packets to each client (car) connected. Those packets contain data such as an image (simulating a webcam put on the car), some speed data or even odometry data. We can directly feed those data into our previously trained model. The model predicts a steering and throttle value that is being then sent back to the server to apply them on the car. \\
 
-The incorporation of the simulator in our project was made easy by the modularity of it. We only needed to developp the client side: handling the packets, processing the telemetry data, and so on. Basically, the code used to run the real car or a car in the sim is the same, only the source of the data differs. This helped us a lot in the process of developping performant and accurate models prior to deploy them on the real car.
+The incorporation of the simulator in our project was made easy by the modularity of it. We only needed to develop the client side: handling the packets, processing the telemetry data, and so on. Basically, the code used to run the real car or a car in the sim is the same, only the source of the data differs. This helped us a lot in the process of developping performant and accurate models prior to deploy them on the real car.
 
 We even recreated the track we are used to race at, this is what the track looks like: \\
 \newpage
@@ -574,19 +574,19 @@ We created this track using photos took during the races, we took a photo of eve
 Here are the measurements of the track: \\
 \centerline{\includegraphics[width=15cm]{../../docs/track-measurements.png}} 
 
-Then, with this scene that looked just like our race environnement, we added all the components required by the simulator to make the client connect and so on. We were then left with a fully working track ! Once our track was finished, we committed a pull request to the simulator's repository and this track made its way into an official simulator release ! We now can train and test our models without having to fire up the real car. We mainly use it to debug our codes and imporve our model architectures.
+Then, with this scene that looked just like our race environment, we added all the components required by the simulator to make the client connect and so on. We were then left with a fully working track ! Once our track was finished, we committed a pull request to the simulator's repository and this track made its way into an official simulator release ! We now can train and test our models without having to fire up the real car. We mainly use it to debug our codes and imporve our model architectures.
 
 % Ellerbach
 \subsection{Creating some labels}
-One of our goal was to handle the throttle using our model to be able to go faster in the straights and slower in the corners. Our first approach was to treat the throttle output just like the steering output by trying to train the model usin gour own throttle inputs. This method did work to some extent. One of the limitation is that our model learns from us, meaning that if we do not respect a precise value in the straights and in the corners, the model would just try to predict an in between values not finding a true correlation between the image and the targetted throttle. \\
+One of our goal was to handle the throttle using our model to be able to go faster in the straights and slower in the corners. Our first approach was to treat the throttle output just like the steering output by trying to train the model using our own throttle inputs. This method did work to some extent. One of the limitation is that our model learns from us, meaning that if we do not respect a precise value in the straights and in the corners, the model would just try to predict an in between values not finding a true correlation between the image and the targeted throttle. \\
 
-So we tried something different: creating our own labels. Theoretically, after collecting a dataset while driving on the center of the track, only by looking at the steering values, we could determine whether we are in a turn, before a turn, or in a straight. This is exactly what we did. We did collect a buch of data by driving multiple laps. Then, we loaded those sorted data and had a look at the mean steering values, it was clear that we could generate some labels from this. So we did continue on this idea, we created a script to analyze those data and determine in which `zone` our car was in. Then we saved those created informations into the corresponding json files. \\
+So we tried something different: creating our own labels. Theoretically, after collecting a dataset while driving in the center of the track, only by looking at the steering values, we could determine whether we are in a turn, before a turn, or in a straight. This is exactly what we did. We did collect a buch of data by driving multiple laps. Then, we loaded those sorted data and had a look at the mean steering values, it was clear that we could generate some labels from this. So we did continue on this idea, we created a script to analyze those data and determine in which `zone` our car was in. Then we saved the created information into the corresponding json files. \\
 
-Then, we were required in order to use those new labels to add a new output to our model. This way, we would have as inputs: an image, and as outputs: a steering and 3 neurons corresponding to the following: [are we in a straight, are we in a braking zone, are we in a corner]. The advantage of detecting those zones is that it is really easy to add throttle coefficients to each zones, and those coefficients could be tweaked to offer the best performances. 
+Then, we were required in order to use those new labels to add a new output to our model. This way, we would have as inputs: an image, and as outputs: a steering and 3 neurons corresponding to the following: [are we in a straight, are we in a braking zone, are we in a corner]. The advantage of detecting those zones is that it is really easy to add throttle coefficients to each zone, and those coefficients could be tweaked to offer the best performances. 
 
 % Ellerbach
 \subsection{Data Generation tool}
-At first, we did use the simulator to gather data, simply by driving around in the simulator just like we would in the real life with the car. By mixing both data collected from the simulator and from our real car, we observed that we acheived better performance, our model did understand better the track. And we wanted to take it a step further and set a goal to automate the gathering of our data.
+At first, we did use the simulator to gather data, simply by driving around in the simulator just like we would in the real life with the car. By mixing both data collected from the simulator and from our real car, we observed that we achieved better performance, our model did understand better the track. And we wanted to take it a step further and set a goal to automate the gathering of our data.
 
 So we headed to this goal ! The first step was to create a new unity project where we would import our previously created track. Then we asked ourselves, what do we need in order to create data ? A camera, a moving car and a way to tell where the car should go and then save those data.
 \subsubsection{Generating images}
@@ -595,7 +595,7 @@ We then measured the position of the camera on our real car as well as the angle
 
 \centerline{\includegraphics[width=15cm]{../../docs/camera.png}} 
 \centerline{\includegraphics[width=15cm]{../../docs/car-sim.png}} 
-Here, the camera won't be seing the car itself, so this design is only indicative for us, a camera object alone would have done the job fine.
+Here, the camera won't be seeing the car itself, so this design is only indicative for us, a camera object alone would have done the job fine.
 
 \begin{figure}[h]
     \centering
@@ -615,7 +615,7 @@ You can see here that the image we are generating is really close to an image th
 \subsubsection{Generating labels}
 Now that we can generate images, we need now a way to generate labels: steering and zones labels. In order to generate them, we will need three splines, one for the ideal trajectory, one for the car trajectory and one for the center of the road. For simplicity, we will consider for the moment the ideal trajectory as being the same as the center of the road. The car trajectory spline is randomized at runtime using the center of the road. This way, by randomizing where the car is located, we can truly generate data that we would not have generated in real life. Indeed, when driving the car on the real circuit, we do not explore cases where the car is off trajectory, and our driving is never perfect, whereas the data generation tool would be able to generate perfect labels for any kind of situation.
 
-Here is the top down view of both center line spline and the randomized car trajectory spline: \\ 
+Here is the top-down view of both center line spline and the randomized car trajectory spline: \\ 
 \centerline{\includegraphics[width=15cm]{../../docs/splines.png}} 
 
 You can distinguish the car on the top of the image along with a red point, this point represents the target point of the car. This point is used to process the steering label. We found a basic policy comparing our orientation and the target orientation along with our lateral position and target lateral position. \\
@@ -632,10 +632,10 @@ Having at our disposition a spline located at the center of the road, we can est
 Here is a visualization of those mean angles: \\
 \centerline{\includegraphics[width=15cm]{../../docs/sim-zones.png}} 
 
-The bigger the blue point is, the bigger the mean is. Using this map, we can go even further, and apply directly our previously developped algorithm for the zones labels. And that's it ! We have our new labels.
+The bigger the blue point is, the bigger the mean is. Using this map, we can go even further, and apply directly our previously developed algorithm for the zones labels. And that's it ! We have our new labels.
 
 \subsubsection{Generating random speeds}
-Speed also affects how we drive, so not generating those informations would be a huge mistake as one of the parameters that makes our car fail in real life is the speed. The car struggles when it goes too fast or too slow compared to the speed it was trained at. We can fix that by randomizing the speed in our data generation tool. As you may have noticed, we already use the X and Z axis of our spline, but one axis is left unused: the Y axis (the height). We will use this axis to store our random speeds.
+Speed also affects how we drive, so not generating those datasets would be a huge mistake as one of the parameters that makes our car fail in real life is the speed. The car struggles when it goes too fast or too slow compared to the speed it was trained at. We can fix that by randomizing the speed in our data generation tool. As you may have noticed, we already use the X and Z axis of our spline, but one axis is left unused: the Y axis (the height). We will use this axis to store our random speeds.
 
 Here is a side view of the car trajectory spline with the height representing the speed of the car: \\
 \centerline{\includegraphics[width=15cm]{../../docs/sim-speed.png}} 
@@ -644,12 +644,12 @@ But how will the speed of the car affect the other previously generated labels ?
 
 For the steering, the red target point is in fact placed at a given distance in from the car's position, we previously considered the speed as constant, so we can easily now express this distance as a function of the speed. So as the speed varies, the distance to the red target point also varies. A higher speed mean a larger distance to the target point. We can see this as: the faster you go, the further you need to look ahead.
 
-For the zones labels, the speed doens't impact the location of the car so it won't affect those labels. But still it is important to mention that we do use the speed of the car to ensure a minimum speed threshold when in a corner or in a braking zone. The ideal scenario is that we do reach the minimum speed in the braking zone, just before the corner.
+For the zones labels, the speed doens't impact the location of the car, so it won't affect those labels. But still it is important to mention that we do use the speed of the car to ensure a minimum speed threshold when in a corner or in a braking zone. The ideal scenario is that we do reach the minimum speed in the braking zone, just before the corner.
 
 
 \subsubsection{Randomizing the environment}
-It is really important for our model to explore different environment to avoid overfitting. If it is presented always the exact same track in the same conditions, it will learn to steer using features that are not linked to the track layout, such as where the chairs are located or even what does the windows look like. We obviouslyt do not want that !
-To avoid this behaviour, we randomized this scene. every N seconds, we changed the lightnings, and the objects in the scene. We did create a range of probable lights ranging from blueish to yellowish light. For the props, we did place randomly around the track some chairs and tables. It is quite easy to do this because we do have access to the road center spline from which we can deduce the exact location of the track and thus not place any props on the track. \\
+It is really important for our model to explore different environment to avoid overfitting. If it is presented always the exact same track in the same conditions, it will learn to steer using features that are not linked to the track layout, such as where the chairs are located or even what does the windows look like. We obviously do not want that !
+To avoid this behaviour, we randomized this scene. Every N seconds, we changed the lightnings, and the objects in the scene. We did create a range of probable lights ranging from blueish to yellowish light. For the props, we did place randomly around the track some chairs and tables. It is quite easy to do this because we do have access to the road center spline from which we can deduce the exact location of the track and thus not place any props on the track. \\
 
 We are now ready to fully use our new tool to generate data !
 We can generate up to 200 images per seconds, which is 6 times faster than our regular data gathering speeds.
@@ -658,10 +658,10 @@ Here is a sample of a folder of generated data created in a few seconds: \\
 
 % Ellerbach
 \subsection{Overtaking}
-Our last optionnal objective was to be able to overtake a car properly. Unfurtunetly, we didn't have the time to do this one. When looking back at what we said we would do, we exceeded our objectives and did extra work on working with unity by creating a digital clone of the track and a data generation tool from scratch. Those turned out to be more useful compared to the overtaking algorithm as the races we do stop once our car catches up with the car ahead.
+Our last optional objective was to be able to overtake a car properly. Unfortunately, we didn't have the time to do this one. When looking back at what we said we would do, we exceeded our objectives and did extra work on working with unity by creating a digital clone of the track and a data generation tool from scratch. Those turned out to be more useful compared to the overtaking algorithm as the races we do stop once our car catches up with the car ahead.
 
-But we still have this goal in mind and we will try to accomplish it ! To make it work, we have in fact a lot of things already done. We have implemented a data generation tool which we could use to put a 3D object (a car) in front of the camera. We will then need tomodify the functions used to generate the steering values, add a bit of randomization in between, and here we have it !
-An other approach would be to add randomly images of cars directly during our training using our data augmentation pipeline. Again, we pretty much did all the work, we only need to had a few functions to take care of this.
+But we still have this goal in mind, and we will try to accomplish it ! To make it work, we have in fact a lot of things already done. We have implemented a data generation tool which we could use to put a 3D object (a car) in front of the camera. We will then need to modify the functions used to generate the steering values, add a bit of randomization in between, and here we have it !
+Another approach would be to add randomly images of cars directly during our training using our data augmentation pipeline. Again, we pretty much did all the work, we only need to had a few functions to take care of this.
 
 \newpage
 
@@ -669,7 +669,7 @@ An other approach would be to add randomly images of cars directly during our tr
 \subsection{Website}
 As seen before we already developed a web app for our telemetry server. Also, in parallel we developed a static showcase website (available at \href{https://autonomobile.github.io/}{https://autonomobile.github.io/}). \\
 
-This site is purely static. The mission is to keep it the most professional and simple possible. It is still under construction. We eventually add new content and sections as our progression follows. Our site aims to reflect the efforts and motivation of our team. To deploy the site, We used the excellent quality service offered by Github Pages. \\
+This site is purely static. The mission is to keep it the most professional and simple possible. It is still under construction. We eventually add new content and sections as our progression follows. Our site aims to reflect the efforts and motivation of our team. To deploy the site, We used the excellent quality service offered by GitHub Pages. \\
 
 We have created our own organization on GitHub, as it enable us to publish the project under our team’s name. Hosting our site in the same place as our code repository allows us to offer a greater visibility to people. Moreover, for the development, it is even easier to manage because all resources are in the same place. \\
 
@@ -686,7 +686,7 @@ As we were working on our project, we decided it needed a visual identity that c
 
 But what is the meaning of this piece of craftsmanship?\\
 
-It has a couple of meanings, the first one being the red circle which in our vision represents a track, an unfinished as there is always room for improvement in any project. The second one is more subtle. The second one is the four dots on the top of the circle. These four dots each represent an autonomous vehicle racing on the track. Why four? Because we are a team of four young and hardworking developers. Finally, the most obvious one is the name of our project in the middle of the circle. 
+It has a couple of meanings, the first one being the red circle which in our vision represents a track, an unfinished as there is always room for improvement in any project. The second one is more subtle. The second one is the four dots on the top of the circle. These four dots each represent an autonomous vehicle racing on the track. Why four? Because we are a team of four young and hard-working developers. Finally, the most obvious one is the name of our project in the middle of the circle. 
 
 % Girold
 \subsection{Realization of t-shirt}
@@ -702,7 +702,7 @@ To make our purchase we have used a site with a good reputation and pretty good 
 % sout : 7 / 03 & 25 / 04 & 06 / 06
 \section {Planning}
 \subsubsection {What is next ?}
-The objectives we set ourselves for this presentation were acheived. Our final objective will be to win the race at the Vivatech.
+The objectives we set ourselves for this presentation were achieved. Our final objective will be to win the race at the Vivatech.
 
 \subsubsection {Races}
 
@@ -784,7 +784,7 @@ Main control loop            & x          &           &              &          
 \end{tabular}
 
 \section {Conclusion}
- To ensure the success of the project, Autonomobile team divided the project in different parts. We first improved the control of the car with controller and we worked on the data processing part allowing us to load and save images and metadata. Secondly, we worked on generating useable data putting them into output and inputs. Moreover, we modified the images making them look different from one another to do the training and the future model not overfit. Thirdly, we all of us made our own models and we held a little competition to determine the best. This created enthusiasm and teamwork. Finally, we have made a presentation website with useful informations and we also made a Telemetry Server with which we can modify settings, see a lot of important informations and use the server on our phones thanks to a QR code. We are more invested than ever. We are even invited at the Vivatech in Paris to race against other participants and we plan to continue this project beyond S2 as we have planned to make our own tracks for future competitions at Epita.
+ To ensure the success of the project, Autonomobile team divided the project into different parts. We first improved the control of the car with controller, and we worked on the data processing part allowing us to load and save images and metadata. Secondly, we worked on generating usable data putting them into output and inputs. Moreover, we modified the images making them look different from one another to do the training and the future model not overfit. Thirdly, we all of us made our own models, and we held a little competition to determine the best. This created enthusiasm and teamwork. Finally, we have made a presentation website with useful information and we also made a Telemetry Server with which we can modify settings, see a lot of important information and use the server on our phones thanks to a QR code. We are more invested than ever. We are even invited at the Vivatech in Paris to race against other participants, and we plan to continue this project beyond S2 as we have planned to make our own tracks for future competitions at Epita.
 
 \end{document}
 
