@@ -1,0 +1,241 @@
+\documentclass[12pt]{article}
+
+% Language setting
+% Replace `english' with e.g. `pathspanish' to change the document language
+\usepackage[english]{babel}
+
+% Set page size and margins
+% Replace `letterpaper' with`a4paper' for UK/EU standard size
+\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{subfig}
+\usepackage[colorlinks=true, allcolors=black]{hyperref}
+
+\begin{document}
+
+%title
+\title{\underline{Installation and Operating Manual  - AutoPylot}}
+\date{June 2022}
+
+
+\author{%
+    Group: Autonomobile 
+    }
+
+\maketitle
+
+\centerline{\includegraphics[height=10cm]{../../logos/logo-transparent-black.png}}
+\newpage
+
+\tableofcontents
+\newpage
+\section{How to setup the software}
+
+It is recommended to have python 3.6.X installed, as this is the python version installed on the car.
+To avoid any packages conflicts with your existing python installation, we will use virtualenv install virtualenv using:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        pip install virtualenv
+    }%
+}\\
+
+Clone the repo, and install the package and it's dependencies:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        git clone https://github.com/Autonomobile/AutoPylot.git\\
+        cd AutoPylot
+    }%
+}\\
+
+Then, create a virtual env (you need to specify the path to your python3.6):\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        virtualenv --python your path to python.exe venv
+    }%
+}\\
+
+Then, every time you will be working on the project, you will need to activate this environment, to do so:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+       \path{\venv\Scripts\activate}.
+    }%
+}\\
+
+Now, to install autopylot and its requirements (including dev requirements):\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        pip install -e .[dev]
+    }%
+}\\
+
+For the code formatting, we will use something called "pre-commit", that enables us to automate stuff as linting before committing. If the code is not well linted, it will throw an error before committing and will lint it, you will only have to commit again to apply the changes the linter did ! Here is how to setup pre-commit:\\
+
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+        pip install -e .[dev]
+    }%
+}\\
+
+You are now all setup to work on the project ! Don't forget to keep the setup.py and requirements.txt up to date.\\
+
+To exit the virtualenv:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+       deactivate
+    }%
+}\\
+
+Useful tools:
+\\\\
+\begin{itemize}
+    \item Setup a python linter (we use flake8) : https://code.visualstudio.com/docs/python/linting
+    \item Setup the test extension of VS-Code : https://code.visualstudio.com/docs/python/testing
+    \item Use a docstring generator for example the VS-Code extension "Python Docstring Generator"
+\end{itemize}
+
+
+\section{How to setup the Telemetry Server}
+
+\subsection{Installation}
+
+Installation:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+       npm i\\
+       or\\
+       yarn
+    }%
+}\\
+
+Start Development:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+       npm run dev
+    }%
+}\\
+
+Start Production Build:\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+       npm run build\\
+       npm run start
+    }%
+}\\
+
+then open http://localhost:3000/ \\
+
+\subsection{Usage}
+
+Before starting:\\
+
+In your settings.json of your autopylot client, change the following line with the host and port you need.\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+       "SERVER\textunderscore ADDRESS": "ws://localhost:3000"
+    }%
+}\\
+
+Don't remove the ws:// or change the protocol to http:// as it will not work.\\
+
+
+\subsection{User Manual}
+
+\begin{itemize}
+
+\item start the server with npm run start.
+\item open the client in a browser at http://localhost:3000/ or your custom address.
+\item start the autopylot client. 
+
+if everything goes well, you should see a popup with a message telling you that a new car is connected.\\
+
+\item select the car with the dropdown menu in the top right corner.
+\item start tracking !
+
+\end{itemize}
+
+\section{How to collect, train and deploy your model}
+Here is the three main steps in the making of a model\\
+
+\subsection{Collect}
+First you need to collect some data.\\
+
+You will need to select in the "settings.json" the "CAMERA\textunderscore TYPE", "ACTUATOR\textunderscore TYPE" and "CONTROLLER\textunderscore TYPE". By default they are set for the car configuration eg "webcam", "serial" and "xbox" respectively, if you are collecting data on a PC, I suggest you using "sim", "sim" and "keyboard". This will use data coming from the simulator, inputs from the keyboard and output them (actuate) in the simulator.
+
+
+Start the script with the following command (don't need to cd if you are in the right directory):\\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+    cd main\textunderscore programs/examples \\
+    python3 drive\textunderscore with\textunderscore controller.py
+    }%
+}\\
+
+To drive depending on the controller type you use:\\
+
+\begin{itemize}
+    \item "xbox": steering: left joystick, throttle: left and right triggers
+    \item "keyboard": steering: "q" and "d" keys, throttle: "z" and "s" keys.
+\end{itemize}
+
+To record data depending on the controller type you use:\\
+
+\begin{itemize}
+    \item "xbox": hold button "a"
+    \item "keyboard": hold key "r"
+\end{itemize}
+
+    
+You should see the collected data your "~/collect" folder. If unsure about the location of the folder, check the "COLLECT\textunderscore PATH" settings in the settings.json\\
+
+Note: by default a model will be loaded, if you don't touch anything, you will enter "autonomous" mode using the predictions from this default model.\\
+
+
+\subsection{Training}
+There are plenty settings for the training script:\\
+\begin{itemize}
+    \item "MODEL\textunderscore TYPE": you need to set the type of the model you want to build. For example, if you made a new method to create a model in architectures.py in the Models class called "steering\textunderscore model". You can set the "model\textunderscore type" field to steering\textunderscore model and when training your model, it will be created using this function.
+    \item "MODEL\textunderscore NAME": the name of the model you want to train, the model will be saved under this name. If you wish to retrain it later, make sure to use the same name (if you wish you can copy a model, change its name and then train it again to avoid loosing the previously trained one).
+    \item "TRAIN\textunderscore LOAD\textunderscore MODEL": whether you want to load the model or create one from scratch.
+    \item "TRAIN\textunderscore BATCH\textunderscore SIZE": How much data you want in one batch.
+    \item "TRAIN\textunderscore EPOCHS": How many times you want to train the model on the dataset before saving it.
+    \item "TRAIN\textunderscore SPLITS": Proportion of data in the training set and testing set. If set to 0.9, this will result in having 90 percent of the data going to the training set and 10 percent going to the testing set.
+    \item "TRAIN\textunderscore AUGM\textunderscore FREQ": How frequent we want data to be augmented using data augmentation functions.
+\end{itemize}
+
+
+you can now start this training script with:\\
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+    cd main\textunderscore programs/\\
+    python3 train.py
+    }%
+}\\
+
+Once finished, your new model should be saved in the "models" folder at the root of your project.\\
+
+\subsection{Deploy}
+You will need to change in the settings.json the "MODEL\textunderscore NAME" field to the name of the model you just trained. then same as for the "collect" part, start the drive\textunderscore with\textunderscore controller.py script and enjoy! \\
+
+\noindent\fbox{%
+    \parbox{\textwidth}{%
+    cd main\textunderscore programs/examples
+    python3 drive\textunderscore with\textunderscore controller.py
+    }%
+}\\
+
+\end{document}
