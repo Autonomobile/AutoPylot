@@ -20,6 +20,9 @@ def get_function_by_name(name):
 
 class Functions:
     def brightness(image_data):
+        if "image" not in image_data.keys():
+            return
+
         value = np.random.randint(15, 45)
         sign = np.random.choice([True, False])
         hsv = cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2HSV)
@@ -38,6 +41,9 @@ class Functions:
         image_data["image"] = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
     def shadow(image_data):
+        if "image" not in image_data.keys():
+            return
+
         shape = image_data["image"].shape
         top_y = shape[1] * np.random.uniform()
         top_x = shape[0] * np.random.uniform()
@@ -75,13 +81,20 @@ class Functions:
         image_data["image"] = cv2.cvtColor(image_hls, cv2.COLOR_HLS2BGR)
 
     def blur(image_data):
+        if "image" not in image_data.keys():
+            return
+
         image_data["image"] = cv2.blur(image_data["image"], (2, 2))
 
     def bilateral_filter(image_data):
+        if "image" not in image_data.keys():
+            return
+
         image_data["image"] = cv2.bilateralFilter(image_data["image"], 9, 75, 75)
 
     def flip(image_data):
-        image_data["image"] = cv2.flip(image_data["image"], 1)
+        if "image" in image_data.keys():
+            image_data["image"] = cv2.flip(image_data["image"], 1)
         image_data["steering"] = image_data["steering"] * -1.0
 
     def noise(image_data):
@@ -90,29 +103,40 @@ class Functions:
         ).astype(np.uint8)
 
     def shift(image_data):
-        x_offset = np.random.randint(-20, 20)
-        y_offset = np.random.randint(-5, 5)
-        M = np.float32([[1, 0, x_offset], [0, 1, y_offset]])
+        if "image" in image_data.keys():
+            x_offset = np.random.randint(-20, 20)
+            y_offset = np.random.randint(-5, 5)
+            M = np.float32([[1, 0, x_offset], [0, 1, y_offset]])
 
-        image_data["image"] = cv2.warpAffine(
-            image_data["image"],
-            M,
-            (settings.IMAGE_SHAPE[1], settings.IMAGE_SHAPE[0]),
-            borderMode=cv2.BORDER_CONSTANT,
-            borderValue=(127, 127, 127),
-        )
+            image_data["image"] = cv2.warpAffine(
+                image_data["image"],
+                M,
+                (settings.IMAGE_SHAPE[1], settings.IMAGE_SHAPE[0]),
+                borderMode=cv2.BORDER_CONSTANT,
+                borderValue=(127, 127, 127),
+            )
+
         image_data["steering"] += (x_offset * 2) / settings.IMAGE_SHAPE[0]
 
     def bgr_to_gray(image_data):
+        if "image" not in image_data.keys():
+            return
+
         image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2GRAY)
 
     def mix_channel(image_data):
+        if "image" not in image_data.keys():
+            return
+
         img = image_data["image"]
         order = np.split(img, 3, axis=-1)
         np.random.shuffle(order)
         image_data["image"] = cv2.merge(order)
 
     def resize(image_data):
+        if "image" not in image_data.keys():
+            return
+
         factor = 1.0 + image_data.get("batch-random", np.random.uniform(0.0, 1.0))
         shape = image_data["image"].shape
         image_data["image"] = cv2.resize(
@@ -134,11 +158,26 @@ class Transform:
             if settings.ENABLE_TRANSFORM
         ] + additionnal_funcs
 
-    def __call__(self, image_data):
-        for func, freq in self.functions:
+    def __call__(self, image_data, rands=None):
+        if rands is None:
+            new_rands = []
+
+        for i, (func, freq) in enumerate(self.functions):
             try:
-                if np.random.uniform() < freq:
-                    func(image_data)
+                if rands is None:
+                    rand = np.random.uniform()
+                    if rand < freq:
+                        func(image_data)
+                    new_rands.append(rand)
+                else:
+                    rand = rands[i]
+                    if rand < freq:
+                        func(image_data)
             except Exception as e:
                 print(e)
                 pass
+
+        if rands is None:
+            return new_rands
+        else:
+            return rands

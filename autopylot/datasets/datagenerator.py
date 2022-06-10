@@ -14,18 +14,19 @@ from . import transform
 class DataGenerator(Sequence):
     def __init__(
         self,
+        indexes,
         paths,
-        inputs=["image"],
-        outputs=["steering"],
+        inp_out,
+        index_map,
         batch_size=64,
         additionnal_funcs=[],
     ):
         """Init of the class.
 
         Args:
+            indexes (list): list of indexes of the paths to use.
             paths (list): list or list of list of json_paths to train on.
-            inputs (list, optional): _description_. Defaults to ["image"].
-            outputs (list, optional): _description_. Defaults to ["steering"].
+            inp_out (dict): parsed input and output dict.
             batch_size (int, optional): _description_. Defaults to 64.
             additionnal_funcs (list(tuple(method, float)), optional): tuple containing the function and the frequency.
 
@@ -42,14 +43,27 @@ class DataGenerator(Sequence):
             self.dimensions = 1
         else:
             raise ValueError("Unknown type")
+
+        assert len(indexes) != 0, "indexes should be non-empty"
+        self.indexes = indexes
         self.paths = paths
         self.lenpaths = len(paths)
 
-        assert len(inputs) != 0, "there should be at least one input"
-        self.inputs = inputs
+        assert len(inp_out.keys()) != 0, "inp_out keys should be non-empty"
+        self.inp_out = inp_out
 
-        assert len(outputs) != 0, "there should be at least one output"
-        self.outputs = outputs
+        self.num_inputs = 0
+        for idx in self.inp_out.keys():
+            if "inputs" in self.inp_out[idx]:
+                self.num_inputs += len(self.inp_out[idx]["inputs"])
+
+        self.num_outputs = 0
+        for idx in self.inp_out.keys():
+            if "outputs" in self.inp_out[idx]:
+                self.num_outputs += len(self.inp_out[idx]["outputs"])
+
+        assert isinstance(index_map, dict), "index_map should be a dict"
+        self.index_map = index_map
 
         self.transformer = transform.Transform(additionnal_funcs)
 
@@ -68,26 +82,40 @@ class DataGenerator(Sequence):
         Returns:
             tuple(list, list): X and Y.
         """
-        X = [[] for _ in range(len(self.inputs))]
-        Y = [[] for _ in range(len(self.outputs))]
+        X = [[] for _ in range(self.num_inputs)]
+        Y = [[] for _ in range(self.num_outputs)]
+
         rand = np.random.uniform(0.0, 1.0)
+        rdm_indexes = np.random.randint(0, len(self.indexes), self.batch_size)
 
-        rdm_paths = np.random.choice(self.paths, size=self.batch_size)
-        for path in rdm_paths:
-            try:
-                image_data = io.load_image_data(path)
+        for rdm_idx in rdm_indexes:
+            (i, j) = self.indexes[rdm_idx]
+            rands = None
+            k = 0
+            n = 0
+
+            for idx in self.inp_out.keys():
+                json_path = self.paths[i][j + idx]
+                if (
+                    "image" in self.inp_out[idx]["inputs"]
+                    or "image" in self.inp_out[idx]["outputs"]
+                ):
+                    image_data = io.load_image_data(json_path)
+                else:
+                    image_data = io.load_json(json_path)
+
                 image_data["batch-random"] = rand
-                self.transformer(image_data)
+                rands = self.transformer(image_data, rands)
 
-                for i, inp in enumerate(self.inputs):
+                for inp in self.inp_out[idx]["inputs"]:
                     data = np.asarray(image_data[inp])
-                    X[i].append(data)
+                    X[self.index_map["inputs"][k]].append(data)
+                    k += 1
 
-                for i, out in enumerate(self.outputs):
+                for out in self.inp_out[idx]["outputs"]:
                     data = np.asarray(image_data[out])
-                    Y[i].append(data)
-            except Exception:
-                logging.debug(f"Error processing {path}")
+                    Y[self.index_map["outputs"][n]].append(data)
+                    n += 1
 
         X = [np.array(x) for x in X]
         Y = [np.array(y) for y in Y]
