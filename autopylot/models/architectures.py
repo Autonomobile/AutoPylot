@@ -292,8 +292,7 @@ class Models:
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
 
-        # make sure the outputs are in the good order
-        # starting with the t+0 data and finishing with the t+N data
+        # make sure the outputs are in alphabetic order
         y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
         outputs.append(y1)
         y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
