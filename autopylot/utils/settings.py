@@ -15,41 +15,51 @@ class Settings:
     def __init__(self):
         """Init of the Settings class."""
 
+        # Core settings
+        self.CAMERA_TYPE = "dummy"  # "sim" / "dummy" / "replay" / "webcam"
+        self.ACTUATOR_TYPE = "serial"  # "sim / "serial"
+        self.CONTROLLER_TYPE = "xbox"  # "keyboard" / "xbox"
+        self.JSON_FILE_FORMAT = "{t}.json"
+
+        # Serial settings
+        self.SERIAL_PORT = "/dev/ttyUSB0"
+
+        # Keyboard settings
+        self.KEYMAP = {
+            "forward": "w",
+            "backward": "s",
+            "left": "a",
+            "right": "d",
+            "recording": "r",
+        }
+
         # Telemetry settings
+        self.SERVER_ADDRESS = "localhost"
+        self.SERVER_PORT = 3000
         self.LOG_LEVEL = "info"
         self.DO_SEND_TELEMETRY = True
         self.TELEMETRY_DELAY = 0.03
 
-        # Core settings
-        self.IMAGE_SHAPE = [120, 160, 3]
-        self.CAMERA_TYPE = "webcam"  # "sim" / "dummy" / "replay"
-        self.ACTUATOR_TYPE = "serial"  # "sim"
-        self.CONTROLLER_TYPE = "xbox"  # "keyboard"
-        self.JSON_FILE_FORMAT = "{t}.json"
-        self.DEFAULT_THROTTLE = 0.2
-        self.THROTTLE_MULT = 1.0
-        self.STEERING_MULT = 1.0
-
         # Sim settings
-        self.SIM_HOST = "127.0.0.1"
+        self.SIM_HOST = "localhost"
         self.SIM_PORT = 9091
 
-        # Serial settings
-        self.SERIAL_PORT = "/dev/ttyUSB0"
-        self.SERVER_ADDRESS = "ws://localhost:3000"
-
+        # Profiler settings
         self.PROFILER_RESET = False
         self.PROFILER_N_ITER = 100
         self.PROFILER_FILTERS = ["autopylot"]
         self.PROFILER_SORT_BY = "cumulative"
 
-        self.KEYMAP = {
-            "forward": "z",
-            "backward": "s",
-            "left": "q",
-            "right": "d",
-            "recording": "r",
-        }
+        # Car behaviour settings
+        self.LOOKUP_ZONE = [0.4, 0.3, 0.2]
+        self.DEFAULT_THROTTLE = 0.2
+        self.MIN_THROTTLE = 0.2
+        self.MAX_THROTTLE = 0.4
+        self.THROTTLE_MULT = 1.0
+        self.STEERING_MULT = 1.0
+
+        # imageformat
+        self.IMAGE_SHAPE = [120, 160, 3]
 
         # Model settings
         self.MODEL_TYPE = "steering_model"
@@ -64,17 +74,20 @@ class Settings:
         self.TRAIN_SHUFFLE = True
         self.TRAIN_VERBOSE = 1
 
-        # transform functions
+        # Transform functions
         self.ENABLE_TRANSFORM = True
         self.TRANSFORM_FUNCTIONS = {
             "flip": 0.5,
             "brightness": 0.2,
-            "shift": 0.2,
             "shadow": 0.2,
+            "saturation": 0.2,
             "blur": 0.2,
-            "noise": 0.2,
             "bilateral_filter": 0.2,
+            "noise": 0.2,
+            "shift": 0,
+            "grayscale": 0.1,
             "mix_channel": 0.2,
+            "resize": 0,
         }
 
         # Paths

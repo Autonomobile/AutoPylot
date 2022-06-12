@@ -307,7 +307,7 @@ class Models:
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model
 
-    def mickaNet():
+    def mickaNet_old():
         # 1) preparing the model ========================
         inputs = []
         outputs = []
@@ -353,4 +353,55 @@ class Models:
         model = Model(inputs=inputs, outputs=outputs)
         model.compile(optimizer="adam", loss="mse", loss_weights=[1, 0.75])
 
+        return model
+
+    def mickaNet():
+        inputs = []
+        outputs = []
+
+        image = Input(shape=(120, 160, 3), name="image")
+        speed = Input(shape=(1,), name="speed")
+
+        inputs.append(image)
+        inputs.append(speed)
+
+        x = Cropping2D(cropping=((20, 20), (0, 0)))(image)
+        x = Lambda(lambda x: x / 255)(x)
+
+        x = SeparableConv2D(24, 5, strides=2, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(48, 5, strides=2, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(96, 5, strides=2, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(192, 3, strides=2, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(256, 3, strides=1, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = Flatten()(x)
+        x = Dropout(0.2)(x)
+        x = Concatenate(axis=-1)([x, speed])
+
+        x = Dense(256, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+        x = Dense(256, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+        x = Dense(128, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
+        y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+
+        outputs.append(y1)
+        outputs.append(y2)
+
+        model = Model(inputs=inputs, outputs=outputs)
+        model.compile(optimizer="adam", loss="mse", loss_weights=[1, 0.75])
+
+        logging.info(f"created model with {get_flops(model)} FLOPS")
         return model

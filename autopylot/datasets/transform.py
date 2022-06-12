@@ -19,6 +19,10 @@ def get_function_by_name(name):
 
 
 class Functions:
+    def flip(image_data):
+        image_data["image"] = cv2.flip(image_data["image"], 1)
+        image_data["steering"] = image_data["steering"] * -1.0
+
     def brightness(image_data):
         value = np.random.randint(15, 45)
         sign = np.random.choice([True, False])
@@ -74,15 +78,23 @@ class Functions:
         image_hls = np.array(image_hls, dtype=np.uint8)
         image_data["image"] = cv2.cvtColor(image_hls, cv2.COLOR_HLS2BGR)
 
+    def saturation(image_data):
+        image_hls = np.array(
+            cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2HLS), dtype=np.uint16
+        )
+        image_hls[:, :, 1] = image_hls[:, :, 1] * (
+            1 + 0.3 * np.random.uniform()
+        )
+        image_hls[image_hls[:, :, 1] >= 255] = 255
+        image_hls = np.array(image_hls, dtype=np.uint8)
+        image_data["image"] = cv2.cvtColor(image_hls, cv2.COLOR_HLS2BGR)
+        
+
     def blur(image_data):
         image_data["image"] = cv2.blur(image_data["image"], (2, 2))
 
     def bilateral_filter(image_data):
         image_data["image"] = cv2.bilateralFilter(image_data["image"], 9, 75, 75)
-
-    def flip(image_data):
-        image_data["image"] = cv2.flip(image_data["image"], 1)
-        image_data["steering"] = image_data["steering"] * -1.0
 
     def noise(image_data):
         image_data["image"] = (
@@ -103,8 +115,9 @@ class Functions:
         )
         image_data["steering"] += (x_offset * 2) / settings.IMAGE_SHAPE[0]
 
-    def bgr_to_gray(image_data):
+    def grayscale(image_data):
         image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2GRAY)
+        image_data["image"] = cv2.cvtColor(image_data["image"], cv2.COLOR_GRAY2BGR)
 
     def mix_channel(image_data):
         img = image_data["image"]

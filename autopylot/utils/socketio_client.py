@@ -56,7 +56,7 @@ def on_stop():
     os._exit(0)
 
 
-def wait_for_connection(host, sleep=1):
+def wait_for_connection(host, port, sleep=1):
     """Wait for the connection to be established.
 
     Args:
@@ -65,7 +65,7 @@ def wait_for_connection(host, sleep=1):
     """
     while not sio.connected and not stop_thread:
         try:
-            sio.connect(host)
+            sio.connect(f"ws://{host}:{port}")
         except Exception:
             time.sleep(sleep)
 
@@ -98,9 +98,9 @@ def send_telemetry(telemetry):
     sio.emit("GET_MEMORY", telemetry)
 
 
-def run_threaded(host):
+def run_threaded(host, port):
     last_sent = time.time()
-    wait_for_connection(host)
+    wait_for_connection(host, port)
 
     while not stop_thread:
         if not sio.connected and not stop_thread:
