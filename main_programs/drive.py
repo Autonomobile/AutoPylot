@@ -65,25 +65,6 @@ def main():
             )
             
             # print(predictions["zone"], predictions["steering"])
-            
-            lookup_zone = settings.LOOKUP_ZONE
-            min_speed = 1.5
-
-            zone_idx = np.argmax(predictions["zone"])
-            if zone_idx == 0:
-                throttle = lookup_zone[0] * predictions["zone"][0]
-            elif zone_idx == 1:
-                throttle = (
-                    lookup_zone[1] * predictions["zone"][1]
-                    + lookup_zone[0] * predictions["zone"][0]
-                )
-            else:
-                throttle = (
-                    lookup_zone[2] * predictions["zone"][2]
-                    if mem["speed"] > min_speed
-                    else lookup_zone[1]
-                )
-        
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
             mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
