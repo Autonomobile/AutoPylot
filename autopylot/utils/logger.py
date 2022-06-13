@@ -19,7 +19,7 @@ class SocketIOHandler(logging.Handler):
         logging.Handler.__init__(self)
 
         self.thread = threading.Thread(
-            target=socketio_client.run_threaded, args=(host,port)
+            target=socketio_client.run_threaded, args=(host, port)
         )
         self.thread.start()
 

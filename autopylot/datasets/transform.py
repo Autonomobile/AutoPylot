@@ -81,16 +81,16 @@ class Functions:
         image_data["image"] = cv2.cvtColor(image_hls, cv2.COLOR_HLS2BGR)
 
     def saturation(image_data):
+        if "image" not in image_data.keys():
+            return
+
         image_hls = np.array(
             cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2HLS), dtype=np.uint16
         )
-        image_hls[:, :, 1] = image_hls[:, :, 1] * (
-            1 + 0.3 * np.random.uniform()
-        )
+        image_hls[:, :, 1] = image_hls[:, :, 1] * (1 + 0.3 * np.random.uniform())
         image_hls[image_hls[:, :, 1] >= 255] = 255
         image_hls = np.array(image_hls, dtype=np.uint8)
         image_data["image"] = cv2.cvtColor(image_hls, cv2.COLOR_HLS2BGR)
-        
 
     def blur(image_data):
         if "image" not in image_data.keys():

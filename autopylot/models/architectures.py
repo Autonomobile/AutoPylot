@@ -346,11 +346,11 @@ class Models:
         x = Dense(256, use_bias=False, activation="relu")(x)
         x = Dropout(0.3)(x)
         x = BatchNormalization()(x)
-        
+
         x = Dense(256, use_bias=False, activation="relu")(x)
         x = Dropout(0.3)(x)
         x = BatchNormalization()(x)
-        
+
         x = Dense(256, use_bias=False, activation="relu")(x)
         x = Dropout(0.3)(x)
         x = BatchNormalization()(x)

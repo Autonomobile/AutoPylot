@@ -72,7 +72,7 @@ def main():
             )
 
             # print(mem["throttle"])
-            
+
             print(predictions["zone"], predictions["steering"])
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
