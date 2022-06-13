@@ -98,6 +98,9 @@ class Functions:
         image_data["steering"] = image_data["steering"] * -1.0
 
     def noise(image_data):
+        if "image" not in image_data.keys():
+            return
+
         image_data["image"] = (
             image_data["image"] + np.random.randint(-25, 25, size=settings.IMAGE_SHAPE)
         ).astype(np.uint8)
@@ -174,7 +177,7 @@ class Transform:
                     if rand < freq:
                         func(image_data)
             except Exception as e:
-                print(e)
+                print(image_data, func, freq)
                 pass
 
         if rands is None:
