@@ -54,20 +54,31 @@ def main():
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
             mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
 
+            print(mem["throttle"])
+
         elif mem["state"] == "autonomous":
+
+            # convert dtype64 to dtype32
+            # img = np.array(mem["image"], dtype=np.float32)
+            # mem["image"] = cv2.bilateralFilter(img, 9, 75, 75)
+
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
 
             mem["steering"] = predictions["steering"] * settings.STEERING_MULT
             mem["throttle"] = (
                 np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
-                * settings.THROTTLE_MULT
+                # * settings.THROTTLE_MULT
             )
+
+            # print(mem["throttle"])
             
-            # print(predictions["zone"], predictions["steering"])
+            print(predictions["zone"], predictions["steering"])
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
             mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
+
+            # print(mem["throttle"])
 
             io.save_image_data(
                 mem,
