@@ -5,7 +5,7 @@ import random
 
 from ..datasets import datagenerator, dataset
 from ..utils import settings
-from . import architectures, utils
+from . import architectures, utils, info_parser
 
 settings = settings.settings
 
@@ -83,34 +83,44 @@ class TrainModel:
         if not os.path.exists(dataset_path):
             raise ValueError(f"Dataset path {dataset_path} not found")
 
-        paths = dataset.sort_paths(dataset.get_every_json_paths(dataset_path))
+        # input parser
+        infoParser = info_parser.InfoParser(self.model_info)
+        logging.info(f"input / output order mapping: {infoParser.index_map}")
 
-        # shuffle the list of paths
+        seq_paths = dataset.sequence_sorted_paths(dataset_path)
+        indexes = []
+        for i, seq_path in enumerate(seq_paths):
+            for j in range(0, len(seq_path) - infoParser.max_ahead):
+                indexes.append((i, j))
+
+        # shuffle the list of indexes
         if shuffle:
-            random.shuffle(paths)
+            random.shuffle(indexes)
 
-        datalen = len(paths)
-        train_paths = paths[: int(datalen * train_split)]
-        test_paths = paths[int(datalen * train_split) :]
+        datalen = 0
+        for seq_path in seq_paths:
+            datalen += len(seq_path)
 
-        inputs = [i[0] for i in self.model_info["inputs"]]
-        outputs = [i[0] for i in self.model_info["outputs"]]
+        train_idx = indexes[: int(datalen * train_split)]
+        test_idx = indexes[int(datalen * train_split) :]
 
-        logging.info(f"training model on {len(train_paths)} samples")
+        logging.info(f"training model on {len(train_idx)} samples")
 
         # Create train and test datagenerators
         train_generator = datagenerator.DataGenerator(
-            paths=train_paths,
-            inputs=inputs,
-            outputs=outputs,
+            indexes=train_idx,
+            paths=seq_paths,
+            inp_out=infoParser.parsed,
+            index_map=infoParser.index_map,
             batch_size=batch_size,
             additionnal_funcs=additionnal_funcs,
         )
 
         test_generator = datagenerator.DataGenerator(
-            paths=test_paths,
-            inputs=inputs,
-            outputs=outputs,
+            indexes=test_idx,
+            paths=seq_paths,
+            inp_out=infoParser.parsed,
+            index_map=infoParser.index_map,
             batch_size=batch_size,
             additionnal_funcs=additionnal_funcs,
         )

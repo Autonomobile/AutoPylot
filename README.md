@@ -25,7 +25,7 @@ This will require multiple intermediate milestones:
  - [x] Race against others !
  - [x] WIN !
 
-For more detailed information please read the [project specifications](ressources/project-specifications/project-specifications.pdf) 
+For more detailed information please read the [project report](ressources/final-presentation/project-report/project-report.pdf) 
 
 Enjoy,
 

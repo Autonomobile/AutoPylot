@@ -292,17 +292,21 @@ class Models:
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
 
-        y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
+        # make sure the outputs are in alphabetic order
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
         outputs.append(y1)
-
-        y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
         outputs.append(y2)
+        y3 = Dense(1, use_bias=False, activation="tanh", name="steering.10")(x)
+        outputs.append(y3)
+        z = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        outputs.append(z)
 
         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
-        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 0.75])
+        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 1, 1, 0.75])
 
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model

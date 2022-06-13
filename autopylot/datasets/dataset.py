@@ -17,7 +17,7 @@ def __get_time_stamp(path):
     """Get time component of the jsonfile.
 
     Args:
-        path (string): path of directory which contains sorted dataset (time.png and time.json).
+        path (string): path of a json file.
     Returns:
         Float: The name of the json file in float
     """
@@ -36,14 +36,33 @@ def get_every_json_paths(dirpath):
 
 
 def sort_paths(paths):
-    """Sort paths
+    """Sort paths.
 
     Args:
-        paths (list[string]): path of directory which contains sorted dataset (time.png and time.json).
+        paths (list[string]): json file path.
     Returns:
         list[string]: Sorted paths.
     """
     return sorted(paths, key=__get_time_stamp)
+
+
+def sequence_sorted_paths(dirpath, split_time=2):
+    """Sequence sorted paths.
+
+    Args:
+        dirpath (string): path of directory containing json and png files.
+    Returns:
+        list[list[string]]: List of sequences of sorted paths.
+    """
+    paths = sort_paths(get_every_json_paths(dirpath))
+    seq_paths = [[]]
+    for i in range(len(paths)):
+        if __get_time_stamp(paths[i]) - __get_time_stamp(paths[i - 1]) > split_time:
+            seq_paths.append([paths[i]])
+        else:
+            seq_paths[-1].append(paths[i])
+
+    return seq_paths
 
 
 def load_dataset(dirpath):
