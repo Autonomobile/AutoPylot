@@ -27,6 +27,7 @@ class DataGenerator(Sequence):
             indexes (list): list of indexes of the paths to use.
             paths (list): list or list of list of json_paths to train on.
             inp_out (dict): parsed input and output dict.
+            index_map (dict): mapping of indexes from alphabetical order to chronological order.
             batch_size (int, optional): _description_. Defaults to 64.
             additionnal_funcs (list(tuple(method, float)), optional): tuple containing the function and the frequency.
 
@@ -47,7 +48,13 @@ class DataGenerator(Sequence):
         assert len(indexes) != 0, "indexes should be non-empty"
         self.indexes = indexes
         self.paths = paths
-        self.lenpaths = len(paths)
+
+        if self.dimensions == 0:
+            self.lenpaths = len(paths)
+        else:
+            self.lenpaths = 0
+            for seq in paths:
+                self.lenpaths += len(seq)
 
         assert len(inp_out.keys()) != 0, "inp_out keys should be non-empty"
         self.inp_out = inp_out

@@ -85,7 +85,7 @@ class TrainModel:
 
         # input parser
         infoParser = info_parser.InfoParser(self.model_info)
-        print(infoParser.index_map)
+        logging.info(f"input / output order mapping: {infoParser.index_map}")
 
         seq_paths = dataset.sequence_sorted_paths(dataset_path)
         indexes = []
@@ -127,9 +127,9 @@ class TrainModel:
 
         self.model.fit(
             train_generator,
-            steps_per_epoch=len(train_idx) // batch_size + 1,
+            steps_per_epoch=len(train_generator) // batch_size + 1,
             validation_data=test_generator,
-            validation_steps=len(test_idx) // batch_size + 1,
+            validation_steps=len(test_generator) // batch_size + 1,
             epochs=settings.TRAIN_EPOCHS,
             max_queue_size=32,
             workers=16,
