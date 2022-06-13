@@ -339,11 +339,7 @@ class Models:
         x = Dropout(0.3)(x)
         x = Concatenate(axis=-1)([x, speed])
 
-        x = Dense(1024, use_bias=False, activation="relu")(x)
-        x = Dropout(0.3)(x)
-        x = BatchNormalization()(x)
-
-        x = Dense(512, use_bias=False, activation="relu")(x)
+        x = Dense(256, use_bias=False, activation="relu")(x)
         x = Dropout(0.3)(x)
         x = BatchNormalization()(x)
         
@@ -351,7 +347,11 @@ class Models:
         x = Dropout(0.3)(x)
         x = BatchNormalization()(x)
         
-        x = Dense(128, use_bias=False, activation="relu")(x)
+        x = Dense(256, use_bias=False, activation="relu")(x)
+        x = Dropout(0.3)(x)
+        x = BatchNormalization()(x)
+
+        x = Dense(256, use_bias=False, activation="relu")(x)
         x = Dropout(0.3)(x)
         x = BatchNormalization()(x)
 

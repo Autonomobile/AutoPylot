@@ -1,1 +1,1 @@
-{"inputs": [["image", [120, 160, 3]], ["speed", [1]]], "outputs": [["steering", [1]], ["zone", [3]]], "settings": {"dataset_path": "/home/mickael/collect", "epochs": 16, "batch_size": 32, "train_split": 0.9, "shuffle": true, "verbose": 1}}
+{"inputs": [["image", [120, 160, 3]], ["speed", [1]]], "outputs": [["steering", [1]], ["zone", [3]]], "settings": {"dataset_path": "/home/mickael/collect", "epochs": 12, "batch_size": 32, "train_split": 0.9, "shuffle": true, "verbose": 1}}
