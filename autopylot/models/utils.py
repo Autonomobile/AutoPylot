@@ -178,7 +178,10 @@ def predict_decorator(func, outputs):
         def pred_to_dict(out):
             predictions = {}
             for i, (name, _) in enumerate(outputs):
-                predictions[name] = out[i][0][0]
+                p = out[i][0]
+                if p.shape[0] == 1:
+                    p = p[0]
+                predictions[name] = p
             return predictions
 
     def wrapped_f(*args, **kwargs):
