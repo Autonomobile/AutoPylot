@@ -66,7 +66,7 @@ def has_dtypes(dtypes, iterable):
 def init(
     name="",
     pathlogs=settings.LOGS_PATH,
-    host=settings.SERVER_ADDRESS,
+    host=settings.SERVER_HOST,
     port=settings.SERVER_PORT,
     handlers=[logging.FileHandler, logging.StreamHandler, SocketIOHandler],
     DO_SEND_TELEMETRY=False,

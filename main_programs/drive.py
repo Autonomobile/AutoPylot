@@ -25,10 +25,6 @@ model, model_info = utils.load_model(
 if not os.path.exists(settings.COLLECT_PATH):
     os.mkdir(settings.COLLECT_PATH)
 
-session = str(time.time())
-
-os.mkdir(settings.COLLECT_PATH + "/" + session)
-
 prepare_data = preparedata.PrepareData(model_info)
 sw = state_switcher.StateSwitcher()
 actuator = Actuator()
@@ -58,22 +54,17 @@ def main():
 
         elif mem["state"] == "autonomous":
 
-            # convert dtype64 to dtype32
-            # img = np.array(mem["image"], dtype=np.float32)
-            # mem["image"] = cv2.bilateralFilter(img, 9, 75, 75)
-
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
 
             mem["steering"] = predictions["steering"] * settings.STEERING_MULT
             mem["throttle"] = (
                 np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
-                # * settings.THROTTLE_MULT
+                * settings.THROTTLE_MULT
             )
-
-            # print(mem["throttle"])
-
+            print(mem["throttle"])
             print(predictions["zone"], predictions["steering"])
+
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
             mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
@@ -84,7 +75,6 @@ def main():
                 mem,
                 os.path.join(
                     settings.COLLECT_PATH,
-                    session,
                     settings.JSON_FILE_FORMAT.format(t=time.time()),
                 ),
             )

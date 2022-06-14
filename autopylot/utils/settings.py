@@ -16,6 +16,7 @@ class Settings:
         """Init of the Settings class."""
 
         # Core settings
+        self.IMAGE_SHAPE = [120, 160, 3]
         self.CAMERA_TYPE = "dummy"  # "sim" / "dummy" / "replay" / "webcam"
         self.ACTUATOR_TYPE = "serial"  # "sim / "serial"
         self.CONTROLLER_TYPE = "xbox"  # "keyboard" / "xbox"
@@ -34,11 +35,11 @@ class Settings:
         }
 
         # Telemetry settings
-        self.SERVER_ADDRESS = "localhost"
-        self.SERVER_PORT = 3000
         self.LOG_LEVEL = "info"
         self.DO_SEND_TELEMETRY = True
         self.TELEMETRY_DELAY = 0.03
+        self.SERVER_HOST = "localhost"
+        self.SERVER_PORT = 3000
 
         # Sim settings
         self.SIM_HOST = "localhost"
@@ -47,23 +48,22 @@ class Settings:
         # Profiler settings
         self.PROFILER_RESET = False
         self.PROFILER_N_ITER = 100
-        self.PROFILER_FILTERS = ["autopylot"]
         self.PROFILER_SORT_BY = "cumulative"
+        self.PROFILER_FILTERS = ["autopylot"]
 
         # Car behaviour settings
-        self.LOOKUP_ZONE = [0.4, 0.3, 0.2]
-        self.DEFAULT_THROTTLE = 0.2
+        self.THROTTLE = 0.3
         self.MIN_THROTTLE = 0.2
         self.MAX_THROTTLE = 0.4
         self.THROTTLE_MULT = 1.0
         self.STEERING_MULT = 1.0
-
-        # imageformat
-        self.IMAGE_SHAPE = [120, 160, 3]
+        self.CONTROLLER_THROTTLE_MULT = 1.0
+        self.CONTROLLER_STEERING_MULT = 1.0
+        self.LOOKUP_ZONE = [0.4, 0.3, 0.2]
 
         # Model settings
-        self.MODEL_TYPE = "steering_model"
-        self.MODEL_NAME = "exotic"
+        self.MODEL_TYPE = "mmms"
+        self.MODEL_NAME = "mmms-v1"
         self.MODEL_SAVE_SETTINGS = True
 
         # Training settings
