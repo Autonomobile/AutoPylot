@@ -14,10 +14,12 @@ paths = dataset.sort_paths(dataset.get_every_json_paths(settings.DATASET_PATH))
 model1, model_info1 = utils.load_model(
     os.path.normpath("look_ahead_model/look_ahead_model.tflite")
 )
-# model2, model_info2 = utils.load_model(os.path.normpath("testing_model/testing_model.tflite"))
+model2, model_info2 = utils.load_model(
+    os.path.normpath("synth_model3/synth_model3.tflite")
+)
 
 prepare_data1 = preparedata.PrepareData(model_info1)
-# prepare_data2 = preparedata.PrepareData(model_info2)
+prepare_data2 = preparedata.PrepareData(model_info2)
 
 fig = plt.figure()
 # plt.style.use("classic")
@@ -45,7 +47,7 @@ ax3.set_ylabel("pred2", color="purple")
 ax4.clear()
 ax4.set_ylim(-1.0, 1.0)
 ax4.set_xlim(0, 200)
-ax4.set_ylabel("pred4", color="orange")
+ax4.set_ylabel("pred3", color="orange")
 
 (line1,) = ax1.plot([], [], lw=1, color="blue")
 (line2,) = ax2.plot([], [], lw=1, color="red")
@@ -67,26 +69,31 @@ def init():
 
 def animate(i):
     image_data = io.load_image_data(paths[i])
-    vis_image = vis.vis_all(image_data)
-    vis.show(vis_image)
 
     input_data1 = prepare_data1(image_data)
-    # input_data2 = prepare_data2(image_data)
+    input_data2 = prepare_data2(image_data)
 
     pred1 = model1.predict(input_data1)
-    # pred2 = model2.predict(input_data2)
+    pred2 = model2.predict(input_data2)
 
     if len(X) < 200:  # fill the X list with numbers from 0 to 200
         X.append(X[-1] + 1)
     Y.append(image_data["steering"])
-    Z1.append(pred1["steering.0"])
-    Z2.append(pred1["steering.5"])
-    Z3.append(pred1["steering.10"])
+    mean_steer = (
+        pred1["steering.0"] + pred1["steering.5"] * 2 + pred1["steering.10"] * 2
+    ) / 5
+    Z1.append(mean_steer)
+    # Z2.append(pred1["steering.5"])
+    # Z3.append(pred1["steering.10"])
+
+    image_data["steering"] = mean_steer
+    vis_image = vis.vis_all(image_data)
+    vis.show(vis_image)
 
     line1.set_data(X, Y)
     line2.set_data(X, Z1)
-    line3.set_data(X, Z2)
-    line4.set_data(X, Z3)
+    # line3.set_data(X, Z2)
+    # line4.set_data(X, Z3)
 
     return line1, line2, line3, line4
 
