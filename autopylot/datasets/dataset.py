@@ -57,10 +57,15 @@ def sequence_sorted_paths(dirpath, split_time=2):
     paths = sort_paths(get_every_json_paths(dirpath))
     seq_paths = [[]]
     for i in range(len(paths)):
-        if __get_time_stamp(paths[i]) - __get_time_stamp(paths[i - 1]) > split_time:
+        if __get_time_stamp(paths[i]) - __get_time_stamp(
+            paths[i - 1]
+        ) > split_time or os.path.dirname(paths[i]) != os.path.dirname(paths[i - 1]):
             seq_paths.append([paths[i]])
         else:
             seq_paths[-1].append(paths[i])
+
+    if not seq_paths[0]:
+        seq_paths = seq_paths[1:]
 
     return seq_paths
 

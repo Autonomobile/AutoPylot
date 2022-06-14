@@ -46,29 +46,35 @@ def main():
             mem["throttle"] = 0.0
 
         elif mem["state"] == "manual":
-            mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
-            mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
-
-            print(mem["throttle"])
+            mem["steering"] = (
+                mem["controller"]["steering"] * settings.CONTROLLER_STEERING_MULT
+            )
+            mem["throttle"] = (
+                mem["controller"]["throttle"] * settings.CONTROLLER_THROTTLE_MULT
+            )
 
         elif mem["state"] == "autonomous":
 
             input_data = prepare_data(mem)
             predictions = model.predict(input_data)
 
-            mem["steering"] = predictions["steering"] * settings.STEERING_MULT
+            mem["steering"] = (
+                (
+                    predictions["steering.0"] * 1
+                    + predictions["steering.10"] * 1
+                    + predictions["steering.5"] * 1
+                )
+                / 3
+                * settings.STEERING_MULT
+            )
             mem["throttle"] = (
                 np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
                 * settings.THROTTLE_MULT
             )
-            print(mem["throttle"])
-            print(predictions["zone"], predictions["steering"])
 
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
             mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
-
-            # print(mem["throttle"])
 
             io.save_image_data(
                 mem,
