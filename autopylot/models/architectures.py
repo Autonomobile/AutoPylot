@@ -311,7 +311,7 @@ class Models:
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model
 
-    def mickaNet():
+    def mmms():
         inputs = []
         outputs = []
 
@@ -355,18 +355,18 @@ class Models:
         x = Dropout(0.3)(x)
         x = BatchNormalization()(x)
 
-        x = Dense(256, use_bias=False, activation="relu")(x)
-        x = Dropout(0.3)(x)
-        x = BatchNormalization()(x)
-
-        y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
-        y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
-
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
+        y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
+        y3 = Dense(1, use_bias=False, activation="tanh", name="steering.10")(x)
+        z = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        
         outputs.append(y1)
         outputs.append(y2)
+        outputs.append(y3)
+        outputs.append(z)
 
         model = Model(inputs=inputs, outputs=outputs)
-        model.compile(optimizer="adam", loss="mse", loss_weights=[1, 0.75])
+        model.compile(optimizer="adam", loss="mse", loss_weights=[1, 1, 1, 0.75])
 
         logging.info(f"created model with {get_flops(model)} FLOPS")
         return model
