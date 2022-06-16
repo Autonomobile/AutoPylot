@@ -52,6 +52,7 @@ class Settings:
         self.PROFILER_FILTERS = ["autopylot"]
 
         # Car behaviour settings
+        self.MIN_SPEED = 1
         self.THROTTLE = 0.3
         self.MIN_THROTTLE = 0.2
         self.MAX_THROTTLE = 0.4

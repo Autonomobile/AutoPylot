@@ -67,10 +67,14 @@ def main():
                 / 3
                 * settings.STEERING_MULT
             )
-            mem["throttle"] = (
-                np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
-                * settings.THROTTLE_MULT
-            )
+
+            if mem["speed"] < settings.MIN_SPEED:
+                mem["throttle"] = settings.MIN_THROTTLE
+            else:
+                mem["throttle"] = (
+                    np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
+                    * settings.THROTTLE_MULT
+                )
 
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
