@@ -311,50 +311,62 @@ class Models:
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model
 
-    def mickaNet():
-        # 1) preparing the model ========================
+    def mmms():
         inputs = []
         outputs = []
 
-        # 2) input layer ========================
         image = Input(shape=(120, 160, 3), name="image")
         speed = Input(shape=(1,), name="speed")
 
         inputs.append(image)
         inputs.append(speed)
 
-        # 3 convolutional layers ========================
-        x = BatchNormalization()(image)  # normalize data
-        x = Conv2D(12, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
-        x = Conv2D(24, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
-        x = Conv2D(48, kernel_size=5, strides=2, use_bias=False, activation="relu")(x)
-        x = MaxPooling2D(pool_size=2, strides=2)(x)
+        x = Cropping2D(cropping=((20, 20), (0, 0)))(image)
+        x = Lambda(lambda x: x / 255)(x)
 
-        x = Conv2D(64, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
-        x = Conv2D(96, kernel_size=3, strides=1, use_bias=False, activation="relu")(x)
-        x = MaxPooling2D(pool_size=2, strides=2)(x)
+        x = SeparableConv2D(24, 5, strides=2, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
 
-        # 4 flatten layer ========================
-        x = Flatten()(x)  # flatten the data
-        x = Dropout(0.3)(x)  # dropout to avoid overfitting
+        x = SeparableConv2D(48, 5, strides=2, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(96, 5, strides=2, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(192, 3, strides=2, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(256, 3, strides=1, use_bias=False, activation="relu")(x)
+        x = BatchNormalization()(x)
+
+        x = Flatten()(x)
+        x = Dropout(0.3)(x)
         x = Concatenate(axis=-1)([x, speed])
 
-        # 5 fully connected layers ========================
         x = Dense(256, use_bias=False, activation="relu")(x)
-        x = Dropout(0.2)(x)
-        x = Dense(256, use_bias=False, activation="relu")(x)
-        x = Dropout(0.2)(x)
-        x = Dense(256, use_bias=False, activation="relu")(x)
-        x = Dropout(0.2)(x)
+        x = Dropout(0.3)(x)
+        x = BatchNormalization()(x)
 
-        # 6 output layer ========================
-        y1 = Dense(1, use_bias=False, activation="tanh", name="steering")(x)
+        x = Dense(256, use_bias=False, activation="relu")(x)
+        x = Dropout(0.3)(x)
+        x = BatchNormalization()(x)
+
+        x = Dense(256, use_bias=False, activation="relu")(x)
+        x = Dropout(0.3)(x)
+        x = BatchNormalization()(x)
+
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
+        y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
+        y3 = Dense(1, use_bias=False, activation="tanh", name="steering.10")(x)
+        z = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        
         outputs.append(y1)
-        y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
         outputs.append(y2)
+        outputs.append(y3)
+        outputs.append(z)
 
-        # create the model
         model = Model(inputs=inputs, outputs=outputs)
-        model.compile(optimizer="adam", loss="mse", loss_weights=[1, 0.75])
+        model.compile(optimizer="adam", loss="mse", loss_weights=[1, 1, 1, 0.75])
 
+        logging.info(f"created model with {get_flops(model)} FLOPS")
         return model

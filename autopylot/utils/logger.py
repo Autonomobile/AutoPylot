@@ -15,11 +15,11 @@ class SocketIOHandler(logging.Handler):
     If the peer resets it, an attempt is made to reconnect on the next call.
     """
 
-    def __init__(self, host):
+    def __init__(self, host, port):
         logging.Handler.__init__(self)
 
         self.thread = threading.Thread(
-            target=socketio_client.run_threaded, args=(host,)
+            target=socketio_client.run_threaded, args=(host, port)
         )
         self.thread.start()
 
@@ -66,7 +66,8 @@ def has_dtypes(dtypes, iterable):
 def init(
     name="",
     pathlogs=settings.LOGS_PATH,
-    host=settings.SERVER_ADDRESS,
+    host=settings.SERVER_HOST,
+    port=settings.SERVER_PORT,
     handlers=[logging.FileHandler, logging.StreamHandler, SocketIOHandler],
     DO_SEND_TELEMETRY=False,
 ):
@@ -104,7 +105,7 @@ def init(
 
     if SocketIOHandler in handlers:
         # this is to send records to the server
-        socketIOHandler = SocketIOHandler(host)
+        socketIOHandler = SocketIOHandler(host, port)
         socketIOHandler.setLevel(level)
         logger.addHandler(socketIOHandler)
     return logger

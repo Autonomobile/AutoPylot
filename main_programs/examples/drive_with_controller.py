@@ -74,7 +74,7 @@ def main():
                         else lookup_zone[1]
                     )
             else:
-                throttle = settings.DEFAULT_THROTTLE
+                throttle = settings.THROTTLE
 
             mem["steering"] = (
                 float(predictions.get("steering", 0.0)) * settings.STEERING_MULT
