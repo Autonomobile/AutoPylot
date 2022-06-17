@@ -1,0 +1,1 @@
+{"inputs": [["image", [120, 160, 3]]], "outputs": [["steering.0", [1]], ["steering.5", [1]], ["steering.10", [1]], ["zone", [3]]], "settings": {"dataset_path": "C:\\Users\\maxim\\datasets\\", "epochs": 3, "batch_size": 32, "train_split": 0.9, "shuffle": true, "verbose": 1}}
