@@ -311,6 +311,70 @@ class Models:
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model
 
+    def trajectory_model():
+        inputs = []
+        outputs = []
+
+        inp = Input(shape=(120, 160, 3), name="image")
+        inputs.append(inp)
+
+        x = Cropping2D(cropping=((20, 20), (0, 0)))(inp)
+        x = Lambda(lambda x: x / 255)(x)
+
+        x = SeparableConv2D(24, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(48, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(96, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(192, 3, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(256, 3, strides=1, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = Flatten()(x)
+        x = Dropout(0.3)(x)
+
+        x = Dense(200, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+        x = Dense(100, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+        x = Dense(100, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        # make sure the outputs are in alphabetic order
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
+        outputs.append(y1)
+        y2 = Dense(1, use_bias=False, activation="tanh", name="steering.10")(x)
+        outputs.append(y2)
+        y3 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
+        outputs.append(y3)
+        y4 = Dense(20, use_bias=False, activation="linear", name="trajectory")(x)
+        outputs.append(y4)
+        y5 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        outputs.append(y5)
+
+        # Create the model
+        model = Model(inputs=inputs, outputs=outputs)
+
+        # Compile it
+        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 1, 1, 0.75, 1.5])
+
+        logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
+        return model
+
     def mmms():
         inputs = []
         outputs = []
@@ -359,7 +423,7 @@ class Models:
         y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
         y3 = Dense(1, use_bias=False, activation="tanh", name="steering.10")(x)
         z = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
-        
+
         outputs.append(y1)
         outputs.append(y2)
         outputs.append(y3)
