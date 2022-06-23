@@ -191,6 +191,21 @@ def predict_decorator(func, outputs):
     return wrapped_f
 
 
+def freeze_conv(model):
+    """Freeze all convolutional layers in a model.
+
+    Args:
+        model (tf.keras.models.Model): the model.
+    """
+    for layer in model.layers:
+        if (
+            isinstance(layer, tf.keras.layers.Conv2D)
+            or isinstance(layer, tf.keras.layers.DepthwiseConv2D)
+            or isinstance(layer, tf.keras.layers.SeparableConv2D)
+        ):
+            layer.trainable = False
+
+
 class TFLiteModel:
     """Class to predict using a TFLite model."""
 
