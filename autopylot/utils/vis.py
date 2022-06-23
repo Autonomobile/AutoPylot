@@ -176,7 +176,7 @@ def vis_car_position(image_data, image_key="image"):
     return vis_point(image_data[image_key], image_data["car_position"])
 
 
-def vis_trajectory(image_data, image_key="image", x_minmax=(-1, 1), y_minmax=(0, 2)):
+def vis_trajectory(image_data, image_key="image", x_minmax=(-1, 1), y_minmax=(0, 1.5)):
     """Visualize the trajectory.
 
     Args:

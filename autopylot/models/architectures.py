@@ -347,18 +347,21 @@ class Models:
         x = Dense(200, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
-        x = Dense(100, use_bias=False)(x)
+        x = Dropout(0.1)(x)
+
+        x = Dense(200, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
-        x = Dense(100, use_bias=False)(x)
+        x = Dropout(0.1)(x)
+
+        x = Dense(200, use_bias=False)(x)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
+        x = Dropout(0.1)(x)
 
         # make sure the outputs are in alphabetic order
         y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
         outputs.append(y1)
-        y2 = Dense(1, use_bias=False, activation="tanh", name="steering.10")(x)
-        outputs.append(y2)
         y3 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
         outputs.append(y3)
         y4 = Dense(20, use_bias=False, activation="linear", name="trajectory")(x)
@@ -370,7 +373,11 @@ class Models:
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
-        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 1, 1, 0.75, 1.5])
+        model.compile(
+            optimizer=Adam(),
+            loss=["mse", "mse", "mse", "categorical_crossentropy"],
+            loss_weights=[1, 1, 1.5, 0.75],
+        )
 
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model
