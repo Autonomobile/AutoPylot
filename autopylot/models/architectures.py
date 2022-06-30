@@ -359,7 +359,7 @@ class Models:
         y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
         y3 = Dense(1, use_bias=False, activation="tanh", name="steering.10")(x)
         z = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
-        
+
         outputs.append(y1)
         outputs.append(y2)
         outputs.append(y3)
