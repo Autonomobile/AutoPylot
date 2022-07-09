@@ -34,6 +34,10 @@ def main(path):
         input_data = prepare_data(image_data)
 
         predictions = model.predict(input_data)
+
+        predictions["steering"] = (
+            predictions["steering.0"] * 1 + predictions["steering.5"] * 1
+        ) / 2
         image_data.update(predictions)
 
         # print(image_data["zone"])
