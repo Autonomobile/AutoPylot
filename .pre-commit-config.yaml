@@ -1,7 +1,6 @@
 repos:
 -   repo: https://github.com/psf/black
-    rev: 22.1.0
+    rev: 22.6.0
     hooks:
     - id: black
       entry: black autopylot main_programs
-      language_version: python3.6
