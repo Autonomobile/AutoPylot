@@ -9,6 +9,7 @@ setup(
     license="MIT",
     packages=["autopylot"],
     install_requires=[
+        "protobuf < 4.0.0rc1",
         "opencv-python >= 4.1.1",
         "tensorflow >= 2.3.0",
         "numpy >= 1.17",
