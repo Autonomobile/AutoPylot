@@ -206,7 +206,9 @@ class TFLiteModel:
         except ImportError:
             logging.info("failed to import tflite_runtime.interpreter, using tf.lite")
             import tensorflow.lite as tflite
-        self.interpreter = tflite.Interpreter(model_path=model_path, *args, **kwargs)
+        self.interpreter = tflite.Interpreter(
+            model_path=model_path, num_threads=2, *args, **kwargs
+        )
 
         self.input_details = self.interpreter.get_input_details()
         self.output_details = self.interpreter.get_output_details()
