@@ -79,12 +79,6 @@ def save_to_tflite(model, model_path):
         model_path (string): the full path of where to save the model.
     """
     converter = tf.lite.TFLiteConverter.from_keras_model(model)
-    converter.target_spec.supported_ops = [
-        tf.lite.OpsSet.TFLITE_BUILTINS,
-        tf.lite.OpsSet.SELECT_TF_OPS,
-    ]
-    converter.optimizations = [tf.lite.Optimize.DEFAULT]
-    converter.target_spec.supported_types = [tf.float16]
     tflite_model = converter.convert()
     open(model_path, "wb").write(tflite_model)
 
@@ -226,11 +220,11 @@ class TFLiteModel:
         self.input_details = self.interpreter.get_input_details()
         self.output_details = self.interpreter.get_output_details()
 
-        self.interpreter.resize_tensor_input(
-            self.input_details[0]["index"],
-            [1] + settings.IMAGE_SHAPE,
-            strict=True,
-        )
+        # self.interpreter.resize_tensor_input(
+        #     self.input_details[0]["index"],
+        #     [1] + settings.IMAGE_SHAPE,
+        #     strict=True,
+        # )
         self.interpreter.allocate_tensors()
 
         # load model info

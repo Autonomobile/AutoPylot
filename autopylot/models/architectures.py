@@ -395,7 +395,7 @@ class Models:
         model.compile(
             optimizer=Adam(),
             loss=["mse", "mse", "mse", "categorical_crossentropy"],
-            loss_weights=[1, 1, 1.5, 0.75],
+            loss_weights=[1, 1, 1.5, 0.5],
         )
 
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
