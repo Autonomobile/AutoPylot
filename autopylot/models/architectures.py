@@ -44,6 +44,19 @@ def shape_flatten(shape):
     return tot
 
 
+def sort_input_outputs(inputs, outputs):
+    """Sort in the alphabetic order input and output so that
+    the tflite model will have the same input and output order.
+
+    Args:
+        inputs (list): list of input tensors
+        outputs (list): list of output tensors
+    """
+    inputs = sorted(inputs, key=lambda x: x.name)
+    outputs = sorted(outputs, key=lambda x: x.name)
+    return inputs, outputs
+
+
 class Models:
     def test_model(output_layers=[("steering", (1,))]):
         """This model does nothing, it's just a dummy model to test our functions.
@@ -70,6 +83,7 @@ class Models:
             outputs.append(y)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -150,6 +164,7 @@ class Models:
         outputs.append(y)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -204,7 +219,8 @@ class Models:
         y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
         outputs.append(y2)
 
-        # Create the model
+        # Create the
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -240,6 +256,7 @@ class Models:
         outputs.append(y)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -303,6 +320,7 @@ class Models:
         outputs.append(z)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -367,6 +385,7 @@ class Models:
         outputs.append(y5)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -429,6 +448,7 @@ class Models:
         outputs.append(y3)
         outputs.append(z)
 
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
         model.compile(optimizer="adam", loss="mse", loss_weights=[1, 1, 1, 0.75])
 
