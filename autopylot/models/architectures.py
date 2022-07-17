@@ -1,6 +1,7 @@
 """This is where we will store our different model architectures."""
 
 import logging
+
 import tensorflow as tf
 from keras_flops import get_flops
 from tensorflow.keras import Input, Model
@@ -11,18 +12,14 @@ from tensorflow.keras.layers import (
     Conv2D,
     Cropping2D,
     Dense,
-    DepthwiseConv2D,
     Dropout,
     Flatten,
-    AveragePooling2D,
     GlobalAveragePooling2D,
     Lambda,
-    MaxPooling2D,
-    Reshape,
     SeparableConv2D,
+    GlobalMaxPooling2D,
 )
-from tensorflow.keras.regularizers import l1_l2
-from tensorflow.keras.optimizers import Adam, SGD
+from tensorflow.keras.optimizers import Adam
 
 
 def get_model_constructor_by_name(name):
@@ -262,7 +259,7 @@ class Models:
         # Compile it
         model.compile(
             optimizer="adam", loss="mse"
-        )  # can change the optimizer adam by stg else
+        )  # can change the optimizer adam by sgd else
 
         return model
 
