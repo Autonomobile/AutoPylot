@@ -5,7 +5,7 @@ import numpy as np
 from autopylot.actuators import Actuator
 from autopylot.cameras import Camera
 from autopylot.controllers import Controller
-from autopylot.datasets import preparedata, transform
+from autopylot.datasets import transform
 from autopylot.models import utils
 from autopylot.utils import io, logger, memory, settings, state_switcher
 
@@ -18,7 +18,6 @@ settings = settings.settings
 model, model_info = utils.load_model(
     f"{settings.MODEL_NAME}/{settings.MODEL_NAME}.tflite"
 )
-prepare_data = preparedata.PrepareData(model_info)
 
 settings.ENABLE_TRANSFORM = False
 transformers = transform.Transform()
@@ -53,8 +52,7 @@ def main():
 
         elif mem["state"] == "autonomous":
             transformers(mem)
-            input_data = prepare_data(mem)
-            predictions = model.predict(input_data)
+            predictions = model.predict(mem)
 
             if "throttle" in predictions.keys():
                 throttle = predictions["throttle"]

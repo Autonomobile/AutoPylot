@@ -3,8 +3,7 @@ Load and visualization of a dataset example,
 using the load_sorted_dataset_generator, visualize every image one by one.
 """
 
-import numpy as np
-from autopylot.datasets import dataset, preparedata, transform
+from autopylot.datasets import dataset, transform
 from autopylot.models import utils
 from autopylot.utils import io, logger, profiler, settings, vis
 
@@ -20,7 +19,6 @@ pr = profiler.Profiler()
 model, model_info = utils.load_model(
     f"{settings.MODEL_NAME}/{settings.MODEL_NAME}.tflite"
 )
-prepare_data = preparedata.PrepareData(model_info)
 settings.ENABLE_TRANSFORM = False
 transformer = transform.Transform()
 
@@ -31,9 +29,7 @@ def main(path):
         vis_image = vis.vis_all(image_data)
         transformer(image_data)
 
-        input_data = prepare_data(image_data)
-
-        predictions = model.predict(input_data)
+        predictions = model.predict(image_data)
 
         predictions["steering"] = (
             predictions["steering.0"] * 1 + predictions["steering.5"] * 1

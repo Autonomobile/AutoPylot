@@ -4,6 +4,7 @@ import os
 
 import tensorflow as tf
 from tensorflow.keras.models import Model
+import numpy as np
 
 from ..utils import settings
 
@@ -28,7 +29,9 @@ def load_model(model_path, *args, **kwargs):
         try:
             model = tf.keras.models.load_model(model_path, *args, **kwargs)
             model_info = create_model_info(model)
-            model.predict = predict_decorator(model, model_info["outputs"])
+            model.predict = predict_decorator(
+                model, model_info["inputs"], model_info["outputs"]
+            )
             return model, model_info
         except OSError:
             raise ValueError(f"Invalid path to model: {model_path}")
@@ -147,13 +150,14 @@ def get_clean_layer_name(name):
     return name
 
 
-def predict_decorator(func, outputs):
+def predict_decorator(func, inputs, outputs):
     """Decorate the model.predict function.
 
     It used the __call__ of the model to avoid performance issues
 
     Args:
         func (method): the predict function
+        inputs (list(tuple(string, list))): the inputs info list.
         outputs (list(tuple(string, list))): the outputs info list.
 
     Returns:
@@ -163,23 +167,32 @@ def predict_decorator(func, outputs):
 
         def pred_to_dict(out):
             predictions = {}
-            for (name, _) in outputs:
-                predictions[name] = out[0][0]
+            for (output_name, _) in outputs:
+                predictions[output_name] = out[0][0]
             return predictions
 
     else:
 
         def pred_to_dict(out):
             predictions = {}
-            for i, (name, _) in enumerate(outputs):
-                p = out[i][0]
-                if p.shape[0] == 1:
-                    p = p[0]
-                predictions[name] = p
+            for i, (output_name, _) in enumerate(outputs):
+                value = out[i][0]
+                if value.shape[0] == 1:
+                    value = value[0]
+                predictions[output_name] = value
             return predictions
 
-    def wrapped_f(*args, **kwargs):
-        out = func(*args, **kwargs, training=False)
+    def wrapped_f(mem, *args, **kwargs):
+        input_data = {}
+        for input_name, _ in inputs:
+            try:
+                data = np.expand_dims(mem[input_name], 0).astype(np.float32)
+                if len(data.shape) < 2:
+                    data = np.expand_dims(data, 0)
+                input_data[input_name] = data
+            except KeyError:
+                raise ValueError(f"input name {input_name} is not in memory")
+        out = func(input_data, *args, **kwargs, training=False)
         return pred_to_dict(out)
 
     return wrapped_f
@@ -222,17 +235,12 @@ class TFLiteModel:
         self.input_details = self.interpreter.get_input_details()
         self.output_details = self.interpreter.get_output_details()
 
-        # self.interpreter.resize_tensor_input(
-        #     self.input_details[0]["index"],
-        #     [1] + settings.IMAGE_SHAPE,
-        #     strict=True,
-        # )
-        self.interpreter.allocate_tensors()
+        self.signatures = self.interpreter.get_signature_list()
+        logging.info(f"Model signatures: {self.signatures}")
 
-        # load model info
-        self.outputs = load_model_info(model_path)["outputs"]
+        self.runner = self.interpreter.get_signature_runner("serving_default")
 
-    def predict(self, input_data):
+    def predict(self, mem):
         """Get the model output from input_data.
 
         Args:
@@ -241,17 +249,24 @@ class TFLiteModel:
         Returns:
             dict: a dict containing all the predictions.
         """
-        for i, inp in enumerate(input_data):
-            self.interpreter.set_tensor(self.input_details[i]["index"], inp)
-        self.interpreter.invoke()
+        input_data = {}
+        for input_name in self.signatures["serving_default"]["inputs"]:
+            try:
+                data = np.expand_dims(mem[input_name], 0).astype(np.float32)
+                if len(data.shape) < 2:
+                    data = np.expand_dims(data, 0)
+                input_data[input_name] = data
+            except KeyError:
+                raise ValueError(f"input name {input_name} is not in memory")
 
-        output_dict = {}
-        for ((name, shape), tensor) in zip(self.outputs, self.output_details):
-            # single value
-            if shape[0] == 1:
-                output_dict[name] = self.interpreter.get_tensor(tensor["index"])[0][0]
-            # array of neurons
+        output_dict = self.runner(**input_data)
+        predictions = {}
+
+        for (output_name, output_data) in output_dict.items():
+            if output_data.shape[1] == 1:
+                output_data = output_data[0][0]
             else:
-                output_dict[name] = self.interpreter.get_tensor(tensor["index"])[0]
+                output_data = output_data[0]
+            predictions[output_name] = output_data
 
-        return output_dict
+        return predictions

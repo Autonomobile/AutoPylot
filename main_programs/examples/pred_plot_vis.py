@@ -2,7 +2,6 @@ import os
 from collections import deque
 
 import matplotlib.pyplot as plt
-from autopylot.datasets import dataset, preparedata
 from autopylot.utils import io, settings, vis
 from autopylot.models import utils
 from matplotlib.animation import FuncAnimation
@@ -11,15 +10,11 @@ settings = settings.settings
 
 paths = dataset.sort_paths(dataset.get_every_json_paths(settings.DATASET_PATH))
 
-model1, model_info1 = utils.load_model(
+model1, _ = utils.load_model(
     os.path.normpath("look_ahead_model/look_ahead_model.tflite")
 )
-model2, model_info2 = utils.load_model(
-    os.path.normpath("synth_model3/synth_model3.tflite")
-)
+model2, _ = utils.load_model(os.path.normpath("synth_model3/synth_model3.tflite"))
 
-prepare_data1 = preparedata.PrepareData(model_info1)
-prepare_data2 = preparedata.PrepareData(model_info2)
 
 fig = plt.figure()
 # plt.style.use("classic")
@@ -70,15 +65,14 @@ def init():
 def animate(i):
     image_data = io.load_image_data(paths[i])
 
-    input_data1 = prepare_data1(image_data)
-    input_data2 = prepare_data2(image_data)
-
-    pred1 = model1.predict(input_data1)
-    pred2 = model2.predict(input_data2)
+    pred1 = model1.predict(image_data)
+    pred2 = model2.predict(image_data)
 
     if len(X) < 200:  # fill the X list with numbers from 0 to 200
         X.append(X[-1] + 1)
     Y.append(image_data["steering"])
+
+    # kind of a mess for the moment, will need to refacto
     mean_steer = (
         pred1["steering.0"] + pred1["steering.5"] * 2 + pred1["steering.10"] * 2
     ) / 5
