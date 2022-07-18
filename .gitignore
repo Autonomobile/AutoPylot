@@ -139,3 +139,5 @@ dmypy.json
 
 # settings json file
 /settings.json
+/joystick_mapping.json
+/action_mapping.json

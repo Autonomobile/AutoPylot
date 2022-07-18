@@ -1,12 +1,15 @@
-# script based on https://github.com/autorope/donkeycar/blob/dev/donkeycar/parts/controller.py
+"""
+script based on https://github.com/autorope/donkeycar/blob/dev/donkeycar/parts/controller.py
+"""
 
 import array
+import json
 import logging
 import os
 import struct
 import threading
 
-from ..utils import memory, utils
+from ..utils import memory, settings, utils
 
 
 class Joystick(object):
@@ -127,8 +130,7 @@ class Joystick(object):
                 if typev & 0x02:
                     axis = self.axis_map[number]
                     if axis:
-                        fvalue = value / 32767.0
-                        self.axis_states[axis] = fvalue
+                        self.axis_states[axis] = value / 32767.0
 
         logging.info("Controller disconnected.")
 
@@ -182,9 +184,23 @@ class XboxOneJoystick(Joystick):
             0x136: "button_lb",
             0x137: "button_rb",
         }
+        self.load_custom_mapping()
 
         if do_init:
             self.init()
+
+    def load_custom_mapping(self, filepath=settings.settings.CONTROLLER_MAPPING_PATH):
+        """
+        Load a custom key buttons and axes mapping from file
+        """
+        if os.path.exists(filepath):
+            mapping_dict = json.load(open(filepath))
+            if "axis_names" in mapping_dict.keys():
+                self.axis_names.update(mapping_dict["axis_names"])
+            if "button_names" in mapping_dict.keys():
+                self.button_names.update(mapping_dict["button_names"])
+
+            logging.info("Loaded custom controller mapping")
 
     def update(self):
         """Update function for the controller.

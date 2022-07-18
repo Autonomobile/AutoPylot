@@ -95,6 +95,10 @@ class Settings:
         self.ROOT_PATH = os.path.dirname(
             os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         )
+        self.CONTROLLER_MAPPING_PATH = os.path.join(
+            self.ROOT_PATH, "joystick_mapping.json"
+        )
+        self.ACTIONS_MAPPING_PATH = os.path.join(self.ROOT_PATH, "action_mapping.json")
         self.MODELS_PATH = os.path.join(self.ROOT_PATH, "models")
         self.LOGS_PATH = os.path.join(self.ROOT_PATH, "logs", "logs.log")
         self.PROFILER_PATH = os.path.join(self.ROOT_PATH, "logs", "profiler.log")
