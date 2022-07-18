@@ -2,6 +2,7 @@ import os
 from collections import deque
 
 import matplotlib.pyplot as plt
+from autopylot.datasets import dataset
 from autopylot.utils import io, settings, vis
 from autopylot.models import utils
 from matplotlib.animation import FuncAnimation
