@@ -13,6 +13,7 @@ Servo servoSteering;
 #define ESC_MIN 1000
 #define ESC_MAX 2000
 #define ESC_NEUTRAL 1500
+#define ESC_DEADBAND 100
 Servo motorESC;
 
 // Sensor
@@ -23,9 +24,14 @@ Servo motorESC;
 #define BUTTON_PIN 16
 #define LED_PIN 15
 
+
+#define BUFF_LENGTH 5
 // variables used to read serial
 byte dummyBuff[1] = {0};
-byte buffData[4] = {0, 0, 0, 0}; // one byte for start, one byte for the steering servo, an other of the motor and one byte for end
+// {start, steering, throttle, end}
+byte buffData[BUFF_LENGTH] = {0, 0, 0, 0, 0};
+bool reverseMode = false;
+
 int expected_start = 255;
 int expected_end = 0;
 
@@ -73,18 +79,18 @@ void setup()
 
 void loop()
 {
-  
+
   // write rpm sensor data to the serial
   if (Serial && motor_speed != prev_motor_speed)
   {
     prev_motor_speed = motor_speed;
-    Serial.println(prev_motor_speed);    
+    Serial.println(prev_motor_speed);
   }
-  
+
   if (Serial.available())
   {
     // read the data from the serial
-    Serial.readBytes(buffData, 4);
+    Serial.readBytes(buffData, BUFF_LENGTH);
 
     if (buffData[0] == expected_start && buffData[3] == expected_end) // check wether we are reading the right data buffer
     {
@@ -108,7 +114,7 @@ void loop()
 
 void changeSteering()
 {
-  float decoded_steering = buffData[1]; // cast byte to int
+  float decoded_steering = buffData[1];
 
   int steering = SERVO_MAX - decoded_steering / 255 * (SERVO_MAX - SERVO_MIN);
   servoSteering.writeMicroseconds(steering);
@@ -116,10 +122,50 @@ void changeSteering()
 
 void changeThrottle()
 {
-  float decoded_trottle = buffData[2]; // cast byte to int
+  float decoded_trottle = buffData[2];
+  float decoded_brake = buffData[3];
 
   int throttle = ESC_MIN + decoded_trottle / 255 * (ESC_MAX - ESC_MIN);
-  motorESC.writeMicroseconds(throttle);
+  int brake = ESC_NEUTRAL - decoded_brake / 255 * (ESC_NEUTRAL - ESC_MIN);
+
+  if (brake != ESC_NEUTRAL)
+  {
+    // go back to brake mode
+    if (reverseMode)
+    {
+      motorESC.writeMicroseconds(ESC_NEUTRAL + ESC_DEADBAND);
+      reverseMode = false;
+    }
+
+    motorESC.writeMicroseconds(brake);
+  }
+
+  else
+  {
+    // positive throttle
+    if (throttle >= ESC_NEUTRAL)
+    {
+      motorESC.writeMicroseconds(throttle);
+      reverseMode = false;
+    }
+    // reverse
+    else if (reverseMode)
+    {
+      motorESC.writeMicroseconds(throttle);
+    }
+    // go into reverse mode
+    else
+    {
+      motorESC.writeMicroseconds(ESC_MIN);
+      motorESC.writeMicroseconds(ESC_NEUTRAL);
+      motorESC.writeMicroseconds(throttle);
+      reverseMode = true;
+    }
+  }
+}
+
+void changeBrake()
+{
 }
 
 void signalChange() // this function will be called on state change of SENSOR_PIN

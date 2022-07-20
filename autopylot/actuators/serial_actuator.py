@@ -17,6 +17,7 @@ class SerialActuator:
         port=settings.settings.SERIAL_PORT,
         steering_key="steering",
         throttle_key="throttle",
+        brake_key="brake",
         speed_key="speed",
     ):
         """Initialize the class.
@@ -41,7 +42,7 @@ class SerialActuator:
         self.ser.timeout = 0  # 0 = no timeout
 
         self.__sensor_rpm = 0  # init rpm of the sensor to 0
-        self.__command = bytearray([255, 127, 127, 0])
+        self.__command = bytearray([255, 127, 127, 0, 0])
         self.__isRuning = True
         self.__isOperation = False
         self.__boosting = False
@@ -51,11 +52,13 @@ class SerialActuator:
 
         self.__steering_key = steering_key
         self.__throttle_key = throttle_key
+        self.__brake_key = brake_key
         self.__speed_key = speed_key
 
         self.__ignore_next = False
         self.__steering = 127
         self.__throttle = 127
+        self.__brake = 0
         self.__wheel_to_meters = 0.50  # 1 wheel turn = 0.20 m
         self.__gear_ratio = 7  # 7 motor turn = 1 wheel turn
         self.__last_received = time.time()
@@ -75,7 +78,7 @@ class SerialActuator:
         self.__isRuning = False
         self.__thread.join()
         if self.ser.is_open:
-            self.apply_steering_throttle(0, 0)
+            self.apply_steering_throttle_brake(0, 0, 1)
             self.ser.close()  # close port
 
     def start_thread(self):
@@ -147,25 +150,39 @@ class SerialActuator:
         self.__command[2] = self.__throttle
         self.ser.write(self.__command)
 
-    def apply_steering_throttle(self, steering, throttle):
+    def apply_brake(self, brake):
+        """Change motor brake.
+
+        Args:
+            brake (float): brake between 0 and 1.
+        """
+        self.__brake = int(utils.map_value(brake, 0, 1, 0, 255))
+        self.__command[3] = self.__brake
+        self.ser.write(self.__command)
+
+    def apply_steering_throttle_brake(self, steering, throttle, brake):
         """Change all the elements at the same time.
 
         Args:
             steering (float): steering between -1 and 1.
             throttle (float): throttle between -1 and 1.
+            brake (float): brake between 0 and 1.
         """
         self.__steering = int(utils.map_value(steering, -1, 1, 0, 255))
         self.__throttle = int(utils.map_value(throttle, -1, 1, 0, 255))
+        self.__brake = int(utils.map_value(brake, 0, 1, 0, 255))
 
         self.__command[1] = self.__steering
         self.__command[2] = self.__throttle
+        self.__command[3] = self.__brake
         self.ser.write(self.__command)
 
     def update(self):
         """Update steering and throttle using memory."""
         steering = self.__memory.get(self.__steering_key, 0)
         throttle = self.__memory.get(self.__throttle_key, 0)
-        self.apply_steering_throttle(steering, throttle)
+        brake = self.__memory.get(self.__brake_key, 0)
+        self.apply_steering_throttle_brake(steering, throttle, brake)
 
     def get_sensor_last_received(self):
         return self.__last_received

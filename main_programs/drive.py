@@ -3,7 +3,6 @@ import time
 import cv2
 import numpy as np
 
-import numpy as np
 from autopylot.actuators import Actuator
 from autopylot.cameras import Camera
 from autopylot.controllers import Controller

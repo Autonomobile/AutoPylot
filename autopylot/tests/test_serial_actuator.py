@@ -1,8 +1,10 @@
 """Test the serial control."""
 from ..actuators.serial_actuator import SerialActuator
 import time
+import pytest
 
 
+@pytest.mark.serial
 def test_serial_high_speed():
     test_memory = {}
 
@@ -21,6 +23,7 @@ def test_serial_high_speed():
     assert test_memory["speed"] == 28.94188469553137
 
 
+@pytest.mark.serial
 def test_serial_normal_speed():
     test_memory = {}
 
@@ -40,6 +43,7 @@ def test_serial_normal_speed():
     assert test_memory["speed"] == 6.289941126151059
 
 
+@pytest.mark.serial
 def test_serial_no_speed():
     test_memory = {}
 
@@ -58,6 +62,7 @@ def test_serial_no_speed():
     assert test_memory["speed"] == 0.0
 
 
+@pytest.mark.serial
 def test_serial_invalid_bitarray():
     test_memory = {}
 
@@ -75,6 +80,7 @@ def test_serial_invalid_bitarray():
     assert test_memory.get("speed") is None
 
 
+@pytest.mark.serial
 def test_serial_send_positive_steering():
     # simulate right turn
     test_memory = {"steering": 0.5}
@@ -84,9 +90,10 @@ def test_serial_send_positive_steering():
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b"\xff\xbf\x7f\x00"
+    assert out == b"\xff\xbf\x7f\x00\x00"
 
 
+@pytest.mark.serial
 def test_serial_send_negative_steering():
     # simulate left turn
     test_memory = {"steering": -0.5}
@@ -96,9 +103,10 @@ def test_serial_send_negative_steering():
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b"\xff?\x7f\x00"
+    assert out == b"\xff?\x7f\x00\x00"
 
 
+@pytest.mark.serial
 def test_serial_send_positive_throttle():
     # simulate forward throttle
     test_memory = {"throttle": 0.5}
@@ -108,9 +116,10 @@ def test_serial_send_positive_throttle():
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b"\xff\x7f\xbf\x00"
+    assert out == b"\xff\x7f\xbf\x00\x00"
 
 
+@pytest.mark.serial
 def test_serial_send_negative_throttle():
     # simulate backward throttle
     test_memory = {"throttle": -0.5}
@@ -120,9 +129,10 @@ def test_serial_send_negative_throttle():
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b"\xff\x7f?\x00"
+    assert out == b"\xff\x7f?\x00\x00"
 
 
+@pytest.mark.serial
 def test_serial_send_both():
     # simulate right turn and forward throttle
     test_memory = {"steering": 0.5, "throttle": 0.5}
@@ -132,4 +142,17 @@ def test_serial_send_both():
     ser.update()
 
     out = ser.ser.readlines()[-1]
-    assert out == b"\xff\xbf\xbf\x00"
+    assert out == b"\xff\xbf\xbf\x00\x00"
+
+
+@pytest.mark.serial
+def test_serial_brake():
+    # simulate a brake
+    test_memory = {"brake": 0.75}
+
+    # open a test serial
+    ser = SerialActuator(test_memory, port="loop://")
+    ser.update()
+
+    out = ser.ser.readlines()[-1]
+    assert out == b"\xff\x7f\x7f\xbf\x00"
