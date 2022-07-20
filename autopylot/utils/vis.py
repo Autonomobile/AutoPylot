@@ -1,6 +1,8 @@
 import cv2
 import numpy as np
 
+from . import utils
+
 
 def vis_line_scalar(
     image,
@@ -165,13 +167,39 @@ def vis_car_position(image_data, image_key="image"):
     """Visualize the position of the detected car.
 
     Args:
-        image_data (dictionnary): image data dictionnary.
+        image_data (dict): image data dictionary.
         image_key (string): image key.
 
     Returns:
         np.array: modified image with the drawn visualization.
     """
     return vis_point(image_data[image_key], image_data["car_position"])
+
+
+def vis_trajectory(image_data, image_key="image", x_minmax=(-1, 1), y_minmax=(0, 1.5)):
+    """Visualize the trajectory.
+
+    Args:
+        image_data (dict): image data dictionary.
+
+    Returns:
+        np.array: trajectory visualization image.
+    """
+    trajectory = image_data["trajectory"]
+    h, w, _ = image_data[image_key].shape
+
+    for i in range(len(trajectory) // 2):
+        x, y = trajectory[i * 2], trajectory[i * 2 + 1]
+        x = int(utils.map_value(x, x_minmax[0], x_minmax[1], 0, w))
+        y = int(utils.map_value(y, y_minmax[0], y_minmax[1], h, 0))
+
+        image_data[image_key] = vis_point(
+            image_data[image_key],
+            (x, y),
+            color=(0, 255, 0),
+            radius=5,
+        )
+    return image_data[image_key]
 
 
 def vis_all(image_data, image_key="image"):
@@ -192,6 +220,8 @@ def vis_all(image_data, image_key="image"):
         image_data_copy[image_key] = vis_throttle(image_data_copy, image_key)
     if "speed" in image_data_copy:
         image_data_copy[image_key] = vis_speed(image_data_copy, image_key)
+    if "trajectory" in image_data_copy:
+        image_data_copy[image_key] = vis_trajectory(image_data_copy, image_key)
 
     return image_data_copy[image_key]
 

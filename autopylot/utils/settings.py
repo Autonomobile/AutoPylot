@@ -69,6 +69,7 @@ class Settings:
 
         # Training settings
         self.TRAIN_LOAD_MODEL = False
+        self.TRAIN_FREEZE_CONV = False
         self.TRAIN_BATCH_SIZE = 32
         self.TRAIN_EPOCHS = 10
         self.TRAIN_SPLITS = 0.9

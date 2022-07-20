@@ -51,7 +51,8 @@ class Functions:
         bot_y = shape[1] * np.random.uniform()
 
         image_hls = np.array(
-            cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2HLS), dtype=np.uint16
+            cv2.cvtColor(image_data["image"], cv2.COLOR_BGR2HLS),
+            dtype=np.uint16,
         )
         shadow_mask = 0 * image_hls[:, :, 1]
 
@@ -108,6 +109,10 @@ class Functions:
         if "image" in image_data.keys():
             image_data["image"] = cv2.flip(image_data["image"], 1)
         image_data["steering"] = image_data["steering"] * -1.0
+
+        if "trajectory" in image_data.keys():
+            for i in range(len(image_data["trajectory"]) // 2):
+                image_data["trajectory"][i * 2] *= -1.0
 
     def noise(image_data):
         if "image" not in image_data.keys():

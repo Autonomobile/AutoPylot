@@ -50,6 +50,10 @@ class TrainModel:
         else:
             raise ValueError("model_type should be a function")
 
+        if settings.TRAIN_FREEZE_CONV:
+            utils.freeze_conv(self.model)
+            logging.info("Freezed conv layers")
+
     def train(
         self,
         dataset_path=settings.DATASET_PATH,
