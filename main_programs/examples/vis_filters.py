@@ -5,7 +5,7 @@ using the load_sorted_dataset_generator, visualize every image one by one.
 
 import numpy as np
 import cv2
-from autopylot.datasets import dataset, preparedata, transform
+from autopylot.datasets import dataset, transform
 from autopylot.models import utils
 from autopylot.utils import io, settings, vis
 
