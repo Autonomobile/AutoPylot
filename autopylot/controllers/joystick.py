@@ -27,7 +27,7 @@ class Joystick(object):
         self.dev_fn = dev_fn
         self.connected = False
 
-    def init(self):
+    def init(self, config=False):
         try:
             from fcntl import ioctl
         except ModuleNotFoundError:
@@ -84,8 +84,11 @@ class Joystick(object):
 
         self.connected = True
 
-        th = threading.Thread(target=self.poll)
-        th.start()
+        if not config:
+            th = threading.Thread(target=self.poll)
+            th.start()
+        else:
+            logging.warning("disabled poll thread.")
 
         logging.info("Instantiated Joystick.")
         return True
@@ -133,6 +136,47 @@ class Joystick(object):
                         self.axis_states[axis] = value / 32767.0
 
         logging.info("Controller disconnected.")
+
+    def poll_raw(self, deadzone=0.2):
+        """
+        Query the state of the joystick, returns raw buttons that were pressed and used axis.
+        Used to make joystick configs.
+
+        Returns:
+            (list, list): tuple containing a list of pressed buttons and a list of used axis.
+        """
+        if self.connected:
+            pressed = []
+            axis = []
+
+            if self.jsdev is None:
+                return (None, None)
+
+            try:
+                evbuf = self.jsdev.read(8)
+            except OSError:
+                self.connected = False
+                return (None, None)
+
+            if evbuf:
+                tval, value, typev, number = struct.unpack("ihBB", evbuf)
+
+                if typev & 0x80:
+                    # ignore initialization event
+                    pass
+
+                if typev & 0x01:
+                    pressed.append(number)
+
+                if typev & 0x02:
+                    value /= 32767.0
+                    # small deadzone
+                    if value >= deadzone or value <= -deadzone:
+                        axis.append(number)
+
+            return pressed, axis
+        else:
+            return (None, None)
 
 
 class XboxOneJoystick(Joystick):
@@ -203,7 +247,8 @@ class XboxOneJoystick(Joystick):
             logging.info("Loaded custom controller mapping")
 
     def update(self):
-        """Update function for the controller.
+        """
+        Update function for the controller.
         This function stores in the memory the newly fetched axis values.
         """
         if self.connected:
