@@ -47,6 +47,9 @@ long prev_motor_speed = 0;
 
 void setup()
 {
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+  
   Serial.begin(115200);
   Serial.setTimeout(200);
 
@@ -79,7 +82,6 @@ void setup()
 
 void loop()
 {
-
   // write rpm sensor data to the serial
   if (Serial && motor_speed != prev_motor_speed)
   {
@@ -92,7 +94,7 @@ void loop()
     // read the data from the serial
     Serial.readBytes(buffData, BUFF_LENGTH);
 
-    if (buffData[0] == expected_start && buffData[3] == expected_end) // check wether we are reading the right data buffer
+    if (buffData[0] == expected_start && buffData[4] == expected_end) // check wether we are reading the right data buffer
     {
       last_received = millis();
       changeSteering();
@@ -133,11 +135,12 @@ void changeThrottle()
     // go back to brake mode
     if (reverseMode)
     {
-      motorESC.writeMicroseconds(ESC_NEUTRAL + ESC_DEADBAND);
-      reverseMode = false;
+      motorESC.writeMicroseconds(ESC_NEUTRAL);
     }
-
-    motorESC.writeMicroseconds(brake);
+    else
+    {
+      motorESC.writeMicroseconds(brake); 
+    }
   }
 
   else
@@ -146,7 +149,12 @@ void changeThrottle()
     if (throttle >= ESC_NEUTRAL)
     {
       motorESC.writeMicroseconds(throttle);
-      reverseMode = false;
+
+      if (reverseMode)
+      {
+        reverseMode = false;
+        digitalWrite(LED_BUILTIN, LOW);
+      }
     }
     // reverse
     else if (reverseMode)
@@ -156,10 +164,13 @@ void changeThrottle()
     // go into reverse mode
     else
     {
-      motorESC.writeMicroseconds(ESC_MIN);
+      motorESC.writeMicroseconds((ESC_NEUTRAL + ESC_MIN) / 2);
+      delay(100);
       motorESC.writeMicroseconds(ESC_NEUTRAL);
-      motorESC.writeMicroseconds(throttle);
+      delay(100);
+      motorESC.writeMicroseconds(throttle); 
       reverseMode = true;
+      digitalWrite(LED_BUILTIN, HIGH);
     }
   }
 }
@@ -203,7 +214,7 @@ void calibrationSteps()
   motorESC.writeMicroseconds(ESC_MIN);
 
   delay(2900); // wait less than 3 seconds and set to neutral point to avoid motor to start at full power
-  motorESC.writeMicroseconds((ESC_MIN + ESC_MAX) / 2);
+  motorESC.writeMicroseconds(ESC_NEUTRAL);
 }
 
 void waitButtonClicked()
