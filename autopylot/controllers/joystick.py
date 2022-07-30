@@ -137,7 +137,7 @@ class Joystick(object):
 
         logging.info("Controller disconnected.")
 
-    def poll_raw(self, deadzone=0.9):
+    def poll_raw(self, deadzone=0.95):
         """
         Query the state of the joystick, returns raw buttons that were pressed and used axis.
         Used to make joystick configs.

@@ -61,7 +61,7 @@ def create_config(
 
             if len(pressed_buttons) == 1:
                 button_names[int(pressed_buttons[0])] = button
-                print(f"assigned button {pressed_buttons[0]} to button")
+                print(f"assigned button {pressed_buttons[0]} to {button}")
                 done = True
 
             elif len(pressed_buttons) > 1:
@@ -77,8 +77,14 @@ def create_config(
             _, pressed_axis = joy.poll_raw()
 
             if len(pressed_axis) == 1:
-                axis_names[pressed_axis[0]] = axis
-                done = True
+                ret = input(
+                    f"press enter to assign {pressed_buttons[0]} to {button}, press c to cancel"
+                )
+                if ret == "c":
+                    print("cancelled")
+                else:
+                    axis_names[pressed_axis[0]] = axis
+                    done = True
 
     # save the config
     with open(settings.settings.CONTROLLER_MAPPING_PATH, "w") as f:
