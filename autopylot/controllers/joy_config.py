@@ -78,7 +78,8 @@ def create_config(
 
             if len(pressed_axis) == 1:
                 ret = input(
-                    f"press enter to assign {pressed_axis[0]} to {axis}, press c to cancel"
+                    f"press enter to assign {pressed_axis[0]} to {axis}, \
+                    press c then enter to cancel \n"
                 )
                 if ret == "c":
                     print("cancelled")
