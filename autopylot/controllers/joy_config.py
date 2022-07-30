@@ -3,7 +3,7 @@
 import json
 import logging
 
-from ..utils import settings
+from ..utils import settings, logger
 from .joystick import Joystick
 
 
@@ -85,4 +85,5 @@ def create_config(
 
 
 if __name__ == "__main__":
+    logger.init(handlers=[logging.StreamHandler])
     create_config()
