@@ -3,7 +3,7 @@
 import json
 import logging
 
-from ..utils import settings, logger
+from ..utils import settings
 from .joystick import Joystick
 
 
@@ -39,27 +39,35 @@ def create_config(
     if not joy.connected:
         logging.error("Joystick not connected.")
         return
+    
+    # get rid of the init poll
+    pb, pa = joy.poll_raw()
+    while len(pb) or len(pa):
+        pb, pa = joy.poll_raw()
 
     button_names = {}
     axis_names = {}
 
+    print("Starting joystick config")
+
     for button in button_list:
-        logging.info(f"Press button {button}")
+        print(f"Press button {button}")
 
         pressed_button = []
         done = False
 
         while not done:
             pressed_buttons, _ = joy.poll_raw()
-
+            
             if len(pressed_buttons) == 1:
                 button_names[pressed_buttons[0]] = button
                 done = True
-            else:
+                print(f"assigned button {pressed_buttons[0]} to button")
+            elif len(pressed_buttons) > 1:
                 logging.warning(f"More than one button pressed {pressed_button}")
 
     for axis in axis_list:
-        logging.info(f"Use axis {axis}")
+        print(f"Use axis {axis}")
 
         pressed_axis = []
         done = False
@@ -85,5 +93,4 @@ def create_config(
 
 
 if __name__ == "__main__":
-    logger.init(handlers=[logging.StreamHandler])
     create_config()
