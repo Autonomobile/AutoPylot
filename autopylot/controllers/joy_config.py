@@ -67,25 +67,26 @@ def create_config(
             elif len(pressed_buttons) > 1:
                 logging.warning(f"More than one button pressed {pressed_button}")
 
-    for axis in axis_list:
-        print(f"Push axis {axis} all the way")
+    # need to fix axis config
+    # for axis in axis_list:
+    #     print(f"Push axis {axis} all the way")
 
-        pressed_axis = []
-        done = False
+    #     pressed_axis = []
+    #     done = False
 
-        while not done:
-            _, pressed_axis = joy.poll_raw()
+    #     while not done:
+    #         _, pressed_axis = joy.poll_raw()
 
-            if len(pressed_axis) == 1:
-                ret = input(
-                    f"press enter to assign {pressed_axis[0]} to {axis}, \
-                    press c then enter to cancel \n"
-                )
-                if ret == "c":
-                    print("cancelled")
-                else:
-                    axis_names[pressed_axis[0]] = axis
-                    done = True
+    #         if len(pressed_axis) == 1:
+    #             ret = input(
+    #                 f"press enter to assign {pressed_axis[0]} to {axis} \n, \
+    #                 press c then enter to cancel \n"
+    #             )
+    #             if ret == "c":
+    #                 print("cancelled")
+    #             else:
+    #                 axis_names[pressed_axis[0]] = axis
+    #                 done = True
 
     # save the config
     with open(settings.settings.CONTROLLER_MAPPING_PATH, "w") as f:
