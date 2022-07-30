@@ -60,14 +60,15 @@ def create_config(
             pressed_buttons, _ = joy.poll_raw()
 
             if len(pressed_buttons) == 1:
-                button_names[pressed_buttons[0]] = button
-                done = True
+                button_names[int(pressed_buttons[0])] = button
                 print(f"assigned button {pressed_buttons[0]} to button")
+                done = True
+
             elif len(pressed_buttons) > 1:
                 logging.warning(f"More than one button pressed {pressed_button}")
 
     for axis in axis_list:
-        print(f"Use axis {axis}")
+        print(f"Push axis {axis} all the way")
 
         pressed_axis = []
         done = False
@@ -89,7 +90,9 @@ def create_config(
             f,
             indent=4,
         )
-    logging.log(f"Saved joystick config to {settings.settings.CONTROLLER_MAPPING_PATH}")
+    logging.info(
+        f"Saved joystick config to {settings.settings.CONTROLLER_MAPPING_PATH}"
+    )
 
 
 if __name__ == "__main__":
