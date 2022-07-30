@@ -39,7 +39,7 @@ def create_config(
     if not joy.connected:
         logging.error("Joystick not connected.")
         return
-    
+
     # get rid of the init poll
     pb, pa = joy.poll_raw()
     while len(pb) or len(pa):
@@ -58,7 +58,7 @@ def create_config(
 
         while not done:
             pressed_buttons, _ = joy.poll_raw()
-            
+
             if len(pressed_buttons) == 1:
                 button_names[pressed_buttons[0]] = button
                 done = True

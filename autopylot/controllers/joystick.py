@@ -165,7 +165,7 @@ class Joystick(object):
                     # ignore initialization event
                     pass
 
-                if typev & 0x01:
+                if typev & 0x01 and value:
                     pressed.append(number)
 
                 if typev & 0x02:
