@@ -1,5 +1,8 @@
 #include <Servo.h>
 
+// #define CALIBRATION_BOARD // uncomment this line if you are using the calibration pins
+// #define RPM_SENSOR // uncomment if you want to compile with the RPM_SENSOR
+
 // Servo
 #define SERVO_PIN 6
 #define SERVO_MIN 900
@@ -15,15 +18,6 @@ Servo servoSteering;
 #define ESC_NEUTRAL 1500
 #define ESC_DEADBAND 100
 Servo motorESC;
-
-// Sensor
-#define SENSOR_INT_PIN 1
-#define SENSOR_DIGITAL_PIN 3
-
-// debugging board
-#define BUTTON_PIN 16
-#define LED_PIN 15
-
 
 #define BUFF_LENGTH 5
 // variables used to read serial
@@ -49,7 +43,7 @@ void setup()
 {
   pinMode(LED_BUILTIN, OUTPUT);
   digitalWrite(LED_BUILTIN, LOW);
-  
+
   Serial.begin(115200);
   Serial.setTimeout(200);
 
@@ -61,9 +55,22 @@ void setup()
   motorESC.attach(ESC_PIN, ESC_MIN, ESC_MAX);
   motorESC.writeMicroseconds(ESC_NEUTRAL);
 
+  #ifdef RPM_SENSOR
   // sensor init
+  #define SENSOR_INT_PIN 1
+  #define SENSOR_DIGITAL_PIN 3
+  
   // pinMode(SENSOR_INT_PIN, INPUT);
   attachInterrupt(SENSOR_INT_PIN, signalChange, CHANGE);
+  #endif
+
+  #ifdef CALIBRATION_BOARD
+  // debugging board init
+  #define BUTTON_PIN 16
+  #define LED_PIN 15
+  
+  pinMode(BUTTON_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
 
   // if the button is pressed within a second, enter calibration process
   for (int i = 0; i < 20; i++)
@@ -78,10 +85,12 @@ void setup()
     }
   }
   blinkLED(1);
+  #endif
 }
 
 void loop()
 {
+
   // write rpm sensor data to the serial
   if (Serial && motor_speed != prev_motor_speed)
   {
@@ -94,7 +103,7 @@ void loop()
     // read the data from the serial
     Serial.readBytes(buffData, BUFF_LENGTH);
 
-    if (buffData[0] == expected_start && buffData[4] == expected_end) // check wether we are reading the right data buffer
+    if (buffData[0] == expected_start && buffData[BUFF_LENGTH - 1] == expected_end) // check wether we are reading the right data buffer
     {
       last_received = millis();
       changeSteering();
@@ -175,10 +184,7 @@ void changeThrottle()
   }
 }
 
-void changeBrake()
-{
-}
-
+#ifdef RPM_SENSOR
 void signalChange() // this function will be called on state change of SENSOR_PIN
 {
   last_interrupt_time = micros();
@@ -195,7 +201,9 @@ void signalChange() // this function will be called on state change of SENSOR_PI
     }
   }
 }
+#endif
 
+#ifdef CALIBRATION_BOARD
 void calibrationSteps()
 {
   // neutral pwm
@@ -227,7 +235,6 @@ void waitButtonPressed()
 {
   while (!digitalRead(BUTTON_PIN))
   { // wait for button to be pressed
-    // Serial.println(digitalRead(BUTTON_PIN)); // for debugging purpose
     delay(50);
   }
 }
@@ -250,3 +257,4 @@ void blinkLED(int rep)
     delay(250);
   }
 }
+#endif
