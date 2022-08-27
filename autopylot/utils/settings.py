@@ -62,6 +62,7 @@ class Settings:
         self.BRAKING_MULT = 1.0
         self.CONTROLLER_THROTTLE_MULT = 1.0
         self.CONTROLLER_STEERING_MULT = 1.0
+        self.CONTROLLER_BRAKING_MULT = 1.0
         self.LOOKUP_ZONE = [0.4, 0.3, 0.2]
 
         # Model settings

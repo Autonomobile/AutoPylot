@@ -1,6 +1,5 @@
 import os
 import time
-import cv2
 import numpy as np
 
 from autopylot.actuators import Actuator
@@ -50,11 +49,10 @@ def main():
             mem["throttle"] = (
                 mem["controller"]["throttle"] * settings.CONTROLLER_THROTTLE_MULT
             )
+            mem["brake"] = mem["controller"]["brake"] * settings.CONTROLLER_BRAKING_MULT
 
         elif mem["state"] == "autonomous":
-
             predictions = model.predict(mem)
-
             mem["steering"] = (
                 (
                     predictions["steering.0"] * 1
@@ -81,6 +79,7 @@ def main():
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
             mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
+            mem["brake"] = mem["controller"]["brake"] * settings.BRAKING_MULT
 
             io.save_image_data(
                 mem,
