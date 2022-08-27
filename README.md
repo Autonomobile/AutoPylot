@@ -82,6 +82,14 @@ useful tools:
 ## Collect, Train and Deploy your model
 Here is the three main steps in the making of a model
 
+### Joystick config
+if you want to config your joystick mapping, run:
+```
+python -m "autopylot.controllers.joy_config"
+```
+it will run you through the mapping config of your controller,
+when finish, you will find your mapping file in the root of your project.
+
 ### Collect
 First you need to collect some data.
 

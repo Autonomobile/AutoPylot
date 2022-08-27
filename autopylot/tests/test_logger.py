@@ -2,7 +2,7 @@ import logging
 
 import numpy as np
 
-from ..utils import logger, utils, settings
+from ..utils import logger, settings
 
 settings = settings.settings
 
