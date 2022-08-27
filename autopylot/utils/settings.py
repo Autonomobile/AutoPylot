@@ -52,12 +52,14 @@ class Settings:
         self.PROFILER_FILTERS = ["autopylot"]
 
         # Car behaviour settings
+        self.IDLE_BRAKE = 0.2
         self.MIN_SPEED = 1
         self.THROTTLE = 0.3
         self.MIN_THROTTLE = 0.2
         self.MAX_THROTTLE = 0.4
         self.THROTTLE_MULT = 1.0
         self.STEERING_MULT = 1.0
+        self.BRAKING_MULT = 1.0
         self.CONTROLLER_THROTTLE_MULT = 1.0
         self.CONTROLLER_STEERING_MULT = 1.0
         self.LOOKUP_ZONE = [0.4, 0.3, 0.2]
