@@ -1,12 +1,15 @@
-# script based on https://github.com/autorope/donkeycar/blob/dev/donkeycar/parts/controller.py
+"""
+script based on https://github.com/autorope/donkeycar/blob/dev/donkeycar/parts/controller.py
+"""
 
 import array
+import json
 import logging
 import os
 import struct
 import threading
 
-from ..utils import memory, utils
+from ..utils import memory, settings, utils
 
 
 class Joystick(object):
@@ -24,7 +27,7 @@ class Joystick(object):
         self.dev_fn = dev_fn
         self.connected = False
 
-    def init(self):
+    def init(self, config=False):
         try:
             from fcntl import ioctl
         except ModuleNotFoundError:
@@ -81,8 +84,11 @@ class Joystick(object):
 
         self.connected = True
 
-        th = threading.Thread(target=self.poll)
-        th.start()
+        if not config:
+            th = threading.Thread(target=self.poll)
+            th.start()
+        else:
+            logging.warning("disabled poll thread.")
 
         logging.info("Instantiated Joystick.")
         return True
@@ -127,10 +133,50 @@ class Joystick(object):
                 if typev & 0x02:
                     axis = self.axis_map[number]
                     if axis:
-                        fvalue = value / 32767.0
-                        self.axis_states[axis] = fvalue
+                        self.axis_states[axis] = value / 32767.0
 
         logging.info("Controller disconnected.")
+
+    def poll_raw(self, deadzone=0.95):
+        """
+        Query the state of the joystick, returns raw buttons that were pressed and used axis.
+        Used to make joystick configs.
+
+        Returns:
+            (list, list): tuple containing a list of pressed buttons and a list of used axis.
+        """
+        if self.connected:
+            pressed = []
+            axis = []
+
+            if self.jsdev is None:
+                return (None, None)
+
+            try:
+                evbuf = self.jsdev.read(8)
+            except OSError:
+                self.connected = False
+                return (None, None)
+
+            if evbuf:
+                tval, value, typev, number = struct.unpack("ihBB", evbuf)
+
+                if typev & 0x80:
+                    # ignore initialization event
+                    pass
+
+                if typev & 0x01 and value:
+                    pressed.append(number)
+
+                if typev & 0x02:
+                    value /= 32767.0
+                    # small deadzone
+                    if value >= deadzone or value <= -deadzone:
+                        axis.append(number)
+
+            return pressed, axis
+        else:
+            return (None, None)
 
 
 class XboxOneJoystick(Joystick):
@@ -182,12 +228,27 @@ class XboxOneJoystick(Joystick):
             0x136: "button_lb",
             0x137: "button_rb",
         }
+        self.load_custom_mapping()
 
         if do_init:
             self.init()
 
+    def load_custom_mapping(self, filepath=settings.settings.CONTROLLER_MAPPING_PATH):
+        """
+        Load a custom key buttons and axes mapping from file
+        """
+        if os.path.exists(filepath):
+            mapping_dict = json.load(open(filepath))
+            if "axis_names" in mapping_dict.keys():
+                self.axis_names.update(mapping_dict["axis_names"])
+            if "button_names" in mapping_dict.keys():
+                self.button_names.update(mapping_dict["button_names"])
+
+            logging.info("Loaded custom controller mapping")
+
     def update(self):
-        """Update function for the controller.
+        """
+        Update function for the controller.
         This function stores in the memory the newly fetched axis values.
         """
         if self.connected:
