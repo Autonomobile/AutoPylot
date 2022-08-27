@@ -41,6 +41,7 @@ def main():
         if mem["state"] == "stop":
             mem["steering"] = 0.0
             mem["throttle"] = 0.0
+            mem["brake"] = settings.IDLE_BRAKE
 
         elif mem["state"] == "manual":
             mem["steering"] = (
@@ -66,11 +67,16 @@ def main():
 
             if mem["speed"] < settings.MIN_SPEED:
                 mem["throttle"] = settings.MIN_THROTTLE
+                mem["brake"] = 0.0
             else:
                 mem["throttle"] = (
                     np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
                     * settings.THROTTLE_MULT
                 )
+                if predictions["zone"][-1] > 0.5:
+                    mem["brake"] = predictions["zone"] * settings.BRAKING_MULT
+                else:
+                    mem["brake"] = 0.0
 
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
