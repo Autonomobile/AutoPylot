@@ -1,6 +1,7 @@
 """This is where we will store our different model architectures."""
 
 import logging
+
 import tensorflow as tf
 from keras_flops import get_flops
 from tensorflow.keras import Input, Model
@@ -11,18 +12,14 @@ from tensorflow.keras.layers import (
     Conv2D,
     Cropping2D,
     Dense,
-    DepthwiseConv2D,
     Dropout,
     Flatten,
-    AveragePooling2D,
     GlobalAveragePooling2D,
     Lambda,
-    MaxPooling2D,
-    Reshape,
     SeparableConv2D,
+    GlobalMaxPooling2D,
 )
-from tensorflow.keras.regularizers import l1_l2
-from tensorflow.keras.optimizers import Adam, SGD
+from tensorflow.keras.optimizers import Adam
 
 
 def get_model_constructor_by_name(name):
@@ -42,6 +39,19 @@ def shape_flatten(shape):
     for n in shape:
         tot *= n
     return tot
+
+
+def sort_input_outputs(inputs, outputs):
+    """Sort in the alphabetic order input and output so that
+    the tflite model will have the same input and output order.
+
+    Args:
+        inputs (list): list of input tensors
+        outputs (list): list of output tensors
+    """
+    inputs = sorted(inputs, key=lambda x: x.name)
+    outputs = sorted(outputs, key=lambda x: x.name)
+    return inputs, outputs
 
 
 class Models:
@@ -70,6 +80,7 @@ class Models:
             outputs.append(y)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -150,6 +161,7 @@ class Models:
         outputs.append(y)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -204,7 +216,8 @@ class Models:
         y2 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
         outputs.append(y2)
 
-        # Create the model
+        # Create the
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -240,12 +253,13 @@ class Models:
         outputs.append(y)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
         model.compile(
             optimizer="adam", loss="mse"
-        )  # can change the optimizer adam by stg else
+        )  # can change the optimizer adam by sgd else
 
         return model
 
@@ -303,10 +317,83 @@ class Models:
         outputs.append(z)
 
         # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
         model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 1, 1, 0.75])
+
+        logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
+        return model
+
+    def trajectory_model():
+        inputs = []
+        outputs = []
+
+        inp = Input(shape=(120, 160, 3), name="image")
+        inputs.append(inp)
+
+        x = Cropping2D(cropping=((20, 20), (0, 0)))(inp)
+        x = Lambda(lambda x: x / 255)(x)
+
+        x = SeparableConv2D(24, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(48, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(96, 5, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(192, 3, strides=2, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = SeparableConv2D(256, 3, strides=1, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+
+        x = Flatten()(x)
+        x = Dropout(0.3)(x)
+
+        x = Dense(200, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+        x = Dropout(0.1)(x)
+
+        x = Dense(200, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+        x = Dropout(0.1)(x)
+
+        x = Dense(200, use_bias=False)(x)
+        x = Activation("relu")(x)
+        x = BatchNormalization()(x)
+        x = Dropout(0.1)(x)
+
+        # make sure the outputs are in alphabetic order
+        y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
+        outputs.append(y1)
+        y3 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
+        outputs.append(y3)
+        y4 = Dense(20, use_bias=False, activation="linear", name="trajectory")(x)
+        outputs.append(y4)
+        y5 = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
+        outputs.append(y5)
+
+        # Create the model
+        inputs, outputs = sort_input_outputs(inputs, outputs)
+        model = Model(inputs=inputs, outputs=outputs)
+
+        # Compile it
+        model.compile(
+            optimizer=Adam(),
+            loss=["mse", "mse", "mse", "categorical_crossentropy"],
+            loss_weights=[1, 1, 1.5, 0.5],
+        )
 
         logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
         return model
@@ -365,6 +452,7 @@ class Models:
         outputs.append(y3)
         outputs.append(z)
 
+        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
         model.compile(optimizer="adam", loss="mse", loss_weights=[1, 1, 1, 0.75])
 

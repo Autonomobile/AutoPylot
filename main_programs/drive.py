@@ -6,7 +6,6 @@ import numpy as np
 from autopylot.actuators import Actuator
 from autopylot.cameras import Camera
 from autopylot.controllers import Controller
-from autopylot.datasets import preparedata
 from autopylot.models import utils
 from autopylot.utils import io, logger, memory, settings, state_switcher
 
@@ -23,7 +22,6 @@ model, model_info = utils.load_model(
 if not os.path.exists(settings.COLLECT_PATH):
     os.mkdir(settings.COLLECT_PATH)
 
-prepare_data = preparedata.PrepareData(model_info)
 sw = state_switcher.StateSwitcher()
 actuator = Actuator()
 camera = Camera()
@@ -54,8 +52,7 @@ def main():
 
         elif mem["state"] == "autonomous":
 
-            input_data = prepare_data(mem)
-            predictions = model.predict(input_data)
+            predictions = model.predict(mem)
 
             mem["steering"] = (
                 (

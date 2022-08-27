@@ -4,7 +4,6 @@ import shutil
 
 import pytest
 from autopylot.cameras import Camera
-from autopylot.datasets import preparedata
 from autopylot.models import architectures, utils
 from autopylot.utils import memory, settings
 
@@ -47,25 +46,22 @@ def test_input_shapes():
 @pytest.mark.models
 def test_missing_data():
     """If the memory doens't have the right data, it should raise an Exception."""
-    model, model_info = utils.load_model("test/test.tflite")
-    prepare_data = preparedata.PrepareData(model_info)
+    model, model_info = utils.load_model("test/test.h5")
 
     with pytest.raises(ValueError):
-        prepare_data(memory.mem)
+        model.predict(memory.mem)
 
 
 @pytest.mark.models
 def test_tflite_predict():
     """Test the prediction on the .tflite model."""
     model, model_info = utils.load_model("test/test.tflite")
-    prepare_data = preparedata.PrepareData(model_info)
     camera = Camera(camera_type="dummy")
 
     camera.update()
     memory.mem["speed"] = 0.123
 
-    input_data = prepare_data(memory.mem)
-    predictions = model.predict(input_data)
+    predictions = model.predict(memory.mem)
     assert predictions != {}
 
 
@@ -73,14 +69,12 @@ def test_tflite_predict():
 def test_tf_predict():
     """Test the prediction on the .h5 model."""
     model, model_info = utils.load_model("test/test.h5")
-    prepare_data = preparedata.PrepareData(model_info)
     camera = Camera(camera_type="dummy")
 
     camera.update()
     memory.mem["speed"] = 2.3
 
-    input_data = prepare_data(memory.mem)
-    predictions = model.predict(input_data)
+    predictions = model.predict(memory.mem)
     assert predictions != {}
 
 
