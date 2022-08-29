@@ -52,6 +52,7 @@ class Keyboard:
         self.memory["controller"] = {
             "steering": steering,
             "throttle": throttle,
+            "brake": 0.0,
             "button_a": keyboard.is_pressed(self.key_recording),
             "button_x": any(pressed),
         }

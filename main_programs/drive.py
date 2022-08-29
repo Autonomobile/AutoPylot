@@ -1,9 +1,7 @@
 import os
 import time
-import cv2
 import numpy as np
 
-import numpy as np
 from autopylot.actuators import Actuator
 from autopylot.cameras import Camera
 from autopylot.controllers import Controller
@@ -42,6 +40,7 @@ def main():
         if mem["state"] == "stop":
             mem["steering"] = 0.0
             mem["throttle"] = 0.0
+            mem["brake"] = settings.IDLE_BRAKE
 
         elif mem["state"] == "manual":
             mem["steering"] = (
@@ -50,11 +49,10 @@ def main():
             mem["throttle"] = (
                 mem["controller"]["throttle"] * settings.CONTROLLER_THROTTLE_MULT
             )
+            mem["brake"] = mem["controller"]["brake"] * settings.CONTROLLER_BRAKING_MULT
 
         elif mem["state"] == "autonomous":
-
             predictions = model.predict(mem)
-
             mem["steering"] = (
                 (
                     predictions["steering.0"] * 1
@@ -67,15 +65,21 @@ def main():
 
             if mem["speed"] < settings.MIN_SPEED:
                 mem["throttle"] = settings.MIN_THROTTLE
+                mem["brake"] = 0.0
             else:
                 mem["throttle"] = (
                     np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
                     * settings.THROTTLE_MULT
                 )
+                if predictions["zone"][-1] > 0.5:
+                    mem["brake"] = predictions["zone"] * settings.BRAKING_MULT
+                else:
+                    mem["brake"] = 0.0
 
         elif mem["state"] == "collect":
             mem["steering"] = mem["controller"]["steering"] * settings.STEERING_MULT
             mem["throttle"] = mem["controller"]["throttle"] * settings.THROTTLE_MULT
+            mem["brake"] = mem["controller"]["brake"] * settings.BRAKING_MULT
 
             io.save_image_data(
                 mem,

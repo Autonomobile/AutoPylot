@@ -1,5 +1,8 @@
 #include <Servo.h>
 
+// #define CALIBRATION_BOARD // uncomment this line if you are using the calibration pins
+// #define RPM_SENSOR // uncomment if you want to compile with the RPM_SENSOR
+
 // Servo
 #define SERVO_PIN 6
 #define SERVO_MIN 900
@@ -13,19 +16,16 @@ Servo servoSteering;
 #define ESC_MIN 1000
 #define ESC_MAX 2000
 #define ESC_NEUTRAL 1500
+#define ESC_DEADBAND 100
 Servo motorESC;
 
-// Sensor
-#define SENSOR_INT_PIN 1
-#define SENSOR_DIGITAL_PIN 3
-
-// debugging board
-#define BUTTON_PIN 16
-#define LED_PIN 15
-
+#define BUFF_LENGTH 5
 // variables used to read serial
 byte dummyBuff[1] = {0};
-byte buffData[4] = {0, 0, 0, 0}; // one byte for start, one byte for the steering servo, an other of the motor and one byte for end
+// {start, steering, throttle, end}
+byte buffData[BUFF_LENGTH] = {0, 0, 0, 0, 0};
+bool reverseMode = false;
+
 int expected_start = 255;
 int expected_end = 0;
 
@@ -41,6 +41,9 @@ long prev_motor_speed = 0;
 
 void setup()
 {
+  pinMode(LED_BUILTIN, OUTPUT);
+  digitalWrite(LED_BUILTIN, LOW);
+
   Serial.begin(115200);
   Serial.setTimeout(200);
 
@@ -52,9 +55,22 @@ void setup()
   motorESC.attach(ESC_PIN, ESC_MIN, ESC_MAX);
   motorESC.writeMicroseconds(ESC_NEUTRAL);
 
+  #ifdef RPM_SENSOR
   // sensor init
+  #define SENSOR_INT_PIN 1
+  #define SENSOR_DIGITAL_PIN 3
+  
   // pinMode(SENSOR_INT_PIN, INPUT);
   attachInterrupt(SENSOR_INT_PIN, signalChange, CHANGE);
+  #endif
+
+  #ifdef CALIBRATION_BOARD
+  // debugging board init
+  #define BUTTON_PIN 16
+  #define LED_PIN 15
+  
+  pinMode(BUTTON_PIN, INPUT);
+  pinMode(LED_PIN, OUTPUT);
 
   // if the button is pressed within a second, enter calibration process
   for (int i = 0; i < 20; i++)
@@ -69,24 +85,25 @@ void setup()
     }
   }
   blinkLED(1);
+  #endif
 }
 
 void loop()
 {
-  
+
   // write rpm sensor data to the serial
   if (Serial && motor_speed != prev_motor_speed)
   {
     prev_motor_speed = motor_speed;
-    Serial.println(prev_motor_speed);    
+    Serial.println(prev_motor_speed);
   }
-  
+
   if (Serial.available())
   {
     // read the data from the serial
-    Serial.readBytes(buffData, 4);
+    Serial.readBytes(buffData, BUFF_LENGTH);
 
-    if (buffData[0] == expected_start && buffData[3] == expected_end) // check wether we are reading the right data buffer
+    if (buffData[0] == expected_start && buffData[BUFF_LENGTH - 1] == expected_end) // check wether we are reading the right data buffer
     {
       last_received = millis();
       changeSteering();
@@ -108,7 +125,7 @@ void loop()
 
 void changeSteering()
 {
-  float decoded_steering = buffData[1]; // cast byte to int
+  float decoded_steering = buffData[1];
 
   int steering = SERVO_MAX - decoded_steering / 255 * (SERVO_MAX - SERVO_MIN);
   servoSteering.writeMicroseconds(steering);
@@ -116,12 +133,58 @@ void changeSteering()
 
 void changeThrottle()
 {
-  float decoded_trottle = buffData[2]; // cast byte to int
+  float decoded_trottle = buffData[2];
+  float decoded_brake = buffData[3];
 
   int throttle = ESC_MIN + decoded_trottle / 255 * (ESC_MAX - ESC_MIN);
-  motorESC.writeMicroseconds(throttle);
+  int brake = ESC_NEUTRAL - decoded_brake / 255 * (ESC_NEUTRAL - ESC_MIN);
+
+  if (brake != ESC_NEUTRAL)
+  {
+    // go back to brake mode
+    if (reverseMode)
+    {
+      motorESC.writeMicroseconds(ESC_NEUTRAL);
+    }
+    else
+    {
+      motorESC.writeMicroseconds(brake); 
+    }
+  }
+
+  else
+  {
+    // positive throttle
+    if (throttle >= ESC_NEUTRAL)
+    {
+      motorESC.writeMicroseconds(throttle);
+
+      if (reverseMode)
+      {
+        reverseMode = false;
+        digitalWrite(LED_BUILTIN, LOW);
+      }
+    }
+    // reverse
+    else if (reverseMode)
+    {
+      motorESC.writeMicroseconds(throttle);
+    }
+    // go into reverse mode
+    else
+    {
+      motorESC.writeMicroseconds((ESC_NEUTRAL + ESC_MIN) / 2);
+      delay(100);
+      motorESC.writeMicroseconds(ESC_NEUTRAL);
+      delay(100);
+      motorESC.writeMicroseconds(throttle); 
+      reverseMode = true;
+      digitalWrite(LED_BUILTIN, HIGH);
+    }
+  }
 }
 
+#ifdef RPM_SENSOR
 void signalChange() // this function will be called on state change of SENSOR_PIN
 {
   last_interrupt_time = micros();
@@ -138,7 +201,9 @@ void signalChange() // this function will be called on state change of SENSOR_PI
     }
   }
 }
+#endif
 
+#ifdef CALIBRATION_BOARD
 void calibrationSteps()
 {
   // neutral pwm
@@ -157,7 +222,7 @@ void calibrationSteps()
   motorESC.writeMicroseconds(ESC_MIN);
 
   delay(2900); // wait less than 3 seconds and set to neutral point to avoid motor to start at full power
-  motorESC.writeMicroseconds((ESC_MIN + ESC_MAX) / 2);
+  motorESC.writeMicroseconds(ESC_NEUTRAL);
 }
 
 void waitButtonClicked()
@@ -170,7 +235,6 @@ void waitButtonPressed()
 {
   while (!digitalRead(BUTTON_PIN))
   { // wait for button to be pressed
-    // Serial.println(digitalRead(BUTTON_PIN)); // for debugging purpose
     delay(50);
   }
 }
@@ -193,3 +257,4 @@ void blinkLED(int rep)
     delay(250);
   }
 }
+#endif

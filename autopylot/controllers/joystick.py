@@ -261,10 +261,20 @@ class XboxOneJoystick(Joystick):
             th_left = utils.deadzone(self.axis_states["z"], 0.05)
             throttle = th_right - th_left
 
-            # provide steering, throttle and every axis/buttons values we have
+            # calculate the brake value
+            if throttle < 0.0 and self.button_states["button_b"]:
+                brake = 0.0
+            elif throttle < 0.0:
+                brake = throttle
+                throttle = 0.0
+            else:
+                brake = 0.0
+
+            # provide steering, throttle, brake and every axis/buttons values we have
             self.memory["controller"] = {
                 "steering": steering,
                 "throttle": throttle,
+                "brake": brake,
                 **self.axis_states,
                 **self.button_states,
             }
