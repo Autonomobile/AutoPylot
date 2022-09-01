@@ -89,7 +89,7 @@ class TrainModel:
 
         # input parser
         infoParser = info_parser.InfoParser(self.model_info)
-        logging.info(f"input / output order mapping: {infoParser.index_map}")
+        logging.info(f"model info: {infoParser.parsed}")
 
         seq_paths = dataset.sequence_sorted_paths(dataset_path)
         indexes = []
@@ -108,14 +108,15 @@ class TrainModel:
         train_idx = indexes[: int(datalen * train_split)]
         test_idx = indexes[int(datalen * train_split) :]
 
-        logging.info(f"training model on {len(train_idx)} samples")
+        logging.info(
+            f"training model on {len(train_idx)} samples, testing on {len(test_idx)}"
+        )
 
         # Create train and test datagenerators
         train_generator = datagenerator.DataGenerator(
             indexes=train_idx,
             paths=seq_paths,
             inp_out=infoParser.parsed,
-            index_map=infoParser.index_map,
             batch_size=batch_size,
             additionnal_funcs=additionnal_funcs,
         )
@@ -124,7 +125,6 @@ class TrainModel:
             indexes=test_idx,
             paths=seq_paths,
             inp_out=infoParser.parsed,
-            index_map=infoParser.index_map,
             batch_size=batch_size,
             additionnal_funcs=additionnal_funcs,
         )
@@ -133,10 +133,9 @@ class TrainModel:
             train_generator,
             steps_per_epoch=len(train_generator) // batch_size + 1,
             validation_data=test_generator,
-            validation_steps=len(test_generator) // batch_size + 1,
+            validation_steps=1,
             epochs=settings.TRAIN_EPOCHS,
-            max_queue_size=32,
-            workers=16,
+            workers=4,
         )
 
         if settings.MODEL_SAVE_SETTINGS:

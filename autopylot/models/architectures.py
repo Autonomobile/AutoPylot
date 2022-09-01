@@ -21,6 +21,8 @@ from tensorflow.keras.layers import (
 )
 from tensorflow.keras.optimizers import Adam
 
+from . import utils
+
 
 def get_model_constructor_by_name(name):
     return getattr(Models, name)
@@ -49,8 +51,9 @@ def sort_input_outputs(inputs, outputs):
         inputs (list): list of input tensors
         outputs (list): list of output tensors
     """
-    inputs = sorted(inputs, key=lambda x: x.name)
-    outputs = sorted(outputs, key=lambda x: x.name)
+    inputs = sorted(inputs, key=lambda x: utils.get_clean_layer_name(x.name))
+    outputs = sorted(outputs, key=lambda x: utils.get_clean_layer_name(x.name))
+    print([x.name for x in outputs])
     return inputs, outputs
 
 
@@ -307,12 +310,20 @@ class Models:
         x = BatchNormalization()(x)
 
         # make sure the outputs are in alphabetic order
+        c1 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles")(x)
+        c2 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles-size")(x)
+        c3 = Dense(2, use_bias=False, activation="tanh", name="obstacles-coord")(x)
+        outputs.append(c1)
+        outputs.append(c2)
+        outputs.append(c3)
+
         y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
-        outputs.append(y1)
         y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
-        outputs.append(y2)
         y3 = Dense(1, use_bias=False, activation="tanh", name="steering.10")(x)
+        outputs.append(y1)
+        outputs.append(y2)
         outputs.append(y3)
+
         z = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
         outputs.append(z)
 
@@ -321,9 +332,13 @@ class Models:
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
-        model.compile(optimizer=Adam(), loss="mse", loss_weights=[1, 1, 1, 0.75])
+        model.compile(
+            optimizer=Adam(),
+            loss=["mse", "mse", "mse", "mse", "mse", "mse", "categorical_crossentropy"],
+            loss_weights=[1, 1, 1, 1, 1, 1, 0.75],
+        )
 
-        logging.info(f"created gigachad model with {get_flops(model)} FLOPS")
+        logging.info(f"created separable model with {get_flops(model)} FLOPS")
         return model
 
     def trajectory_model():

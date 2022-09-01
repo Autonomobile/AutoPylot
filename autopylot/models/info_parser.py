@@ -20,9 +20,9 @@ class InfoParser:
                 idx = 0
 
             if idx not in self.parsed.keys():
-                self.parsed[idx] = {"inputs": [name], "outputs": []}
+                self.parsed[idx] = {"inputs": [(name, inp[0])], "outputs": []}
             else:
-                self.parsed[idx]["inputs"].append(name)
+                self.parsed[idx]["inputs"].append((name, inp[0]))
 
         for i, out in enumerate(self.model_info["outputs"]):
             if "." in out[0]:
@@ -33,9 +33,9 @@ class InfoParser:
                 idx = 0
 
             if idx not in self.parsed.keys():
-                self.parsed[idx] = {"outputs": [name], "inputs": []}
+                self.parsed[idx] = {"outputs": [(name, out[0])], "inputs": []}
             else:
-                self.parsed[idx]["outputs"].append(name)
+                self.parsed[idx]["outputs"].append((name, out[0]))
 
         self.index_map["inputs"] = _get_map(self.model_info["inputs"])
         self.index_map["outputs"] = _get_map(self.model_info["outputs"])
