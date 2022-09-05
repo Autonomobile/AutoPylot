@@ -1,6 +1,8 @@
 # AutoPylot
 AutoPylot project by Autonomobile !
 
+![the car](./ressources/docs/superCar.jpg)
+
 ## How to acces our presentation website
 
 follow this link :
