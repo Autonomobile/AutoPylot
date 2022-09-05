@@ -28,21 +28,13 @@ def test_init():
         }
     }
 
-    index_map = {
-        "inputs": {0: 0, 1: 1},
-        "outputs": {0: 0, 1: 1},
-    }
-
     dataGenerator = datagenerator.DataGenerator(
         [(0, 0)],
         [["dummy_path.json"]],
         inp_out,
-        index_map,
         batch_size=64,
     )
     assert dataGenerator.batch_size == 64
-    assert dataGenerator.num_inputs == 2
-    assert dataGenerator.num_outputs == 2
     assert len(dataGenerator) == len(dataGenerator.paths)
 
 
@@ -51,32 +43,26 @@ def test_call():
 
     inp_out = {
         0: {
-            "inputs": ["image", "speed"],
-            "outputs": ["steering", "throttle"],
+            "inputs": [("image", "image"), ("speed", "speed")],
+            "outputs": [("steering", "steering"), ("throttle", "throttle")],
         }
-    }
-
-    index_map = {
-        "inputs": {0: 0, 1: 1},
-        "outputs": {0: 0, 1: 1},
     }
 
     dataGenerator = datagenerator.DataGenerator(
         [(0, 0)],
         [["dummy_path.json"]],
         inp_out,
-        index_map,
         batch_size=64,
     )
 
     Xs, Ys = dataGenerator[0]  # calls the __getitem__ method
-    assert isinstance(Xs, list) and isinstance(Ys, list)
+    assert isinstance(Xs, dict) and isinstance(Ys, dict)
 
-    assert Xs[0].shape == (64, 120, 160, 3)  # the image input
-    assert Xs[1].shape == (64,)  # the speed input
+    assert Xs["image"].shape == (64, 120, 160, 3)  # the image input
+    assert Xs["speed"].shape == (64,)  # the speed input
 
-    assert Ys[0].shape == (64,)  # the steering output
-    assert Ys[1].shape == (64,)  # the throttle output
+    assert Ys["steering"].shape == (64,)  # the steering output
+    assert Ys["throttle"].shape == (64,)  # the throttle output
 
 
 def test_call_no_image():
@@ -84,29 +70,24 @@ def test_call_no_image():
 
     inp_out = {
         0: {
-            "inputs": ["speed", "throttle"],
-            "outputs": ["steering", "throttle"],
+            "inputs": [("speed", "speed"), ("throttle", "throttle")],
+            "outputs": [("steering", "steering"), ("throttle", "throttle")],
         }
-    }
-
-    index_map = {
-        "inputs": {0: 0, 1: 1},
-        "outputs": {0: 0, 1: 1},
     }
 
     dataGenerator = datagenerator.DataGenerator(
         [(0, 0)],
         [["dummy_path.json"]],
         inp_out,
-        index_map,
         batch_size=32,
     )
     Xs, Ys = dataGenerator[0]  # calls the __getitem__ method
-    assert Xs[0].shape == (32,)  # the speed input
-    assert Xs[1].shape == (32,)  # the throttle input
 
-    assert Ys[0].shape == (32,)  # the steering output
-    assert Ys[1].shape == (32,)  # the throttle output
+    for inp in Xs.keys():
+        assert Xs[inp].shape == (32,)
+
+    for out in Ys.keys():
+        assert Ys[out].shape == (32,)
 
 
 def test_delete_data():
