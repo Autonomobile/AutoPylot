@@ -43,20 +43,6 @@ def shape_flatten(shape):
     return tot
 
 
-def sort_input_outputs(inputs, outputs):
-    """Sort in the alphabetic order input and output so that
-    the tflite model will have the same input and output order.
-
-    Args:
-        inputs (list): list of input tensors
-        outputs (list): list of output tensors
-    """
-    inputs = sorted(inputs, key=lambda x: utils.get_clean_layer_name(x.name))
-    outputs = sorted(outputs, key=lambda x: utils.get_clean_layer_name(x.name))
-    print([x.name for x in outputs])
-    return inputs, outputs
-
-
 class Models:
     def test_model(output_layers=[("steering", (1,))]):
         """This model does nothing, it's just a dummy model to test our functions.
@@ -164,7 +150,6 @@ class Models:
         outputs.append(y)
 
         # Create the model
-        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -220,7 +205,6 @@ class Models:
         outputs.append(y2)
 
         # Create the
-        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -256,7 +240,6 @@ class Models:
         outputs.append(y)
 
         # Create the model
-        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -309,7 +292,6 @@ class Models:
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
 
-        # make sure the outputs are in alphabetic order
         c1 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles")(x)
         c2 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles-size")(x)
         c3 = Dense(2, use_bias=False, activation="tanh", name="obstacles-coord")(x)
@@ -328,7 +310,6 @@ class Models:
         outputs.append(z)
 
         # Create the model
-        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -389,7 +370,6 @@ class Models:
         x = BatchNormalization()(x)
         x = Dropout(0.1)(x)
 
-        # make sure the outputs are in alphabetic order
         y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
         outputs.append(y1)
         y3 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
@@ -400,7 +380,6 @@ class Models:
         outputs.append(y5)
 
         # Create the model
-        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
@@ -467,7 +446,6 @@ class Models:
         outputs.append(y3)
         outputs.append(z)
 
-        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
         model.compile(optimizer="adam", loss="mse", loss_weights=[1, 1, 1, 0.75])
 

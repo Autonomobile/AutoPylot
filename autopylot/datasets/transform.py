@@ -118,6 +118,9 @@ class Functions:
             for i in range(len(image_data["trajectory"]) // 2):
                 image_data["trajectory"][i * 2] *= -1.0
 
+        if "obstacles-coord" in image_data.keys():
+            image_data["obstacles-coord"][1] = image_data["obstacles-coord"][1] * -1.0
+
     def noise(image_data):
         if "image" not in image_data.keys():
             return
@@ -205,8 +208,8 @@ class Functions:
             image_data["obstacles"] = 1  # defaults to 0
             image_data["obstacles-size"] = size_mult  # defaults to 0
             image_data["obstacles-coord"] = [
-                ((cty / img.shape[1]) - 0.5) * 2,
-                ((ctx / img.shape[0]) - 0.5) * 2,
+                ((cty / img.shape[0]) - 0.5) * 2,
+                ((ctx / img.shape[1]) - 0.5) * 2,
             ]  # defaults to [0, 0]
 
 

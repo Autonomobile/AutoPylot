@@ -5,7 +5,7 @@ import random
 
 from ..datasets import datagenerator, dataset
 from ..utils import settings
-from . import architectures, utils, info_parser
+from . import architectures, info_parser, utils
 
 settings = settings.settings
 

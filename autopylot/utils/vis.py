@@ -200,16 +200,17 @@ def vis_obstacles(image_data, image_key="image", x_minmax=(-1, 1), y_minmax=(-1,
     """
 
     y, x = image_data["obstacles-coord"]
+    radius = image_data["obstacles-size"]
     h, w, _ = image_data[image_key].shape
 
     x = int(utils.map_value(x, x_minmax[0], x_minmax[1], 0, w))
-    y = int(utils.map_value(y, y_minmax[0], y_minmax[1], h, 0))
+    y = int(utils.map_value(y, y_minmax[0], y_minmax[1], 0, h))
 
     image_data[image_key] = vis_point(
         image_data[image_key],
         (x, y),
         color=(0, 255, 0),
-        radius=5,
+        radius=int(radius * 20),
     )
     return image_data[image_key]
 

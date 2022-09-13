@@ -31,7 +31,6 @@ def main(path):
 
         predictions = model.predict(image_data)
         image_data.update(predictions)
-        print(predictions)
 
         image_data["steering"] = image_data["steering.0"]
 
