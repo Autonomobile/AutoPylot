@@ -19,24 +19,20 @@ pr = profiler.Profiler()
 model, model_info = utils.load_model(
     f"{settings.MODEL_NAME}/{settings.MODEL_NAME}.tflite"
 )
-settings.ENABLE_TRANSFORM = False
+settings.ENABLE_TRANSFORM = True
 transformer = transform.Transform()
 
 
 def main(path):
     for path in dataset.sort_paths(dataset.get_every_json_paths(path)):
         image_data = io.load_image_data(path)
-        vis_image = vis.vis_all(image_data)
         transformer(image_data)
+        vis_image = vis.vis_all(image_data)
 
         predictions = model.predict(image_data)
-
-        predictions["steering"] = (
-            predictions["steering.0"] * 1 + predictions["steering.5"] * 1
-        ) / 2
         image_data.update(predictions)
 
-        # print(image_data["zone"])
+        image_data["steering"] = image_data["steering.0"]
 
         vis_pred = vis.vis_all(image_data)
         pr.update()

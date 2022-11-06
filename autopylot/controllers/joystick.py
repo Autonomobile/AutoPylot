@@ -262,6 +262,7 @@ class XboxOneJoystick(Joystick):
             throttle = th_right - th_left
 
             # calculate the brake value
+            # TODO: test this with the car
             if throttle < 0.0 and self.button_states["button_b"]:
                 brake = 0.0
             elif throttle < 0.0:

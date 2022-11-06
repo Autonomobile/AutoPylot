@@ -72,7 +72,7 @@ def main():
                     * settings.THROTTLE_MULT
                 )
                 if predictions["zone"][-1] > 0.5:
-                    mem["brake"] = predictions["zone"] * settings.BRAKING_MULT
+                    mem["brake"] = predictions["zone"][-1] * settings.BRAKING_MULT
                 else:
                     mem["brake"] = 0.0
 

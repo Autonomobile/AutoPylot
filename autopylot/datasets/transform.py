@@ -1,16 +1,20 @@
+import os
+from glob import glob
+
 import cv2
 import numpy as np
 
 from ..utils import settings
 
 settings = settings.settings
+obstacles_path = glob(os.path.join(settings.OBSTACLES_PATH, "*"))
 
 
 def get_function_by_name(name):
     """Get the function by name.
 
     Args:
-        name (str): the name of the function.
+        name (str): the name of the function.gtgfgfttttt
 
     Returns:
         function: the function.
@@ -114,6 +118,9 @@ class Functions:
             for i in range(len(image_data["trajectory"]) // 2):
                 image_data["trajectory"][i * 2] *= -1.0
 
+        if "obstacles-coord" in image_data.keys():
+            image_data["obstacles-coord"][1] = image_data["obstacles-coord"][1] * -1.0
+
     def noise(image_data):
         if "image" not in image_data.keys():
             return
@@ -136,7 +143,7 @@ class Functions:
                 borderValue=(127, 127, 127),
             )
 
-        image_data["steering"] += (x_offset * 2) / settings.IMAGE_SHAPE[0]
+            image_data["steering"] += (x_offset * 2) / settings.IMAGE_SHAPE[0]
 
     def grayscale(image_data):
         if "image" not in image_data.keys():
@@ -165,6 +172,56 @@ class Functions:
             (int(shape[1] * factor), int(shape[0] * factor)),
         )
 
+    def obstacles(image_data):
+        if "image" in image_data.keys():
+            img = image_data["image"]
+
+            obstacle_path = np.random.choice(obstacles_path)
+            obstacle_img = cv2.imread(obstacle_path, cv2.IMREAD_UNCHANGED)
+
+            # need to work on the size policy
+            max_size = 32
+            upper_0 = img.shape[0] - max_size
+            upper_1 = img.shape[1] - max_size
+
+            # define random placement
+            cty = np.random.randint(min(max_size, upper_0), max(max_size, upper_0))
+            ctx = np.random.randint(min(max_size, upper_1), max(max_size, upper_1))
+            size_mult = cty / img.shape[0]
+
+            sizey = int(max_size * size_mult)
+            sizex = int(max_size * size_mult)
+            topy = cty - sizey
+            topx = ctx - sizex
+            boty = cty + sizey
+            botx = ctx + sizex
+
+            resized = cv2.resize(obstacle_img, (sizex * 2, sizey * 2))
+            color, alpha = resized[:, :, :3], resized[:, :, -1:] / 255
+
+            # apply obstacle on the image
+            img[topy:boty, topx:botx, :] = (
+                img[topy:boty, topx:botx, :] * (1 - alpha) + color * alpha
+            )
+
+            # car detection data
+            image_data["obstacles"] = 1  # defaults to 0
+            image_data["obstacles-size"] = size_mult  # defaults to 0
+            image_data["obstacles-coord"] = [
+                ((cty / img.shape[0]) - 0.5) * 2,
+                ((ctx / img.shape[1]) - 0.5) * 2,
+            ]  # defaults to [0, 0]
+
+
+# default values for each functions
+default_values = {
+    "obstacles": [
+        ("obstacles", 0),
+        ("obstacles-size", 0),
+        ("obstacles-coord", [0, 0]),
+    ]
+}
+
 
 class Transform:
     def __init__(self, additionnal_funcs=[]):
@@ -185,6 +242,10 @@ class Transform:
 
         for i, (func, freq) in enumerate(self.functions):
             try:
+                values = default_values.get(func.__name__, [])
+                for key, val in values:
+                    image_data[key] = val
+
                 if rands is None:
                     rand = np.random.uniform()
                     if rand < freq:
@@ -195,8 +256,8 @@ class Transform:
                     if rand < freq:
                         func(image_data)
             except Exception as e:
+                print(e)
                 print(image_data, func, freq)
-                pass
 
         if rands is None:
             return new_rands

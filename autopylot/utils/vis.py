@@ -163,19 +163,6 @@ def vis_point(image, point, color=(0, 0, 255), radius=2):
     return cv2.circle(image.copy(), point, radius, color, thickness=-1)
 
 
-def vis_car_position(image_data, image_key="image"):
-    """Visualize the position of the detected car.
-
-    Args:
-        image_data (dict): image data dictionary.
-        image_key (string): image key.
-
-    Returns:
-        np.array: modified image with the drawn visualization.
-    """
-    return vis_point(image_data[image_key], image_data["car_position"])
-
-
 def vis_trajectory(image_data, image_key="image", x_minmax=(-1, 1), y_minmax=(0, 1.5)):
     """Visualize the trajectory.
 
@@ -202,6 +189,32 @@ def vis_trajectory(image_data, image_key="image", x_minmax=(-1, 1), y_minmax=(0,
     return image_data[image_key]
 
 
+def vis_obstacles(image_data, image_key="image", x_minmax=(-1, 1), y_minmax=(-1, 1)):
+    """Visualize the coordinates of the obstacles
+
+    Args:
+        image_data (dict): image data dictionary.
+        image_key (str, optional): key of the image. Defaults to "image".
+        x_minmax (tuple, optional): point range. Defaults to (-1, 1).
+        y_minmax (tuple, optional): point range. Defaults to (-1, 1).
+    """
+
+    y, x = image_data["obstacles-coord"]
+    radius = image_data["obstacles-size"]
+    h, w, _ = image_data[image_key].shape
+
+    x = int(utils.map_value(x, x_minmax[0], x_minmax[1], 0, w))
+    y = int(utils.map_value(y, y_minmax[0], y_minmax[1], 0, h))
+
+    image_data[image_key] = vis_point(
+        image_data[image_key],
+        (x, y),
+        color=(0, 255, 0),
+        radius=int(radius * 20),
+    )
+    return image_data[image_key]
+
+
 def vis_all(image_data, image_key="image"):
     """Visualize every data present in the image_data dictionary.
 
@@ -222,6 +235,12 @@ def vis_all(image_data, image_key="image"):
         image_data_copy[image_key] = vis_speed(image_data_copy, image_key)
     if "trajectory" in image_data_copy:
         image_data_copy[image_key] = vis_trajectory(image_data_copy, image_key)
+    if (
+        "obstacles-coord" in image_data_copy
+        and "obstacles" in image_data_copy
+        and image_data_copy["obstacles"] > 0.5
+    ):
+        image_data_copy[image_key] = vis_obstacles(image_data_copy, image_key)
 
     return image_data_copy[image_key]
 
