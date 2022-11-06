@@ -69,7 +69,6 @@ class Models:
             outputs.append(y)
 
         # Create the model
-        inputs, outputs = sort_input_outputs(inputs, outputs)
         model = Model(inputs=inputs, outputs=outputs)
 
         # Compile it
