@@ -49,7 +49,7 @@ class SimClient(SDClient):
                 del json_packet["msg_type"]
                 self.node_positions[json_packet["index"]] = json_packet
             else:
-                logging.info(f"received packet with unknowned type: {msg_type}")
+                logging.debug(f"received packet with unknowned type: {msg_type}")
 
         except Exception as msg:
             logging.error(msg)
