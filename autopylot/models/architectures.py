@@ -291,12 +291,12 @@ class Models:
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
 
-        c1 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles")(x)
-        c2 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles-size")(x)
-        c3 = Dense(2, use_bias=False, activation="tanh", name="obstacles-coord")(x)
-        outputs.append(c1)
-        outputs.append(c2)
-        outputs.append(c3)
+        # c1 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles")(x)
+        # c2 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles-size")(x)
+        # c3 = Dense(2, use_bias=False, activation="tanh", name="obstacles-coord")(x)
+        # outputs.append(c1)
+        # outputs.append(c2)
+        # outputs.append(c3)
 
         y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
         y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
