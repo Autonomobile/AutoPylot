@@ -2,6 +2,7 @@
 
 // #define CALIBRATION_BOARD // uncomment this line if you are using the calibration pins
 // #define RPM_SENSOR // uncomment if you want to compile with the RPM_SENSOR
+// #define ENABLE_BRAKES // uncomment if you want to use the brakes
 
 // Servo
 #define SERVO_PIN 6
@@ -19,6 +20,14 @@ Servo servoSteering;
 #define ESC_DEADBAND 100
 Servo motorESC;
 
+#ifdef RPM_SENSOR
+
+// Sensor for RPM
+#define SENSOR_INT_PIN 1
+#define SENSOR_DIGITAL_PIN 3
+
+#endif
+
 #define BUFF_LENGTH 5
 // variables used to read serial
 byte dummyBuff[1] = {0};
@@ -26,8 +35,8 @@ byte dummyBuff[1] = {0};
 byte buffData[BUFF_LENGTH] = {0, 0, 0, 0, 0};
 bool reverseMode = false;
 
-int expected_start = 255;
-int expected_end = 0;
+byte expected_start = 255;
+byte expected_end = 0;
 
 // variables to detect last received serial message (safety)
 long last_received = 0;
@@ -55,11 +64,7 @@ void setup()
   motorESC.attach(ESC_PIN, ESC_MIN, ESC_MAX);
   motorESC.writeMicroseconds(ESC_NEUTRAL);
 
-  #ifdef RPM_SENSOR
-  // sensor init
-  #define SENSOR_INT_PIN 1
-  #define SENSOR_DIGITAL_PIN 3
-  
+  #ifdef RPM_SENSOR  
   // pinMode(SENSOR_INT_PIN, INPUT);
   attachInterrupt(SENSOR_INT_PIN, signalChange, CHANGE);
   #endif
@@ -137,6 +142,8 @@ void changeThrottle()
   float decoded_brake = buffData[3];
 
   int throttle = ESC_MIN + decoded_trottle / 255 * (ESC_MAX - ESC_MIN);
+
+  #ifdef ENABLE_BRAKES
   int brake = ESC_NEUTRAL - decoded_brake / 255 * (ESC_NEUTRAL - ESC_MIN);
 
   if (brake != ESC_NEUTRAL)
@@ -151,6 +158,7 @@ void changeThrottle()
       motorESC.writeMicroseconds(brake); 
     }
   }
+
 
   else
   {
@@ -182,6 +190,12 @@ void changeThrottle()
       digitalWrite(LED_BUILTIN, HIGH);
     }
   }
+  #endif
+
+  #ifndef ENABLE_BRAKES
+  motorESC.writeMicroseconds(throttle);
+  #endif
+
 }
 
 #ifdef RPM_SENSOR
