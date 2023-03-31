@@ -45,7 +45,7 @@ while running:
 
         # autonomous
         else:
-            mem["steering"] = predictions["steering.0"]
+            mem["steering"] = predictions["steering.0"] * settings.STEERING_MULT
             mem["throttle"] = (
                 np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
                 * settings.THROTTLE_MULT
