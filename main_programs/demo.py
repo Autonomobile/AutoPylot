@@ -37,14 +37,12 @@ while running:
         # get predictions
         predictions = model.predict(mem)
 
-        # manual mode
-        if mem["controller"]["button_x"]:
+        if mem["controller"]["button_x"]:  # manual mode
             mem["steering"] = mem["controller"]["steering"]
             mem["throttle"] = mem["controller"]["throttle"]
             mem["brake"] = mem["controller"]["brake"]
 
-        # autonomous
-        else:
+        else:  # autonomous mode
             mem["steering"] = predictions["steering.0"] * settings.STEERING_MULT
             mem["throttle"] = (
                 np.matmul(predictions["zone"], settings.LOOKUP_ZONE)
