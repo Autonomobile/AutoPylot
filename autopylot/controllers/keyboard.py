@@ -40,7 +40,7 @@ class Keyboard:
 
         if count != 0:
             steering = sum_steer / count
-            throttle = 0.5
+            throttle = 0.3
 
         else:
             steering = 0

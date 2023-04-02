@@ -43,13 +43,13 @@ class SimClient(SDClient):
             elif msg_type == "telemetry":
                 self.image = decode_image(json_packet["image"])
                 self.speed = json_packet["speed"]
-                self.last_received = time.time()
                 self.total_nodes = json_packet["totalNodes"]
+                self.last_received = time.time()
             elif msg_type == "node_position":
                 del json_packet["msg_type"]
                 self.node_positions[json_packet["index"]] = json_packet
             else:
-                logging.info(f"received packet with unknowned type: {msg_type}")
+                logging.debug(f"received packet with unknowned type: {msg_type}")
 
         except Exception as msg:
             logging.error(msg)
@@ -115,6 +115,7 @@ class SimClient(SDClient):
         while self.image is None:
             time.sleep(self.poll_socket_sleep_sec)
         img, self.image = self.image, None
+
         return img
 
 
