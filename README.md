@@ -1,6 +1,10 @@
 # AutoPylot
 AutoPylot project by Autonomobile !
 
+## We were here
+https://www.renaultgroup.com/news-onair/top-stories/robocars-le-grand-prix-de-voitures-autonomes-qui-a-anime-vivatech-2022/
+https://twitter.com/01net/status/1537750831700779010
+
 ![the car](./ressources/docs/superCar.jpg)
 
 ## How to acces our presentation website
