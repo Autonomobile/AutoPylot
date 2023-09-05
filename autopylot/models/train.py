@@ -62,7 +62,6 @@ class TrainModel:
         train_split=settings.TRAIN_SPLITS,
         shuffle=settings.TRAIN_SHUFFLE,
         verbose=settings.TRAIN_VERBOSE,
-        do_save=True,
         additionnal_funcs=[],
     ):
         """Trains the model on the given dataset.
@@ -135,7 +134,7 @@ class TrainModel:
             validation_data=test_generator,
             validation_steps=1,
             epochs=settings.TRAIN_EPOCHS,
-            workers=4,
+            workers=8,
         )
 
         if settings.MODEL_SAVE_SETTINGS:

@@ -1,7 +1,7 @@
 #include <Servo.h>
 
 // #define CALIBRATION_BOARD // uncomment this line if you are using the calibration pins
-// #define RPM_SENSOR // uncomment if you want to compile with the RPM_SENSOR
+#define RPM_SENSOR // uncomment if you want to compile with the RPM_SENSOR
 // #define ENABLE_BRAKES // uncomment if you want to use the brakes
 
 // Servo
@@ -64,16 +64,16 @@ void setup()
   motorESC.attach(ESC_PIN, ESC_MIN, ESC_MAX);
   motorESC.writeMicroseconds(ESC_NEUTRAL);
 
-  #ifdef RPM_SENSOR  
+#ifdef RPM_SENSOR
   // pinMode(SENSOR_INT_PIN, INPUT);
   attachInterrupt(SENSOR_INT_PIN, signalChange, CHANGE);
-  #endif
+#endif
 
-  #ifdef CALIBRATION_BOARD
+#ifdef CALIBRATION_BOARD
   // debugging board init
-  #define BUTTON_PIN 16
-  #define LED_PIN 15
-  
+#define BUTTON_PIN 16
+#define LED_PIN 15
+
   pinMode(BUTTON_PIN, INPUT);
   pinMode(LED_PIN, OUTPUT);
 
@@ -90,7 +90,7 @@ void setup()
     }
   }
   blinkLED(1);
-  #endif
+#endif
 }
 
 void loop()
@@ -143,7 +143,7 @@ void changeThrottle()
 
   int throttle = ESC_MIN + decoded_trottle / 255 * (ESC_MAX - ESC_MIN);
 
-  #ifdef ENABLE_BRAKES
+#ifdef ENABLE_BRAKES
   int brake = ESC_NEUTRAL - decoded_brake / 255 * (ESC_NEUTRAL - ESC_MIN);
 
   if (brake != ESC_NEUTRAL)
@@ -155,7 +155,7 @@ void changeThrottle()
     }
     else
     {
-      motorESC.writeMicroseconds(brake); 
+      motorESC.writeMicroseconds(brake);
     }
   }
 
@@ -185,16 +185,16 @@ void changeThrottle()
       delay(100);
       motorESC.writeMicroseconds(ESC_NEUTRAL);
       delay(100);
-      motorESC.writeMicroseconds(throttle); 
+      motorESC.writeMicroseconds(throttle);
       reverseMode = true;
       digitalWrite(LED_BUILTIN, HIGH);
     }
   }
-  #endif
+#endif
 
-  #ifndef ENABLE_BRAKES
+#ifndef ENABLE_BRAKES
   motorESC.writeMicroseconds(throttle);
-  #endif
+#endif
 
 }
 
@@ -247,7 +247,8 @@ void waitButtonClicked()
 
 void waitButtonPressed()
 {
-  while (!digitalRead(BUTTON_PIN))
+  while (!digitalRead(BUT
+  TON_PIN))
   { // wait for button to be pressed
     delay(50);
   }
