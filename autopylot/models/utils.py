@@ -162,7 +162,7 @@ def remove_decoder(model):
         model (Model): the model.
 
     Returns:
-        Model: the model without the decoder.
+        Model: the model without the decoder. OR None if no changes
     """
 
     new_outputs = []
@@ -170,8 +170,12 @@ def remove_decoder(model):
     for output in outputs:
         if "image" not in output.name:
             new_outputs.append(output)
+
+    if len(new_outputs) == 0:
+        raise ValueError("No output left after removing decoder")
     
-    return Model(model.inputs, new_outputs)
+    if len(new_outputs) != len(outputs):
+        return Model(model.inputs, new_outputs)
 
 def predict_decorator(func, inputs, outputs):
     """Decorate the model.predict function.

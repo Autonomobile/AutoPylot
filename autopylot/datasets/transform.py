@@ -173,44 +173,46 @@ class Functions:
         )
 
     def obstacles(image_data):
-        if "image" in image_data.keys():
-            img = image_data["image"]
+        if "image" not in image_data.keys():
+            return 
+        
+        img = image_data["image"]
 
-            obstacle_path = np.random.choice(obstacles_path)
-            obstacle_img = cv2.imread(obstacle_path, cv2.IMREAD_UNCHANGED)
+        obstacle_path = np.random.choice(obstacles_path)
+        obstacle_img = cv2.imread(obstacle_path, cv2.IMREAD_UNCHANGED)
 
-            # need to work on the size policy
-            max_size = 32
-            upper_0 = img.shape[0] - max_size
-            upper_1 = img.shape[1] - max_size
+        # need to work on the size policy
+        max_size = 64
+        upper_0 = img.shape[0] - max_size
+        upper_1 = img.shape[1] - max_size
 
-            # define random placement
-            cty = np.random.randint(min(max_size, upper_0), max(max_size, upper_0))
-            ctx = np.random.randint(min(max_size, upper_1), max(max_size, upper_1))
-            size_mult = cty / img.shape[0]
+        # define random placement
+        cty = np.random.randint(min(max_size, upper_0), max(max_size, upper_0))
+        ctx = np.random.randint(min(max_size, upper_1), max(max_size, upper_1))
+        size_mult = cty / img.shape[0]
 
-            sizey = int(max_size * size_mult)
-            sizex = int(max_size * size_mult)
-            topy = cty - sizey
-            topx = ctx - sizex
-            boty = cty + sizey
-            botx = ctx + sizex
+        sizey = int(max_size * size_mult)
+        sizex = int(max_size * size_mult)
+        topy = cty - sizey
+        topx = ctx - sizex
+        boty = cty + sizey
+        botx = ctx + sizex
 
-            resized = cv2.resize(obstacle_img, (sizex * 2, sizey * 2))
-            color, alpha = resized[:, :, :3], resized[:, :, -1:] / 255
+        resized = cv2.resize(obstacle_img, (sizex * 2, sizey * 2))
+        color, alpha = resized[:, :, :3], resized[:, :, -1:] / 255
 
-            # apply obstacle on the image
-            img[topy:boty, topx:botx, :] = (
-                img[topy:boty, topx:botx, :] * (1 - alpha) + color * alpha
-            )
+        # apply obstacle on the image
+        img[topy:boty, topx:botx, :] = (
+            img[topy:boty, topx:botx, :] * (1 - alpha) + color * alpha
+        )
 
-            # car detection data
-            image_data["obstacles"] = 1  # defaults to 0
-            image_data["obstacles-size"] = size_mult  # defaults to 0
-            image_data["obstacles-coord"] = [
-                ((cty / img.shape[0]) - 0.5) * 2,
-                ((ctx / img.shape[1]) - 0.5) * 2,
-            ]  # defaults to [0, 0]
+        # car detection data
+        image_data["obstacles"] = 1  # defaults to 0
+        image_data["obstacles-size"] = size_mult  # defaults to 0
+        image_data["obstacles-coord"] = [
+            ((cty / img.shape[0]) - 0.5) * 2,
+            ((ctx / img.shape[1]) - 0.5) * 2,
+        ]  # defaults to [0, 0]
 
 
 # default values for each functions

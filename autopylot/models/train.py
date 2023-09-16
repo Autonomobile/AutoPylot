@@ -146,4 +146,10 @@ class TrainModel:
                 "shuffle": shuffle,
                 "verbose": verbose,
             }
+        
+        # save alternative version without decoder
+        encoder = utils.remove_decoder(self.model)
+        if encoder is not None:
+            utils.save_model(encoder, f"{self.name}_enc", model_info=self.model_info)
+
         utils.save_model(self.model, self.name, model_info=self.model_info)
