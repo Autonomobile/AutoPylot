@@ -144,11 +144,38 @@ def get_clean_layer_name(name):
     Returns:
         string: the filtered layer name.
     """
+    
+    if name.endswith("_output"):
+        name = name.split("_output")[0]
+
     delimit_chars = ":_/"
     for char in delimit_chars:
         name = name.split(char)[0]
+
     return name
 
+def remove_decoder(model):
+    """Remove the decoder from the model.
+    removes the "image" output layer and rebuild the model.
+
+    Args:
+        model (Model): the model.
+
+    Returns:
+        Model: the model without the decoder. OR None if no changes
+    """
+
+    new_outputs = []
+    outputs = model.outputs
+    for output in outputs:
+        if "image" not in output.name:
+            new_outputs.append(output)
+
+    if len(new_outputs) == 0:
+        raise ValueError("No output left after removing decoder")
+    
+    if len(new_outputs) != len(outputs):
+        return Model(model.inputs, new_outputs)
 
 def predict_decorator(func, inputs, outputs):
     """Decorate the model.predict function.

@@ -62,7 +62,6 @@ class TrainModel:
         train_split=settings.TRAIN_SPLITS,
         shuffle=settings.TRAIN_SHUFFLE,
         verbose=settings.TRAIN_VERBOSE,
-        do_save=True,
         additionnal_funcs=[],
     ):
         """Trains the model on the given dataset.
@@ -135,7 +134,7 @@ class TrainModel:
             validation_data=test_generator,
             validation_steps=1,
             epochs=settings.TRAIN_EPOCHS,
-            workers=4,
+            workers=8,
         )
 
         if settings.MODEL_SAVE_SETTINGS:
@@ -147,4 +146,10 @@ class TrainModel:
                 "shuffle": shuffle,
                 "verbose": verbose,
             }
+        
+        # save alternative version without decoder
+        encoder = utils.remove_decoder(self.model)
+        if encoder is not None:
+            utils.save_model(encoder, f"{self.name}_enc", model_info=self.model_info)
+
         utils.save_model(self.model, self.name, model_info=self.model_info)

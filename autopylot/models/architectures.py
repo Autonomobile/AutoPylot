@@ -18,6 +18,8 @@ from tensorflow.keras.layers import (
     Lambda,
     SeparableConv2D,
     GlobalMaxPooling2D,
+    UpSampling2D,
+    ZeroPadding2D,
 )
 from tensorflow.keras.optimizers import Adam
 
@@ -272,9 +274,9 @@ class Models:
 
         x = SeparableConv2D(192, 3, strides=2, use_bias=False)(x)
         x = Activation("relu")(x)
-        x = BatchNormalization()(x)
+        w = BatchNormalization()(x)
 
-        x = SeparableConv2D(256, 3, strides=1, use_bias=False)(x)
+        x = SeparableConv2D(256, 3, strides=1, use_bias=False)(w)
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
 
@@ -291,12 +293,12 @@ class Models:
         x = Activation("relu")(x)
         x = BatchNormalization()(x)
 
-        # c1 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles")(x)
-        # c2 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles-size")(x)
-        # c3 = Dense(2, use_bias=False, activation="tanh", name="obstacles-coord")(x)
-        # outputs.append(c1)
-        # outputs.append(c2)
-        # outputs.append(c3)
+        c1 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles")(x)
+        c2 = Dense(1, use_bias=False, activation="sigmoid", name="obstacles-size")(x)
+        c3 = Dense(2, use_bias=False, activation="tanh", name="obstacles-coord")(x)
+        outputs.append(c1)
+        outputs.append(c2)
+        outputs.append(c3)
 
         y1 = Dense(1, use_bias=False, activation="tanh", name="steering.0")(x)
         y2 = Dense(1, use_bias=False, activation="tanh", name="steering.5")(x)
@@ -307,6 +309,40 @@ class Models:
 
         z = Dense(3, use_bias=False, activation="softmax", name="zone")(x)
         outputs.append(z)
+        
+        # decoder
+        # (3, 8, 256)
+
+        w = SeparableConv2D(256, 3, strides=1, use_bias=False, padding="same")(w)
+        w = Activation("relu")(w)
+        w = ZeroPadding2D(padding=((1, 0), (1, 0)))(w)
+        w = UpSampling2D(size=(2, 2))(w)
+        # (8, 18, 256)
+
+        w = SeparableConv2D(192, 3, strides=1, use_bias=False, padding="same")(w)
+        w = Activation("relu")(w)
+        w = ZeroPadding2D(padding=((1, 1), (1, 1)))(w)
+        w = UpSampling2D(size=(2, 2))(w)
+        # (20, 40, 192)
+
+        w = SeparableConv2D(96, 5, strides=1, use_bias=False, padding="same")(w)
+        w = Activation("relu")(w)
+        w = UpSampling2D(size=(2, 2))(w)
+        # (40, 80, 96)
+
+        w = SeparableConv2D(48, 5, strides=1, use_bias=False, padding="same")(w)
+        w = Activation("relu")(w)
+        w = UpSampling2D(size=(2, 2))(w)
+        # (80, 160, 48)
+
+        w = SeparableConv2D(24, 5, strides=1, use_bias=False, padding="same")(w)
+        w = Activation("relu")(w)
+
+        w = Conv2D(3, 3, strides=1, use_bias=False, padding="same")(w)
+        w = Activation("tanh")(w)
+        w = ZeroPadding2D(padding=((20, 20), (0, 0)))(w)
+        w = Lambda(lambda x: (x + 1) * 0.5, name="image.0")(w)
+        outputs.append(w)
 
         # Create the model
         model = Model(inputs=inputs, outputs=outputs)
@@ -314,8 +350,8 @@ class Models:
         # Compile it
         model.compile(
             optimizer=Adam(),
-            loss=["mse", "mse", "mse", "mse", "mse", "mse", "categorical_crossentropy"],
-            loss_weights=[1, 1, 1, 1, 1, 1, 0.75],
+            loss=["mse", "mse", "mse", "mse", "mse", "mse", "categorical_crossentropy", "mse"],
+            loss_weights=[1, 1, 1, 1, 1, 1, 0.75, 1],
         )
 
         logging.info(f"created separable model with {get_flops(model)} FLOPS")

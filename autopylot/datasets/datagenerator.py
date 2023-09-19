@@ -112,7 +112,10 @@ class DataGenerator(Sequence):
         for k in X.keys():
             X[k] = np.array(X[k])
         for k in Y.keys():
-            Y[k] = np.array(Y[k])
+            if "image" in k:
+                Y[k] = np.array(Y[k]) / 255.0
+            else:
+                Y[k] = np.array(Y[k])
 
         return X, Y
 

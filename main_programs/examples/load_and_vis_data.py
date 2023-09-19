@@ -24,7 +24,10 @@ transformer = transform.Transform()
 
 
 def main(path):
-    for path in dataset.sort_paths(dataset.get_every_json_paths(path)):
+    paths = dataset.sort_paths(dataset.get_every_json_paths(path))
+    i = 0 
+    while i < len(paths):
+        path = paths[i]
         image_data = io.load_image_data(path)
         transformer(image_data)
         vis_image = vis.vis_all(image_data)
@@ -39,7 +42,20 @@ def main(path):
 
         vis.cv2.imshow("vis_image", vis_image)
         vis.cv2.imshow("vis_pred", vis_pred)
-        vis.cv2.waitKey(0)
+
+        if "image.0" in image_data:
+            vis.cv2.imshow("image.0", image_data["image.0"])
+
+        key = vis.cv2.waitKey(0)
+        if key == ord("q"):
+            vis.cv2.destroyAllWindows()
+            break
+        elif key == ord("n"):
+            i += 300
+        elif key == ord("p"):
+            i -= 300
+        else:
+            i += 1
 
 
 if __name__ == "__main__":

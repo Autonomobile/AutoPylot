@@ -41,7 +41,7 @@ def vis_line_scalar(
     return vis_image
 
 
-def vis_steering(image_data, image_key="image"):
+def vis_steering(image_data, image_key="image", color=(0, 0, 255)):
     """Visualize the steering scalar.
 
     Args:
@@ -57,12 +57,12 @@ def vis_steering(image_data, image_key="image"):
         pos=(0.5, 0),
         length=(0, 0.25),
         fact=(0.2, 0),
-        color=(0, 0, 255),
+        color=color,
         thickness=2,
     )
 
 
-def vis_throttle(image_data, image_key="image"):
+def vis_throttle(image_data, image_key="image", color=(0, 0, 255)):
     """Visualize the throttle scalar.
 
     Args:
@@ -73,7 +73,6 @@ def vis_throttle(image_data, image_key="image"):
         np.array: modified image with the drawn visualization.
     """
     throttle = image_data["throttle"]
-    color = (0, 0, 255)
     if throttle < 0:
         color = (255, 0, 0)
         throttle *= -1
@@ -215,7 +214,7 @@ def vis_obstacles(image_data, image_key="image", x_minmax=(-1, 1), y_minmax=(-1,
     return image_data[image_key]
 
 
-def vis_all(image_data, image_key="image"):
+def vis_all(image_data, image_key="image", color=(0, 0, 255)):
     """Visualize every data present in the image_data dictionary.
 
     Args:

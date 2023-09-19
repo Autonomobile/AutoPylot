@@ -34,45 +34,52 @@ def test_create_directory():
 
 def test_load_image_none():
     """Testing if the image was loaded."""
-    image = io.load_image(os.getcwd() + "\\testing_io\\test.png")
-    assert image is None, "should not be None, the image doens't exist."
+    path = os.path.join(os.getcwd(), "testing_io", "test.png")
+    image = io.load_image(path)
+    assert image is None, "should be None, the image doens't exist."
 
 
 def test_save_image():
     """Testing the saving of an image."""
     image = np.zeros((2, 2, 3), dtype=np.uint8)
-    save = io.save_image(os.getcwd() + "\\testing_io\\test.png", image)
+    path = os.path.join(os.getcwd(), "testing_io", "test.png")
+    save = io.save_image(path, image)
     assert save is True, "Image not saved."
 
 
 def test_load_image():
     """Testing the loading of the image."""
-    image = io.load_image(os.getcwd() + "\\testing_io\\test.png")
+    path = os.path.join(os.getcwd(), "testing_io", "test.png")
+    image = io.load_image(path)
     assert image.shape == (2, 2, 3)
 
 
 def test_load_json_none():
     """Testing the loading of a non existing json (should raise an error)."""
     with pytest.raises(Exception):
-        io.load_json(os.getcwd() + "\\testing_io\\test.json")
+        path = os.path.join(os.getcwd(), "testing_io", "test.json")
+        io.load_json(path)
 
 
 def test_save_json():
     """Testing the saving of a dictionnary into a .json file."""
     data = {"test": "this is a test"}
-    save = io.save_json(os.getcwd() + "\\testing_io\\test.json", data)
+    path = os.path.join(os.getcwd(), "testing_io", "test.json")
+    save = io.save_json(path, data)
     assert save is True, "json not saved."
 
 
 def test_load_json():
     """Testing the loading of the .json file."""
-    data = io.load_json(os.getcwd() + "\\testing_io\\test.json")
+    path = os.path.join(os.getcwd(), "testing_io", "test.json")
+    data = io.load_json(path)
     assert data == {"test": "this is a test"}
 
 
 def test_load_image_data():
     """Testing the loading of both image and .json file."""
-    image_data = io.load_image_data(os.getcwd() + "\\testing_io\\test.json")
+    path = os.path.join(os.getcwd(), "testing_io", "test.json")
+    image_data = io.load_image_data(path)
     image = image_data["image"]
     del image_data["image"]
     assert image.shape == (2, 2, 3) and image_data == {"test": "this is a test"}
@@ -85,8 +92,9 @@ def test_save_image_data():
         "image": np.zeros((2, 2, 3), dtype=np.uint8),
     }
 
-    io.save_image_data(image_data, os.getcwd() + "\\testing_io\\test2.json")
-    image_data_copy = io.load_image_data(os.getcwd() + "\\testing_io\\test2.json")
+    path = os.path.join(os.getcwd(), "testing_io", "test2.json")
+    io.save_image_data(image_data, path)
+    image_data_copy = io.load_image_data(path)
 
     assert (
         image_data["image"].shape == image_data_copy["image"].shape
